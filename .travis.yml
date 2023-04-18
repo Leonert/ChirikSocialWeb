@@ -13,3 +13,4 @@ script:
   # mvn clean test jacoco:report coveralls:report
   # - mvn clean verify sonar:sonar -Pcoverage 
 - sonar-scanner
+- mvn clean test jacoco:report coveralls:report
