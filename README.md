@@ -10,6 +10,8 @@ mvn -version
 If Maven is installed, to run the application, go to the root of the social-network-api project through the command line and run the command mvn spring-boot:run
 ```sh
 cd  social-network-api
+```
+```sh
 mvn spring-boot:run
 ```
 
