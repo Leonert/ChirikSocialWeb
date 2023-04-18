@@ -1,4 +1,4 @@
-name: bild
+name: build
 
 on:
   push:
