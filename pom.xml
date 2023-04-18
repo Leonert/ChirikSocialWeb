@@ -74,28 +74,6 @@
                                     <artifactId>maven-project-info-reports-plugin</artifactId>
                                     <version>3.0.0</version>
                                 </plugin>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.9</version>
-                    <executions>
-                        <execution>
-                            <id>jacoco-initialize</id>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.eluder.coveralls</groupId>
-                    <artifactId>coveralls-maven-plugin</artifactId>
-                    <version>4.3.0</version>
-                    <configuration>
-                        <repoToken>fcXckJrEdBG2K178ieje1KS1AaRjcAfqo</repoToken>
-                        <coverallsFile>target</coverallsFile>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
