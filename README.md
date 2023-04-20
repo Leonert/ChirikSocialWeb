@@ -16,3 +16,12 @@ mvn spring-boot:run
 ```
 
 The CLI will run your application on the configured port and you can access it just like you would if you start the app in an IDE.
+
+### Java code style checking
+
+In this project, the style of the code is checked using Checkstyle.
+
+To check the style of the code, go to the root of the project and run the following on the command line:
+```sh
+mvn validate
+```
