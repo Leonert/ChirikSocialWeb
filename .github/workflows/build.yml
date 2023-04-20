@@ -25,3 +25,4 @@ jobs:
 
       - name: Compile and run tests with Maven
         run: mvn clean test --file pom.xml
+        working-directory: /social-network-api/
