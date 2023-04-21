@@ -34,7 +34,8 @@ jobs:
           node-version: 18.16.0
 
       - name: Install dependencies
-        run: npm install --prefix ./FP3SocialNetwork/FP3SocialNetwork/social-network-ua/package.json
-
+        run: npm install --prefix 
+        working-directory: ./social-network-ui
       - name: Run build
-        run: npm run build --prefix ./FP3SocialNetwork/FP3SocialNetwork/social-network-ua/package.json
+        run: npm run build --prefix 
+        working-directory: ./social-network-ui
