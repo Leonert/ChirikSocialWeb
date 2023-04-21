@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
           node-version: 18.16.0
 
       - name: Install dependencies
-        run: npm install --prefix ./social-network-ua
+        run: npm install --prefix ./FP3SocialNetwork/FP3SocialNetwork/social-network-ua/package.json
 
       - name: Run build
-        run: npm run build --prefix ./social-network-ua
+        run: npm run build --prefix ./FP3SocialNetwork/FP3SocialNetwork/social-network-ua/package.json
