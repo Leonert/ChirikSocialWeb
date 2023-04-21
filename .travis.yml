@@ -1,0 +1,14 @@
+sudo: false
+install: true
+
+#Travis CI testing configuration file
+language: java
+jdk: openjdk17
+addons:
+  sonarcloud:
+    organization: "fp3socialnetwork"
+    token:
+      secure: "XmuFuMnAaPP8owxl9DOUBVpx+/CQzIw3bpPCrmdHqFxt5nZMnBdS5j7hH4FRClaJwsPGCPsdtI8Y+AZB89br5yCjYg5upFaw8NWW3VlegXcvuwYrQXVWATb5p1mT9dvQ/GEGo85EtVXjbR6t8VZ8ELndcSvyDTrzLjfZk3Mhm1KgbujdNSDgkzExLdR7DDyGH2ioXox41zO5VoLlJwvdkJM9fHoVyOyQqRdLoEaC6hNhy5B0i6dT7QUcwOAXCjgs3AOuHzVXuAzN97JHZecQE/GaXR/LsrJI6ErDBY0ofAsuvDU022cYeaI8SMVTqwSFZMLypbmfXsh6AyMO2kOjn26SwFfEldMBgd/hj7ZFE5pz90rRsDnL8pgA3yDFwAlZIDcOGk2GeYRjn5r4F+Vyx7cz34hfpJGSAwpkHYei+IV8wXL1/69fjjcUhYUb5ZUHc5gcLVUKtEpGK9psJxyYbsB0fznCAIS6NAL2pOXp3A+VX8GEFwT+hyOP4+ugRdydQXVmwWgEaq9mmZRizcvoPtaQwdjxyZ643DpCZCeG7oKBoYzxikvcKUIW8L6WJz3vIfjESoN8n0aS76V9tpq7GmMOfDiXMPPQuD6TBTCl/tib77/nt9P1tXRCvCsVrIx3zUBXGLzX6TLGAQl94bg5R6Xex5beipbulkqKitDQIbc="
+script:
+- sonar-scanner
+- mvn clean test jacoco:report coveralls:report -f social-network-api/pom.xml
