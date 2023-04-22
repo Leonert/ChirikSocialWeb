@@ -1,4 +1,6 @@
-import './App.css'
+import './App.scss'
+
+// "extends": "stylelint-config-standard",
 
 function App () {
   return (
