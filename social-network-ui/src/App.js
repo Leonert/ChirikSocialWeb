@@ -1,7 +1,9 @@
-import "./App.css";
+import './App.scss'
 
-function App() {
-  return <div className="App"></div>;
+function App () {
+  return (
+    <div className='App' />
+  )
 }
 
-export default App;
+export default App

@@ -1,8 +1,8 @@
-import React from 'react';
-import MuiDialog from '@mui/material/Dialog';
-import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import React from 'react'
+import MuiDialog from '@mui/material/Dialog'
+import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import TwitterIcon from '@mui/icons-material/Twitter'
 
 const CustomModal = styled(MuiDialog)({
   '.MuiDialog-paper': {
@@ -10,9 +10,9 @@ const CustomModal = styled(MuiDialog)({
     maxWidth: '600px',
     width: '100%',
     borderRadius: '8px',
-    color: 'white',
-  },
-});
+    color: 'white'
+  }
+})
 
 const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
   return (
@@ -29,20 +29,22 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) 
           >
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
-          {headerText ? (
-            <Typography sx={{ justifySelf: 'center' }}> {headerText}</Typography>
-          ) : (
-            hasLogoIcon && (
-              <TwitterIcon
-                sx={{ display: 'block', color: 'white', width: '32px', height: '32px', justifySelf: 'center' }}
-              />
-            )
-          )}
+          {headerText
+            ? (
+              <Typography sx={{ justifySelf: 'center' }}> {headerText}</Typography>
+              )
+            : (
+                hasLogoIcon && (
+                  <TwitterIcon
+                    sx={{ display: 'block', color: 'white', width: '32px', height: '32px', justifySelf: 'center' }}
+                  />
+                )
+              )}
         </DialogTitle>
         <DialogContent> {children}</DialogContent>
       </>
     </CustomModal>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal
