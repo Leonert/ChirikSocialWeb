@@ -1,8 +1,6 @@
 import './App.scss'
 
-// "extends": "stylelint-config-standard",
-
-function App () {
+function App() {
   return (
     <div className='App' />
   )
