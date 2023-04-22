@@ -41,7 +41,6 @@
     "stylelint-dev": "stylelint 'src/**/*.scss' --cache --cache-location './.stylelintcache'; exit 0",
     "stylelint-build": "stylelint 'src/**/*.scss'",
     "stylelint-fix-sass": "stylelint --fix 'src/**/*.scss'"
-
   },
   "eslintConfig": {
     "extends": [
@@ -62,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "standard": "^10.0.3"
   }
 }
