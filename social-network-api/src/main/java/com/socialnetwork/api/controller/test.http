@@ -1,0 +1,10 @@
+####
+POST localhost:8080/account/registration
+Content-Type: application/json
+
+{"username": "username1", "emailAddress": "a@g.g"}
+####
+POST localhost:8080/account/registration
+Content-Type: application/json
+
+{"username": "username1", "emailAddress": "a@g.g"}

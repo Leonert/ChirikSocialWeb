@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   private String username;
 
   private String password;
 
-  private String email;
+  private String emailAddress;
 
   @Column(name = "created_date")
   private LocalDateTime createdDate;
