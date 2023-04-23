@@ -1,10 +1,17 @@
 ####
-POST localhost:8080/account/registration
+POST localhost:8080/account/registration/check-credentials
 Content-Type: application/json
 
 {"username": "username1", "emailAddress": "a@g.g"}
 ####
-POST localhost:8080/account/registration
+POST localhost:8080/account/registration/check-credentials
 Content-Type: application/json
 
-{"username": "username1", "emailAddress": "a@g.g"}
+{"username": "usernamefd1", "emailAddress": "a@g.g"}
+
+###
+POST localhost:8080/account/registration/register
+Content-Type: application/json
+
+{"username": "someUsername", "emailAddress": "d.kozarenkoo@gmail.com", "password": "xs3X13xksaG4o3D"}
+
