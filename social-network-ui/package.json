@@ -37,7 +37,8 @@
     "lint": "npx eslint \"./**/*.js\" --cache --cache-strategy content --fix",
     "watch-styles": "npm-watch",
     "stylelint-fix": "stylelint --fix \"src/**/*.css\"",
-    "stylelint-dev": "stylelint \"src/**/*.css\" --cache --cache-location \"./.stylelintcache\"; exit 0"
+    "stylelint-dev": "stylelint \"src/**/*.css\" --cache --cache-location \"./.stylelintcache\"; exit 0",
+    "stylelint-build": "stylelint \"src/**/*.css\""
   },
   "browserslist": {
     "production": [
