@@ -13,7 +13,9 @@ export default function HeaderMain() {
 
   const dispatch = useDispatch();
   return (
-    <div style={{ backgroundColor: " #1e2028", padding: "40px" }}>
+    <div
+      style={{ backgroundColor: " #1e2028", padding: "40px", height: "5000px" }}
+    >
       <Grid
         container
         sx={{
@@ -22,6 +24,9 @@ export default function HeaderMain() {
           width: "33%",
           border: "1px solid #faf5f5",
           justifyContent: "space-between",
+          position: "fixed",
+          top: "5px",
+          left: "33%",
         }}
       >
         <Grid item xs={12} sm={12} md={12}>
