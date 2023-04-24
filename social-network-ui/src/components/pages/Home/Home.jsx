@@ -1,10 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import HeaderMain from "../../HeaderMain/HeaderMain";
 import ButtonShowMore from "../../ButtonShowMore/ButtonShowMore";
 import { Box } from "@mui/material";
-import Post from "../../Post/Post";
-
+import PostList from "../../PostList/PostList";
+import Following from "../../Following/Following";
 function Home() {
+  const recommendation = useSelector((state) => state.home.recommendation);
+  const following = useSelector((state) => state.home.following);
   return (
     <Box
       sx={{
@@ -18,7 +21,8 @@ function Home() {
     >
       <HeaderMain />
       <ButtonShowMore />
-      <Post />
+      {recommendation && <PostList />}
+      {following && <Following />}
     </Box>
   );
 }

@@ -20,16 +20,20 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { red } from "@mui/material/colors";
-export default function RecipeReviewCard() {
+export default function Post(props) {
   return (
-    <Card>
+    <Card
+      sx={{
+        borderBottom: "1px solid #1e2028",
+      }}
+    >
       <CardHeader
         avatar={
           <Avatar
             sx={{ bgcolor: red[500] }}
             aria-label="recipe"
-            alt="Вy Sharp"
-            src="./img/av3.jpg"
+            alt={props.name}
+            src={props.avatar}
           ></Avatar>
         }
         action={
@@ -39,18 +43,13 @@ export default function RecipeReviewCard() {
             </IconButton>
           </Tooltip>
         }
-        title="Nick name"
-        subheader="Data "
+        title={props.name}
+        subheader={props.data}
       />
-      <CardMedia
-        component="img"
-        height="194"
-        image="./img/av2.jpg"
-        alt="Paella dish"
-      />
+      {<CardMedia component="img" image={props.image} alt="Post" />}
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          Some text to be included in the post
+          {props.content}
         </Typography>
       </CardContent>
       <CardActions
@@ -62,28 +61,28 @@ export default function RecipeReviewCard() {
       >
         <Tooltip title="Replay">
           <IconButton aria-label="ChatBubbleOutline">
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={props.replay} color="primary">
               <ChatBubbleOutlineIcon />
             </Badge>
           </IconButton>
         </Tooltip>
         <Tooltip title="Retweet">
           <IconButton aria-label="ChatBubbleOutline">
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={props.retweet} color="primary">
               <RepeatIcon />
             </Badge>
           </IconButton>
         </Tooltip>
         <Tooltip title="Like">
           <IconButton aria-label="add to favorites">
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={props.like} color="primary">
               <FavoriteIcon />
             </Badge>
           </IconButton>
         </Tooltip>
         <Tooltip title="View">
           <IconButton aria-label="ChatBubbleOutline">
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={props.view} color="primary">
               <EqualizerIcon />
             </Badge>
           </IconButton>
