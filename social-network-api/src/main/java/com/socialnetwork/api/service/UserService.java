@@ -16,7 +16,6 @@ public class UserService {
   private final UserRepository userRepository;
   private final ConfirmationTokenRepository confirmationTokenRepository;
   private final EmailService emailService;
-  private static final String CONFIRM_ACCOUNT_URL = "http://localhost:8080/account/registration/confirm-account?token=";
 
   public Optional<User> findByUsername(String username) {
     return userRepository.findByUsername(username);
@@ -32,12 +31,12 @@ public class UserService {
     ConfirmationToken confirmationToken = new ConfirmationToken(user);
     confirmationTokenRepository.save(confirmationToken);
 
-    emailService.sendEmail(user, confirmationToken, CONFIRM_ACCOUNT_URL);
+    emailService.sendEmail(user, confirmationToken);
 
     System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
   }
 
-  public void confirmEmail(String confirmationToken) throws EmailVerificationException {
+  public void verifyAccount(String confirmationToken) throws EmailVerificationException {
     Optional<ConfirmationToken> optionalToken =
             confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 

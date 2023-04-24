@@ -4,6 +4,9 @@ import com.socialnetwork.api.entity.User;
 import com.socialnetwork.api.exception.EmailVerificationException;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -19,6 +27,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountController {
   private final UserService userService;
+  private static final URL EMAIL_CONFIRMED_HTML_URL
+          = AccountController.class.getResource("/html/email-confirmed.html");
 
   // for testing in h2 console (http://localhost:8080/h2-console)
   // INSERT INTO USERS(id, email_address, username, is_enabled) VALUES(1, 'testemail1@gmail.com', 'username1', false);
@@ -52,10 +62,16 @@ public class AccountController {
   @RequestMapping(value = "registration/confirm-account", method = {RequestMethod.GET, RequestMethod.POST})
   public ResponseEntity<String> confirmUserAccount(@RequestParam("token") String confirmationToken) {
     try {
-      userService.confirmEmail(confirmationToken);
-      return ResponseEntity.ok("Ok");
+      String html = new String(Files.readAllBytes(Paths.get(EMAIL_CONFIRMED_HTML_URL.toURI())));
+      System.out.println(html);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.TEXT_HTML);
+      userService.verifyAccount(confirmationToken);
+      return new ResponseEntity<>(html, headers, HttpStatus.OK);
     } catch (EmailVerificationException evx) {
       return ResponseEntity.badRequest().body(evx.getMessage());
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException(e);
     }
   }
 }
