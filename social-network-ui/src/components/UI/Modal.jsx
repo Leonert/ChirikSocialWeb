@@ -27,7 +27,10 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) 
         <DialogTitle
           sx={{ display: 'grid', justifyItems: 'start', gridTemplateColumns: 'repeat(3, 1fr)' }}
         >
-          <IconButton sx={{ p: 0 }} onClick={() => dispatch(handleModal(false))}>
+          <IconButton
+            sx={{ p: 0, width: '30px', height: '30px' }}
+            onClick={() => dispatch(handleModal(false))}
+          >
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
           {headerText ? (

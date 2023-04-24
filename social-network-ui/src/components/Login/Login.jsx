@@ -110,15 +110,18 @@ export const Login = () => {
               >
                 Don't have an account?
               </Typography>
-              <Link
-                to="signup"
+              <Typography
+                variant="span"
+                onClick={() => {
+                  dispatch(handleModal(false));
+                }}
                 style={{
                   cursor: 'pointer',
                   textDecoration: 'none',
                 }}
               >
                 Sign up
-              </Link>
+              </Typography>
             </Typography>
           </>
         ) : (
@@ -170,15 +173,18 @@ export const Login = () => {
               >
                 Don't have an account?
               </Typography>
-              <Link
-                to="signup"
+              <Typography
+                variant="span"
+                onClick={() => {
+                  dispatch(handleModal(false));
+                }}
                 style={{
                   cursor: 'pointer',
                   textDecoration: 'none',
                 }}
               >
                 Sign up
-              </Link>
+              </Typography>
             </Typography>
           </>
         )}
