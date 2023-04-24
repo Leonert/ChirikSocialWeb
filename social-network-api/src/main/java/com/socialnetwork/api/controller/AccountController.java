@@ -30,10 +30,6 @@ public class AccountController {
   private static final URL EMAIL_CONFIRMED_HTML_URL
           = AccountController.class.getResource("/html/email-confirmed.html");
 
-  // for testing in h2 console (http://localhost:8080/h2-console)
-  // INSERT INTO USERS(id, email_address, username, is_enabled) VALUES(1, 'testemail1@gmail.com', 'username1', false);
-  // INSERT INTO USERS(id, email_address, username, is_enabled) VALUES(2, 'testemail2@gmail.com', 'username2', false);
-  // INSERT INTO USERS(id, email_address, username, is_enabled) VALUES(3, 'testemail3@gmail.com', 'username3', false);
   @PostMapping("registration/check-credentials")
   public ResponseEntity<String> checkRegistrationCredentials(@RequestBody User user) {
     Optional<User> optionalUserByUsername =

@@ -13,5 +13,5 @@ Content-Type: application/json
 POST localhost:8080/account/registration/register
 Content-Type: application/json
 
-{"username": "someUsername", "emailAddress": "d.kozarenkoo@gmail.com", "password": "xs3X13xksaG4o3D"}
+{"username": "someUsername", "emailAddress": "d.kozarenkoo@gmail.com", "password": "password123"}
 
