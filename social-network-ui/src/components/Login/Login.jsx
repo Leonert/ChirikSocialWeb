@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../../features/slices/loginUser';
 import { Box, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
 import { TitleLogin } from './TitleLogin';
 import { ButtonsLogin } from './ButtonsLogin';
 import { CustomButton } from './CustomButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Snackbar from '@mui/material/Snackbar';
 
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -18,18 +22,17 @@ const validationSchema = yup.object({
 });
 
 export const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleNextPage = () => {
-    setFirstPage(false);
-
-    formik.validateForm().then(() => {
-      if (Object.keys(formik.errors).length === 0) {
-        console.log(formik.errors);
-        setFirstPage(false);
-      }
-    });
+    const err = Object.keys(formik.errors);
+    if (!err.includes('email')) {
+      formik.setErrors({});
+      setFirstPage(false);
+    }
   };
 
   const formik = useFormik({
@@ -42,10 +45,16 @@ export const Login = () => {
       const formData = new FormData();
       formData.append('email', values.email);
       formData.append('password', values.password);
-      // console.log(values);
-      // alert(JSON.stringify(values, null, 2));
+
+      dispatch(loginUser(values));
+      resetForm();
+      navigate('/');
     },
   });
+
+  useEffect(() => {
+    formik.validateField('email');
+  }, []);
 
   return (
     <Box

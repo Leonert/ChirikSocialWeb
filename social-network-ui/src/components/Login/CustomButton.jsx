@@ -16,7 +16,7 @@ export const CustomButton = ({
   };
 
   return (
-    <Button type={onSubmit && 'submit'} onClick={handleClick} sx={{ ...settings, ...styles }}>
+    <Button type={onSubmit ? 'submit' : ''} onClick={handleClick} sx={{ ...settings, ...styles }}>
       {children}
     </Button>
   );

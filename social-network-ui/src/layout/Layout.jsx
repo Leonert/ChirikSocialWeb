@@ -7,7 +7,6 @@ export const Layout = () => {
   return (
     <div>
       <Modal children={<Login />} open={true} />
-      <Button />
       <Outlet />
     </div>
   );
