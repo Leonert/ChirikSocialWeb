@@ -8,7 +8,7 @@ export const CustomButton = ({
 }) => {
   const settings = {
     border: '1px solid gray',
-    width: '100%',
+    // width: '100%',
     marginBottom: '20px',
     display: 'flex',
     alignItems: 'center',

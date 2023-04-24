@@ -4,14 +4,14 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../../features/slices/loginUser';
+import { loginUser } from '../../features/slices/loginSlice';
 import { Box, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
 import { TitleLogin } from './TitleLogin';
 import { ButtonsLogin } from './ButtonsLogin';
 import { CustomButton } from './CustomButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import Snackbar from '@mui/material/Snackbar';
+import { handleModal } from '../../features/slices/authModalSlice';
 
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -85,14 +85,18 @@ export const Login = () => {
           <>
             <CustomButton
               handleClick={() => handleNextPage()}
-              styles={{ backgroundColor: '#000000', '&:hover': { backgroundColor: '#191818' } }}
+              styles={{
+                backgroundColor: '#000000',
+                width: '100%',
+                '&:hover': { backgroundColor: '#191818' },
+              }}
             >
               <Typography textTransform="none" sx={{ color: 'white', fontWeight: 600 }}>
                 Next{' '}
               </Typography>
             </CustomButton>
 
-            <CustomButton styles={{ '&:hover': { backgroundColor: '#dbdfdf' } }}>
+            <CustomButton styles={{ width: '100%', '&:hover': { backgroundColor: '#dbdfdf' } }}>
               <Typography textTransform="none" sx={{ color: 'black', fontWeight: 600 }}>
                 Forgot password?{' '}
               </Typography>
@@ -146,9 +150,11 @@ export const Login = () => {
             />
 
             <CustomButton
+              handleClick={() => dispatch(handleModal(false))}
               onSubmit={true}
               styles={{
                 backgroundColor: '#000000',
+                width: '100%',
                 '&:hover': { backgroundColor: '#191818' },
               }}
             >

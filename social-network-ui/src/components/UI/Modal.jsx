@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { handleModal } from '../../features/slices/authModalSlice';
 import MuiDialog from '@mui/material/Dialog';
 import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,13 +19,15 @@ const CustomModal = styled(MuiDialog)({
 });
 
 const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
+  const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.authModal);
   return (
-    <CustomModal PaperProps={{ sx }} open={open} onClose={onClose}>
+    <CustomModal PaperProps={{ sx }} open={status} onClose={onClose}>
       <>
         <DialogTitle
           sx={{ display: 'grid', justifyItems: 'start', gridTemplateColumns: 'repeat(3, 1fr)' }}
         >
-          <IconButton sx={{ p: 0 }} onClick={onClose}>
+          <IconButton sx={{ p: 0 }} onClick={() => dispatch(handleModal(false))}>
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
           {headerText ? (
