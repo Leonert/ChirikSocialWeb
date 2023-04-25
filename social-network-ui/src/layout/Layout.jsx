@@ -7,6 +7,7 @@ import Modal from '../components/UI/Modal';
 
 export const Layout = () => {
   const { login } = useSelector((state) => state.authModal);
+  const { user } = useSelector((state) => state.login);
 
   return (
     <div>
@@ -14,7 +15,7 @@ export const Layout = () => {
         <Modal>{login ? <Login /> : '<Sign up/>'}</Modal>
         <Outlet />
       </div>
-      <BottomLine />
+      {!user && <BottomLine />}
     </div>
   );
 };
