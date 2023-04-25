@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const loginUser = createAsyncThunk('login/loginUser', async ({ email, password }) => {
@@ -13,6 +13,7 @@ export const loginUser = createAsyncThunk('login/loginUser', async ({ email, pas
 
     return data;
   } catch (error) {
+    // eslint-disable-next-line
     console.log(error);
   }
 });

@@ -1,7 +1,8 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
+
+import { handleLoginModal, handleModal } from '../../features/slices/authModalSlice';
 import { CustomButton } from '../Login/CustomButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { handleModal } from '../../features/slices/authModalSlice';
 
 export const BottomLine = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,10 @@ export const BottomLine = () => {
         }}
       >
         <CustomButton
-          handleClick={() => dispatch(handleModal(true))}
+          handleClick={() => {
+            dispatch(handleLoginModal(true));
+            dispatch(handleModal(true));
+          }}
           styles={{
             dispaly: 'inline-block',
             margin: '0 16px',

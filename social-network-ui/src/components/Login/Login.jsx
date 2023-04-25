@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../../features/slices/loginSlice';
-import { Box, TextField, Typography, InputAdornment, IconButton } from '@mui/material';
-import { TitleLogin } from './TitleLogin';
-import { ButtonsLogin } from './ButtonsLogin';
-import { CustomButton } from './CustomButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { Box, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+
 import { handleModal } from '../../features/slices/authModalSlice';
+import { loginUser } from '../../features/slices/loginSlice';
+import { ButtonsLogin } from './ButtonsLogin';
+import { CustomButton } from './CustomButton';
+import { TitleLogin } from './TitleLogin';
 
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -40,7 +40,7 @@ export const Login = () => {
       email: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       const formData = new FormData();
       formData.append('email', values.email);
@@ -108,7 +108,7 @@ export const Login = () => {
                 textTransform="none"
                 sx={{ color: 'gray', fontSize: '14px', marginRight: '6px' }}
               >
-                Don't have an account?
+                Don&apos;t have an account?
               </Typography>
               <Typography
                 variant="span"
@@ -171,7 +171,7 @@ export const Login = () => {
                 textTransform="none"
                 sx={{ color: 'gray', fontSize: '14px', marginRight: '6px' }}
               >
-                Don't have an account?
+                Don&apos;t have an account?
               </Typography>
               <Typography
                 variant="span"

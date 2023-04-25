@@ -1,5 +1,5 @@
-import MuiButton from '@mui/material/Button';
 import { styled } from '@mui/material';
+import MuiButton from '@mui/material/Button';
 
 const Button = styled(MuiButton)({
   textTransform: 'unset',

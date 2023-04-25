@@ -1,10 +1,11 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { handleModal } from '../../features/slices/authModalSlice';
-import MuiDialog from '@mui/material/Dialog';
-import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
+import MuiDialog from '@mui/material/Dialog';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { handleLoginModal, handleModal } from '../../features/slices/authModalSlice';
 
 const CustomModal = styled(MuiDialog)({
   '.MuiDialog-paper': {
@@ -21,15 +22,17 @@ const CustomModal = styled(MuiDialog)({
 const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.authModal);
+
   return (
     <CustomModal PaperProps={{ sx }} open={status} onClose={onClose}>
       <>
-        <DialogTitle
-          sx={{ display: 'grid', justifyItems: 'start', gridTemplateColumns: 'repeat(3, 1fr)' }}
-        >
+        <DialogTitle sx={{ display: 'grid', justifyItems: 'start', gridTemplateColumns: 'repeat(3, 1fr)' }}>
           <IconButton
             sx={{ p: 0, width: '30px', height: '30px' }}
-            onClick={() => dispatch(handleModal(false))}
+            onClick={() => {
+              dispatch(handleLoginModal(false));
+              dispatch(handleModal(false));
+            }}
           >
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
