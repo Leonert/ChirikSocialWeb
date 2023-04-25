@@ -11,7 +11,7 @@ Content-Type: application/json
 {"username": "denys"}
 
 ###
-POST localhost:8080/registration/register
+POST localhost:8080/registration/save-user
 Content-Type: application/json
 
 // впишіть свою пошту

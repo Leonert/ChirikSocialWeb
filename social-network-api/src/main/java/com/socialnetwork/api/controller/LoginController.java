@@ -1,5 +1,6 @@
 package com.socialnetwork.api.controller;
 
+import com.socialnetwork.api.model.BadResponse;
 import com.socialnetwork.api.model.Credentials;
 import com.socialnetwork.api.model.JwtResponse;
 import com.socialnetwork.api.model.User;
@@ -36,13 +37,13 @@ public class LoginController {
     Optional<User> optionalUser = userService.findByUsername(credentials.getUsername());
 
     if (optionalUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NO_SUCH_USERNAME);
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BadResponse(NO_SUCH_USERNAME));
     }
 
     User user = optionalUser.get();
 
     if (!passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(WRONG_PASSWORD);
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BadResponse(WRONG_PASSWORD));
     }
 
     String jwt = jwtTokenUtil.generateToken(credentials.getUsername(), credentials.isRememberMe());

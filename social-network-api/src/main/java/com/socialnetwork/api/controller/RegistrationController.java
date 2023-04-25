@@ -1,6 +1,7 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.exception.EmailVerificationException;
+import com.socialnetwork.api.model.BadResponse;
 import com.socialnetwork.api.model.GoodResponse;
 import com.socialnetwork.api.model.User;
 import com.socialnetwork.api.service.UserService;
@@ -46,7 +47,7 @@ public class RegistrationController {
             userService.findByEmailAddress(user.getEmailAddress());
 
     if (optionalUserByEmailAddress.isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(EMAIL_TAKEN);
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(new BadResponse(EMAIL_TAKEN));
     }
 
     return ResponseEntity.ok(new GoodResponse("Ok"));
@@ -58,7 +59,7 @@ public class RegistrationController {
             userService.findByUsername(user.getUsername());
 
     if (optionalUserByUsername.isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(USERNAME_TAKEN);
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(new BadResponse(USERNAME_TAKEN));
     }
 
     return ResponseEntity.ok(new GoodResponse("Ok"));
@@ -73,7 +74,7 @@ public class RegistrationController {
   }
 
   @RequestMapping(value = "activate", method = {RequestMethod.GET, RequestMethod.POST})
-  public ResponseEntity<String> confirmUserAccount(@RequestParam("token") String confirmationToken) {
+  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
     try {
       String html = new String(Files.readAllBytes(Paths.get(EMAIL_CONFIRMED_HTML_URL.toURI())));
       HttpHeaders headers = new HttpHeaders();
@@ -81,7 +82,7 @@ public class RegistrationController {
       userService.verifyAccount(confirmationToken);
       return new ResponseEntity<>(html, headers, HttpStatus.OK);
     } catch (EmailVerificationException evx) {
-      return ResponseEntity.badRequest().body(evx.getMessage());
+      return ResponseEntity.badRequest().body(new BadResponse(evx.getMessage()));
     } catch (IOException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
