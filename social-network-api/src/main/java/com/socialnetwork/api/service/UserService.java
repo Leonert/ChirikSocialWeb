@@ -1,7 +1,7 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.entity.ConfirmationToken;
-import com.socialnetwork.api.entity.User;
+import com.socialnetwork.api.model.ConfirmationToken;
+import com.socialnetwork.api.model.User;
 import com.socialnetwork.api.exception.EmailVerificationException;
 import com.socialnetwork.api.repository.ConfirmationTokenRepository;
 import com.socialnetwork.api.repository.UserRepository;
@@ -13,8 +13,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
   private final UserRepository userRepository;
+
   private final ConfirmationTokenRepository confirmationTokenRepository;
+
   private final EmailService emailService;
 
   public Optional<User> findByUsername(String username) {

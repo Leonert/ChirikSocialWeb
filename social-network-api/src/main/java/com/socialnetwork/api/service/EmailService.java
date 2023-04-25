@@ -1,7 +1,7 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.entity.ConfirmationToken;
-import com.socialnetwork.api.entity.User;
+import com.socialnetwork.api.model.ConfirmationToken;
+import com.socialnetwork.api.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
   private final JavaMailSender javaMailSender;
   private static final String EMAIL_ADDRESS_FROM = "java.test.email000@gmail.com";
-  private static final String CONFIRM_ACCOUNT_URL = "http://localhost:8080/account/registration/confirm-account?token=";
+  private static final String CONFIRM_ACCOUNT_URL = "http://localhost:8080/account/registration/activate?token=";
 
   @Async
   public void sendEmail(User user, ConfirmationToken token) {

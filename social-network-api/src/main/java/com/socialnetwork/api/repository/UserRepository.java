@@ -1,6 +1,6 @@
 package com.socialnetwork.api.repository;
 
-import com.socialnetwork.api.entity.User;
+import com.socialnetwork.api.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
