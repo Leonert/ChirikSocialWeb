@@ -19,9 +19,7 @@ export interface AddTweetFormProps {
     addressedId?: number;
     onCloseModal?: () => void;
 }
-
 const MAX_LENGTH = 280;
-
 const AddTweetForm: FC<AddTweetFormProps> = (
     {
         unsentTweet,
@@ -43,12 +41,6 @@ const AddTweetForm: FC<AddTweetFormProps> = (
     const fileInputRef = useRef(null);
     const params = useParams();
 
-
-    const myAction = () => ({
-        type: 'MY_ACTION_TYPE',
-    });
-
-
     const handleClickImage = () => {
         fileInputRef.current.click();
     };
@@ -66,9 +58,6 @@ const AddTweetForm: FC<AddTweetFormProps> = (
             }
         }
     }, [unsentTweet]);
-
-
-
 
     const handleChangeTextarea = (event: ChangeEvent<HTMLTextAreaElement>): void => {
         setText(event.target.value);
@@ -107,7 +96,6 @@ const AddTweetForm: FC<AddTweetFormProps> = (
 
     const handleClickQuoteTweet = async (): Promise<void> => {
         const result = await uploadTweetImages();
-
         dispatch(({
             images: result,
             tweetId: quoteTweet.id,
@@ -117,7 +105,6 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         setText("");
         if (onCloseModal) onCloseModal();
     };
-
     const handleClickReplyTweet = async (): Promise<void> => {
         dispatch(("Your tweet was sent."));
         setText("");

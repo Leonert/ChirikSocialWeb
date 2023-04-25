@@ -14,19 +14,18 @@ import {NavLink} from "react-router-dom";
 import {BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH} from "../../util/path-constants";
 import CreateIcon from "@material-ui/icons/Create";
 import AddTweetModal from "./AddTweetModal/AddTweetModal";
-import {useSelector} from "react-redux";
 
 
 const SideMenu = (): ReactElement => {
     const classes = useSideMenuStyles();
     const [visibleAddTweet, setVisibleAddTweet] = useState(false);
-
     const handleClickOpenAddTweet = (): void => {
         setVisibleAddTweet(true);
     };
     const onCloseAddTweet = (): void => {
         setVisibleAddTweet(false);
     };
+
 
     return (
         <>

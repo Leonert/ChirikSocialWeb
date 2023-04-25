@@ -12,8 +12,6 @@ interface AddTweetModalProps {
     visible?: boolean;
     onClose: () => void;
 }
-
-
 const AddTweetModal: FC<AddTweetModalProps> = ({ title, visible, onClose }): ReactElement | null => {
     const classes = useAddTweetModalStyles();
     return (

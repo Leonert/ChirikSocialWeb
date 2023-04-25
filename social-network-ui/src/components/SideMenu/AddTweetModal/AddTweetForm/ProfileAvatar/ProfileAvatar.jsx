@@ -7,12 +7,10 @@ import {Avatar} from "@material-ui/core";
 const ProfileAvatar = memo((): ReactElement => {
     const globalClasses = useGlobalStyles();
 
-
     return (
         <Link to={`${PROFILE}`}>
             <Avatar className={globalClasses.avatar}/>
         </Link>
     );
 });
-
 export default ProfileAvatar;
