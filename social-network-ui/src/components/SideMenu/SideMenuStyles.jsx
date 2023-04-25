@@ -5,7 +5,6 @@ export const useSideMenuStyles = makeStyles((theme: Theme) => ({
         position: "fixed",
         top: 0,
         listStyle: "none",
-        padding: 0,
         margin: 0,
         maxWidth: 230,
         "& li .selected": {
@@ -116,11 +115,12 @@ export const useSideMenuStyles = makeStyles((theme: Theme) => ({
     },
     button: {
         height: "52px !important",
+        color: theme.palette.text.primary,
         padding: theme.spacing(3.2),
         marginTop: theme.spacing(2),
         "& .MuiButton-label": {
-            fontSize: 15
-        }
+            fontSize: 19
+        },
     },
     followerRequestsCount: {
         display: "inline-block",

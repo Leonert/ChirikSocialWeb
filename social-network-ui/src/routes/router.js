@@ -17,12 +17,60 @@ export const router = createBrowserRouter([
     errorElement: <div>Error page</div>,
     children: [
       {
-        path: '/main',
+        path: '/home',
         element:
             <MuiThemeProvider theme={defaultTheme}>
                 <CssBaseline />
                 <SideMenu />
             </MuiThemeProvider>,
+      },
+      {
+          path: '/search',
+          element:
+              <MuiThemeProvider theme={defaultTheme}>
+                  <CssBaseline />
+                  <SideMenu />
+              </MuiThemeProvider>,
+      },
+      {
+          path: '/notifications',
+          element:
+              <MuiThemeProvider theme={defaultTheme}>
+                  <CssBaseline />
+                  <SideMenu />
+              </MuiThemeProvider>,
+      },
+      {
+          path: '/messages',
+          element:
+              <MuiThemeProvider theme={defaultTheme}>
+                  <CssBaseline />
+                  <SideMenu />
+              </MuiThemeProvider>,
+      },
+      {
+          path: '/bookmarks',
+          element:
+              <MuiThemeProvider theme={defaultTheme}>
+                  <CssBaseline />
+                  <SideMenu />
+              </MuiThemeProvider>,
+      },
+      {
+          path: '/lists',
+          element:
+              <MuiThemeProvider theme={defaultTheme}>
+                  <CssBaseline />
+                  <SideMenu />
+              </MuiThemeProvider>,
+      },
+      {
+          path: '/profile',
+          element:
+              <MuiThemeProvider theme={defaultTheme}>
+                  <CssBaseline />
+                  <SideMenu />
+              </MuiThemeProvider>,
       },
     ],
   },
