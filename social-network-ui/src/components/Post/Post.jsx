@@ -19,7 +19,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import { red } from "@mui/material/colors";
 export default function Post(props) {
   return (
     <Card
@@ -30,7 +29,7 @@ export default function Post(props) {
       <CardHeader
         avatar={
           <Avatar
-            sx={{ bgcolor: red[500] }}
+            // sx={{ bgcolor: red[500] }}
             aria-label="recipe"
             alt={props.name}
             src={props.avatar}
