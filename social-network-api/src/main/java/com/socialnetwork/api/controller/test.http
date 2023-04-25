@@ -22,4 +22,3 @@ POST localhost:8080/login/authenticate
 Content-Type: application/json
 
 {"username": "denys", "password": "141", "rememberMe":  false}
-
