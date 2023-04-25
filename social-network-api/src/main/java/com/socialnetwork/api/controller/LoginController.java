@@ -1,9 +1,9 @@
 package com.socialnetwork.api.controller;
 
+import com.socialnetwork.api.model.User;
 import com.socialnetwork.api.model.BadResponse;
 import com.socialnetwork.api.model.Credentials;
-import com.socialnetwork.api.model.JwtResponse;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.model.UserResponse;
 import com.socialnetwork.api.security.JwtTokenUtil;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,8 @@ public class LoginController {
 
   private static final String WRONG_PASSWORD = "You entered an incorrect password. Check the password.";
 
+  private static final String CONFIRMATION_REQUIRED = "The account exists but needs to be activated.";
+
   @PostMapping("/authenticate")
   public ResponseEntity<?> createAuthToken(@RequestBody Credentials credentials) {
     Optional<User> optionalUser = userService.findByUsername(credentials.getUsername());
@@ -46,8 +48,13 @@ public class LoginController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BadResponse(WRONG_PASSWORD));
     }
 
+    // якщо такий користувач зареєстрований, але обліковий запис не підтверджено
+    if (!user.isEnabled()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse(CONFIRMATION_REQUIRED));
+    }
+
     String jwt = jwtTokenUtil.generateToken(credentials.getUsername(), credentials.isRememberMe());
 
-    return ResponseEntity.ok(new JwtResponse(jwt));
+    return ResponseEntity.ok(new UserResponse(user, jwt));
   }
 }

@@ -2,7 +2,7 @@
 POST localhost:8080/registration/check-email
 Content-Type: application/json
 
-{"emailAddress": "d.kozarenkoo@gmail.com"}
+{"emailAddress": "denyaaquapark@gmail.com"}
 
 ###
 POST localhost:8080/registration/check-username

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
   private final JavaMailSender javaMailSender;
   private static final String EMAIL_ADDRESS_FROM = "java.test.email000@gmail.com";
-  private static final String CONFIRM_ACCOUNT_URL = "http://localhost:8080/account/registration/activate?token=";
+  private static final String CONFIRM_ACCOUNT_URL = "http://localhost:8080/registration/activate?token=";
 
   @Async
   public void sendEmail(User user, ConfirmationToken token) {

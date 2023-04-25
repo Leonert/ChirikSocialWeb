@@ -34,8 +34,6 @@ public class User {
   @Column(name = "created_date")
   private LocalDateTime createdDate;
 
-  private String name;
-
   @Column(name = "profile_background_image_url")
   private String profileBackgroundImageUrl;
 
