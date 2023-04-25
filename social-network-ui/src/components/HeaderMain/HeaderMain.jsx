@@ -10,7 +10,6 @@ import {
 export default function HeaderMain() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
-
   const dispatch = useDispatch();
   return (
     <Grid
