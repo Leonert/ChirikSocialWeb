@@ -29,7 +29,7 @@ const ActionIconButton: FC<ActionIconButtonProps> = (
         setDelayHandler(delayHandler);
         setVisibleHoverAction(false);
     };
-    return (
+    return(
         <div id={id} className={classes.icon}>
             <IconButton
                 onClick={onClick}

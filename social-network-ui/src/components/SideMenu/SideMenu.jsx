@@ -26,10 +26,9 @@ const SideMenu = (): ReactElement => {
         setVisibleAddTweet(false);
     };
 
-
-    return (
+    return(
         <>
-           <ul className={classes.container}>
+            <ul className={classes.container}>
                <li>
                    <NavLink to={HOME} activeClassName={"selected"}>
 
