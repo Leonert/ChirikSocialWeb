@@ -1,14 +1,10 @@
-import React from "react";
-import Post from "../Post/Post";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { getPost } from "../../features/slices/homeSlice";
+import Post from '../Post/Post';
+
 export default function PostList() {
- 
   const posts = useSelector((state) => state.home.post);
-
-
-  console.log(posts);
 
   return (
     <div>
