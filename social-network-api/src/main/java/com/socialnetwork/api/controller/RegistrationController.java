@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/registration")
+@RequestMapping("/api/registration")
 @RequiredArgsConstructor
 public class RegistrationController {
 
@@ -74,7 +74,8 @@ public class RegistrationController {
   }
 
   @RequestMapping(value = "activate", method = {RequestMethod.GET, RequestMethod.POST})
-  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
+  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken)
+          throws IOException, URISyntaxException {
     try {
       String html = new String(Files.readAllBytes(Paths.get(EMAIL_CONFIRMED_HTML_URL.toURI())));
       HttpHeaders headers = new HttpHeaders();
@@ -83,8 +84,6 @@ public class RegistrationController {
       return new ResponseEntity<>(html, headers, HttpStatus.OK);
     } catch (EmailVerificationException evx) {
       return ResponseEntity.badRequest().body(new BadResponse(evx.getMessage()));
-    } catch (IOException | URISyntaxException e) {
-      throw new RuntimeException(e);
     }
   }
 }

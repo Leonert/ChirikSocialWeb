@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/login")
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -48,7 +48,6 @@ public class LoginController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BadResponse(WRONG_PASSWORD));
     }
 
-    // якщо такий користувач зареєстрований, але обліковий запис не підтверджено
     if (!user.isEnabled()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse(CONFIRMATION_REQUIRED));
     }
