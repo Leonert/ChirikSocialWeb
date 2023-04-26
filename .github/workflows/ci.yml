@@ -39,6 +39,3 @@ jobs:
       - name: Run build
         run: npm run build --prefix
         working-directory: ./social-network-ui
-      - name: Fix dependencies
-        run: npm audit fix --force
-        working-directory: ./social-network-ui
