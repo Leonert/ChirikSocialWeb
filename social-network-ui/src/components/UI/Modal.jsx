@@ -1,8 +1,8 @@
-import React from 'react';
-import MuiDialog from '@mui/material/Dialog';
-import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
+import MuiDialog from '@mui/material/Dialog';
+import React from 'react';
 
 const CustomModal = styled(MuiDialog)({
   '.MuiDialog-paper': {
@@ -16,17 +16,10 @@ const CustomModal = styled(MuiDialog)({
 
 const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
   return (
-    <CustomModal
-      PaperProps={{ sx }}
-      open={open}
-      onClose={onClose}
-    >
+    <CustomModal PaperProps={{ sx }} open={open} onClose={onClose}>
       <>
         <DialogTitle sx={{ display: 'grid', justifyItems: 'start', gridTemplateColumns: 'repeat(3, 1fr)' }}>
-          <IconButton
-            sx={{ p: 0 }}
-            onClick={onClose}
-          >
+          <IconButton sx={{ p: 0 }} onClick={onClose}>
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
           {headerText ? (

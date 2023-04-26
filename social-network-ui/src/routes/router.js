@@ -6,11 +6,8 @@ import {MuiThemeProvider} from "@material-ui/core";
 import { defaultTheme} from "../theme";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-
-
 export const theme= (defaultTheme);
 export const router = createBrowserRouter([
-
   {
     path: '/',
     element: <Layout />,
