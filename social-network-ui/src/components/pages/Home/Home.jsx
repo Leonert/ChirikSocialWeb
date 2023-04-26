@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getPost } from '../../../features/slices/homeSlice';
 import ButtonShowMore from '../../ButtonShowMore/ButtonShowMore';
