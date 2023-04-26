@@ -35,8 +35,6 @@ public class UserService {
     confirmationTokenRepository.save(confirmationToken);
 
     emailService.sendEmail(user, confirmationToken);
-
-    System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
   }
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
