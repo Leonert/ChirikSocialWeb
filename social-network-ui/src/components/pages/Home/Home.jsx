@@ -24,9 +24,10 @@ function Home() {
         alert(error);
       });
   };
+
   useEffect(() => {
     fetchPost();
-  }, []); 
+  }, []);
 
   return (
     <Box
