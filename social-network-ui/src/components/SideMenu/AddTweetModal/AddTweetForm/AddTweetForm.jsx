@@ -50,14 +50,6 @@ const AddTweetForm: FC<AddTweetFormProps> = (
     };
 
 
-    useEffect(() => {
-        if (unsentTweet) {
-            setText(unsentTweet.text);
-            setSelectedScheduleDate(new Date(unsentTweet.scheduledDate));
-            if (unsentTweet.images?.length !== 0) {
-            }
-        }
-    }, [unsentTweet]);
 
     const handleChangeTextarea = (event: ChangeEvent<HTMLTextAreaElement>): void => {
         setText(event.target.value);
@@ -110,6 +102,7 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         setText("");
         if (onCloseModal) onCloseModal();
     };
+
     return (
         <>
             <div className={classes.content}>

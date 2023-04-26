@@ -14,6 +14,7 @@ interface AddTweetModalProps {
 }
 const AddTweetModal: FC<AddTweetModalProps> = ({ title, visible, onClose }): ReactElement | null => {
     const classes = useAddTweetModalStyles();
+
     return (
             <Dialog className={classes.content} open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
                 <DialogTitle className={classes.header} id="form-dialog-title">
