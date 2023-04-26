@@ -34,8 +34,11 @@ jobs:
           node-version: 18.16.0
 
       - name: Install dependencies
-        run: npm install --prefix 
+        run: npm install --prefix
         working-directory: ./social-network-ui
       - name: Run build
-        run: npm run build --prefix 
+        run: npm run build --prefix
+        working-directory: ./social-network-ui
+      - name: Fix dependencies
+        run: npm audit fix --force
         working-directory: ./social-network-ui
