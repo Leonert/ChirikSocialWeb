@@ -26,7 +26,7 @@ function Home() {
   };
   useEffect(() => {
     fetchPost();
-  }, []);
+  }, []); 
 
   return (
     <Box
