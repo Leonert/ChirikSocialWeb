@@ -48,7 +48,7 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         const files = event.target.files;
         if (files.length > 0) {
             const file = files[0];
-            console.log('Loading File:', file);
+            console.log('Loading File:', file); // eslint-disable-line no-console
         }
     };
 
