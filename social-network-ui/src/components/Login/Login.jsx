@@ -1,15 +1,25 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Box, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { FcGoogle } from 'react-icons/fc';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { handleModal } from '../../features/slices/authModalSlice';
-import { loginUser } from '../../features/slices/loginSlice';
-import { ButtonsLogin } from './ButtonsLogin';
+import { loginUser } from '../../features/slices/authSlice';
+import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { CustomButton } from './CustomButton';
 import { TitleLogin } from './TitleLogin';
 
@@ -26,6 +36,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const { loading, user } = useSelector((state) => state.auth);
 
   const handleNextPage = () => {
     const err = Object.keys(formik.errors);
@@ -39,13 +50,18 @@ export const Login = () => {
     initialValues: {
       email: '',
       password: '',
+      rememberMe: true,
     },
     validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       const formData = new FormData();
       formData.append('email', values.email);
       formData.append('password', values.password);
+      formData.append('rememberMe', values.rememberMe);
 
+      console.log(values.email, values.password, values.rememberMe);
+
+      dispatch(handleModal(false));
       dispatch(loginUser(values));
       resetForm();
       navigate('/');
@@ -64,8 +80,19 @@ export const Login = () => {
         minHeight: '70vh',
       }}
     >
+      {loading && <CustomLoader />}
       <TitleLogin firstPage={firstPage} />
-      {firstPage && <ButtonsLogin />}
+      {firstPage && (
+        <>
+          <CustomButton styles={{ color: 'black', width: '100%', '&:hover': { backgroundColor: '#dbdfdf' } }}>
+            <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
+              <FcGoogle size={20} />
+            </Typography>{' '}
+            <Typography textTransform="none"> Sign in with Google</Typography>
+          </CustomButton>
+          <Divider sx={{ marginBottom: '20px' }}>or</Divider>
+        </>
+      )}
 
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -87,6 +114,7 @@ export const Login = () => {
               handleClick={() => handleNextPage()}
               styles={{
                 backgroundColor: '#000000',
+                marginTop: '120px',
                 width: '100%',
                 '&:hover': { backgroundColor: '#191818' },
               }}
@@ -96,11 +124,11 @@ export const Login = () => {
               </Typography>
             </CustomButton>
 
-            <CustomButton styles={{ width: '100%', '&:hover': { backgroundColor: '#dbdfdf' } }}>
+            {/* <CustomButton styles={{ width: '100%', '&:hover': { backgroundColor: '#dbdfdf' } }}>
               <Typography textTransform="none" sx={{ color: 'black', fontWeight: 600 }}>
                 Forgot password?{' '}
               </Typography>
-            </CustomButton>
+            </CustomButton> */}
 
             <Typography textTransform="none">
               <Typography
@@ -136,7 +164,7 @@ export const Login = () => {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              sx={{ display: 'block', marginBottom: '150px' }}
+              sx={{ display: 'block', marginBottom: '10px' }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -152,8 +180,13 @@ export const Login = () => {
               }}
             />
 
+            <FormControlLabel
+              control={<Checkbox checked={formik.values.rememberMe} onChange={formik.handleChange} name="rememberMe" />}
+              sx={{ display: 'block', marginBottom: '140px' }}
+              label="Remember me"
+            />
+
             <CustomButton
-              handleClick={() => dispatch(handleModal(false))}
               onSubmit={true}
               styles={{
                 backgroundColor: '#000000',
