@@ -2,6 +2,7 @@ import React, { FC, ReactElement, useState } from "react";
 import {IconButton } from "@material-ui/core";
 import {useActionIconButtonStyles} from "./ActionIconButtonStyles";
 
+const HOVER_DELAY = 500;
 interface ActionIconButtonProps {
     id?: string;
     onClick?: any;
@@ -21,12 +22,15 @@ const ActionIconButton: FC<ActionIconButtonProps> = (
 ): ReactElement => {
     const classes = useActionIconButtonStyles();
     const [delayHandler, setDelayHandler] = useState(null);
-    const[visibleHoverAction,setVisibleHoverAction] = useState(false)
+    // eslint-disable-next-line no-unused-vars
+    const [visibleHoverAction, setVisibleHoverAction] = useState(false);
+
     const handleHoverAction = (): void => {
-        setDelayHandler(setTimeout(() => setVisibleHoverAction(true)))
+        setDelayHandler(setTimeout(() => setVisibleHoverAction(true), HOVER_DELAY));
     };
+
     const handleLeaveAction = (): void => {
-        setDelayHandler(delayHandler);
+        clearTimeout(delayHandler);
         setVisibleHoverAction(false);
     };
 
