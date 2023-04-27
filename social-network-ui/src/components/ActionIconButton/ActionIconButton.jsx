@@ -23,7 +23,7 @@ const ActionIconButton: FC<ActionIconButtonProps> = (
     const [delayHandler, setDelayHandler] = useState(null);
     const[visibleHoverAction,setVisibleHoverAction] = useState(false)
     const handleHoverAction = (): void => {
-        setDelayHandler(setTimeout(() =>setVisibleHoverAction(true)))
+        setDelayHandler(setTimeout(() => setVisibleHoverAction(true)))
     };
     const handleLeaveAction = (): void => {
         setDelayHandler(delayHandler);

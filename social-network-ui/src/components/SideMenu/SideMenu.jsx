@@ -1,9 +1,9 @@
-import React, {ReactElement, useEffect, useState} from "react";
+import React, {ReactElement, useState} from "react";
 import {useSideMenuStyles} from "./SideMenuStyles";
 import {Hidden, IconButton, Typography} from "@mui/material";
 import {
     BookmarksIcon,
-    ExploreIcon, HomeIcon, HomeIconFilled,
+    ExploreIcon, HomeIcon,
     ListsIcon,
     MessagesIcon,
     NotificationsIcon, ProfileIcon,

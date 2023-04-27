@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, ReactElement, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, FC, ReactElement, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -49,8 +49,6 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         console.log('Loading File:', file);
     };
 
-
-
     const handleChangeTextarea = (event: ChangeEvent<HTMLTextAreaElement>): void => {
         setText(event.target.value);
     };
@@ -61,45 +59,65 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         const result = await uploadTweetImages();
 
         if (visiblePoll) {
-            dispatch(({
-                images: result,
-            }));
+            dispatch({
+                type: 'ADD_TWEET',
+                payload: {
+                    images: result,
+                },
+            });
         } else if (selectedScheduleDate !== null && unsentTweet === undefined) {
-            dispatch(({
-                images: result,
-                scheduledDate: selectedScheduleDate
-            }));
+            dispatch({
+                type: 'ADD_TWEET',
+                payload: {
+                    images: result,
+                    scheduledDate: selectedScheduleDate,
+                },
+            });
         } else if (unsentTweet) {
-            dispatch(({
-                id: unsentTweet?.id,
-                images: result,
-            }));
+            dispatch({
+                type: 'UPDATE_TWEET',
+                payload: {
+                    id: unsentTweet.id,
+                    images: result,
+                },
+            });
             if (onCloseModal) onCloseModal();
         }
-        dispatch((selectedScheduleDate ? (
-            `Your Tweet will be sent on`
-        ) : (
-            "Your tweet was sent."
-        )));
-        setText("");
+        dispatch({
+            type: 'SET_NOTIFICATION',
+            payload: selectedScheduleDate
+                ? 'Your Tweet will be sent on'
+                : 'Your tweet was sent.',
+        });
+        setText('');
         setVisiblePoll(false);
         setSelectedScheduleDate(null);
     };
 
     const handleClickQuoteTweet = async (): Promise<void> => {
         const result = await uploadTweetImages();
-        dispatch(({
-            images: result,
-            tweetId: quoteTweet.id,
-            userId: params.userId
-    }));
-        dispatch(("Your tweet was sent."));
-        setText("");
+        dispatch({
+            type: 'ADD_TWEET',
+            payload: {
+                images: result,
+                tweetId: quoteTweet.id,
+                userId: params.userId,
+            },
+        });
+        dispatch({
+            type: 'SET_NOTIFICATION',
+            payload: 'Your tweet was sent.',
+        });
+        setText('');
         if (onCloseModal) onCloseModal();
     };
+
     const handleClickReplyTweet = async (): Promise<void> => {
-        dispatch(("Your tweet was sent."));
-        setText("");
+        dispatch({
+            type: 'SET_NOTIFICATION',
+            payload: 'Your tweet was sent.',
+        });
+        setText('');
         if (onCloseModal) onCloseModal();
     };
 
