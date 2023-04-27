@@ -37,5 +37,5 @@ jobs:
         run: npm install --force
         working-directory: ./social-network-ui
       - name: Run build
-        run: npm run build --prefix
+        run: npm run build --force
         working-directory: ./social-network-ui
