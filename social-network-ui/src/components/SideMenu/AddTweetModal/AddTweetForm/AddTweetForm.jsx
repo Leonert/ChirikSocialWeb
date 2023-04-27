@@ -35,7 +35,7 @@ const AddTweetForm: FC<AddTweetFormProps> = (
     const [text, setText] = useState("");
     const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
     const [visiblePoll, setVisiblePoll] = useState(false);
-    const classes = useAddTweetFormStyles({ quoteTweet: quoteTweet, isScheduled: selectedScheduleDate !== null });
+    const classes = useAddTweetFormStyles({ qT: quoteTweet, isScheduled: selectedScheduleDate !== null });
     const textLimitPercent = Math.round((text.length / 280) * 100);
     const textCount = MAX_LENGTH - text.length;
     const fileInputRef = useRef(null);
@@ -45,8 +45,11 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         fileInputRef.current.click();
     };
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        console.log('Loading File:', file);
+        const files = event.target.files;
+        if (files.length > 0) {
+            const file = files[0];
+            console.log('Loading File:', file);
+        }
     };
 
     const handleChangeTextarea = (event: ChangeEvent<HTMLTextAreaElement>): void => {
