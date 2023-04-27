@@ -53,11 +53,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       try {
         username = jwtTokenUtil.getUsernameFromToken(jwtToken);
       } catch (Exception e) {
-        System.out.println("401 1");
         response.setStatus(401);
       }
     } else {
-      System.out.println("401 2");
       response.setStatus(401);
     }
 
@@ -71,7 +69,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
       } else {
-        System.out.println("401 3");
         response.setStatus(401);
       }
     }
