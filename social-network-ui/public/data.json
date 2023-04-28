@@ -4,7 +4,7 @@
     "avatar": "",
     "nickname": "Kitty",
     "data": "16.05.23",
-    "img": "./post/post1.jpg",
+
     "post": "Very long and interesting post for all readers",
     "replay": "23",
     "retweet": "34",
@@ -17,7 +17,7 @@
     "nickname": "Jon",
     "data": "16.05.23",
     "img": "./post/post11.jpg",
-    "post": "Very long and interesting post for all readers",
+
     "replay": "20",
     "retweet": "36",
     "like": "3",

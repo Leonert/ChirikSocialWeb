@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import Box from '@mui/material/Box';
+// import Button from '@mui/material/Button';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,7 +17,7 @@ export default function HeaderMain() {
       container
       sx={{
         p: 1,
-        backgroundColor: 'rgba(253, 252, 252, 0.3)',
+        backgroundColor: 'rgba(253, 252, 252, 0.7)',
         width: '33%',
         border: '1px solid #faf5f5',
         justifyContent: 'space-between',
@@ -28,18 +29,11 @@ export default function HeaderMain() {
       <Grid item xs={12} sm={12} md={12}>
         <h2 style={{ paddingLeft: '20px', margin: '0 0 20px 0 ' }}>Home</h2>
       </Grid>
-      <Grid
-        item
-        xs={6}
-        md={6}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      <Grid item xs={6} md={6}>
         <Button
           onClick={() => dispatch(changeStatusRecommendation())}
           sx={{
+            width: '100%',
             backgroundColor: 'transparent',
           }}
         >
@@ -50,6 +44,7 @@ export default function HeaderMain() {
         <Button
           onClick={() => dispatch(changeStatusFollowing())}
           sx={{
+            width: '100%',
             backgroundColor: 'transparent',
           }}
         >

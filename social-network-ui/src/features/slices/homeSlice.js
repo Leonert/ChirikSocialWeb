@@ -1,11 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const homeSlice = createSlice({
-  name: "home",
+  name: 'home',
   initialState: {
     recommendation: true,
     following: false,
+    modalUser: false,
     post: [],
+    postId: "",
   },
   reducers: {
     changeStatusRecommendation: (state) => {
@@ -19,9 +21,12 @@ const homeSlice = createSlice({
     getPost: (state, actions) => {
       state.post.push(...actions.payload);
     },
+    getPostId: (state, actions) => {
+      state.postId = actions.payload;
+      state.modalUser= true
+    },
   },
 });
 
 export default homeSlice.reducer;
-export const { changeStatusRecommendation, changeStatusFollowing, getPost } =
-  homeSlice.actions;
+export const { changeStatusRecommendation, changeStatusFollowing, getPost, getPostId } = homeSlice.actions;

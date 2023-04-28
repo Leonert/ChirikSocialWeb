@@ -1,43 +1,33 @@
-import React from "react";
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import RepeatIcon from '@mui/icons-material/Repeat';
 import {
   Avatar,
+  Badge,
   Card,
+  CardActions,
+  CardContent,
   CardHeader,
   CardMedia,
-  CardContent,
-  CardActions,
-  Badge,
-  Typography,
-  Tooltip,
   IconButton,
-} from "@mui/material";
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import React from 'react';
 
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import RepeatIcon from "@mui/icons-material/Repeat";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 export default function Post(props) {
   return (
     <Card
       sx={{
-        borderBottom: "1px solid #1e2028",
+        borderBottom: '1px solid #1e2028',
       }}
     >
       <CardHeader
-        avatar={
-          <Avatar
-            // sx={{ bgcolor: red[500] }}
-            aria-label="recipe"
-            alt={props.name}
-            src={props.avatar}
-          ></Avatar>
-        }
+        avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
         action={
           <Tooltip title="More">
-            <IconButton aria-label="settings">
+            <IconButton aria-label="settings" onClick={props.handleClick}>
               <MoreHorizIcon />
             </IconButton>
           </Tooltip>
@@ -45,17 +35,19 @@ export default function Post(props) {
         title={props.name}
         subheader={props.data}
       />
-      {<CardMedia component="img" image={props.image} alt="Post" />}
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {props.content}
-        </Typography>
-      </CardContent>
+      {props.image && <CardMedia component="img" image={props.image} alt="Post" />}
+      {props.content && (
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            {props.content}
+          </Typography>
+        </CardContent>
+      )}
       <CardActions
         disableSpacing
         sx={{
-          display: "flex",
-          justifyContent: "space-around",
+          display: 'flex',
+          justifyContent: 'space-around',
         }}
       >
         <Tooltip title="Replay">
@@ -77,18 +69,6 @@ export default function Post(props) {
             <Badge badgeContent={props.like} color="primary">
               <FavoriteIcon />
             </Badge>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="View">
-          <IconButton aria-label="ChatBubbleOutline">
-            <Badge badgeContent={props.view} color="primary">
-              <EqualizerIcon />
-            </Badge>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Share">
-          <IconButton aria-label="share">
-            <ShareIcon />
           </IconButton>
         </Tooltip>
       </CardActions>

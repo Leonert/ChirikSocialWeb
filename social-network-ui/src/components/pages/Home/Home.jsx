@@ -6,13 +6,15 @@ import { getPost } from '../../../features/slices/homeSlice';
 import ButtonShowMore from '../../ButtonShowMore/ButtonShowMore';
 import Following from '../../Following/Following';
 import HeaderMain from '../../HeaderMain/HeaderMain';
+import ModalUser from '../../ModalUser/ModalUser';
 import PostList from '../../PostList/PostList';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
-
+  const modalUserState = useSelector((state) => state.home.modalUser);
   const dispatch = useDispatch();
+
   const fetchPost = () => {
     fetch('./data.json')
       .then((r) => r.json())
@@ -43,6 +45,7 @@ function Home() {
       <ButtonShowMore />
       {recommendation && <PostList />}
       {following && <Following />}
+      {modalUserState && <ModalUser />}
     </Box>
   );
 }
