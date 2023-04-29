@@ -48,7 +48,7 @@ public class PostController {
   @PostMapping("delete")
   public ResponseEntity<?> deletePost(@RequestBody PostDto postDto) {
     Post post = convertToPost(postDto);
-    if (!postService.existsById(post.getPostId())){
+    if (!postService.existsById(post.getPostId())) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse(POST_NOT_FOUND));
     }
     postService.delete(post);
