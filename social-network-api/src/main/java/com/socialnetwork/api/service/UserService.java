@@ -50,4 +50,8 @@ public class UserService {
     confirmationTokenService.deleteById(token.getTokenId());
     userRepository.save(user);
   }
+
+  public Optional<User> findById(int id) {
+    return userRepository.findById(id);
+  }
 }
