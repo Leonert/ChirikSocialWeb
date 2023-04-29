@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +22,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
-  private static final String POST_NOT_FOUND = "Post with such id wasn`t found";
   private final PostService postService;
   private final UserService userService;
   private final ModelMapper modelMapper;
+  private static final String POST_NOT_FOUND = "Post with such id wasn`t found";
 
   @PostMapping("add")
   public ResponseEntity<?> addPost(@RequestBody PostDTO postDTO) throws NoUserWithSuchCredentialsException {
@@ -74,7 +71,6 @@ public class PostController {
   public List<PostDTO> getPostsByUsername(@RequestBody User user) throws NoUserWithSuchCredentialsException {
     return postService.findPostsByUsername(user.getUsername());
   }
-
   private Post convertToPost(PostDTO postDTO) {
     return modelMapper.map(postDTO, Post.class);
   }

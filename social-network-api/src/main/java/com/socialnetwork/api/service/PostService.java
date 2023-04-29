@@ -46,12 +46,12 @@ public class PostService {
   }
 
   public PostDTO getReferenceById(int id) throws NoPostWithSuchIdException {
-    if (!postRepository.existsById(id)) throw new NoPostWithSuchIdException();
+    if(!postRepository.existsById(id)) throw new NoPostWithSuchIdException();
     return modelMapper.map(postRepository.getReferenceById(id), PostDTO.class);
   }
 
   public List<PostDTO> getPostsSortedByCreatedDate() {
-    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate")).stream().map(post -> modelMapper.map(post, PostDTO.class)).toList();
+    return postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdDate")).stream().map(post -> modelMapper.map(post, PostDTO.class)).toList();
   }
 
   public List<PostDTO> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {

@@ -1,10 +1,12 @@
 package com.socialnetwork.api.exception;
 
+import com.socialnetwork.api.controller.PostController;
+import com.socialnetwork.api.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class NoPostWithSuchIdException extends Exception {
+public class NoPostWithSuchIdException extends Exception{
   public NoPostWithSuchIdException() {
     super("Post with such id wasn`t found");
   }
