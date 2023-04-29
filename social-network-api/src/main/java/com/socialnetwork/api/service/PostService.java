@@ -1,6 +1,6 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.DTO.PostDTO;
+import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.model.Post;
@@ -45,19 +45,24 @@ public class PostService {
     postRepository.delete(post);
   }
 
-  public PostDTO getReferenceById(int id) throws NoPostWithSuchIdException {
-    if(!postRepository.existsById(id)) throw new NoPostWithSuchIdException();
-    return modelMapper.map(postRepository.getReferenceById(id), PostDTO.class);
+  public PostDto getReferenceById(int id) throws NoPostWithSuchIdException {
+    if (!postRepository.existsById(id)) {
+      throw new NoPostWithSuchIdException();
+    }
+    return modelMapper.map(postRepository.getReferenceById(id), PostDto.class);
   }
 
-  public List<PostDTO> getPostsSortedByCreatedDate() {
-    return postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdDate")).stream().map(post -> modelMapper.map(post, PostDTO.class)).toList();
+  public List<PostDto> getPostsSortedByCreatedDate() {
+    return postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdDate"))
+        .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
   }
 
-  public List<PostDTO> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
+  public List<PostDto> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
     Optional<User> user = userRepository.findByUsername(username);
-    if (user.isEmpty()) throw new NoUserWithSuchCredentialsException();
-    return convertToPostDTOsList(postRepository.findByUserId(user.get().getId()));
+    if (user.isEmpty()) {
+      throw new NoUserWithSuchCredentialsException();
+    }
+    return convertToPostDtosList(postRepository.findByUserId(user.get().getId()));
   }
 
   public void enrichNewPost(Post post) {
@@ -66,7 +71,7 @@ public class PostService {
     post.setLikes(0);
   }
 
-  private List<PostDTO> convertToPostDTOsList(List<Post> posts) {
-    return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).toList();
+  private List<PostDto> convertToPostDtosList(List<Post> posts) {
+    return posts.stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
   }
 }

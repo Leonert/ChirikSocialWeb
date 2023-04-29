@@ -1,4 +1,4 @@
-package com.socialnetwork.api.DTO;
+package com.socialnetwork.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
