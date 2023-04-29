@@ -2,16 +2,7 @@ package com.socialnetwork.api.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Column;
-import javax.persistence.GenerationType;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.OneToOne;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,7 +26,8 @@ public class ConfirmationToken {
   @JoinColumn(nullable = false, name = "user_id")
   private User user;
 
-  public ConfirmationToken() {}
+  public ConfirmationToken() {
+  }
 
   public ConfirmationToken(User user) {
     this.user = user;

@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class NoUserWithSuchCredentialsException extends Exception {
-  public NoUserWithSuchCredentialsException() {
-    super("User with such credentials wasn`t found");
+public class NoPostWithSuchIdException extends Exception {
+  public NoPostWithSuchIdException() {
+    super("Post with such id wasn`t found");
   }
 }

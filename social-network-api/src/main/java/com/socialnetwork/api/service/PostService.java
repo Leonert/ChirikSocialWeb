@@ -1,16 +1,20 @@
 package com.socialnetwork.api.service;
 
+import com.socialnetwork.api.DTO.PostDTO;
+import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.model.Post;
 import com.socialnetwork.api.model.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,14 +22,19 @@ import java.util.Optional;
 public class PostService {
   private final PostRepository postRepository;
   private final UserRepository userRepository;
+  private final ModelMapper modelMapper;
 
   public void save(Post post) {
-    enrichPost(post);
+    enrichNewPost(post);
     postRepository.save(post);
   }
 
   public void edit(Post post) {
-    postRepository.save(post);
+    // Maps fields which weren`t null in postcontroller request to update only them in DB
+    Post postToUpdate = postRepository.getReferenceById(post.getPostId());
+    modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+    modelMapper.map(post, postToUpdate);
+    postRepository.save(postToUpdate);
   }
 
   public boolean existsById(Integer postId) {
@@ -36,26 +45,28 @@ public class PostService {
     postRepository.delete(post);
   }
 
-  public Post getReferenceById(int id) {
-    return postRepository.getReferenceById(id);
+  public PostDTO getReferenceById(int id) throws NoPostWithSuchIdException {
+    if (!postRepository.existsById(id)) throw new NoPostWithSuchIdException();
+    return modelMapper.map(postRepository.getReferenceById(id), PostDTO.class);
   }
 
-  public Page<Post> findAll(PageRequest request) {
-    return postRepository.findAll(request);
+  public List<PostDTO> getPostsSortedByCreatedDate() {
+    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate")).stream().map(post -> modelMapper.map(post, PostDTO.class)).toList();
   }
 
-  public Page<Post> findByUserId(Integer id, PageRequest request) {
-    return postRepository.findByUserId(id, request);
-  }
-
-  public Page<Post> findPostsByUsername(String username, Optional<Integer> page) throws NoUserWithSuchCredentialsException {
+  public List<PostDTO> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
     Optional<User> user = userRepository.findByUsername(username);
     if (user.isEmpty()) throw new NoUserWithSuchCredentialsException();
-    return postRepository.findByUserId(user.get().getId(), PageRequest.of(page.orElse(1), 10));
+    return convertToPostDTOsList(postRepository.findByUserId(user.get().getId()));
   }
 
-  public void enrichPost(Post post) {
+  public void enrichNewPost(Post post) {
+    //Add fields which weren`t specified in PostDTO - timestamp and likes count (current time and 0 likes for a new post)
     post.setCreatedDate(LocalDateTime.now());
     post.setLikes(0);
+  }
+
+  private List<PostDTO> convertToPostDTOsList(List<Post> posts) {
+    return posts.stream().map(post -> modelMapper.map(post, PostDTO.class)).toList();
   }
 }

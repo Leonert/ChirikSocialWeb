@@ -37,6 +37,7 @@ public class User {
   private String profileImageUrl;
 
   private boolean isEnabled;
+  @Transient
   @OneToMany(mappedBy = "user")
   private List<Post> posts;
 }
