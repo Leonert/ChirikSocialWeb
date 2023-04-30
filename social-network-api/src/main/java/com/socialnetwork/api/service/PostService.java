@@ -53,7 +53,7 @@ public class PostService {
   }
 
   public List<PostDto> getPostsSortedByCreatedDate() {
-    return postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdDate"))
+    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"))
         .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
   }
 
