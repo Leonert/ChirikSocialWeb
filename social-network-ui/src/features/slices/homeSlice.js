@@ -7,7 +7,9 @@ const homeSlice = createSlice({
     following: false,
     modalUser: false,
     post: [],
-    postId: "",
+    postId: '',
+    replayModal: false,
+    message: '',
   },
   reducers: {
     changeStatusRecommendation: (state) => {
@@ -23,10 +25,29 @@ const homeSlice = createSlice({
     },
     getPostId: (state, actions) => {
       state.postId = actions.payload;
-      state.modalUser= true
+      state.modalUser = true;
+    },
+    openReplayModal: (state, actions) => {
+      state.postId = actions.payload;
+      state.replayModal = true;
+    },
+    clothReplayModal: (state) => {
+      state.postId = '';
+      state.replayModal = false;
+    },
+    replayMessage: (state, actions) => {
+      state.message = actions.payload;
     },
   },
 });
 
 export default homeSlice.reducer;
-export const { changeStatusRecommendation, changeStatusFollowing, getPost, getPostId } = homeSlice.actions;
+export const {
+  changeStatusRecommendation,
+  changeStatusFollowing,
+  getPost,
+  getPostId,
+  openReplayModal,
+  clothReplayModal,
+  replayMessage,
+} = homeSlice.actions;

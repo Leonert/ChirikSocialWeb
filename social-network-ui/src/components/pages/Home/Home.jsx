@@ -8,13 +8,14 @@ import Following from '../../Following/Following';
 import HeaderMain from '../../HeaderMain/HeaderMain';
 import ModalUser from '../../ModalUser/ModalUser';
 import PostList from '../../PostList/PostList';
+import ReplayModal from '../../ReplayModal/ReplayModal';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const fetchPost = () => {
     fetch('./data.json')
       .then((r) => r.json())
@@ -33,12 +34,13 @@ function Home() {
   return (
     <Box
       sx={{
-        width: '33%',
+        width: '40%',
         backgroundColor: ' #1e2028',
         display: 'grid',
-        marginLeft: '33%',
-        paddingTop: '114px',
+        marginLeft: '30%',
+        paddingTop: '130px',
         paddingBottom: '20px',
+        border: '1px solid #faf5f5',
       }}
     >
       <HeaderMain />
@@ -46,6 +48,7 @@ function Home() {
       {recommendation && <PostList />}
       {following && <Following />}
       {modalUserState && <ModalUser />}
+      <ReplayModal />
     </Box>
   );
 }

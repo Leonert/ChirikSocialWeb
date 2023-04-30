@@ -1,78 +1,56 @@
 import { Grid } from '@mui/material';
 import Box from '@mui/material/Box';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { changeStatusFollowing, changeStatusRecommendation } from '../../features/slices/homeSlice';
-import Button from '../UI/Button';
+import { useHeaderMenuStyles } from './HeaderMainStyles';
 
 export default function HeaderMain() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const dispatch = useDispatch();
-
+  const classes = useHeaderMenuStyles();
   return (
-    <Grid
-      container
-      sx={{
-        p: 1,
-        backgroundColor: 'rgba(253, 252, 252, 0.7)',
-        width: '33%',
-        border: '1px solid #faf5f5',
-        justifyContent: 'space-between',
-        position: 'fixed',
-        top: '5px',
-        left: '33%',
-      }}
-    >
-      <Grid item xs={12} sm={12} md={12}>
-        <h2 style={{ paddingLeft: '20px', margin: '0 0 20px 0 ' }}>Home</h2>
+    <div className={classes.wrapper}>
+      <Grid className={classes.container} container>
+        <Grid item xs={12} sm={12} md={12}>
+          <h2 style={{ paddingLeft: '20px', margin: '0 0 20px 0 ' }}>Home</h2>
+        </Grid>
+        <Grid item xs={6}>
+          <Button className={classes.buttonHeader} onClick={() => dispatch(changeStatusRecommendation())}>
+            For you
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button className={classes.buttonHeader} onClick={() => dispatch(changeStatusFollowing())}>
+            Following
+          </Button>
+        </Grid>
+        <Grid item xs={6} className={classes.gridWrapper}>
+          {recommendation && (
+            <Box
+              sx={{
+                width: 70,
+                height: 3,
+                backgroundColor: 'primary.dark',
+              }}
+            />
+          )}
+        </Grid>
+        <Grid item xs={6} className={classes.gridWrapper}>
+          {following && (
+            <Box
+              sx={{
+                width: 85,
+                height: 3,
+                backgroundColor: 'primary.dark',
+              }}
+            />
+          )}
+        </Grid>
       </Grid>
-      <Grid item xs={6} md={6}>
-        <Button
-          onClick={() => dispatch(changeStatusRecommendation())}
-          sx={{
-            width: '100%',
-            backgroundColor: 'transparent',
-          }}
-        >
-          For you
-        </Button>
-      </Grid>
-      <Grid item xs={6} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button
-          onClick={() => dispatch(changeStatusFollowing())}
-          sx={{
-            width: '100%',
-            backgroundColor: 'transparent',
-          }}
-        >
-          Following
-        </Button>
-      </Grid>
-      <Grid item xs={6} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
-        {recommendation && (
-          <Box
-            sx={{
-              width: 65,
-              height: 2,
-              backgroundColor: 'primary.dark',
-            }}
-          />
-        )}
-      </Grid>
-      <Grid item xs={6} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
-        {following && (
-          <Box
-            sx={{
-              width: 75,
-              height: 2,
-              backgroundColor: 'primary.dark',
-            }}
-          />
-        )}
-      </Grid>
-    </Grid>
+    </div>
   );
 }
