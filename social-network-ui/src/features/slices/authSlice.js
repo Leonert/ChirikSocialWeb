@@ -1,22 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const URL = process.env.URL;
-
+// const URL = process.env.URL;
+const URL = 'http://localhost:8080/';
 export const loginUser = createAsyncThunk('auth/loginUser', async ({ email, password, rememberMe }) => {
   try {
-    const { data } = axios.post(`${URL}login/authenticate`, {
-      email,
-      password,
-      rememberMe,
+    const { data } = axios({
+      method: 'post',
+      url: `${URL}api/login/authenticate`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        username: email,
+        password,
+        rememberMe,
+      },
     });
-    if (data.token) {
-      window.localStorage.setItem('token', data.token);
-    }
 
     return data;
   } catch (error) {
-    // eslint-disable-next-line
     console.log(error);
   }
 });
@@ -39,7 +42,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.user = action.payload?.user;
-      state.token = action.payload?.token;
+      state.token = action.payload?.jwt;
     },
     [loginUser.rejected]: (state, action) => {
       state.loading = false;
