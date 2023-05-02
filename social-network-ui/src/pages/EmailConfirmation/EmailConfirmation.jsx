@@ -1,27 +1,74 @@
+import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { LOGIN } from '../../util/path-constants';
+import { EMAIL_CONFIRMATION } from '../../util/endpoints-constants';
+import { HOME, LOGIN } from '../../util/path-constants';
 import useEmailConfirmationStyles from './EmailConfirmationStyles';
 
 const EmailConfirmation = () => {
+  const ACCOUNT_CONFIRMED = 'Your account has been confirmed!';
+  const ACCOUNT_NOT_CONFIRMED = (
+    <>
+      <>Whoops...</>
+      <br />
+      <>Something went wrong</>
+    </>
+  );
   const classes = useEmailConfirmationStyles();
+  const [searchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  useEffect(() => {
+    const checkTokenValidity = async (token) => {
+      try {
+        const response = await axios.get(EMAIL_CONFIRMATION + token);
+
+        if (response.status === 200) {
+          setIsConfirmed(true);
+        }
+      } catch (error) {
+        setIsConfirmed(false);
+      }
+
+      setIsLoading(false);
+    };
+
+    const token = searchParams.get('token');
+
+    if (!token) {
+      setIsLoading(false);
+
+      return;
+    }
+
+    checkTokenValidity(token);
+  }, []);
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ height: '100vh', textAlign: 'center' }} paddingTop={20}>
-        <CheckCircleIcon className={classes.icon} sx={{ width: 130, height: 130, fill: 'primary.main' }} />
-        <Box mb={5} mt={3}>
-          <Typography variant="h4">Your account has been confirmed!</Typography>
-        </Box>
-        <NavLink className={classes.link} to={LOGIN}>
-          <Typography className={classes.typography} variant="h4">
-            Log In
-          </Typography>
-        </NavLink>
+      <Box className={classes.boxWrapper}>
+        {isLoading && <CircularProgress />}
+        {!isLoading && (
+          <Box>
+            {isConfirmed ? <CheckCircleIcon className={classes.icon} /> : <CancelIcon className={classes.icon} />}
+            <Box className={classes.boxInner}>
+              <Typography variant="h4">{isConfirmed ? ACCOUNT_CONFIRMED : ACCOUNT_NOT_CONFIRMED}</Typography>
+            </Box>
+            <NavLink className={classes.link} to={isConfirmed ? LOGIN : HOME}>
+              <Typography className={classes.typography} variant="h4">
+                {isConfirmed ? 'Log In' : 'Home Page'}
+              </Typography>
+            </NavLink>
+          </Box>
+        )}
       </Box>
     </Container>
   );

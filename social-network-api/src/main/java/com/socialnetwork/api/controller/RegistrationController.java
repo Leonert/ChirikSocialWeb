@@ -66,7 +66,7 @@ public class RegistrationController {
   }
 
   @RequestMapping(value = "activate", method = {RequestMethod.GET, RequestMethod.POST})
-  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken){
+  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
     try {
       userService.verifyAccount(confirmationToken);
       return ResponseEntity.ok(new GoodResponse("Ok"));

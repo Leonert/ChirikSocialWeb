@@ -1,6 +1,19 @@
 import { makeStyles } from '@material-ui/core';
 
 const useEmailConfirmationStyles = makeStyles((theme) => ({
+  boxWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    textAlign: 'center',
+  },
+  icon: {
+    minWidth: 130,
+    maxWidth: 130,
+    minHeight: 130,
+    maxHeight: 130,
+  },
   link: {
     textDecoration: 'none',
   },
@@ -15,6 +28,10 @@ const useEmailConfirmationStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.primary.dark,
     },
+  },
+  boxInner: {
+    marginTop: '24px',
+    marginBottom: '40px',
   },
 }));
 
