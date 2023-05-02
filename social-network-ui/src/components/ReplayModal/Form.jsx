@@ -11,22 +11,19 @@ import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
 
-const MAX_LENGTH = 280;
-
 function FormModal({ buttonName }) {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
-  const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
-  const [visiblePoll, setVisiblePoll] = useState(false);
+
   const [remainingChars, setRemainingChars] = useState(280);
-  const openReplayM = useSelector((state) => state.home.replayModal);
   const id = useSelector((state) => state.home.postId);
   const post = useSelector((state) => state.home.post);
   const classes = useAddTweetFormStyles();
   const MAX_LENGTH = 280;
   const textLimitPercent = Math.round((text.length / 280) * 100);
-  const textCount = MAX_LENGTH - text.length;
+  const textCount = remainingChars;
   const fileInputRef = useRef(null);
+  const visiblePoll = false;
 
   const handleClickImage = () => {
     fileInputRef.current.click();
@@ -39,7 +36,6 @@ function FormModal({ buttonName }) {
     }
   };
 
-  const userPost = 'img';
   const targetPost = post.find((post) => post.id === id);
 
   const sendRequest = (follower) => {
