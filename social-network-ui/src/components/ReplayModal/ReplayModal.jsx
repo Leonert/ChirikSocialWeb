@@ -1,51 +1,32 @@
-import { Avatar } from '@mui/material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
-import React from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { clothReplayModal } from '../../features/slices/homeSlice';
-import MyForm from './Form';
+import CloseButton from '../SideMenu/AddTweetModal/AddTweetForm/CloseButton/CloseButton';
+import { useAddTweetModalStyles } from '../SideMenu/AddTweetModal/AddTweetModalStyles';
+import FormModal from './Form';
 
-export default function ReplayModal() {
+const ReplayModal = () => {
   const dispatch = useDispatch();
+  const classes = useAddTweetModalStyles();
   const openReplayM = useSelector((state) => state.home.replayModal);
-  const id = useSelector((state) => state.home.postId);
-  const text = useSelector((state) => state.home.message);
-  const post = useSelector((state) => state.home.post);
   const handleClose = () => {
     dispatch(clothReplayModal());
   };
-
-  const userPost = 'img';
-  const targetPost = post.find((post) => post.id === id);
-  const sendRequest = (name, id, message, follower) => {
-    alert(`${follower} replay ${message} on tweet ${id} to user ${targetPost.nickname}`);
-    dispatch(clothReplayModal());
-  };
-  const userName = 'like This';
-  const useRetweeted = 'some user';
   return (
-    <div>
-      {targetPost && (
-        <Dialog open={openReplayM} onClose={handleClose}>
-          <DialogTitle>
-            <Avatar aria-label="recipe" alt={targetPost.nickname} src={targetPost.avatar}></Avatar>{' '}
-          </DialogTitle>
-          <DialogTitle> {targetPost.nickname}</DialogTitle>
-          <DialogTitle>From </DialogTitle>
-          <DialogTitle>{useRetweeted} </DialogTitle>
-
-          <MyForm />
-
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() => sendRequest(userName, id, text, useRetweeted)}>Subscribe</Button>
-          </DialogActions>
-        </Dialog>
-      )}
-    </div>
+    <Dialog className={classes.content} open={openReplayM} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <DialogTitle className={classes.header} id="form-dialog-title">
+        <CloseButton onClose={handleClose} />
+      </DialogTitle>
+      <DialogContent className={classes.dialogContent}>
+        <FormModal buttonName={'Replay'} />
+      </DialogContent>
+    </Dialog>
   );
-}
+};
+export default ReplayModal;
+
+// maxRows={6} minRows={6} title={"What's happening?"} buttonName={'Tweet'}
