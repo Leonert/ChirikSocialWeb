@@ -16,6 +16,7 @@ const ReplayModal = () => {
   const handleClose = () => {
     dispatch(clothReplayModal());
   };
+  
   return (
     <Dialog className={classes.content} open={openReplayM} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle className={classes.header} id="form-dialog-title">
