@@ -20,6 +20,7 @@ import { usePostStyle } from './PostStyle';
 
 export default function Post(props) {
   const classes = usePostStyle();
+
   return (
     <Card className={classes.Page}>
       <CardHeader

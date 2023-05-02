@@ -17,10 +17,12 @@ export const useReplayModalStyle = makeStyles((theme: Theme) => ({
   btnModal: {
     width: '100%',
     color: '#fff !important',
+
     '&:hover': {
       background: '#4fc3f7 !important',
     },
   },
+
   pageItem: {
     marginBottom: theme.spacing(2),
     '& .Mui-focused': {

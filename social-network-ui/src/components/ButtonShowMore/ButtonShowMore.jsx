@@ -6,6 +6,7 @@ import { useButtonShowStyles } from './ButtonShowMoreStyle';
 
 function ButtonShowMore(props) {
   const classes = useButtonShowStyles();
+
   return (
     <Button className={classes.buttonHeader}>
       <Typography className={classes.btnText}>Show {props.text} tweets</Typography>

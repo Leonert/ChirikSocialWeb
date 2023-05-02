@@ -1,6 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
@@ -20,6 +19,7 @@ export default function PostList() {
     dispatch(openReplayModal(props));
     alert(`past ${props}  add to like`);
   };
+
   return (
     <div>
       {posts &&

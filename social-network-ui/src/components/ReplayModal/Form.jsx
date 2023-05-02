@@ -3,9 +3,8 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@mui/material/Typography';
-import React, { ChangeEvent, FC, ReactElement, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { clothReplayModal } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
@@ -48,8 +47,8 @@ function FormModal({ buttonName }) {
     dispatch(clothReplayModal());
     setText('');
   };
-  const userName = 'like This';
-  const useRetweeted = 'some user';
+  const userName = 'like This Name';
+
   return (
     <div>
       {targetPost && (
@@ -61,13 +60,13 @@ function FormModal({ buttonName }) {
           <Typography className={classes.item}>Send replay</Typography>
           <div className={classes.content}>
             <Avatar />
-            <Typography className={classes.itemNick}>Some text</Typography>
+            <Typography className={classes.itemNick}>{userName}</Typography>
           </div>
           <div className={classes.textareaWrapper}>
             <TextareaAutosize
               onChange={handleTextChange}
               className={classes.contentTextarea}
-              placeholder={'Ask a question...'}
+              placeholder={'Enter replay...'}
               value={text}
               maxRows={6}
             />
