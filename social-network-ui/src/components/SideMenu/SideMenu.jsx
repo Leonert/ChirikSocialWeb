@@ -14,16 +14,15 @@ import {NavLink} from "react-router-dom";
 import {BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH} from "../../util/path-constants";
 import CreateIcon from "@material-ui/icons/Create";
 import AddTweetModal from "./AddTweetModal/AddTweetModal";
-import Messages from "../../pages/Messages/Messages";
 
 
 const SideMenu = () => {
     const classes = useSideMenuStyles();
     const [visibleAddTweet, setVisibleAddTweet] = useState(false);
-    const handleClickOpenAddTweet = (): void => {
+    const handleClickOpenAddTweet = ()=> {
         setVisibleAddTweet(true);
     };
-    const onCloseAddTweet = (): void => {
+    const onCloseAddTweet = ()=> {
         setVisibleAddTweet(false);
     };
 
@@ -82,7 +81,7 @@ const SideMenu = () => {
                     </NavLink>
                 </li>
                 <li className={classes.itemWrapper}>
-                    <NavLink to="/messages" activeClassName={"selected"}>
+                    <NavLink to={MESSAGES} activeClassName={"selected"}>
                         <div>
                             <Hidden smDown>
                                 <span>{MessagesIcon}</span>

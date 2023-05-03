@@ -4,12 +4,10 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-
 import {useMessagesModalStyles} from "./MessagesModalStyles";
 import {MessagesModalInput} from "./MessagesModalInput/MessagesModalInput"
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
 import {SearchIcon} from "../../../icon";
-
 
 
 
