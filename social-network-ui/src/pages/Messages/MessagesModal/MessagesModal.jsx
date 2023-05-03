@@ -1,4 +1,4 @@
-import React, { ReactElement, useState} from 'react';
+import React, { useState} from 'react';
 import {Button, Dialog, InputAdornment, List, ListItem} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -13,7 +13,7 @@ import {SearchIcon} from "../../../icon";
 
 
 
-const MessagesModal = ({visible, onClose}): ReactElement | null => {
+const MessagesModal = ({visible, onClose})=> {
     const classes = useMessagesModalStyles();
     const [text] = useState("");
     const [selectedIndex] = useState();
