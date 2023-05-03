@@ -9,7 +9,7 @@ interface CloseButtonProps {
     onClose: () => void;
 }
 
-const CloseButton: FC<CloseButtonProps> = ({ onClose }): ReactElement => {
+const CloseButton: FC<CloseButtonProps> = ({ onClose }) => {
     const classes = useCloseButtonStyles();
 
     return (

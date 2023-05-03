@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { useState} from "react";
 import {useSideMenuStyles} from "./SideMenuStyles";
 import {Hidden, IconButton, Typography} from "@mui/material";
 import {
@@ -14,9 +14,10 @@ import {NavLink} from "react-router-dom";
 import {BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH} from "../../util/path-constants";
 import CreateIcon from "@material-ui/icons/Create";
 import AddTweetModal from "./AddTweetModal/AddTweetModal";
+import Messages from "../../pages/Messages/Messages";
 
 
-const SideMenu = (): ReactElement => {
+const SideMenu = () => {
     const classes = useSideMenuStyles();
     const [visibleAddTweet, setVisibleAddTweet] = useState(false);
     const handleClickOpenAddTweet = (): void => {
@@ -31,7 +32,6 @@ const SideMenu = (): ReactElement => {
             <ul className={classes.container}>
                <li>
                    <NavLink to={HOME} activeClassName={"selected"}>
-
                    <div className={classes.logoIcon}>
                        <IconButton>
                             {TweetIcon}
@@ -82,15 +82,13 @@ const SideMenu = (): ReactElement => {
                     </NavLink>
                 </li>
                 <li className={classes.itemWrapper}>
-                    <NavLink to={MESSAGES} activeClassName={"selected"}>
+                    <NavLink to="/messages" activeClassName={"selected"}>
                         <div>
                             <Hidden smDown>
-                                <>
-                                    <span>{MessagesIcon}</span>
-                                    <Typography variant={"h5"}>
-                                        Messages
-                                    </Typography>
-                                </>
+                                <span>{MessagesIcon}</span>
+                                <Typography className={classes.label} variant="h5">
+                                    Messages
+                                </Typography>
                             </Hidden>
                         </div>
                     </NavLink>
