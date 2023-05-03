@@ -1,10 +1,10 @@
-import React, { memo, ReactElement } from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { useGlobalStyles } from "../../../../../util/globalClasses";
 import {PROFILE} from "../../../../../util/path-constants";
 import {Avatar} from "@material-ui/core";
 
-const ProfileAvatar= memo(():ReactElement => {
+const ProfileAvatar= memo(() => {
     const globalClasses= useGlobalStyles();
 
     return (
