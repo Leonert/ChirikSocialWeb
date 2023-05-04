@@ -1,4 +1,4 @@
-export const HOME = "/home";
+export const HOME = "/";
 export const NOTIFICATIONS = "/notifications";
 export const MESSAGES = "/messages";
 export const BOOKMARKS = "/bookmarks";
