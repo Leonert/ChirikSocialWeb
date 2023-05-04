@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {ReactElement, useState} from "react";
 import {useSideMenuStyles} from "./SideMenuStyles";
 import {Hidden, IconButton, Typography} from "@mui/material";
 import {

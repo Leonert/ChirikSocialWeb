@@ -1,6 +1,7 @@
 import {makeStyles} from "@material-ui/core";
 
 
+
 export const useSpinnerStyles = makeStyles((theme) => ({
     loading: {
         width: 30,

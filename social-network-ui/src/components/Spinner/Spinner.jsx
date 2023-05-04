@@ -1,5 +1,6 @@
-import React from 'react';
+import React from "react";
 import {useSpinnerStyles} from "./SpinnerStyles";
+
 
 const Spinner = ({paddingTop}) => {
     const classes = useSpinnerStyles({paddingTop});
