@@ -1,13 +1,10 @@
 import React from 'react';
-import { Avatar, Typography } from "@material-ui/core";
+import {Avatar,Typography} from "@material-ui/core";
 
-import { useMessagesModalUserStyles } from "./MessagesModalUserStyles";
 
-const user = {
-    avatar: { src: "user-avatar.png" },
-    fullName: "John Smith",
-    username: "john_smith"
-};
+
+import {useMessagesModalUserStyles} from "./MessagesModalUserStyles";
+
 
 const MessagesModalUser = ({ user }) => {
     const classes = useMessagesModalUserStyles();
@@ -36,6 +33,4 @@ const MessagesModalUser = ({ user }) => {
     );
 };
 
-export default function App() {
-    return <MessagesModalUser user={user} />;
-}
+export default MessagesModalUser

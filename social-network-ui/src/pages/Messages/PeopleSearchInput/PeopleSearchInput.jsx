@@ -1,14 +1,15 @@
 import {withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField/TextField";
 
-export const MessageInput = withStyles((theme) => ({
+export const PeopleSearchInput = withStyles((theme) => ({
     root: {
         '& .MuiOutlinedInput-root': {
-            marginTop: 2,
-            borderRadius: 20,
-            padding: "3px 14px",
+            borderRadius: 30,
             border: "1px solid rgb(207, 217, 222)",
-            width: 490,
+            padding: 0,
+            paddingLeft: 15,
+            marginLeft: 15,
+            width: 385,
             '&.Mui-focused': {
                 backgroundColor: theme.palette.secondary.light,
                 '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
@@ -23,11 +24,15 @@ export const MessageInput = withStyles((theme) => ({
                 borderColor: 'transparent',
                 borderWidth: 1,
             },
+            "& .MuiInputAdornment-root": {
+                "& svg" : {
+                    color: "rgb(83, 100, 113)",
+                    height: "1.25em"
+                }
+            },
         },
         '& .MuiOutlinedInput-input': {
-            "&::placeholder": {
-                color: "rgb(15, 20, 25)",
-            },
+            padding: "12px 0px",
         },
     },
 }))(TextField);

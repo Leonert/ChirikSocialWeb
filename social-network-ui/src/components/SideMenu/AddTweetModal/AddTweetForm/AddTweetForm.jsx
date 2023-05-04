@@ -1,4 +1,4 @@
-import React, {ChangeEvent,useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -43,13 +43,13 @@ const AddTweetForm = (
         }
     };
 
-    const handleChangeTextarea = (event: ChangeEvent<HTMLTextAreaElement>): void => {
+    const handleChangeTextarea = (event) => {
         setText(event.target.value);
     };
-    const uploadTweetImages = async (): Promise<Array> => {
+    const uploadTweetImages = async () => {
 
     };
-    const handleClickAddTweet = async (): Promise<void> => {
+    const handleClickAddTweet = async () => {
         const result = await uploadTweetImages();
 
         if (visiblePoll) {
@@ -88,7 +88,7 @@ const AddTweetForm = (
         setSelectedScheduleDate(null);
     };
 
-    const handleClickQuoteTweet = async (): Promise<void> => {
+    const handleClickQuoteTweet = async () => {
         const result = await uploadTweetImages();
         dispatch({
             type: 'ADD_TWEET',
@@ -106,7 +106,7 @@ const AddTweetForm = (
         if (onCloseModal) onCloseModal();
     };
 
-    const handleClickReplyTweet = async (): Promise<void> => {
+    const handleClickReplyTweet = async () => {
         dispatch({
             type: 'SET_NOTIFICATION',
             payload: 'Your tweet was sent.',

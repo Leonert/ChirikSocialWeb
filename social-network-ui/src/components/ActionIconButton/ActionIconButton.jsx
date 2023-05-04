@@ -3,7 +3,6 @@ import {IconButton } from "@material-ui/core";
 import {useActionIconButtonStyles} from "./ActionIconButtonStyles";
 
 const HOVER_DELAY = 500;
-
 const ActionIconButton = (
     {
         id,

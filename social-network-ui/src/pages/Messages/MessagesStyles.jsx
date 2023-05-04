@@ -18,7 +18,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
         display: 'flex',
         margin: 0,
         padding: 0,
-        width: 416,
+        width: 331,
         height: 53,
         zIndex: 1,
         borderTop: 0,

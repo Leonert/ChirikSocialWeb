@@ -1,5 +1,4 @@
 import {makeStyles} from "@material-ui/core";
-import {theme} from "../../../../routes/router";
 
 
 export const useMessagesModalUserStyles = makeStyles((theme) => ({

@@ -1,14 +1,19 @@
-import React, { Fragment, useRef, useState} from "react";
-import {Avatar, Grid, List, ListItem, Paper, Typography} from "@material-ui/core";
+import React, { useRef, useState} from "react";
+import {Avatar, Grid, InputAdornment, List, ListItem, Paper, Typography} from "@material-ui/core";
 import {useMessagesStyles} from "./MessagesStyles";
 import Button from "@material-ui/core/Button";
 import {MessageInput} from "./MessageInput/MessageInput";
-import {CheckIcon, EmojiIcon, GifIcon, MediaIcon} from "../../icon";
+import {CheckIcon, EmojiIcon, MediaIcon, SandMessageIcon, SearchIcon} from "../../icon";
 import IconButton from "@material-ui/core/IconButton";
 import MessagesModal from "./MessagesModal/MessagesModal";
 import {formatChatMessageDate, formatDate} from "../../util/formatDate";
 import {Link} from "react-router-dom";
 import {DEFAULT_PROFILE_IMG} from "../../util/url";
+import classNames from "classnames";
+import {PeopleSearchInput} from "./PeopleSearchInput/PeopleSearchInput";
+
+
+
 
 
 
@@ -17,21 +22,32 @@ const Messages = () => {
     const chatEndRef = useRef(null);
     const [message, setMessage] = useState("");
     const [visibleModalWindow, setVisibleModalWindow] = useState(false);
-    const [participant] = useState();
+    const [participant, setParticipant] = useState(null);
+    const [text, setText] = useState("");
+    const [chat, setChat] = useState(null);
 
-    const onOpenModalWindow = (): void => {
+
+    const onOpenModalWindow = () => {
         setVisibleModalWindow(true);
     };
 
-    const onCloseModalWindow = (): void => {
+    const onCloseModalWindow = () => {
         setVisibleModalWindow(false);
     };
 
+    const handleListItemClick = (chat) => {
+        setParticipant(chat);
+        setChat(chat);
+    };
+
+    const onSendMessage = () => {
+    };
 
     return (
         <>
             <Grid className={classes.grid} md={4} item>
                 <div className={classes.messagesContainer}>
+
                     <Paper variant="outlined">
                         <Paper className={classes.header}>
                             <div>
@@ -40,6 +56,7 @@ const Messages = () => {
                                 </Typography>
                             </div>
                         </Paper>
+                        {(length === 0) ? (
                             <>
                                 <div className={classes.messagesTitle}>
                                     Send a message, get a message
@@ -57,33 +74,75 @@ const Messages = () => {
                                     Start a conversation
                                 </Button>
                             </>
+                        ) : (
                             <>
                                 <div className={classes.searchWrapper}>
-
+                                    <PeopleSearchInput
+                                        placeholder="Explore for people and groups"
+                                        variant="outlined"
+                                        onChange={(event) => setText(event.target.value)}
+                                        value={text}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    {SearchIcon}
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
                                 </div>
                                 <List component="nav" className={classes.list} aria-label="main mailbox folders">
-
-                                        <ListItem button className={classes.listItem}>
+                                    {((chat) => (
+                                        <ListItem
+                                            key={chat.id}
+                                            button
+                                            className={classes.listItem}
+                                            id={(participant?.id === chat.id) ? ("selected") : ("")}
+                                            selected={participant?.id === chat.id}
+                                            onClick={() => handleListItemClick(chat)}
+                                        >
                                             <div className={classes.userWrapper}>
                                                 <Avatar
                                                     className={classes.userAvatar}
+                                                    src={(chat.id) ? (
+                                                        (chat.avatar?.src) ? (
+                                                        chat.avatar.src
+                                                        ) : (
+                                                        DEFAULT_PROFILE_IMG
+                                                        )
+                                                        ) : ((chat.avatar?.src) ? (
+                                                        chat.avatar.src
+                                                        ) : (
+                                                        DEFAULT_PROFILE_IMG
+                                                        )
+                                                        )}
                                                 />
                                                 <div style={{flex: 1}}>
                                                     <div className={classes.userHeader}>
                                                         <div style={{width: 300}}>
                                                             <Typography className={classes.userFullName}>
-                                                                test
+                                                                {(chat.id) ? (
+                                                                    chat.fullName
+                                                                    ) : (
+                                                                    chat.fullName
+                                                                    )}
                                                             </Typography>
                                                             <Typography className={classes.username}>
-                                                                test
+                                                                {(chat.id) ? (
+                                                                    "@" + chat.username
+                                                                    ) : (
+                                                                    "@" + chat.username
+                                                                    )}
                                                             </Typography>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </ListItem>
+                                    ))}
                                 </List>
                             </>
+                        )}
                     </Paper>
                 </div>
             </Grid>
@@ -125,13 +184,21 @@ const Messages = () => {
                                 </div>
                             </Paper>
                             <Paper className={classes.chat}>
-                                <Fragment key={message.id}>
-                                    <div className={classes.tweetContainer}>
-                                                    <Link to={`/home/tweet/`}>
+                                {(message => (
+                                    (message.author.id) ? (
+                                        <React.Fragment key={message.id}>
+                                            {message && (
+                                                <div className={classes.tweetContainer}>
+                                                    <Link to={`/home/tweet/${message.id}`}>
                                                         <div className={classes.tweetWrapper}>
                                                             <div className={classes.tweetUserInfoWrapper}>
                                                                 <Avatar
                                                                     className={classes.tweetAvatar}
+                                                                    src={(message.user.avatar?.src) ? (
+                                                                        message.user.avatar?.src
+                                                                    ) : (
+                                                                        DEFAULT_PROFILE_IMG
+                                                                    )}
                                                                 />
                                                                 <span className={classes.tweetUserFullName}>
                                                                     {message.user.fullName}
@@ -148,9 +215,11 @@ const Messages = () => {
                                                         </div>
                                                     </Link>
                                                 </div>
+                                            )}
                                             {message.text && (
-                                                <div className={(
-                                                    classes.myMessage
+                                                <div className={classNames(
+                                                    classes.myMessage,
+                                                    message ? classes.myMessageWithTweet : classes.myMessageCommon
                                                 )}>
                                                     <span>{message.text}</span>
                                                 </div>
@@ -159,16 +228,28 @@ const Messages = () => {
                                                 <span>{CheckIcon}</span>
                                                 <span>{formatChatMessageDate(new Date(message.date))}</span>
                                             </div>
-                                        </Fragment>
+                                        </React.Fragment>
                                     ) : (
-                                        <Fragment key={message.id}>
+                                        <React.Fragment key={message.id}>
                                             <div className={classes.participantContainer}>
                                                 <Avatar
                                                     className={classes.participantAvatar}
+                                                    src={(chat?.id) ? (
+                                                        (chat?.avatar?.src) ? (
+                                                        chat?.avatar.src
+                                                        ) : (
+                                                        DEFAULT_PROFILE_IMG
+                                                        )
+                                                        ) : ((chat?.avatar?.src) ? (
+                                                        chat?.avatar.src
+                                                        ) : (
+                                                        DEFAULT_PROFILE_IMG
+                                                        )
+                                                        )}
                                                 />
                                                 <div>
                                                     {message && (
-                                                        <div className={classes.participantTweetCon}>
+                                                        <div className={classes.participantTweetContainer}>
                                                             <Link to={`/home/tweet/${message.id}`}>
                                                                 <div className={classes.participantTweetWrapper}>
                                                                     <div className={classes.participantTweetInfoWrapper}>
@@ -198,8 +279,9 @@ const Messages = () => {
                                                         </div>
                                                     )}
                                                     {message.text && (
-                                                        <div className={(
-                                                            classes.participantMessage
+                                                        <div className={classNames(
+                                                            classes.participantMessage,
+                                                            message ? classes.participantMessageWithTweet : classes.participantMessageCommon
                                                         )}>
                                                             <span>{message.text}</span>
                                                         </div>
@@ -207,9 +289,11 @@ const Messages = () => {
                                                 </div>
                                             </div>
                                             <div className={classes.participantMessageDate}>
+                                                {formatChatMessageDate(new Date(message.date))}
                                             </div>
-                                        </Fragment>
+                                        </React.Fragment>
                                     )
+                                ))}
                                 <div ref={chatEndRef}></div>
                             </Paper>
                             <Paper className={classes.chatFooter}>
@@ -220,7 +304,7 @@ const Messages = () => {
                                 </div>
                                 <div className={classes.chatIcon}>
                                     <IconButton color="primary">
-                                        <span>{GifIcon}</span>
+                                        <span>{EmojiIcon}</span>
                                     </IconButton>
                                 </div>
                                 <MessageInput
@@ -230,14 +314,9 @@ const Messages = () => {
                                     variant="outlined"
                                     placeholder="Start a new message"
                                 />
-                                <div className={classes.emojiIcon}>
-                                    <IconButton color="primary">
-                                        <span>{EmojiIcon}</span>
-                                    </IconButton>
-                                </div>
                                 <div style={{marginLeft: 8}} className={classes.chatIcon}>
-                                    <IconButton  color="primary">
-                                        <span>test</span>
+                                    <IconButton onClick={onSendMessage} color="primary">
+                                        <span>{SandMessageIcon}</span>
                                     </IconButton>
                                 </div>
                             </Paper>
@@ -249,6 +328,7 @@ const Messages = () => {
                 visible={visibleModalWindow}
                 onClose={onCloseModalWindow}/>
         </>
+
     );
 };
 

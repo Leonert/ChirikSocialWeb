@@ -19,10 +19,10 @@ import AddTweetModal from "./AddTweetModal/AddTweetModal";
 const SideMenu = () => {
     const classes = useSideMenuStyles();
     const [visibleAddTweet, setVisibleAddTweet] = useState(false);
-    const handleClickOpenAddTweet = ()=> {
+    const handleClickOpenAddTweet = () => {
         setVisibleAddTweet(true);
     };
-    const onCloseAddTweet = ()=> {
+    const onCloseAddTweet = () => {
         setVisibleAddTweet(false);
     };
 
@@ -34,6 +34,7 @@ const SideMenu = () => {
                    <div className={classes.logoIcon}>
                        <IconButton>
                             {TweetIcon}
+                           <span className={classes.title}>Chirik</span>
                         </IconButton>
                     </div>
                    </NavLink>

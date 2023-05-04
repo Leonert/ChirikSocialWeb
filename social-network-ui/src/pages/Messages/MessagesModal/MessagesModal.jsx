@@ -10,12 +10,33 @@ import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
 import {SearchIcon} from "../../../icon";
 
 
-
 const MessagesModal = ({visible, onClose})=> {
+    const users = [{
+        avatar: { src: "fff.jpeg" },
+        fullName: "John Smith",
+        username: "john_smith",
+        id: 1
+    }];
+
     const classes = useMessagesModalStyles();
-    const [text] = useState("");
     const [selectedIndex] = useState();
 
+
+    const [text, setText] = useState("");
+
+    const handleClickSearch = (event) => {
+        setText(event.target.value);
+    };
+    const onSearch = (text) => {
+        if (text) {
+            setText(text);
+        } else {
+            setText("");
+        }
+    };
+    const handleListItemClick = () => {
+
+    };
 
     return (
         <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -35,10 +56,11 @@ const MessagesModal = ({visible, onClose})=> {
                 </Button>
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <form>
+                <form onSubmit={handleClickSearch}>
                     <MessagesModalInput
                         fullWidth
                         placeholder="Explore people"
+                        onChange={(event) => onSearch(event.target.value)}
                         variant="outlined"
                         value={text}
                         InputProps={{
@@ -52,13 +74,16 @@ const MessagesModal = ({visible, onClose})=> {
                 </form>
                 <div className={classes.divider}/>
                 <List component="nav" aria-label="main mailbox folders">
-
+                    {users.map((user) => (
                         <ListItem
+                            key={user.id}
                             button
+                            selected={selectedIndex === user.id}
+                            onClick={() => handleListItemClick(user)}
                         >
-                            <MessagesModalUser/>
+                            <MessagesModalUser user={user}/>
                         </ListItem>
-
+                    ))}
                 </List>
             </DialogContent>
         </Dialog>
