@@ -10,7 +10,16 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
     width: '100%',
   },
   item: {
-    margin: '10px 20px !important',
+    margin: '10px 55px !important',
+    position: 'relative',
+    '&::before': {
+      content: "",
+      position: "absolute",
+      top: 0,
+      left: "-5px",
+      height: "100%",
+      borderLeft: "1px solid black",
+    },
   },
   itemNick: {
     paddingLeft: '15px',
