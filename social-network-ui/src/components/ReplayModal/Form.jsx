@@ -51,12 +51,12 @@ function FormModal({ buttonName }) {
         <>
           <div className={classes.content}>
             <Avatar aria-label="recipe" alt={targetPost.name} src={targetPost.avatar}></Avatar>
-            <Typography className={classes.itemNick}>{targetPost.nickname}</Typography>
+            <Typography className={classes.itemNick}>@{targetPost.nickname}</Typography>
           </div>
           <Typography className={classes.item}>Send replay</Typography>
           <div className={classes.content}>
             <Avatar />
-            <Typography className={classes.itemNick}>{userName}</Typography>
+            <Typography className={classes.itemNick}>@{userName}</Typography>
           </div>
           <div className={classes.textareaWrapper}>
             <TextareaAutosize

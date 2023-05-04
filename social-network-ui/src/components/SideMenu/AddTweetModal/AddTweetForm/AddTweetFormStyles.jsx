@@ -11,21 +11,10 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
   },
   item: {
     margin: '10px 55px !important',
-    position: 'relative',
-    '&::before': {
-      content: '',
-      position: 'absolute',
-      left: '0',
-      top: '0',
-      bottom: '0',
-      height: '20px',
-      width: '20px',
-      backgroundColor: '#fff !important',
-    },
   },
   itemNick: {
-    paddingLeft: '15px',
     paddingTop: '8px',
+    marginLeft: '15px !important',
   },
   contentTextarea: {
     width: '100%',

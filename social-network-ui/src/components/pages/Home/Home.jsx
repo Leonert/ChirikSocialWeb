@@ -36,8 +36,6 @@ function Home() {
       sx={{
         backgroundColor: ' #1e2028',
         display: 'grid',
-
-        paddingTop: '140px',
         paddingBottom: '20px',
         border: '1px solid #faf5f5',
       }}

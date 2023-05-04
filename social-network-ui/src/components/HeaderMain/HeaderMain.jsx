@@ -12,7 +12,7 @@ export default function HeaderMain() {
   const following = useSelector((state) => state.home.following);
   const dispatch = useDispatch();
   const classes = useHeaderMenuStyles();
-  
+
   return (
     <div className={classes.wrapper}>
       <Grid className={classes.container} container>
