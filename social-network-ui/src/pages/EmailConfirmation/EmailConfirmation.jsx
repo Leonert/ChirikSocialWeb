@@ -8,7 +8,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { EMAIL_CONFIRMATION } from '../../util/endpoints-constants';
 import { HOME, LOGIN } from '../../util/path-constants';
 import useEmailConfirmationStyles from './EmailConfirmationStyles';
 
@@ -29,7 +28,7 @@ const EmailConfirmation = () => {
   useEffect(() => {
     const checkTokenValidity = async (token) => {
       try {
-        const response = await axios.get(EMAIL_CONFIRMATION + token);
+        const response = await axios.get(`http://localhost:8080/api/registration/activate?token=${token}`);
 
         if (response.status === 200) {
           setIsConfirmed(true);
