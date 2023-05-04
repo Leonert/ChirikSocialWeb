@@ -34,11 +34,10 @@ function Home() {
   return (
     <Box
       sx={{
-        width: '40%',
         backgroundColor: ' #1e2028',
         display: 'grid',
-        marginLeft: '30%',
-        paddingTop: '130px',
+
+        paddingTop: '140px',
         paddingBottom: '20px',
         border: '1px solid #faf5f5',
       }}

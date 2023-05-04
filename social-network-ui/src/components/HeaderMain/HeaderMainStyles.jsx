@@ -3,11 +3,11 @@ import { Theme, makeStyles } from '@material-ui/core';
 export const useHeaderMenuStyles = makeStyles((theme: Theme) => ({
   container: {
     position: 'fixed',
-    top: '5px',
+    top: '0',
     listStyle: 'none',
     margin: 0,
-    maxWidth: '40%',
-    left: '30%',
+    maxWidth: '38%',
+    left: '26.5%',
     backdropFilter: 'blur(10px)',
     backgroundColor: 'rgba(11,18,23,0.7)',
     padding: '20px 0 ',

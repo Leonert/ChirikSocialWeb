@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, ReactElement, useRef, useState} from "react";
+import React, {ChangeEvent,useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -9,18 +9,9 @@ import {EmojiIcon, MediaIcon} from "../../../../icon";
 import {useDispatch} from "react-redux";
 import { useParams } from "react-router-dom";
 
-export interface AddTweetFormProps {
-    maxRows?: number;
-    minRows?: number;
-    tweetId?: number;
-    title: string;
-    buttonName: string;
-    addressedUsername?: string;
-    addressedId?: number;
-    onCloseModal?: () => void;
-}
+
 const MAX_LENGTH = 280;
-const AddTweetForm: FC<AddTweetFormProps> = (
+const AddTweetForm = (
     {
         unsentTweet,
         quoteTweet,
@@ -29,7 +20,7 @@ const AddTweetForm: FC<AddTweetFormProps> = (
         buttonName,
         onCloseModal
     }
-): ReactElement => {
+) => {
 
     const dispatch = useDispatch();
     const [text, setText] = useState("");

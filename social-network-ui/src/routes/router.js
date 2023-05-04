@@ -3,15 +3,22 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import SideMenu from '../components/SideMenu/SideMenu';
 import Home from '../components/pages/Home/Home';
 import { Layout } from '../layout/Layout';
 import { defaultTheme } from '../theme';
 
 export const theme = defaultTheme;
+
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: (
+      <MuiThemeProvider theme={defaultTheme}>
+        <CssBaseline />
+        <Layout />
+      </MuiThemeProvider>
+    ),
+    errorElement: <div>Error page</div>,
     element: <Layout />,
     errorElement: <div>Error page</div>,
     children: [
@@ -20,7 +27,7 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
+
             <Home />
           </MuiThemeProvider>
         ),
@@ -30,7 +37,6 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
           </MuiThemeProvider>
         ),
       },
@@ -39,7 +45,6 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
           </MuiThemeProvider>
         ),
       },
@@ -48,7 +53,6 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
           </MuiThemeProvider>
         ),
       },
@@ -57,7 +61,6 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
           </MuiThemeProvider>
         ),
       },
@@ -66,7 +69,6 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
           </MuiThemeProvider>
         ),
       },
@@ -75,7 +77,6 @@ export const router = createBrowserRouter([
         element: (
           <MuiThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <SideMenu />
           </MuiThemeProvider>
         ),
       },
