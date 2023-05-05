@@ -30,7 +30,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 public class PostController {
   private static final String POST_NOT_FOUND = "Post with such id wasn`t found";
   private final PostService postService;
@@ -64,7 +64,7 @@ public class PostController {
       throw new NoUserWithSuchCredentialsException();
     }
     post.setUser(user.get());
-    postService.save(convertToPost(postDto));
+    postService.save(post);
     return ResponseEntity.status(201).body(new GoodResponse("Post was created"));
   }
 
