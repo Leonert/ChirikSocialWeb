@@ -13,4 +13,5 @@ public class PostDto {
   private String image;
   private int likes;
   private LocalDateTime createdDate;
+  private int repostedId;
 }

@@ -38,6 +38,6 @@ public class Post {
   private Integer likes;
 
   @OneToOne
-  @JoinColumn(name = "reposted_post_id")
-  private Post repostedPost;
+  @JoinColumn(name = "reposted_id")
+  private Post post;
 }

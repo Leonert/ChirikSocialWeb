@@ -10,6 +10,7 @@ import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +54,13 @@ public class PostService {
   }
 
   public List<PostDto> getPostsSortedByCreatedDate() {
-    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"))
-        .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
+    List<Post> posts = postRepository.findAll(PageRequest.of(0, 5, Sort.by("created_date")))
+            .stream()
+            .toList();
+
+    return posts.stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
+//    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"))
+//        .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
   }
 
   public List<PostDto> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
