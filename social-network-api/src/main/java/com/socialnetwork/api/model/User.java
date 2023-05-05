@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -44,6 +43,7 @@ public class User {
   private String profileImageUrl;
 
   private boolean isEnabled;
+
   @Transient
   @OneToMany(mappedBy = "user")
   private List<Post> posts;
