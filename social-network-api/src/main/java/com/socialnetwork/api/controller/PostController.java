@@ -48,7 +48,8 @@ public class PostController {
   }
 
   @GetMapping("user/{username}")
-  public List<PostDto> getPostsByUsername(@PathVariable("username") String username) throws NoUserWithSuchCredentialsException {
+  public List<PostDto> getPostsByUsername(@PathVariable("username") String username)
+      throws NoUserWithSuchCredentialsException {
     return postService.findPostsByUsername(username);
   }
 
