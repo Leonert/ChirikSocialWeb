@@ -1,10 +1,11 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
-export const useSideMenuStyles = makeStyles((theme: Theme) => ({
+export const useSideMenuStyles = makeStyles((theme) => ({
     container: {
         position: "fixed",
         top: 0,
         listStyle: "none",
+        padding: 0,
         margin: 0,
         maxWidth: 230,
         "& li .selected": {
@@ -36,10 +37,10 @@ export const useSideMenuStyles = makeStyles((theme: Theme) => ({
             "& div": {
                 backgroundColor: theme.palette.secondary.light,
                 "& .MuiTypography-h5": {
-                    color: theme.palette.primary.light
+                    color: theme.palette.primary.main
                 },
                 "& svg path": {
-                    fill: theme.palette.primary.light
+                    fill: theme.palette.primary.main
                 }
             }
         },
@@ -115,19 +116,17 @@ export const useSideMenuStyles = makeStyles((theme: Theme) => ({
     },
     button: {
         height: "52px !important",
-        color: theme.palette.text.primary,
         padding: theme.spacing(3.2),
         marginTop: theme.spacing(2),
         "& .MuiButton-label": {
             fontSize: 19
-        },
+        }
     },
     followerRequestsCount: {
         display: "inline-block",
         marginLeft: 4,
         padding: "0px 7px",
         borderRadius: "50%",
-        // border: `1px solid ${theme.palette.common.white}`,
         backgroundColor: theme.palette.primary.main,
         fontSize: 12,
         color: theme.palette.common.white,
