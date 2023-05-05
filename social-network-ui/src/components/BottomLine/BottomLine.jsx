@@ -15,7 +15,7 @@ export const BottomLine = () => {
           padding: '20px',
           position: 'fixed',
           bottom: 0,
-          backgroundColor: 'blue',
+          backgroundColor: (theme) => theme.palette.secondary.light,
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
