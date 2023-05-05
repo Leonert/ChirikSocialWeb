@@ -2,13 +2,13 @@ import { Box } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getPost } from '../../../features/slices/homeSlice';
-import ButtonShowMore from '../../ButtonShowMore/ButtonShowMore';
-import Following from '../../Following/Following';
-import HeaderMain from '../../HeaderMain/HeaderMain';
-import ModalUser from '../../ModalUser/ModalUser';
-import PostList from '../../PostList/PostList';
-import ReplayModal from '../../ReplayModal/ReplayModal';
+import { getPost } from '../../features/slices/homeSlice';
+import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
+import Following from '../../components/Following/Following';
+import HeaderMain from '../../components/HeaderMain/HeaderMain';
+import ModalUser from '../../components/ModalUser/ModalUser';
+import PostList from '../../components/PostList/PostList';
+import ReplayModal from '../../components/ReplayModal/ReplayModal';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);

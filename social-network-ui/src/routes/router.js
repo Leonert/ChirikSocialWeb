@@ -3,8 +3,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import Home from '../components/pages/Home/Home';
 import { Layout } from '../layout/Layout';
+import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
+import Home from '../pages/Home/Home';
 import { defaultTheme } from '../theme';
 
 export const theme = defaultTheme;
@@ -25,5 +26,14 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
     ],
+  },
+  {
+    path: '/email-confirmation',
+    element: (
+      <MuiThemeProvider theme={defaultTheme}>
+        <CssBaseline />
+        <EmailConfirmation />
+      </MuiThemeProvider>
+    ),
   },
 ]);
