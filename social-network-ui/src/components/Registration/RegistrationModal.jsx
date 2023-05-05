@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as yup from 'yup';
 
+import axiosIns from '../../axiosInstance';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import AccountProfileFields from './AccountProfileFields';
@@ -37,7 +38,6 @@ const BIOValidationSchema = yup.object({
   birthDate: yup
     .date('Invalid date')
     .required('Birthdate is required')
-    .min(new Date(1900), 'Invalid date')
     .max(maxValidDate, 'Invalid date')
     .typeError('Invalid date'),
 });
@@ -69,6 +69,21 @@ const RegistrationModal = () => {
     } else {
       handleNextStep();
       alert(JSON.stringify(values, null, 2));
+      try {
+        const data = {
+          emailAddress: values.email,
+          username: values.username,
+          password: values.password,
+          firstName: values.name,
+          lastName: values.surname,
+          birthDate: values.birthDate,
+        };
+        const response = await axiosIns.post('/api/registration/save-user', data);
+        console.log(data);
+        console.log(response);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -106,12 +121,12 @@ const RegistrationModal = () => {
     <InitialStep key={1} onCreateAccount={handleNextStep} />,
     <AccountProfileFields formik={formik} key={2} onSubmit={handleSubmit.bind(null, formik.values, formik)} />,
     <BIOFields key={3} formik={formik} />,
-    <ConfirmMail key={4} onSubmit={handleLastStep} />,
+    <ConfirmMail key={4} onSubmit={handleLastStep} formik={formik} />,
   ];
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button onClick={handleOpen}>Sign in</Button>
       <Modal
         open={open}
         onClose={handleClose}
