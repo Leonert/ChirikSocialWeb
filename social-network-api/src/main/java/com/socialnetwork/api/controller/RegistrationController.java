@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,18 +25,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-  private final UserService userService;
-
-  private final PasswordEncoder passwordEncoder;
-
   private static final String USERNAME_TAKEN = "User with such username already exists.";
-
   private static final String EMAIL_TAKEN = "User with such email address already exists.";
+  private final UserService userService;
+  private final PasswordEncoder passwordEncoder;
 
   @PostMapping("check-email")
   public ResponseEntity<?> checkIfEmailExists(@RequestBody User user) {
     Optional<User> optionalUserByEmailAddress =
-            userService.findByEmailAddress(user.getEmailAddress());
+        userService.findByEmailAddress(user.getEmailAddress());
 
     if (optionalUserByEmailAddress.isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new BadResponse(EMAIL_TAKEN));
@@ -48,7 +45,7 @@ public class RegistrationController {
   @PostMapping("check-username")
   public ResponseEntity<?> checkIfUsernameExists(@RequestBody User user) {
     Optional<User> optionalUserByUsername =
-            userService.findByUsername(user.getUsername());
+        userService.findByUsername(user.getUsername());
 
     if (optionalUserByUsername.isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new BadResponse(USERNAME_TAKEN));
