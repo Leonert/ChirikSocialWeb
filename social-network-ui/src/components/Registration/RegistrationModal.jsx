@@ -68,7 +68,6 @@ const RegistrationModal = () => {
       }
     } else {
       handleNextStep();
-      alert(JSON.stringify(values, null, 2));
       try {
         const data = {
           emailAddress: values.email,
@@ -126,7 +125,9 @@ const RegistrationModal = () => {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Sign in</Button>
+      <Button sx={{ p: '7px  34px', fontSize: '16px' }} onClick={handleOpen}>
+        Sign up
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
