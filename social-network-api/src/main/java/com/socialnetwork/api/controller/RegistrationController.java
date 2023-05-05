@@ -27,13 +27,8 @@ public class RegistrationController {
 
   private static final String USERNAME_TAKEN = "User with such username already exists.";
   private static final String EMAIL_TAKEN = "User with such email address already exists.";
-<<<<<<< HEAD
-  private static final URL EMAIL_CONFIRMED_HTML_URL
-      = RegistrationController.class.getResource("/html/email-confirmed.html");
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
-=======
->>>>>>> 5ad0cb82893b34147507e391f0b027a87a3a1a37
 
   @PostMapping("check-email")
   public ResponseEntity<?> checkIfEmailExists(@RequestBody User user) {
