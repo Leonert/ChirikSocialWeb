@@ -20,7 +20,7 @@ public class PostDto {
 
   private interface Text {String getText(); }
 
-  private interface image {String getImage(); }
+  private interface Image {String getImage(); }
 
   private interface CreatedDate {LocalDateTime getCreatedDate(); }
 

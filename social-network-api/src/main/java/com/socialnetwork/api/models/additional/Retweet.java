@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "retweets")
 public class Retweet {
   @EmbeddedId
-  private RetweetPk retweetPK;
+  private RetweetPk retweetPk;
 
   @ManyToOne
   @MapsId("userId")

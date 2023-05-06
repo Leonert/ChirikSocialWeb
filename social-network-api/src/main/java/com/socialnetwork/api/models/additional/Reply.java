@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "replies")
 public class Reply {
   @EmbeddedId
-  private ReplyPk replyPK;
+  private ReplyPk replyPk;
 
   @ManyToOne
   @JoinColumn(name = "reply_id")

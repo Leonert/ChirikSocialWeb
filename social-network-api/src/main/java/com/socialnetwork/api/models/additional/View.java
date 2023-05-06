@@ -25,5 +25,5 @@ public class View {
   @JoinColumn(name = "post_id")
   Post seenPost;
   @EmbeddedId
-  private ViewPk viewPK;
+  private ViewPk viewPk;
 }

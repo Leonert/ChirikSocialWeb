@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "likes")
 public class Like {
   @EmbeddedId
-  private LikePk likePK;
+  private LikePk likePk;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

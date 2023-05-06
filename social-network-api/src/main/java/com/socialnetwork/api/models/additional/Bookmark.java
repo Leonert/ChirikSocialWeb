@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "bookmarks")
 public class Bookmark {
   @EmbeddedId
-  private BookmarkPk bookmarkPK;
+  private BookmarkPk bookmarkPk;
   @ManyToOne
   @JoinColumn(name = "user_id")
   @MapsId("userId")

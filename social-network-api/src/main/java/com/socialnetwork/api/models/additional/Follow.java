@@ -24,5 +24,5 @@ public class Follow {
   @JoinColumn(name = "followed_id")
   User followedUser;
   @EmbeddedId
-  private FollowPk followPK;
+  private FollowPk followPk;
 }
