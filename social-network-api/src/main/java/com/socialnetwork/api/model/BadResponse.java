@@ -1,3 +1,4 @@
 package com.socialnetwork.api.model;
 
-public record BadResponse (String errorMessage) {}
+public record BadResponse(String errorMessage) {
+}

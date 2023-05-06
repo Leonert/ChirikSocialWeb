@@ -1,71 +1,69 @@
-import { createTheme } from "@material-ui/core/styles";
-import { deepmerge } from "@mui/utils";
+import { createTheme } from '@material-ui/core/styles';
+import { deepmerge } from '@mui/utils';
 
 const commonTheme = {
-    typography: {
-        fontFamily: [
-            "system-ui",
-            "-apple-system",
-            "BlinkMacSystemFont",
-            "Segoe UI",
-            "Roboto",
-            "Ubuntu",
-            "Helvetica Neue",
-            "sans-serif"
-        ]
+  typography: {
+    fontFamily: [
+      'system-ui',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'Ubuntu',
+      'Helvetica Neue',
+      'sans-serif',
+    ],
+  },
+  palette: {
+    error: {
+      light: 'rgb(255, 221, 237)',
+      main: 'rgb(244, 33, 46)',
+      dark: 'rgb(202, 32, 85)',
     },
-    palette: {
-        error: {
-            light: "rgb(255, 221, 237)",
-            main: "rgb(244, 33, 46)",
-            dark: "rgb(202, 32, 85)"
-        },
-        common: {
-            black: "rgb(15, 20, 25)",
-            white: "rgb(255, 255, 255)"
-        }
+    common: {
+      black: 'rgb(15, 20, 25)',
+      white: 'rgb(255, 255, 255)',
     },
-    overrides: {
-        MuiButton: {
-            root: {
-                borderRadius: 30,
-                textTransform: "none",
-                height: 36
-            },
-            contained: {
-                boxShadow: "none",
-                "&:hover": {
-                    boxShadow: "none"
-                }
-            },
-            sizeSmall: {
-                height: 32,
-                padding: "0px 16px"
-            },
-            sizeLarge: {
-                height: 44,
-                "& .MuiButton-label": {
-                    fontSize: 15,
-                    fontWeight: 700,
-                    lineHeight: "20px"
-                }
-            },
-            label: {
-                fontSize: 14,
-                fontWeight: 700,
-                lineHeight: "16px"
-            }
+  },
+  overrides: {
+    MuiButton: {
+      root: {
+        borderRadius: 30,
+        textTransform: 'none',
+        height: 36,
+      },
+      contained: {
+        boxShadow: 'none',
+        '&:hover': {
+          boxShadow: 'none',
         },
-        MuiFilledInput: {
-            underline: {
-                "&:after": {
-                    borderBottomWidth: "2px"
-                },
-                "&:before": {
-                    borderColor: "#000",
-                    borderBottomWidth: "2px"
-                }
-            }
+      },
+      sizeSmall: {
+        height: 32,
+        padding: '0px 16px',
+      },
+      sizeLarge: {
+        height: 44,
+        '& .MuiButton-label': {
+          fontSize: 15,
+          fontWeight: 700,
+          lineHeight: '20px',
+        },
+      },
+      label: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '16px',
+      },
+    },
+    MuiFilledInput: {
+      underline: {
+        '&:after': {
+          borderBottomWidth: '2px',
+        },
+        '&:before': {
+          borderColor: '#000',
+          borderBottomWidth: '2px',
         },
         MuiDialog: {
             paper: {

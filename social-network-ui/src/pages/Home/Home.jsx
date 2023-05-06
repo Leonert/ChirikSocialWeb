@@ -1,14 +1,14 @@
 import { Box } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {getPost} from "../../features/slices/homeSlice";
-import HeaderMain from "../../components/HeaderMain/HeaderMain";
-import ButtonShowMore from "../../components/ButtonShowMore/ButtonShowMore";
-import PostList from "../../components/PostList/PostList";
-import Following from "../../components/Following/Following";
-import ModalUser from "../../components/ModalUser/ModalUser";
-import ReplayModal from "../../components/ReplayModal/ReplayModal";
 
+import { getPost } from '../../features/slices/homeSlice';
+import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
+import Following from '../../components/Following/Following';
+import HeaderMain from '../../components/HeaderMain/HeaderMain';
+import ModalUser from '../../components/ModalUser/ModalUser';
+import PostList from '../../components/PostList/PostList';
+import ReplayModal from '../../components/ReplayModal/ReplayModal';
 
 
 function Home() {

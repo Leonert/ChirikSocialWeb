@@ -4,6 +4,8 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from '../layout/Layout';
+import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
+import Home from '../pages/Home/Home';
 import { defaultTheme } from '../theme';
 import Messages from "../pages/Messages/Messages";
 import {HOME, MESSAGES} from "../util/path-constants";
@@ -33,5 +35,14 @@ export const router = createBrowserRouter([
       },
 
     ],
+  },
+  {
+    path: '/email-confirmation',
+    element: (
+      <MuiThemeProvider theme={defaultTheme}>
+        <CssBaseline />
+        <EmailConfirmation />
+      </MuiThemeProvider>
+    ),
   },
 ]);
