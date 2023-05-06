@@ -9,7 +9,6 @@ import Home from '../pages/Home/Home';
 import { defaultTheme } from '../theme';
 import Messages from "../pages/Messages/Messages";
 import {HOME, MESSAGES} from "../util/path-constants";
-import Home from "../pages/Home/Home";
 
 export const theme = defaultTheme;
 
