@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
-public class BookmarkPK implements Serializable {
+public class BookmarkPk implements Serializable {
   @Column(name = "user_id")
   private int userId;
   @Column(name = "post_id")

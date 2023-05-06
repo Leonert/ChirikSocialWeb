@@ -15,15 +15,25 @@ import java.util.List;
 @Data
 public class PostDto {
   private interface Id {int getId(); }
+
   private interface Author {User getAuthor(); }
+
   private interface Text {String getText(); }
+
   private interface image {String getImage(); }
+
   private interface CreatedDate {LocalDateTime getCreatedDate(); }
+
   private interface Views {List<View> getViews(); }
+
   private interface Likes {List<Like> getLikes(); }
+
   private interface Retweets {List<Retweet> getRetweets(); }
+
   private interface Bookmarks {List<Bookmark> getBookmarks(); }
+
   private interface Replies {List<Reply> getReplies(); }
+
   private interface RepliedTo {Reply getRepliedTo(); }
 
   public enum Request{;

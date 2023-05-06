@@ -1,6 +1,6 @@
 package com.socialnetwork.api.models.additional;
 
-import com.socialnetwork.api.models.additional.keys.ViewPK;
+import com.socialnetwork.api.models.additional.keys.ViewPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
@@ -25,5 +25,5 @@ public class View {
   @JoinColumn(name = "post_id")
   Post seenPost;
   @EmbeddedId
-  private ViewPK viewPK;
+  private ViewPk viewPK;
 }

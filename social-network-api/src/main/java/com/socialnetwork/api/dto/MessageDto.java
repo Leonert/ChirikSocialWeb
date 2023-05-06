@@ -6,9 +6,15 @@ import java.time.LocalDateTime;
 
 public class MessageDto {
   private interface Id {int getId();}
+
   private interface Sender { User getSender();}
-  private interface Recipient { User getRecipient();}private interface Message { String getMessage();}
+
+  private interface Recipient { User getRecipient();}
+
+  private interface Message { String getMessage();}
+
   private interface Timestamp { LocalDateTime getTimestamp();}
+
   private interface Read { boolean isRead();}
 
   public enum Request {;

@@ -1,6 +1,6 @@
 package com.socialnetwork.api.models.additional;
 
-import com.socialnetwork.api.models.additional.keys.FollowPK;
+import com.socialnetwork.api.models.additional.keys.FollowPk;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
 
@@ -24,5 +24,5 @@ public class Follow {
   @JoinColumn(name = "followed_id")
   User followedUser;
   @EmbeddedId
-  private FollowPK followPK;
+  private FollowPk followPK;
 }

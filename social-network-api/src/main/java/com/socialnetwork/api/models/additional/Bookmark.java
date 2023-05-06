@@ -1,6 +1,6 @@
 package com.socialnetwork.api.models.additional;
 
-import com.socialnetwork.api.models.additional.keys.BookmarkPK;
+import com.socialnetwork.api.models.additional.keys.BookmarkPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "bookmarks")
 public class Bookmark {
   @EmbeddedId
-  private BookmarkPK bookmarkPK;
+  private BookmarkPk bookmarkPK;
   @ManyToOne
   @JoinColumn(name = "user_id")
   @MapsId("userId")

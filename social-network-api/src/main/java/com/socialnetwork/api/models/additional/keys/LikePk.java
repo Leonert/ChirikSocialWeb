@@ -5,10 +5,9 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public class ReplyPK implements Serializable {
-  @Column(name = "reply_id")
-  private int replyId;
-  @Column(name = "replied_id")
-  private int repliedId;
+public class LikePk implements Serializable {
+  @Column(name = "user_id")
+  private int userId;
+  @Column(name = "post_id")
+  private int postId;
 }
-

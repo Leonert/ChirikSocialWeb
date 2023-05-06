@@ -8,9 +8,10 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
-public class RetweetPK implements Serializable {
-  @Column(name = "user_id")
-  private int userId;
-  @Column(name = "post_id")
-  private int PostId;
+public class FollowPk implements Serializable {
+  @Column(name = "follower_id")
+  private int followerId;
+
+  @Column(name = "followed_id")
+  private int followedId;
 }

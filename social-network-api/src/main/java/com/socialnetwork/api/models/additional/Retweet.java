@@ -1,6 +1,6 @@
 package com.socialnetwork.api.models.additional;
 
-import com.socialnetwork.api.models.additional.keys.RetweetPK;
+import com.socialnetwork.api.models.additional.keys.RetweetPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "retweets")
 public class Retweet {
   @EmbeddedId
-  private RetweetPK retweetPK;
+  private RetweetPk retweetPK;
 
   @ManyToOne
   @MapsId("userId")

@@ -43,11 +43,11 @@ public class PostController {
     return postService.getPostsSortedByCreatedDate();
   }
 
-//  @GetMapping("user/{username}")
-//  public List<PostDto> getPostsByUsername(@PathVariable("username") String username)
-//      throws NoUserWithSuchCredentialsException {
-//    return postService.findPostsByUsername(username);
-//  }
+  //  @GetMapping("user/{username}")
+  //  public List<PostDto> getPostsByUsername(@PathVariable("username") String username)
+  //      throws NoUserWithSuchCredentialsException {
+  //    return postService.findPostsByUsername(username);
+  //  }
 
   @PostMapping()
   public ResponseEntity<?> addPost(@RequestBody PostDto postDto) throws NoUserWithSuchCredentialsException {
@@ -64,25 +64,25 @@ public class PostController {
     return ResponseEntity.status(201).body(new Response("Post was created"));
   }
 
-//  @PatchMapping()
-//  public ResponseEntity<?> editPost(@RequestBody PostDto postDto) {
-//    Post post = convertToPost(postDto);
-//    if (!postService.existsById(post.getPostId())) {
-//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(POST_NOT_FOUND));
-//    }
-//    postService.edit(post);
-//    return ResponseEntity.ok(new Response("Post was edited successfully"));
-//  }
+  //  @PatchMapping()
+  //  public ResponseEntity<?> editPost(@RequestBody PostDto postDto) {
+  //    Post post = convertToPost(postDto);
+  //    if (!postService.existsById(post.getPostId())) {
+  //      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(POST_NOT_FOUND));
+  //    }
+  //    postService.edit(post);
+  //    return ResponseEntity.ok(new Response("Post was edited successfully"));
+  //  }
 
-//  @DeleteMapping()
-//  public ResponseEntity<?> deletePost(@RequestBody PostDto postDto) {
-//    Post post = convertToPost(postDto);
-//    if (!postService.existsById(post.getPostId())) {
-//      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(POST_NOT_FOUND));
-//    }
-//    postService.delete(post);
-//    return ResponseEntity.ok(new Response("Post was deleted"));
-//  }
+  //  @DeleteMapping()
+  //  public ResponseEntity<?> deletePost(@RequestBody PostDto postDto) {
+  //    Post post = convertToPost(postDto);
+  //    if (!postService.existsById(post.getPostId())) {
+  //      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(POST_NOT_FOUND));
+  //    }
+  //    postService.delete(post);
+  //    return ResponseEntity.ok(new Response("Post was deleted"));
+  //  }
 
   private Post convertToPost(PostDto postDto) {
     return modelMapper.map(postDto, Post.class);

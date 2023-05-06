@@ -26,13 +26,13 @@ public class PostService {
     postRepository.save(post);
   }
 
-//  public void edit(Post post) {
-//    // Maps fields which weren`t null in postcontroller request to update only them in DB
-//    Post postToUpdate = postRepository.getReferenceById(post.getPostId());
-//    modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-//    modelMapper.map(post, postToUpdate);
-//    postRepository.save(postToUpdate);
-//  }
+  //  public void edit(Post post) {
+  //    // Maps fields which weren`t null in postcontroller request to update only them in DB
+  //    Post postToUpdate = postRepository.getReferenceById(post.getPostId());
+  //    modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+  //    modelMapper.map(post, postToUpdate);
+  //    postRepository.save(postToUpdate);
+  //  }
 
   public boolean existsById(Integer postId) {
     return postRepository.existsById(postId);
@@ -54,13 +54,13 @@ public class PostService {
         .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
   }
 
-//  public List<PostDto> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
-//    Optional<User> user = userRepository.findByUsername(username);
-//    if (user.isEmpty()) {
-//      throw new NoUserWithSuchCredentialsException();
-//    }
-//    return convertToPostDtosList(postRepository.findByUserId(user.get().getId()));
-//  }
+  //  public List<PostDto> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
+  //    Optional<User> user = userRepository.findByUsername(username);
+  //    if (user.isEmpty()) {
+  //      throw new NoUserWithSuchCredentialsException();
+  //    }
+  //    return convertToPostDtosList(postRepository.findByUserId(user.get().getId()));
+  //  }
 
   public void enrichNewPost(Post post) {
     //Add fields which weren`t specified in PostDTO - timestamp and likes count (current time and 0 likes for a new post)

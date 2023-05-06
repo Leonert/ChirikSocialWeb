@@ -1,6 +1,6 @@
 package com.socialnetwork.api.models.additional;
 
-import com.socialnetwork.api.models.additional.keys.LikePK;
+import com.socialnetwork.api.models.additional.keys.LikePk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "likes")
 public class Like {
   @EmbeddedId
-  private LikePK likePK;
+  private LikePk likePK;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
