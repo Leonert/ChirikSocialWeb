@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,26 @@ public class PostService {
   public void save(Post post) {
     enrichNewPost(post);
     postRepository.save(post);
+  }
+
+  public List<Post> getRepostedPosts(List<Post> posts) {
+    return posts
+            .stream()
+            .filter(p -> p.getReposted() != null)
+            .map(p -> {
+              try {
+                return modelMapper.map(getReferenceById(p.getReposted().getPostId()), Post.class);
+              } catch (NoPostWithSuchIdException e) {
+                throw new RuntimeException(e);
+              }
+            })
+            .toList();
+  }
+
+  public List<Post> getSomePosts(Integer page, Integer postsNumber) {
+    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by("createdDate")))
+            .stream()
+            .toList();
   }
 
   public void edit(Post post) {
@@ -54,13 +75,13 @@ public class PostService {
   }
 
   public List<PostDto> getPostsSortedByCreatedDate() {
-    List<Post> posts = postRepository.findAll(PageRequest.of(0, 5, Sort.by("created_date")))
-            .stream()
-            .toList();
-
-    return posts.stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
-//    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"))
-//        .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
+    //    List<Post> posts = postRepository.findAll(PageRequest.of(0, 5, Sort.by("created_date")))
+    //            .stream()
+    //            .toList();
+    //
+    //    return posts.stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
+    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"))
+            .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
   }
 
   public List<PostDto> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {

@@ -26,7 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   private final JwtTokenUtil jwtTokenUtil;
   private final JwtUserDetailsService jwtUserDetailsService;
   private final List<String> globalPaths =
-      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration"));
+      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "api/posts"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

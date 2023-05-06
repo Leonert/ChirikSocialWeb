@@ -39,5 +39,5 @@ public class Post {
 
   @OneToOne
   @JoinColumn(name = "reposted_id")
-  private Post post;
+  private Post reposted;
 }
