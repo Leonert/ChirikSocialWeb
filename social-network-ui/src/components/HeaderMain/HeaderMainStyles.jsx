@@ -1,4 +1,4 @@
-import { Theme, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 export const useHeaderMenuStyles = makeStyles((theme) => ({
   container: {
