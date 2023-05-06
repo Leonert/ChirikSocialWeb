@@ -1,6 +1,6 @@
 import { Theme, makeStyles } from '@material-ui/core';
 
-export const useHeaderMenuStyles = makeStyles((theme: Theme) => ({
+export const useHeaderMenuStyles = makeStyles((theme) => ({
   container: {
     top: '0',
     listStyle: 'none',

@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { createTheme } from "@material-ui/core/styles";
 import { deepmerge } from "@mui/utils";
+
 const commonTheme = {
     typography: {
         fontFamily: [

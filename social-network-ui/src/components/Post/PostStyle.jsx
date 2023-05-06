@@ -1,6 +1,6 @@
-import { Theme, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-export const usePostStyle = makeStyles((theme: Theme) => ({
+export const usePostStyle = makeStyles((theme) => ({
   Page: {
     backgroundColor: theme.palette.background.paper + ' !important',
     color: theme.palette.text.primary,
