@@ -19,6 +19,7 @@ import * as yup from 'yup';
 
 import { handleModal } from '../../features/slices/authModalSlice';
 import { loginUser } from '../../features/slices/authSlice';
+import { handleSnackbar } from '../../features/slices/snackbarSlice';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { CustomButton } from './CustomButton';
 import { TitleLogin } from './TitleLogin';
@@ -61,6 +62,7 @@ export const Login = () => {
 
       console.log(values.email, values.password, values.rememberMe);
 
+      dispatch(handleSnackbar(true));
       dispatch(handleModal(false));
       dispatch(loginUser(values));
       resetForm();

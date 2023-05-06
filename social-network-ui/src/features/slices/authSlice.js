@@ -5,7 +5,7 @@ import axios from 'axios';
 const URL = 'http://localhost:8080/';
 export const loginUser = createAsyncThunk('auth/loginUser', async ({ email, password, rememberMe }) => {
   try {
-    const { data } = axios({
+    const { data } = await axios({
       method: 'post',
       url: `${URL}api/login/authenticate`,
       headers: {
@@ -17,10 +17,11 @@ export const loginUser = createAsyncThunk('auth/loginUser', async ({ email, pass
         rememberMe,
       },
     });
+    console.log(data);
 
     return data;
   } catch (error) {
-    console.log(error);
+    throw new Error(error.message);
   }
 });
 
