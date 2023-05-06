@@ -1,6 +1,8 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
+!**/src/main/resources/application.properties/
+!**/src/main/resources/application.properties
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
@@ -12,6 +14,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.properties
 
 ### Eclipse ###
 .apt_generated
