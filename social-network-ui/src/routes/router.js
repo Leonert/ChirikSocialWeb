@@ -3,9 +3,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import Home from '../components/pages/Home/Home';
 import { Layout } from '../layout/Layout';
 import { defaultTheme } from '../theme';
+import Messages from "../pages/Messages/Messages";
+import {HOME, MESSAGES} from "../util/path-constants";
+import Home from "../pages/Home/Home";
+import SideMenu from "../components/SideMenu/SideMenu";
 
 export const theme = defaultTheme;
 
@@ -16,14 +19,20 @@ export const router = createBrowserRouter([
       <MuiThemeProvider theme={defaultTheme}>
         <CssBaseline />
         <Layout />
+
       </MuiThemeProvider>
     ),
     errorElement: <div>Error page</div>,
     children: [
       {
-        path: '/',
+        path: HOME,
         element: <Home />,
       },
+      {
+        path: MESSAGES,
+        element: <Messages />,
+      },
+
     ],
   },
 ]);

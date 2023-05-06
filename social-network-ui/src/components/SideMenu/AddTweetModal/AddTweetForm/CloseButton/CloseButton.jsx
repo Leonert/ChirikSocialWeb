@@ -1,5 +1,4 @@
 import React from "react";
-
 import { useCloseButtonStyles } from "./CloseButtonStyles";
 import {CloseIcon} from "../../../../../icon";
 import ActionIconButton from "../../../../ActionIconButton/ActionIconButton";

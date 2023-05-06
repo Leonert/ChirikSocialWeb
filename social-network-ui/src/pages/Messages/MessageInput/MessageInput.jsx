@@ -1,4 +1,4 @@
-import {withStyles} from "@material-ui/core";
+import {withStyles} from "@mui/styles";
 import TextField from "@material-ui/core/TextField/TextField";
 
 export const MessageInput = withStyles((theme) => ({

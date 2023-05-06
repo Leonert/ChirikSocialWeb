@@ -18,7 +18,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
         }
     },
     title: {
-        color: theme.palette.primary.main,
+        color: theme.palette.primary.dark,
         padding: 5,
         fontWeight: 700
 
@@ -89,7 +89,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
         height: 19,
         borderRadius: "50%",
         backgroundColor: theme.palette.primary.main,
-        fontSize: 13,
+        fontSize: 10,
         color: theme.palette.common.white,
         textAlign: "center"
     },

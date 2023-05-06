@@ -1,12 +1,54 @@
-import React from "react";
-import Spinner from "../../components/Spinner/Spinner";
+import { Box } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {getPost} from "../../features/slices/homeSlice";
+import HeaderMain from "../../components/HeaderMain/HeaderMain";
+import ButtonShowMore from "../../components/ButtonShowMore/ButtonShowMore";
+import PostList from "../../components/PostList/PostList";
+import Following from "../../components/Following/Following";
+import ModalUser from "../../components/ModalUser/ModalUser";
+import ReplayModal from "../../components/ReplayModal/ReplayModal";
 
-const Home = () => {
-    return (
-        <div>
-            <h1>TEst</h1>
-            <Spinner />
-        </div>
-    );
+
+
+function Home() {
+  const recommendation = useSelector((state) => state.home.recommendation);
+  const following = useSelector((state) => state.home.following);
+  const modalUserState = useSelector((state) => state.home.modalUser);
+
+  const dispatch = useDispatch();
+  const fetchPost = () => {
+    fetch('./data.json')
+      .then((r) => r.json())
+      .then((products) => {
+        dispatch(getPost(products));
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchPost();
+  }, []);
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: ' #1e2028',
+        display: 'grid',
+        paddingBottom: '20px',
+        border: '1px solid #faf5f5',
+      }}
+    >
+      <HeaderMain />
+      <ButtonShowMore />
+      {recommendation && <PostList />}
+      {following && <Following />}
+      {modalUserState && <ModalUser />}
+      <ReplayModal />
+    </Box>
+  );
 }
-export default Home
+
+export default Home;

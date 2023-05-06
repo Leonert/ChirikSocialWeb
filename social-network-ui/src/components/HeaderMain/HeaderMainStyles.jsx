@@ -15,7 +15,7 @@ export const useHeaderMenuStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     color: '#fff !important',
     '&:hover': {
-      background: '#4fc3f7 !important',
+      borderRadius: 1,
     },
   },
   gridWrapper: {
