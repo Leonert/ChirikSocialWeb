@@ -1,6 +1,6 @@
 package com.socialnetwork.api.security;
 
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.base.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

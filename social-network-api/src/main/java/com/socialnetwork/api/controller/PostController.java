@@ -3,10 +3,9 @@ package com.socialnetwork.api.controller;
 import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.model.BadResponse;
-import com.socialnetwork.api.model.GoodResponse;
-import com.socialnetwork.api.model.Post;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.additional.Response;
+import com.socialnetwork.api.models.base.Post;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.service.PostService;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +17,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,11 +43,11 @@ public class PostController {
     return postService.getPostsSortedByCreatedDate();
   }
 
-  @GetMapping("user/{username}")
-  public List<PostDto> getPostsByUsername(@PathVariable("username") String username)
-      throws NoUserWithSuchCredentialsException {
-    return postService.findPostsByUsername(username);
-  }
+//  @GetMapping("user/{username}")
+//  public List<PostDto> getPostsByUsername(@PathVariable("username") String username)
+//      throws NoUserWithSuchCredentialsException {
+//    return postService.findPostsByUsername(username);
+//  }
 
   @PostMapping()
   public ResponseEntity<?> addPost(@RequestBody PostDto postDto) throws NoUserWithSuchCredentialsException {
@@ -59,34 +55,34 @@ public class PostController {
     // in userservice and throwing exception if user with such id wasn`t found
     //Also checking of JWT token and comparing it with user needed to be realise in future TODO
     Post post = convertToPost(postDto);
-    Optional<User> user = userService.findById(post.getUser().getId());
+    Optional<User> user = userService.findById(post.getAuthor().getId());
     if (user.isEmpty()) {
       throw new NoUserWithSuchCredentialsException();
     }
-    post.setUser(user.get());
+    post.setAuthor(user.get());
     postService.save(post);
-    return ResponseEntity.status(201).body(new GoodResponse("Post was created"));
+    return ResponseEntity.status(201).body(new Response("Post was created"));
   }
 
-  @PatchMapping()
-  public ResponseEntity<?> editPost(@RequestBody PostDto postDto) {
-    Post post = convertToPost(postDto);
-    if (!postService.existsById(post.getPostId())) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BadResponse(POST_NOT_FOUND));
-    }
-    postService.edit(post);
-    return ResponseEntity.ok(new GoodResponse("Post was edited successfully"));
-  }
+//  @PatchMapping()
+//  public ResponseEntity<?> editPost(@RequestBody PostDto postDto) {
+//    Post post = convertToPost(postDto);
+//    if (!postService.existsById(post.getPostId())) {
+//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(POST_NOT_FOUND));
+//    }
+//    postService.edit(post);
+//    return ResponseEntity.ok(new Response("Post was edited successfully"));
+//  }
 
-  @DeleteMapping()
-  public ResponseEntity<?> deletePost(@RequestBody PostDto postDto) {
-    Post post = convertToPost(postDto);
-    if (!postService.existsById(post.getPostId())) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse(POST_NOT_FOUND));
-    }
-    postService.delete(post);
-    return ResponseEntity.ok(new GoodResponse("Post was deleted"));
-  }
+//  @DeleteMapping()
+//  public ResponseEntity<?> deletePost(@RequestBody PostDto postDto) {
+//    Post post = convertToPost(postDto);
+//    if (!postService.existsById(post.getPostId())) {
+//      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(POST_NOT_FOUND));
+//    }
+//    postService.delete(post);
+//    return ResponseEntity.ok(new Response("Post was deleted"));
+//  }
 
   private Post convertToPost(PostDto postDto) {
     return modelMapper.map(postDto, Post.class);

@@ -1,9 +1,9 @@
 package com.socialnetwork.api.controller;
 
-import com.socialnetwork.api.model.BadResponse;
-import com.socialnetwork.api.model.Credentials;
-import com.socialnetwork.api.model.User;
-import com.socialnetwork.api.model.UserResponse;
+import com.socialnetwork.api.models.additional.Response;
+import com.socialnetwork.api.models.auth.Credentials;
+import com.socialnetwork.api.models.auth.UserResponse;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,17 +34,17 @@ public class LoginController {
     Optional<User> optionalUser = userService.findByUsername(credentials.getUsername());
 
     if (optionalUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BadResponse(NO_SUCH_USERNAME));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(NO_SUCH_USERNAME));
     }
 
     User user = optionalUser.get();
 
     if (!passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BadResponse(WRONG_PASSWORD));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(WRONG_PASSWORD));
     }
 
     if (!user.isEnabled()) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse(CONFIRMATION_REQUIRED));
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(CONFIRMATION_REQUIRED));
     }
 
     String jwt = jwtTokenUtil.generateToken(credentials.getUsername(), credentials.isRememberMe());
