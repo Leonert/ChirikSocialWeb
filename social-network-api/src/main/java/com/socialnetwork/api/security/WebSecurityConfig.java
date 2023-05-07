@@ -32,7 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
-            .headers().frameOptions().disable();
+            .headers().frameOptions().disable()
+            .and()
+            .oauth2Login();
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }
 }
