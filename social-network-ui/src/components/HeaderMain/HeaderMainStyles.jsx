@@ -1,6 +1,6 @@
-import { Theme, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-export const useHeaderMenuStyles = makeStyles((theme: Theme) => ({
+export const useHeaderMenuStyles = makeStyles((theme) => ({
   container: {
     top: '0',
     listStyle: 'none',
@@ -15,7 +15,7 @@ export const useHeaderMenuStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     color: '#fff !important',
     '&:hover': {
-      background: '#4fc3f7 !important',
+      borderRadius: 1,
     },
   },
   gridWrapper: {

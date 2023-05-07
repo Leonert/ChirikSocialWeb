@@ -7,6 +7,8 @@ import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
 import { defaultTheme } from '../theme';
+import Messages from "../pages/Messages/Messages";
+import {HOME, MESSAGES} from "../util/path-constants";
 
 export const theme = defaultTheme;
 
@@ -17,14 +19,20 @@ export const router = createBrowserRouter([
       <MuiThemeProvider theme={defaultTheme}>
         <CssBaseline />
         <Layout />
+
       </MuiThemeProvider>
     ),
     errorElement: <div>Error page</div>,
     children: [
       {
-        path: '/',
+        path: HOME,
         element: <Home />,
       },
+      {
+        path: MESSAGES,
+        element: <Messages />,
+      },
+
     ],
   },
   {

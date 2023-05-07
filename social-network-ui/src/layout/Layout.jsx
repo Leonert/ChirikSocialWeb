@@ -11,7 +11,7 @@ export const Layout = () => {
   return (
     <Container className={classes.wrapper} maxWidth="lg">
       <Grid sm={1} md={2} item style={{ minWidth: '256px' }}>
-        <SideMenu />
+          <SideMenu />
       </Grid>
       <Grid container spacing={3}>
         <Outlet />
