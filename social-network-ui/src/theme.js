@@ -237,7 +237,9 @@ export const defaultTheme = createTheme(
         },
         MuiButton: {
           contained: {
+
             color: 'rgb(255, 255, 255) !important',
+
           },
         },
         MuiBackdrop: {
