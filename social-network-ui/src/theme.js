@@ -1,4 +1,3 @@
-
 import { createTheme } from '@material-ui/core/styles';
 import { deepmerge } from '@mui/utils';
 
@@ -92,6 +91,77 @@ const commonTheme = {
                 },
             },
         },
+
+      },
+    },
+    MuiList: {
+      padding: {
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+    },
+    MuiListItemAvatar: {
+      root: {
+        minWidth: 0,
+      },
+    },
+    MuiTypography: {
+      h3: {
+        fontSize: 23,
+        fontWeight: 700,
+        lineHeight: '28px',
+      },
+      h4: {
+        marginBottom: 8,
+        fontSize: 31,
+        fontWeight: 800,
+        lineHeight: '36px',
+      },
+      h5: {
+        fontSize: 20,
+        fontWeight: 800,
+        lineHeight: '24px',
+      },
+      h6: {
+        fontSize: 15,
+        fontWeight: 800,
+        lineHeight: '20px',
+      },
+      subtitle1: {
+        fontSize: 15,
+        fontWeight: 400,
+        lineHeight: '20px',
+      },
+      subtitle2: {
+        fontSize: 13,
+        fontWeight: 400,
+        lineHeight: '16px',
+      },
+      body1: {
+        fontSize: 15,
+        fontWeight: 400,
+        lineHeight: '20px',
+      },
+      body2: {},
+    },
+  },
+};
+
+export const defaultTheme = createTheme(
+  deepmerge(
+    {
+      palette: {
+        background: {
+          default: 'rgb(21, 32, 43)',
+          paper: 'rgb(21, 32, 43)',
+          lightBlue: 'rgb(63, 81, 181)',
+          lightDefault: 'rgb(19, 36, 51)',
+        },
+        secondary: {
+          light: 'rgb(29, 155, 240, 0.1)',
+          main: 'rgb(25, 39, 52)',
+          dark: 'rgb(255, 255, 255, 0.03)',
+
         MuiIconButton: {
             root: {
                 padding: 0,
@@ -111,6 +181,7 @@ const commonTheme = {
                     width: '1.172rem',
                 },
             },
+
         },
         MuiList: {
             padding: {

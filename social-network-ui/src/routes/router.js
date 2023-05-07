@@ -1,47 +1,51 @@
-import { MuiThemeProvider } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
-import { defaultTheme } from '../theme';
 import Messages from "../pages/Messages/Messages";
-import {HOME, MESSAGES} from "../util/path-constants";
 
-export const theme = defaultTheme;
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <MuiThemeProvider theme={defaultTheme}>
-        <CssBaseline />
-        <Layout />
 
-      </MuiThemeProvider>
-    ),
+    element: <Layout />,
     errorElement: <div>Error page</div>,
     children: [
       {
-        path: HOME,
+        index: true,
         element: <Home />,
       },
       {
-        path: MESSAGES,
-        element: <Messages />,
+        path: '/search',
+        element: <div></div>,
       },
-
+      {
+        path: '/notifications',
+        element: <div></div>,
+      },
+      {
+        path: '/Messages',
+        element: <div></div>,
+      },
+      {
+        path: '/bookmarks',
+        element: <div></div>,
+      },
+      {
+        path: '/lists',
+        element: <div></div>,
+      },
+      {
+        path: '/profile',
+        element: <div></div>,
+      },
     ],
   },
   {
     path: '/email-confirmation',
-    element: (
-      <MuiThemeProvider theme={defaultTheme}>
-        <CssBaseline />
-        <EmailConfirmation />
-      </MuiThemeProvider>
-    ),
+    element: <EmailConfirmation />,
   },
 ]);
