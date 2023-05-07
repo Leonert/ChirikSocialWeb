@@ -26,8 +26,8 @@ export const router = createBrowserRouter([
         element: <div></div>,
       },
       {
-        path: '/Messages',
-        element: <div></div>,
+        path: '/messages',
+        element: <Messages />,
       },
       {
         path: '/bookmarks',
