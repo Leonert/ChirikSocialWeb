@@ -2,13 +2,16 @@ package com.socialnetwork.api.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Column;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -41,4 +44,7 @@ public class User {
   private String profileImageUrl;
 
   private boolean isEnabled;
+  @Transient
+  @OneToMany(mappedBy = "user")
+  private List<Post> posts;
 }

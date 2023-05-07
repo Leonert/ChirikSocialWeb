@@ -1,16 +1,15 @@
 package com.socialnetwork.api.security;
 
-import java.util.Date;
-import java.util.function.Function;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import java.util.function.Function;
 
 @Component
 @PropertySource("classpath:application.properties")
@@ -52,11 +51,11 @@ public class JwtTokenUtil {
     Date expiration = new Date(now.getTime() + (isToRemember ? expirationRemember : expirationDefault));
 
     return Jwts.builder()
-            .setSubject(username)
-            .setIssuedAt(now)
-            .setExpiration(expiration)
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
-            .compact();
+        .setSubject(username)
+        .setIssuedAt(now)
+        .setExpiration(expiration)
+        .signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .compact();
   }
 
   public Boolean isTokenValid(String token, UserDetails userDetails) {
