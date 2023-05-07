@@ -1,6 +1,6 @@
-import { Theme, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
-export const useLogOutStyle = makeStyles((theme: Theme) => ({
+export const useLogOutStyle = makeStyles((theme) => ({
   Page: {
     backgroundColor: theme.palette.background.paper + ' !important',
     color: theme.palette.text.primary,
@@ -30,10 +30,15 @@ export const useLogOutStyle = makeStyles((theme: Theme) => ({
   button: {
     height: '48px !important',
     padding: theme.spacing(3.2),
-    marginTop: theme.spacing(2),
-    backgroundColor: theme.palette.primary.main,
+    marginTop: '10px !important',
+    backgroundColor: `${theme.palette.primary.main} !important`,
+    borderRadius: '30px !important',
+    '&:hover': {
+    backgroundColor: `${theme.palette.primary.light} !important`,
+  },
     '& .MuiButton-label': {
-      fontSize: 19,
+      fontSize: 16,
+      color: theme.palette.text.primary,
     },
   },
   header: {

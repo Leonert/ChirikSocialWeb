@@ -53,7 +53,7 @@ function FormModal({ buttonName }) {
             <Avatar aria-label="recipe" alt={targetPost.name} src={targetPost.avatar}></Avatar>
             <Typography className={classes.itemNick}>@{targetPost.nickname}</Typography>
           </div>
-          <Typography className={classes.item}>Send replay</Typography>
+          <Typography className={classes.item}>Send replay @{targetPost.nickname}</Typography>
           <div className={classes.content}>
             <Avatar />
             <Typography className={classes.itemNick}>@{userName}</Typography>
@@ -64,7 +64,6 @@ function FormModal({ buttonName }) {
               className={classes.contentTextarea}
               placeholder={'Enter replay...'}
               value={text}
-              maxRows={6}
             />
           </div>
           <div className={classes.footer}>

@@ -5,7 +5,7 @@ export const SIGN_IN = 'signIn';
 const authModalSlice = createSlice({
   name: 'authModal',
   initialState: {
-    status: true,
+    status: false,
     login: false,
     modalLogOut: true,
   },
