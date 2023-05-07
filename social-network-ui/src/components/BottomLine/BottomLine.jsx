@@ -11,11 +11,12 @@ export const BottomLine = () => {
     >
       <Box
         sx={{
+          zIndex: 2,
           width: '100%',
           padding: '20px',
           position: 'fixed',
           bottom: 0,
-          backgroundColor: (theme) => theme.palette.secondary.light,
+          backgroundColor: (theme) => theme.palette.background.lightDefault,
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
