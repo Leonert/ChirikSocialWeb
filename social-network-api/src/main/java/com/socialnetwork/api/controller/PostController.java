@@ -50,7 +50,7 @@ public class PostController {
   //  }
 
   @PostMapping()
-  public ResponseEntity<?> addPost(@RequestBody PostDto postDto) throws NoUserWithSuchCredentialsException {
+  public ResponseEntity<?> addPost(@RequestBody PostDto.Request.Default postDto) throws NoUserWithSuchCredentialsException {
     //Retrieving user id from DTO (only needed field in request), looking for it
     // in userservice and throwing exception if user with such id wasn`t found
     //Also checking of JWT token and comparing it with user needed to be realise in future TODO
@@ -84,7 +84,7 @@ public class PostController {
   //    return ResponseEntity.ok(new Response("Post was deleted"));
   //  }
 
-  private Post convertToPost(PostDto postDto) {
+  private Post convertToPost(PostDto.Request.Default postDto) {
     return modelMapper.map(postDto, Post.class);
   }
 }
