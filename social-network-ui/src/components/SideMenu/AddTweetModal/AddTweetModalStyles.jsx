@@ -10,9 +10,7 @@ export const useAddTweetModalStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.background.default,
     },
   },
-  dialogContent: {
-    backgroundColor: theme.palette.background.default,
-  },
+
   header: {
     padding: '5px 15px',
     margin: 0,
