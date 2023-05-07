@@ -17,11 +17,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       },
     },
   },
-  itemText: {
-    color: theme.palette.primary.dark,
-    padding: 5,
-    fontWeight: 700,
-  },
+
   itemWrapper: {
     marginBottom: 2,
     height: 58,
@@ -92,6 +88,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     textAlign: 'center',
   },
+
   popover: {
     width: 198,
     height: 'auto',

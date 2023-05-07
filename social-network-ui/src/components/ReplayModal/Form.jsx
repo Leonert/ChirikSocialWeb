@@ -53,7 +53,7 @@ function FormModal({ buttonName }) {
             <Avatar aria-label="recipe" alt={targetPost.name} src={targetPost.avatar}></Avatar>
             <Typography className={classes.itemNick}>@{targetPost.nickname}</Typography>
           </div>
-          <Typography className={classes.itemText}>Send replay @{targetPost.nickname}</Typography>
+          <Typography className={classes.item}>Send replay @{targetPost.nickname}</Typography>
           <div className={classes.content}>
             <Avatar />
             <Typography className={classes.itemNick}>@{userName}</Typography>
@@ -77,7 +77,7 @@ function FormModal({ buttonName }) {
             <div className={classes.footerAddForm}>
               {text && (
                 <>
-                  <span id={'textCount'}>{textCount}</span>
+                  <span id={'textCount'} className={classes.textCount}>{textCount}</span>
                   <div className={classes.footerAddFormCircleProgress}>
                     <CircularProgress
                       variant="determinate"
@@ -87,7 +87,7 @@ function FormModal({ buttonName }) {
                       style={text.length >= MAX_LENGTH ? { color: 'red' } : undefined}
                     />
                     <CircularProgress
-                      style={{ color: 'rgba(0, 0, 0, 0.1)' }}
+                      style={{ color: 'rgba(226, 216, 216, 0.1)' }}
                       variant="determinate"
                       size={20}
                       thickness={5}
