@@ -3,12 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
-import { router } from './routes/router';
-import { store } from './app/store';
-import { defaultTheme } from './theme';
-import './reset.css';
-import './index.css';
 
+import { store } from './app/store';
+import './index.css';
+import './reset.css';
+import { router } from './routes/router';
+import { defaultTheme } from './theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

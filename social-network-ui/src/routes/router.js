@@ -1,45 +1,50 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import SideMenu from '../components/SideMenu/SideMenu';
-import { defaultTheme } from '../theme';
-import Layout from './layout/Layout';
+import { Layout } from '../layout/Layout';
+import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
+import Home from '../pages/Home/Home';
+import Messages from '../pages/Messages/Messages';
 
-export const theme = defaultTheme;
 export const router = createBrowserRouter([
   {
     path: '/',
+
     element: <Layout />,
     errorElement: <div>Error page</div>,
     children: [
       {
-        path: '/home',
-        element: <SideMenu />,
+        index: true,
+        element: <Home />,
       },
       {
         path: '/search',
-        element: <SideMenu />,
+        element: <div></div>,
       },
       {
         path: '/notifications',
-        element: <SideMenu />,
+        element: <div></div>,
       },
       {
-        path: '/messages',
-        element: <SideMenu />,
+        path: '/Messages',
+        element: <div></div>,
       },
       {
         path: '/bookmarks',
-        element: <SideMenu />,
+        element: <div></div>,
       },
       {
         path: '/lists',
-        element: <SideMenu />,
+        element: <div></div>,
       },
       {
         path: '/profile',
-        element: <SideMenu />,
+        element: <div></div>,
       },
     ],
+  },
+  {
+    path: '/email-confirmation',
+    element: <EmailConfirmation />,
   },
 ]);

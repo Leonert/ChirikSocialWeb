@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createTheme } from '@material-ui/core/styles';
 import { deepmerge } from '@mui/utils';
 
@@ -173,6 +172,7 @@ export const defaultTheme = createTheme(
           default: 'rgb(21, 32, 43)',
           paper: 'rgb(21, 32, 43)',
           lightBlue: 'rgb(63, 81, 181)',
+          lightDefault: 'rgb(19, 36, 51)',
         },
         secondary: {
           light: 'rgb(29, 155, 240, 0.1)',
@@ -194,7 +194,6 @@ export const defaultTheme = createTheme(
           700: 'rgb(61, 84, 102)',
           800: 'rgba(91, 112, 131, 0.4)',
         },
-        hoverBlue: 'rgb(48, 63, 159)',
       },
       overrides: {
         MuiPaper: {

@@ -1,0 +1,18 @@
+import { makeStyles } from '@material-ui/core';
+
+export const useButtonShowStyles = makeStyles((theme) => ({
+  buttonHeader: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper + ' !important',
+    '&:hover': {
+      borderRadius: 1,
+      backgroundColor: theme.palette.background.paper + ' !important',
+    },
+  },
+  btnText: {
+    mb: 2,
+    paddingBottom: '0',
+    margin: '0',
+    color: '#fff',
+  },
+}));

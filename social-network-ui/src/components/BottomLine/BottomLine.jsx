@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { handleLoginModal, handleModal } from '../../features/slices/authModalSlice';
 import { CustomButton } from '../Login/CustomButton';
+import { CustomLoginModal } from '../Login/CustomLoginModal';
 import { Login } from '../Login/Login';
 import RegistrationModal from '../Registration/RegistrationModal';
 import Modal from '../UI/Modal';
@@ -19,13 +20,12 @@ export const BottomLine = () => {
     >
       <Box
         sx={{
+          zIndex: 2,
           width: '100%',
           padding: '20px',
           position: 'fixed',
           bottom: 0,
-
-          backgroundColor: (theme) => theme.palette.secondary.light,
-
+          backgroundColor: (theme) => theme.palette.background.lightDefault,
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
@@ -39,22 +39,14 @@ export const BottomLine = () => {
           styles={{
             dispaly: 'inline-block',
             margin: '0 16px',
+            p: '7px  34px',
+            fontSize: '16px',
           }}
         >
           Log in
         </CustomButton>
-        <CustomButton
-          styles={{
-            dispaly: 'inline-block',
-            margin: '0',
-          }}
-        >
-          Sign up
-        </CustomButton>
-
-        {login && <Modal>{<Login />}</Modal>}
-
-        {/* <RegistrationModal /> */}
+        {login && <CustomLoginModal>{<Login />}</CustomLoginModal>}
+        <RegistrationModal />
       </Box>
     </Box>
   );

@@ -21,16 +21,16 @@
   "plugins": [
     "react"
   ],
-  "rules": {
-    "react/prop-types": 0,
-    "no-unused-vars": "warn",
-    "prefer-const": "warn",
-    "padding-line-between-statements": ["error", {
-      "blankLine": "always",
-      "prev": "*",
-      "next": "return"
-    }],
-    "react/react-in-jsx-scope": "off",
-    "no-console": "warn"
-  }
+  "rules": { 
+    "react/prop-types": 0, 
+    "no-unused-vars": "warn", 
+    "prefer-const": "warn", 
+    "padding-line-between-statements": ["error", { 
+      "blankLine": "always", 
+      "prev": "*", 
+      "next": "return" 
+    }], 
+    "react/react-in-jsx-scope": "off", 
+    "no-console": "warn" 
+  } 
 }
