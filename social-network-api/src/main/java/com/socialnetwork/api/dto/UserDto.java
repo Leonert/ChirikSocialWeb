@@ -5,6 +5,7 @@ import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import com.socialnetwork.api.models.base.Message;
+import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ public enum UserDto {
   public enum Request {
     ;
 
-    @Value
+    @Data
     public static class Default implements Id, Username {
       int id;
       String username;
@@ -26,7 +27,7 @@ public enum UserDto {
   public enum Response {
     ;
 
-    @Value
+    @Data
     public static class Default implements Id, Username {
       int id;
       String username;

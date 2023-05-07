@@ -7,6 +7,7 @@ import com.socialnetwork.api.models.additional.Reply;
 import com.socialnetwork.api.models.additional.Retweet;
 import com.socialnetwork.api.models.additional.View;
 import com.socialnetwork.api.models.base.User;
+import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public enum PostDto {
   public enum Request {
     ;
 
-    @Value
+    @Data
     public static class Default implements Id, Author {
       int id;
       User author;
@@ -28,7 +29,7 @@ public enum PostDto {
   public enum Response {
     ;
 
-    @Value
+    @Data
     public static class Default implements Id, Author {
       int id;
       User author;

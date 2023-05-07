@@ -1,6 +1,7 @@
 package com.socialnetwork.api.dto;
 
 import com.socialnetwork.api.models.base.User;
+import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public enum MessageDto {
   public enum Request {
     ;
 
-    @Value
+    @Data
     public static class Default implements Id {
       int id;
     }
@@ -20,7 +21,7 @@ public enum MessageDto {
   public enum Response {
     ;
 
-    @Value
+    @Data
     public static class Default implements Id {
       int id;
     }
