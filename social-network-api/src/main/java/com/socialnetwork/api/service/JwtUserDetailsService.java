@@ -1,6 +1,6 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.security.JwtUserDetails;
 import lombok.RequiredArgsConstructor;

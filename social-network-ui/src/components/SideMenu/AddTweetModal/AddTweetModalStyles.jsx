@@ -1,6 +1,6 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
-export const useAddTweetModalStyles = makeStyles((theme: Theme) => ({
+export const useAddTweetModalStyles = makeStyles((theme) => ({
     content: {
         top: "-20%",
         "& .MuiDialogTitle-root": {

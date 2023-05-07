@@ -24,7 +24,8 @@ export default function Post(props) {
   return (
     <Card className={classes.Page}>
       <CardHeader
-        className={classes.pageItem}
+        className={classes.pageItem }
+
         avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
         action={
           <Tooltip title="More">
