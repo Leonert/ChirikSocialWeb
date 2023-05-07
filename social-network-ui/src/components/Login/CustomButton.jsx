@@ -2,11 +2,13 @@ import { Button } from '@mui/material';
 
 export const CustomButton = ({ children, styles = '', onSubmit = false, handleClick = Function.prototype }) => {
   const settings = {
-    border: '1px solid gray',
-    marginBottom: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: '20px',
+    textTransform: 'unset',
+    backgroundColor: 'rgb(63, 81, 181)',
+    borderRadius: '4px',
+    color: 'rgb(255, 255, 255)',
+    '&:hover': {
+      backgroundColor: 'rgb(48, 63, 159)',
+    },
   };
 
   return (

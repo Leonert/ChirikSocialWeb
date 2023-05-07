@@ -60,7 +60,7 @@ export const Login = () => {
       formData.append('password', values.password);
       formData.append('rememberMe', values.rememberMe);
 
-      console.log(values.email, values.password, values.rememberMe);
+      // console.log(values.email, values.password, values.rememberMe);
 
       dispatch(handleSnackbar(true));
       dispatch(handleModal(false));
@@ -86,13 +86,13 @@ export const Login = () => {
       <TitleLogin firstPage={firstPage} />
       {firstPage && (
         <>
-          <CustomButton styles={{ color: 'black', width: '100%', '&:hover': { backgroundColor: '#dbdfdf' } }}>
+          <CustomButton styles={{ width: '100%', marginBottom: '20px' }}>
             <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
               <FcGoogle size={20} />
             </Typography>{' '}
             <Typography textTransform="none"> Sign in with Google</Typography>
           </CustomButton>
-          <Divider sx={{ marginBottom: '20px' }}>or</Divider>
+          <Divider sx={{ marginBottom: '20px', color: 'white' }}>or</Divider>
         </>
       )}
 
@@ -115,22 +115,19 @@ export const Login = () => {
             <CustomButton
               handleClick={() => handleNextPage()}
               styles={{
-                backgroundColor: '#000000',
                 marginTop: '120px',
+                marginBottom: '30px',
                 width: '100%',
-                '&:hover': { backgroundColor: '#191818' },
               }}
             >
-              <Typography textTransform="none" sx={{ color: 'white', fontWeight: 600 }}>
+              <Typography textTransform="none" sx={{ fontWeight: 600 }}>
                 Next{' '}
               </Typography>
             </CustomButton>
 
-            {/* <CustomButton styles={{ width: '100%', '&:hover': { backgroundColor: '#dbdfdf' } }}>
-              <Typography textTransform="none" sx={{ color: 'black', fontWeight: 600 }}>
-                Forgot password?{' '}
-              </Typography>
-            </CustomButton> */}
+            <CustomButton styles={{ width: '100%', marginBottom: '30px' }}>
+              <Typography textTransform="none">Forgot password? </Typography>
+            </CustomButton>
 
             <Typography textTransform="none">
               <Typography
@@ -147,7 +144,11 @@ export const Login = () => {
                 }}
                 style={{
                   cursor: 'pointer',
-                  textDecoration: 'none',
+                  color: 'rgb(63, 81, 181)',
+                  '&:hover': {
+                    color: 'rgb(48, 63, 159)',
+                    textDecoration: 'underline',
+                  },
                 }}
               >
                 Sign up
@@ -191,9 +192,8 @@ export const Login = () => {
             <CustomButton
               onSubmit={true}
               styles={{
-                backgroundColor: '#000000',
                 width: '100%',
-                '&:hover': { backgroundColor: '#191818' },
+                marginBottom: '20px',
               }}
             >
               <Typography textTransform="none" sx={{ color: 'white', fontWeight: 600 }}>
@@ -213,9 +213,13 @@ export const Login = () => {
                 onClick={() => {
                   dispatch(handleModal(false));
                 }}
-                style={{
+                sx={{
                   cursor: 'pointer',
-                  textDecoration: 'none',
+                  color: 'rgb(63, 81, 181)',
+                  '&:hover': {
+                    color: 'rgb(48, 63, 159)',
+                    textDecoration: 'underline',
+                  },
                 }}
               >
                 Sign up

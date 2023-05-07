@@ -1,13 +1,11 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import { Layout } from '../layout/Layout';
 
-import SideMenu from "../components/SideMenu/SideMenu";
-import {MuiThemeProvider} from "@material-ui/core";
-import { defaultTheme} from "../theme";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import SideMenu from '../components/SideMenu/SideMenu';
+import { defaultTheme } from '../theme';
+import Layout from './layout/Layout';
 
-export const theme= (defaultTheme);
+export const theme = defaultTheme;
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -16,59 +14,31 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/home',
-        element:
-            <MuiThemeProvider theme={defaultTheme}>
-                <CssBaseline />
-                <SideMenu />
-            </MuiThemeProvider>,
+        element: <SideMenu />,
       },
       {
-          path: '/search',
-          element:
-              <MuiThemeProvider theme={defaultTheme}>
-                  <CssBaseline />
-                  <SideMenu />
-              </MuiThemeProvider>,
+        path: '/search',
+        element: <SideMenu />,
       },
       {
-          path: '/notifications',
-          element:
-              <MuiThemeProvider theme={defaultTheme}>
-                  <CssBaseline />
-                  <SideMenu />
-              </MuiThemeProvider>,
+        path: '/notifications',
+        element: <SideMenu />,
       },
       {
-          path: '/messages',
-          element:
-              <MuiThemeProvider theme={defaultTheme}>
-                  <CssBaseline />
-                  <SideMenu />
-              </MuiThemeProvider>,
+        path: '/messages',
+        element: <SideMenu />,
       },
       {
-          path: '/bookmarks',
-          element:
-              <MuiThemeProvider theme={defaultTheme}>
-                  <CssBaseline />
-                  <SideMenu />
-              </MuiThemeProvider>,
+        path: '/bookmarks',
+        element: <SideMenu />,
       },
       {
-          path: '/lists',
-          element:
-              <MuiThemeProvider theme={defaultTheme}>
-                  <CssBaseline />
-                  <SideMenu />
-              </MuiThemeProvider>,
+        path: '/lists',
+        element: <SideMenu />,
       },
       {
-          path: '/profile',
-          element:
-              <MuiThemeProvider theme={defaultTheme}>
-                  <CssBaseline />
-                  <SideMenu />
-              </MuiThemeProvider>,
+        path: '/profile',
+        element: <SideMenu />,
       },
     ],
   },

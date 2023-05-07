@@ -7,17 +7,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { handleLoginModal, handleModal } from '../../features/slices/authModalSlice';
 
-const CustomModal = styled(MuiDialog)({
+const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {
-    // backgroundColor: 'black',
-    backgroundColor: 'yellow',
+    backgroundColor: theme.palette.background.default,
     maxWidth: '600px',
     width: '100%',
     borderRadius: '8px',
-    // color: 'white',
     color: 'black',
   },
-});
+}));
 
 const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
   const dispatch = useDispatch();

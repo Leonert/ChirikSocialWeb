@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { handleLoginModal, handleModal } from '../../features/slices/authModalSlice';
 import { CustomButton } from '../Login/CustomButton';
-// import { Login } from '../components/Login/Login';
-// import Modal from '../components/UI/Modal';
 import { Login } from '../Login/Login';
+import RegistrationModal from '../Registration/RegistrationModal';
 import Modal from '../UI/Modal';
 
 export const BottomLine = () => {
@@ -24,7 +23,9 @@ export const BottomLine = () => {
           padding: '20px',
           position: 'fixed',
           bottom: 0,
-          backgroundColor: 'blue',
+
+          backgroundColor: (theme) => theme.palette.secondary.light,
+
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
@@ -38,8 +39,6 @@ export const BottomLine = () => {
           styles={{
             dispaly: 'inline-block',
             margin: '0 16px',
-            backgroundColor: 'gray',
-            color: 'white',
           }}
         >
           Log in
@@ -48,13 +47,14 @@ export const BottomLine = () => {
           styles={{
             dispaly: 'inline-block',
             margin: '0',
-            backgroundColor: 'gray',
-            color: 'white',
           }}
         >
           Sign up
         </CustomButton>
-        <Modal>{login ? <Login /> : '<Sign up/>'}</Modal>
+
+        {login && <Modal>{<Login />}</Modal>}
+
+        {/* <RegistrationModal /> */}
       </Box>
     </Box>
   );

@@ -5,14 +5,14 @@ export const TitleLogin = ({ firstPage }) => {
     <>
       {firstPage ? (
         <Typography
-          sx={{ fontSize: '32px', fontWeight: '600', textAlign: 'center', marginBottom: '30px' }}
+          sx={{ fontSize: '32px', fontWeight: '600', textAlign: 'center', marginBottom: '30px', color: 'white' }}
           variant="h3"
         >
           Sign in to Twitter
         </Typography>
       ) : (
         <Typography
-          sx={{ fontSize: '32px', fontWeight: '600', textAlign: 'center', marginBottom: '30px' }}
+          sx={{ fontSize: '32px', fontWeight: '600', textAlign: 'center', marginBottom: '30px', color: 'white' }}
           variant="h3"
         >
           Enter your password

@@ -8,7 +8,6 @@ export const CustomSnackbar = () => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.snackbar);
   const { error } = useSelector((state) => state.auth);
-  console.log(error); 
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -26,8 +25,11 @@ export const CustomSnackbar = () => {
     </>
   );
 
+  console.log('render snack');
+
   return (
     <div>
+      <div>bwhbwhdbwhdwhbdhwdbhwbdhbwdhwbhbw</div>
       <Snackbar
         open={status}
         autoHideDuration={6000}
