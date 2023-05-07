@@ -172,6 +172,7 @@ export const defaultTheme = createTheme(
           default: 'rgb(21, 32, 43)',
           paper: 'rgb(21, 32, 43)',
           lightBlue: 'rgb(63, 81, 181)',
+          lightDefault: 'rgb(19, 36, 51)',
         },
         secondary: {
           light: 'rgb(29, 155, 240, 0.1)',
