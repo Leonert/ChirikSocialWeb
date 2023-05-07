@@ -1,12 +1,11 @@
-import { Theme, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-export const useReplayModalStyle = makeStyles((theme: Theme) => ({
+export const useReplayModalStyle = makeStyles((theme) => ({
   Page: {
     backgroundColor: theme.palette.background.paper + ' !important',
     color: theme.palette.text.primary,
     border: `1px solid ${theme.palette.divider}`,
     backdropFilter: 'blur(10px)',
-    backgroundColor: 'rgba(11,18,23,0.3)',
   },
   container: {
     backdropFilter: 'blur(10px)',

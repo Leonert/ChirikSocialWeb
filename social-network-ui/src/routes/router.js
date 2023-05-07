@@ -4,10 +4,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
+import Messages from "../pages/Messages/Messages";
+
 
 export const router = createBrowserRouter([
   {
     path: '/',
+
     element: <Layout />,
     errorElement: <div>Error page</div>,
     children: [
@@ -24,7 +27,7 @@ export const router = createBrowserRouter([
         element: <div></div>,
       },
       {
-        path: '/messages',
+        path: '/Messages',
         element: <div></div>,
       },
       {

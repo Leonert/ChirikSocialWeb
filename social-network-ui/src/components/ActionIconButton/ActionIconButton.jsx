@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import {IconButton } from "@material-ui/core";
 import {useActionIconButtonStyles} from "./ActionIconButtonStyles";
+import {IconButton} from "@mui/material";
 
 const HOVER_DELAY = 500;
 
@@ -15,8 +15,7 @@ const ActionIconButton = (
 ) => {
     const classes = useActionIconButtonStyles();
     const [delayHandler, setDelayHandler] = useState(null);
-    // eslint-disable-next-line no-unused-vars
-    const [visibleHoverAction, setVisibleHoverAction] = useState(false);
+    const [ setVisibleHoverAction] = useState(false);
 
     const handleHoverAction = () => {
         setDelayHandler(setTimeout(() => setVisibleHoverAction(true), HOVER_DELAY));

@@ -1,8 +1,8 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.exception.EmailVerificationException;
-import com.socialnetwork.api.model.ConfirmationToken;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.auth.ConfirmationToken;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
