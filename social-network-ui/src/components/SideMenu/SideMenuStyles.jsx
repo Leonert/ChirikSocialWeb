@@ -17,7 +17,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       },
     },
   },
-  title: {
+  itemText: {
     color: theme.palette.primary.dark,
     padding: 5,
     fontWeight: 700,

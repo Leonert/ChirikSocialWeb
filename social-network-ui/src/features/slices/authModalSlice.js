@@ -7,7 +7,7 @@ const authModalSlice = createSlice({
   initialState: {
     status: false,
     login: false,
-    modalLogOut: false,
+    modalLogOut: true,
   },
   reducers: {
     handleModal: (state, action) => {
