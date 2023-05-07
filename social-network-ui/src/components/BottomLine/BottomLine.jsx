@@ -6,7 +6,6 @@ import { CustomButton } from '../Login/CustomButton';
 import { CustomLoginModal } from '../Login/CustomLoginModal';
 import { Login } from '../Login/Login';
 import RegistrationModal from '../Registration/RegistrationModal';
-import Modal from '../UI/Modal';
 
 export const BottomLine = () => {
   const { login } = useSelector((state) => state.authModal);

@@ -6,8 +6,6 @@ import { Outlet } from 'react-router-dom';
 import { BottomLine } from '../components/BottomLine/BottomLine';
 import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
-// import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
-import { handleSnackbar } from '../features/slices/snackbarSlice';
 import { useLayoutStyles } from './LayoutStyles';
 
 export const Layout = () => {
@@ -24,6 +22,7 @@ export const Layout = () => {
           <Outlet />
         </Grid>
       </Container>
+      <CustomSnackbar />
       {!user && <BottomLine />}
     </>
   );

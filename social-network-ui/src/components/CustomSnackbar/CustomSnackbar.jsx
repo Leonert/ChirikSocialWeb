@@ -25,11 +25,8 @@ export const CustomSnackbar = () => {
     </>
   );
 
-  console.log('render snack');
-
   return (
     <div>
-      <div>bwhbwhdbwhdwhbdhwdbhwbdhbwdhwbhbw</div>
       <Snackbar
         open={status}
         autoHideDuration={6000}

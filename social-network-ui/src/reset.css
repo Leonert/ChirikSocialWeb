@@ -28,12 +28,12 @@ input,
 textarea,
 button,
 select {
+  border: none;
+  outline: none;
+  background-color: transparent;
   font-family: inherit;
   font-size: inherit;
-  border: none;
-  background-color: transparent;
   appearance: none;
-  outline: none;
 }
 
 button {

@@ -37,7 +37,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const { loading, user } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   const handleNextPage = () => {
     const err = Object.keys(formik.errors);

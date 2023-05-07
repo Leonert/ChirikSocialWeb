@@ -2,29 +2,31 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../axiosInstance';
 
-export const loginUser = createAsyncThunk('auth/loginUser', async ({ email, password, rememberMe }) => {
-  try {
-    const { data } = await axiosIns({
-      method: 'post',
-      url: `/api/login/authenticate`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        username: email,
-        password,
-        rememberMe,
-      },
-    });
+export const loginUser = createAsyncThunk(
+  'auth/loginUser',
+  async ({ email, password, rememberMe }, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosIns({
+        method: 'post',
+        url: `/api/login/authenticate`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          username: email,
+          password,
+          rememberMe,
+        },
+      });
 
-    console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
 
-    return data;
-  } catch (error) {
-    // console.log(error.response.data.errorMessage);
-    // throw new Error(error.message);
+      return rejectWithValue(error.response.data.message);
+    }
   }
-});
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -43,12 +45,12 @@ const authSlice = createSlice({
     [loginUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      state.user = action.payload?.user;
-      state.token = action.payload?.jwt;
+      state.user = action.payload.user;
+      state.token = action.payload.jwt;
+      localStorage.setItem('token', action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       state.error = action.payload;
     },
   },
