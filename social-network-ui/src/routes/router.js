@@ -26,7 +26,9 @@ export const router = createBrowserRouter([
         element: <div></div>,
       },
       {
-        path: '/Messages',
+
+        path: '/messages',
+
         element: <Messages />,
       },
       {
