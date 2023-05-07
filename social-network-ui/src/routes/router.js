@@ -4,8 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
-import Messages from "../pages/Messages/Messages";
-
+import Messages from '../pages/Messages/Messages';
 
 export const router = createBrowserRouter([
   {
@@ -27,8 +26,8 @@ export const router = createBrowserRouter([
         element: <div></div>,
       },
       {
-        path: '/Messages',
-        element: <div></div>,
+        path: '/messages',
+        element: <Messages />,
       },
       {
         path: '/bookmarks',
