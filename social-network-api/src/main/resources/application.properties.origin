@@ -18,3 +18,7 @@ jwt.secret=
 jwt.expire.normal=
 jwt.expire.remember=
 email.confirmation.url=
+spring.security.oauth2.client.registration.google.client-id=
+spring.security.oauth2.client.registration.google.client-secret=
+spring.security.oauth2.client.registration.google.redirect-uri=
+spring.security.oauth2.client.registration.google.scope=
