@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1",
+    "avatar": "",
+    "nickname": "Kitty",
+    "data": "16.05.23",
+
+    "post": "Very long and interesting post for all readers",
+    "replay": "23",
+    "retweet": "34",
+    "like": "30",
+    "view": "54"
+  },
+  {
+    "id": "2",
+    "avatar": "../img/av4.jpg",
+    "nickname": "Jon",
+    "data": "16.05.23",
+    "img": "./post/post11.jpg",
+
+    "replay": "20",
+    "retweet": "36",
+    "like": "3",
+    "view": "4"
+  },
+  {
+    "id": "3",
+    "avatar": "../img/av3.jpg",
+    "nickname": "Rubbi",
+    "data": "18.05.23",
+    "img": "../post/post3.jpg",
+    "post": "Very long and interesting post for all readers",
+    "replay": "200",
+    "retweet": "304",
+    "like": "300",
+    "view": "504"
+  },
+  {
+    "id": "4",
+    "avatar": "../img/av4.jpg",
+    "nickname": "Kitty",
+    "data": "18.05.23",
+    "img": "../post/post4.jpg",
+    "post": "Very long and interesting post for all readers",
+    "replay": "2",
+    "retweet": "3",
+    "like": "302",
+    "view": "514"
+  },
+  {
+    "id": "5",
+    "avatar": "../img/av2.jpg",
+    "nickname": "Kitty",
+    "data": "18.05.23",
+    "img": "../post/post5.jpg",
+    "post": "Very long and interesting post for all readers",
+    "replay": "23",
+    "retweet": "34",
+    "like": "30",
+    "view": "54"
+  },
+  {
+    "id": "6",
+    "avatar": "../img/av4.jpg",
+    "nickname": "Mini",
+    "data": "18.05.23",
+    "img": "../post/post6.jpg",
+    "post": "Very long and interesting post for all readers",
+    "replay": "11",
+    "retweet": "23",
+    "like": "45",
+    "view": "12"
+  },
+  {
+    "id": "7",
+    "avatar": "../img/av5.jpg",
+    "nickname": "Pretty",
+    "data": "18.05.23",
+    "img": "../post/post7.jpg",
+    "post": "Very long and interesting post for all readers",
+    "replay": "34",
+    "retweet": "44",
+    "like": "123",
+    "view": "234"
+  },
+  {
+    "id": "8",
+    "avatar": "../img/av2.jpg",
+    "nickname": "Kitty",
+    "data": "18.05.23",
+    "img": "../post/post8.jpg",
+    "post": "Very long and interesting post for all readers",
+    "replay": "23",
+    "retweet": "34",
+    "like": "30",
+    "view": "54"
+  }
+]

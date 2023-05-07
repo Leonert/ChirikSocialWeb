@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { useState} from "react";
 import {useSideMenuStyles} from "./SideMenuStyles";
 import {Hidden, IconButton, Typography} from "@mui/material";
 import {
@@ -16,13 +16,13 @@ import CreateIcon from "@material-ui/icons/Create";
 import AddTweetModal from "./AddTweetModal/AddTweetModal";
 
 
-const SideMenu = (): ReactElement => {
+const SideMenu = () => {
     const classes = useSideMenuStyles();
     const [visibleAddTweet, setVisibleAddTweet] = useState(false);
-    const handleClickOpenAddTweet = (): void => {
+    const handleClickOpenAddTweet = ()=> {
         setVisibleAddTweet(true);
     };
-    const onCloseAddTweet = (): void => {
+    const onCloseAddTweet = ()=> {
         setVisibleAddTweet(false);
     };
 
@@ -31,7 +31,6 @@ const SideMenu = (): ReactElement => {
             <ul className={classes.container}>
                <li>
                    <NavLink to={HOME} activeClassName={"selected"}>
-
                    <div className={classes.logoIcon}>
                        <IconButton>
                             {TweetIcon}
@@ -85,12 +84,10 @@ const SideMenu = (): ReactElement => {
                     <NavLink to={MESSAGES} activeClassName={"selected"}>
                         <div>
                             <Hidden smDown>
-                                <>
-                                    <span>{MessagesIcon}</span>
-                                    <Typography variant={"h5"}>
-                                        Messages
-                                    </Typography>
-                                </>
+                                <span>{MessagesIcon}</span>
+                                <Typography className={classes.label} variant="h5">
+                                    Messages
+                                </Typography>
                             </Hidden>
                         </div>
                     </NavLink>

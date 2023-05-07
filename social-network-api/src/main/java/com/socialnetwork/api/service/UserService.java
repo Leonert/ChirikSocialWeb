@@ -1,8 +1,8 @@
 package com.socialnetwork.api.service;
 
+import com.socialnetwork.api.exception.EmailVerificationException;
 import com.socialnetwork.api.model.ConfirmationToken;
 import com.socialnetwork.api.model.User;
-import com.socialnetwork.api.exception.EmailVerificationException;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class UserService {
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
     Optional<ConfirmationToken> optionalToken =
-            confirmationTokenService.findByConfirmationToken(confirmationToken);
+        confirmationTokenService.findByConfirmationToken(confirmationToken);
 
     if (optionalToken.isEmpty()) {
       throw new EmailVerificationException("Error: Couldn't verify email");
@@ -49,5 +49,9 @@ public class UserService {
     user.setEnabled(true);
     confirmationTokenService.deleteById(token.getTokenId());
     userRepository.save(user);
+  }
+
+  public Optional<User> findById(int id) {
+    return userRepository.findById(id);
   }
 }
