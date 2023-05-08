@@ -5,6 +5,7 @@ import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
+import { Subscriptions } from '../pages/Subscriptions/Subscriptions';
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: '/profile',
         element: <div></div>,
+      },
+      {
+        path: '/subscriptions',
+        element: <Subscriptions />,
       },
     ],
   },
