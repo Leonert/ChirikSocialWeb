@@ -1,23 +1,34 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
 export const useAddTweetFormStyles = makeStyles((theme) => ({
   content: {
     display: 'flex',
     width: '100%',
+    backgroundColor: theme.palette.background.default,
   },
   textareaWrapper: {
     marginLeft: 15,
     width: '100%',
+    backgroundColor: theme.palette.background.default,
+    borderRadius: '20px !important',
   },
   item: {
     margin: '10px 55px !important',
+    color: theme.palette.text.secondary,
   },
+  textCount: {
+    color: theme.palette.text.secondary,
+    zIndex: '2',
+  },
+  
   itemNick: {
     paddingTop: '8px',
     marginLeft: '15px !important',
+    color: theme.palette.text.secondary,
   },
   contentTextarea: {
-    width: '100%',
+    marginTop: 10,
+    width: '98%',
     border: 0,
     fontSize: 20,
     outline: 'none',
