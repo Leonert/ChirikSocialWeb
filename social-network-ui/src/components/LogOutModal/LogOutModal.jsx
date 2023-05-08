@@ -13,7 +13,6 @@ function LogOutModal() {
 
   const openModal = useSelector((state) => state.authModal.modalLogOut);
   const onClose = () => {
-    console.log(1, openModal);
     dispatch(handleLogOutModal(false));
   };
   const logOut = () => {

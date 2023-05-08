@@ -78,10 +78,10 @@ const RegistrationModal = () => {
           birthDate: values.birthDate,
         };
         const response = await axiosIns.post('/api/registration/save-user', data);
-        console.log(data);
-        console.log(response);
+        // console.log(data);
+        // console.log(response);
       } catch (e) {
-        console.error(e);
+        // console.error(e);
       }
     }
   };
@@ -112,9 +112,9 @@ const RegistrationModal = () => {
     setOpen(false);
   };
 
-  const handlePrevStep = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-  };
+  // const handlePrevStep = () => {
+  //   setActiveStep((prevStep) => prevStep - 1);
+  // };
 
   const steps = [
     <InitialStep key={1} onCreateAccount={handleNextStep} />,
