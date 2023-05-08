@@ -1,6 +1,5 @@
 import { Button, Dialog } from '@material-ui/core';
 import { Box, Typography } from '@mui/material';
-
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,7 +20,7 @@ function LogOutModal() {
     dispatch(handleModal(false));
     dispatch(handleLogOutModal(false));
   };
-  console.log(2, openModal);
+
   return (
     <Dialog className={classes.content} open={openModal} onClose={onClose} aria-labelledby="form-dialog-title">
       <Box className={classes.pageItem}>

@@ -1,5 +1,4 @@
-import { CircularProgress } from '@material-ui/core';
-import { Box, Container, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Container, Typography } from '@material-ui/core';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import axios from 'axios';
