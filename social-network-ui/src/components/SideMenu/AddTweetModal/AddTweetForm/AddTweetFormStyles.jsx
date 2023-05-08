@@ -18,7 +18,9 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
   },
   textCount: {
     color: theme.palette.text.secondary,
+    zIndex: '2',
   },
+  
   itemNick: {
     paddingTop: '8px',
     marginLeft: '15px !important',

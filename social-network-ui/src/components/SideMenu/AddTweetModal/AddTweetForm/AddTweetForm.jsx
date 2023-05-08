@@ -1,4 +1,7 @@
-import { Button, CircularProgress, TextareaAutosize } from '@material-ui/core';
+import { Button, CircularProgress, IconButton, TextareaAutosize } from '@material-ui/core';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import PermMediaIcon from '@mui/icons-material/PermMedia';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -14,9 +17,10 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const [text, setText] = useState('');
   const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
   const [visiblePoll, setVisiblePoll] = useState(false);
+  const [remainingChars, setRemainingChars] = useState(280);
   const classes = useAddTweetFormStyles({ qT: quoteTweet, isScheduled: selectedScheduleDate !== null });
   const textLimitPercent = Math.round((text.length / 280) * 100);
-  const textCount = MAX_LENGTH - text.length;
+  const textCount = remainingChars;
   const fileInputRef = useRef(null);
   const params = useParams();
 
@@ -32,7 +36,11 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   };
 
   const handleChangeTextarea = (event) => {
-    setText(event.target.value);
+    const newCount = 280 - event.target.value.length;
+    if (newCount >= 0) {
+      setRemainingChars(newCount);
+      setText(event.target.value);
+    }
   };
   const uploadTweetImages = async () => {};
   const handleClickAddTweet = async () => {
@@ -117,16 +125,29 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
         <div className={classes.footerWrapper}>
           {buttonName !== 'Reply' && (
             <div className={classes.quoteImage}>
-              <ActionIconButton actionText={'Media'} icon={MediaIcon} onClick={handleClickImage} size={'medium'} />
+              <IconButton color="primary" aria-label="add to shopping cart" onClick={handleClickImage}>
+                <PermMediaIcon />
+              </IconButton>
+              <IconButton color="primary" aria-label="add to shopping cart">
+                <InsertEmoticonIcon />
+              </IconButton>
               <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
-              <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
             </div>
           )}
         </div>
         <div className={classes.footerAddForm}>
           {text && (
             <>
-              <span id={'textCount'}>{textCount}</span>
+              <span id={'textCount'} className={classes.textCount}>
+                {textCount}
+              </span>
               <div className={classes.footerAddFormCircleProgress}>
                 <CircularProgress
                   variant="determinate"
@@ -153,7 +174,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
                 ? handleClickQuoteTweet
                 : handleClickAddTweet
             }
-            disabled={visiblePoll ? !text || text.length >= MAX_LENGTH : !text || text.length >= MAX_LENGTH}
+            disabled={visiblePoll ? !text || text.length < MAX_LENGTH - 1 : !text || text.length >= MAX_LENGTH + 2}
             color="primary"
             variant="contained"
           >
