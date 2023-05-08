@@ -1,5 +1,4 @@
-import { Dialog } from '@material-ui/core';
-import { Button } from '@material-ui/core';
+import { Button, Dialog } from '@material-ui/core';
 import { Box } from '@mui/material';
 import { Typography } from '@mui/material';
 import React from 'react';

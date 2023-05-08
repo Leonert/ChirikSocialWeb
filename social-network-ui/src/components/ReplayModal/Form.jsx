@@ -1,7 +1,4 @@
-import { Avatar } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import { Avatar, Button, CircularProgress, TextareaAutosize } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -77,7 +74,9 @@ function FormModal({ buttonName }) {
             <div className={classes.footerAddForm}>
               {text && (
                 <>
-                  <span id={'textCount'} className={classes.textCount}>{textCount}</span>
+                  <span id={'textCount'} className={classes.textCount}>
+                    {textCount}
+                  </span>
                   <div className={classes.footerAddFormCircleProgress}>
                     <CircularProgress
                       variant="determinate"
