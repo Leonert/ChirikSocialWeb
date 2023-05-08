@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useActionIconButtonStyles } from './ActionIconButtonStyles';
 
@@ -8,7 +8,6 @@ import { useActionIconButtonStyles } from './ActionIconButtonStyles';
 const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
   const classes = useActionIconButtonStyles();
   const delayHandler = null;
-  let setVisibleHoverAction = false;
 
   // const handleHoverAction = () => {
   //   setDelayHandler(setTimeout(() => setVisibleHoverAction(true), HOVER_DELAY));
@@ -16,7 +15,6 @@ const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
 
   const handleLeaveAction = (setVisibleHoverAction) => {
     clearTimeout(delayHandler);
-    setVisibleHoverAction = false;
   };
 
   return (
