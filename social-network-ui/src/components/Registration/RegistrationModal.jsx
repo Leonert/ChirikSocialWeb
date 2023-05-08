@@ -77,7 +77,7 @@ const RegistrationModal = () => {
           lastName: values.surname,
           birthDate: values.birthDate,
         };
-        const response = await axiosIns.post('/api/registration/save-user', data);
+        // const response = await axiosIns.post('/api/registration/save-user', data);
         // console.log(data);
         // console.log(response);
       } catch (e) {
