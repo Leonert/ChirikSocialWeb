@@ -1,12 +1,11 @@
 import { Button, CircularProgress, IconButton, TextareaAutosize } from '@material-ui/core';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { EmojiIcon, MediaIcon } from '../../../../icon';
+import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
 import ProfileAvatar from './ProfileAvatar/ProfileAvatar';

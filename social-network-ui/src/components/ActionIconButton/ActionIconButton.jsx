@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 
 import { useActionIconButtonStyles } from './ActionIconButtonStyles';
 
-const HOVER_DELAY = 500;
+// const HOVER_DELAY = 500;
 
 const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
   const classes = useActionIconButtonStyles();
-  const [delayHandler, setDelayHandler] = useState(null);
+  const delayHandler = null;
   let setVisibleHoverAction = false;
 
   // const handleHoverAction = () => {
   //   setDelayHandler(setTimeout(() => setVisibleHoverAction(true), HOVER_DELAY));
   // };
 
-  const handleLeaveAction = () => {
+  const handleLeaveAction = (setVisibleHoverAction) => {
     clearTimeout(delayHandler);
     setVisibleHoverAction = false;
   };
