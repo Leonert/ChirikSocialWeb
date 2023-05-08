@@ -2,7 +2,6 @@ import { Button } from '@material-ui/core';
 import React from 'react';
 
 import { CloseIcon } from '../../../../../icon';
-import ActionIconButton from '../../../../ActionIconButton/ActionIconButton';
 import { useCloseButtonStyles } from './CloseButtonStyles';
 
 const CloseButton = ({ onClose }) => {
@@ -10,7 +9,7 @@ const CloseButton = ({ onClose }) => {
 
   return (
     <div className={classes.close}>
-      <Button onClick={onClose} className={classes.closeButton} >
+      <Button onClick={onClose} className={classes.closeButton}>
         {CloseIcon}
       </Button>
     </div>
