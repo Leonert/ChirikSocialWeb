@@ -8,7 +8,7 @@ const HOVER_DELAY = 500;
 const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
   const classes = useActionIconButtonStyles();
   const [delayHandler, setDelayHandler] = useState(null);
-  const setVisibleHoverAction = false;
+  let setVisibleHoverAction = false;
 
   // const handleHoverAction = () => {
   //   setDelayHandler(setTimeout(() => setVisibleHoverAction(true), HOVER_DELAY));
