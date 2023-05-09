@@ -8,9 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.List;
 
+import java.net.URI;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +19,6 @@ import java.util.List;
 public class MessagesController {
   private final MessageService messageService;
   private final ModelMapper modelMapper;
-
 
   @GetMapping("/{id}")
   public ResponseEntity<MessageDto> getMessageById(@PathVariable int id) {

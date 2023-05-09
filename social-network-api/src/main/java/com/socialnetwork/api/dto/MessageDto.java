@@ -1,9 +1,10 @@
 package com.socialnetwork.api.dto;
 
 import com.socialnetwork.api.models.base.User;
+import lombok.Data;
 import lombok.Value;
 import java.time.LocalDateTime;
-
+@Data
 public class MessageDto {
   private String id;
 
@@ -39,4 +40,3 @@ public class MessageDto {
     }
   }
 }
-

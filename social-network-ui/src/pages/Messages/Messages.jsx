@@ -11,6 +11,12 @@ import MessagesModal from './MessagesModal/MessagesModal';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 import {ChatApi} from "../../services/api/chatApi";
+import {useSelector} from "react-redux";
+
+export const ChatMessageRequest = {
+  chatId: 1,
+  text: 'ddd'
+};
 
 const Messages = () => {
   const classes = useMessagesStyles();
@@ -29,6 +35,15 @@ const Messages = () => {
     fetchChats();
   }, []);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  const scrollToBottom = () => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({behavior: 'smooth'})
+    }
+  };
   const onOpenModalWindow = () => {
     setVisibleModalWindow(true);
   };
@@ -44,7 +59,13 @@ const Messages = () => {
     setChat(chat);
   };
 
-  const onSendMessage = () => {};
+
+  const onSendMessage = () => {
+    if (message !== "") {
+      setMessage("");
+    }
+  };
+
 
   return (
     <>
