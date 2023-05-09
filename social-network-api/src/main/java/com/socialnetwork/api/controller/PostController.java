@@ -1,11 +1,9 @@
 package com.socialnetwork.api.controller;
 
-import com.socialnetwork.api.dto.LikeDto;
 import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.AccessDeniedException;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
@@ -16,8 +14,6 @@ import com.socialnetwork.api.service.PostService;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
