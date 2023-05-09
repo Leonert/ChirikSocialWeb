@@ -1,6 +1,7 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.exception.EmailVerificationException;
+import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
@@ -60,5 +61,9 @@ public class UserService {
 
   public Optional<User> findById(int id) {
     return userRepository.findById(id);
+  }
+
+  public User getReferenceById(int id) throws NoUserWithSuchCredentialsException {
+    return userRepository.getReferenceById(id);
   }
 }

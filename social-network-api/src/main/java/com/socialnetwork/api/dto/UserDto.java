@@ -100,6 +100,11 @@ public enum UserDto {
     ;
 
     @Data
+    public static class Default implements Id {
+      int id;
+    }
+
+    @Data
     public static class Email implements EmailAddress {
       String emailAddress;
     }

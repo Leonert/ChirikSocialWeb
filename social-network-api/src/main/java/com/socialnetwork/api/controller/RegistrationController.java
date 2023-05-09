@@ -47,7 +47,6 @@ public class RegistrationController {
     Optional<User> optionalUserByUsername =
             userService.findByUsername(userDto.getUsername());
 
-
     if (optionalUserByUsername.isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN));
     }

@@ -1,6 +1,5 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.dto.BookmarkDto;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.keys.BookmarkPk;
 import com.socialnetwork.api.models.base.Post;
@@ -31,8 +30,8 @@ public class BookmarkService {
     bookmarkRepository.save(bookmark);
   }
 
-  public void delete(Bookmark bookmark) {
-    bookmarkRepository.delete(bookmark);
+  public void delete(User user, Post post) {
+    bookmarkRepository.deleteByBookmarkedByAndBookmarkedPost(user, post);
   }
 
   public boolean existsByUserAndPost(User user, Post post) {
@@ -43,18 +42,14 @@ public class BookmarkService {
     return bookmarkRepository.findByBookmarkedByAndBookmarkedPost(user, post);
   }
 
-  // returns a list of ids of users who bookmarked that post
-  public List<Integer> getUsersBookmarksIdsForPost(Post post) {
+  public List<Integer> getUsersBookmarksIds(Post post) {
     return bookmarkRepository.findAllByBookmarkedPost(post)
             .stream()
             .map(bookmark -> bookmark.getBookmarkedBy().getId())
             .toList();
   }
 
-  public BookmarkDto.Response.BookmarksList getUsersIdsDtoForPost(Post post) {
-    BookmarkDto.Response.BookmarksList bookmarksList = new BookmarkDto.Response.BookmarksList();
-    List<Integer> usersBookmarksIds = getUsersBookmarksIdsForPost(post);
-    bookmarksList.setBookmarks(usersBookmarksIds);
-    return bookmarksList;
+  public int countPostBookmarks(Post post) {
+    return bookmarkRepository.countAllByBookmarkedPost(post);
   }
 }
