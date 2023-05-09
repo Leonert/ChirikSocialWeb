@@ -2,14 +2,7 @@ package com.socialnetwork.api.models.base;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,6 +11,7 @@ import java.time.LocalDateTime;
 public class Message {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @SequenceGenerator(name = "chats_seq", sequenceName = "chats_seq", initialValue = 100, allocationSize = 1)
   @Column(name = "id")
   private int id;
 
@@ -29,6 +23,9 @@ public class Message {
   @JoinColumn(name = "recipient_id", referencedColumnName = "id")
   private User recipient;
 
+  @Column(name = "date")
+  private LocalDateTime date;
+
   @Column(name = "message")
   private String message;
 
@@ -37,4 +34,8 @@ public class Message {
 
   @Column(name = "is_read")
   private boolean isRead;
+  public Message() {
+    this.date = LocalDateTime.now().withNano(0);
+  }
+
 }

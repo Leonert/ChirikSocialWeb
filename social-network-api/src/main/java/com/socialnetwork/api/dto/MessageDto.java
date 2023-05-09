@@ -5,6 +5,16 @@ import lombok.Value;
 import java.time.LocalDateTime;
 
 public class MessageDto {
+  private String id;
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
   private interface Id {int getId();}
 
   private interface Sender { User getSender();}
