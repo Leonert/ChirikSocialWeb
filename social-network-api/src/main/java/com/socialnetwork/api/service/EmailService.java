@@ -1,7 +1,7 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.model.ConfirmationToken;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.auth.ConfirmationToken;
+import com.socialnetwork.api.models.base.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;

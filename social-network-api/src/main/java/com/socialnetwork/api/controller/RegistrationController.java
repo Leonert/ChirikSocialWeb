@@ -1,14 +1,13 @@
 package com.socialnetwork.api.controller;
 
+import com.socialnetwork.api.dto.UserDto;
 import com.socialnetwork.api.exception.EmailVerificationException;
-import com.socialnetwork.api.model.BadResponse;
-import com.socialnetwork.api.model.GoodResponse;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.additional.Response;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -32,54 +26,54 @@ public class RegistrationController {
 
   private static final String USERNAME_TAKEN = "User with such username already exists.";
   private static final String EMAIL_TAKEN = "User with such email address already exists.";
-  private static final URL EMAIL_CONFIRMED_HTML_URL
-      = RegistrationController.class.getResource("/html/email-confirmed.html");
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
+  private final ModelMapper modelMapper;
 
   @PostMapping("check-email")
-  public ResponseEntity<?> checkIfEmailExists(@RequestBody User user) {
+  public ResponseEntity<?> checkIfEmailExists(@RequestBody UserDto.Request.Email userDto) {
     Optional<User> optionalUserByEmailAddress =
-        userService.findByEmailAddress(user.getEmailAddress());
+            userService.findByEmailAddress(userDto.getEmailAddress());
 
     if (optionalUserByEmailAddress.isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(new BadResponse(EMAIL_TAKEN));
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(EMAIL_TAKEN));
     }
 
-    return ResponseEntity.ok(new GoodResponse("Ok"));
+    return ResponseEntity.ok(new Response("Ok"));
   }
 
   @PostMapping("check-username")
-  public ResponseEntity<?> checkIfUsernameExists(@RequestBody User user) {
+  public ResponseEntity<?> checkIfUsernameExists(@RequestBody UserDto.Request.Name userDto) {
     Optional<User> optionalUserByUsername =
-        userService.findByUsername(user.getUsername());
+            userService.findByUsername(userDto.getUsername());
 
     if (optionalUserByUsername.isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(new BadResponse(USERNAME_TAKEN));
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN));
     }
 
-    return ResponseEntity.ok(new GoodResponse("Ok"));
+    return ResponseEntity.ok(new Response("Ok"));
   }
 
   @PostMapping("save-user")
-  public ResponseEntity<?> saveUserAndSendConfirmation(@RequestBody User user) {
-    String rawPassword = user.getPassword();
+  public ResponseEntity<?> saveUserAndSendConfirmation(@RequestBody UserDto.Request.Registration userDto) {
+    User user = convertToUser(userDto);
+    String rawPassword = userDto.getPassword();
     user.setPassword(passwordEncoder.encode(rawPassword));
-    userService.saveUser(user);
-    return ResponseEntity.ok(new GoodResponse("Ok"));
+    userService.save(user);
+    return ResponseEntity.ok(new Response("Ok"));
   }
 
   @RequestMapping(value = "activate", method = {RequestMethod.GET, RequestMethod.POST})
-  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken)
-      throws IOException, URISyntaxException {
+  public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
     try {
-      String html = new String(Files.readAllBytes(Paths.get(EMAIL_CONFIRMED_HTML_URL.toURI())));
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.TEXT_HTML);
       userService.verifyAccount(confirmationToken);
-      return new ResponseEntity<>(html, headers, HttpStatus.OK);
+      return ResponseEntity.ok(new Response("Ok"));
     } catch (EmailVerificationException evx) {
-      return ResponseEntity.badRequest().body(new BadResponse(evx.getMessage()));
+      return ResponseEntity.badRequest().body(new Response(evx.getMessage()));
     }
+  }
+
+  private User convertToUser(UserDto.Request.Registration userDto) {
+    return modelMapper.map(userDto, User.class);
   }
 }

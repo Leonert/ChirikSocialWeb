@@ -2,20 +2,16 @@ package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
-import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.model.Post;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.repository.PostRepository;
-import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,40 +19,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
   private final PostRepository postRepository;
-  private final UserRepository userRepository;
+  private final LikeService likeService;
+  private final BookmarkService bookmarkService;
   private final ModelMapper modelMapper;
 
   public void save(Post post) {
-    enrichNewPost(post);
+    post.setCreatedDate(LocalDateTime.now());
     postRepository.save(post);
   }
 
-  public List<Post> getRepostedPosts(List<Post> posts) {
-    return posts
-            .stream()
-            .filter(p -> p.getReposted() != null)
-            .map(p -> {
-              try {
-                return modelMapper.map(getReferenceById(p.getReposted().getPostId()), Post.class);
-              } catch (NoPostWithSuchIdException e) {
-                throw new RuntimeException(e);
-              }
-            })
-            .toList();
-  }
-
-  public List<Post> getSomePosts(Integer page, Integer postsNumber) {
+  public List<PostDto.Response.Default> getSomePosts(Integer page, Integer postsNumber) {
     return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by("createdDate")))
             .stream()
+            .map(this::convertToPostDto)
             .toList();
-  }
-
-  public void edit(Post post) {
-    // Maps fields which weren`t null in postcontroller request to update only them in DB
-    Post postToUpdate = postRepository.getReferenceById(post.getPostId());
-    modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-    modelMapper.map(post, postToUpdate);
-    postRepository.save(postToUpdate);
   }
 
   public boolean existsById(Integer postId) {
@@ -67,38 +43,38 @@ public class PostService {
     postRepository.delete(post);
   }
 
-  public PostDto getReferenceById(int id) throws NoPostWithSuchIdException {
+  public Optional<Post> findById(int id) {
+    return postRepository.findById(id);
+  }
+
+  public Post getReferenceById(int id) throws NoPostWithSuchIdException {
     if (!postRepository.existsById(id)) {
       throw new NoPostWithSuchIdException();
     }
-    return modelMapper.map(postRepository.getReferenceById(id), PostDto.class);
+    return postRepository.getReferenceById(id);
   }
 
-  public List<PostDto> getPostsSortedByCreatedDate() {
-    //    List<Post> posts = postRepository.findAll(PageRequest.of(0, 5, Sort.by("created_date")))
-    //            .stream()
-    //            .toList();
-    //
-    //    return posts.stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
-    return postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"))
-            .stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
-  }
+  public PostDto.Response.Default convertToPostDto(Post post) {
+    TypeMap<Post, PostDto.Response.Default> propertyMapper =
+            modelMapper.getTypeMap(Post.class, PostDto.Response.Default.class);
 
-  public List<PostDto> findPostsByUsername(String username) throws NoUserWithSuchCredentialsException {
-    Optional<User> user = userRepository.findByUsername(username);
-    if (user.isEmpty()) {
-      throw new NoUserWithSuchCredentialsException();
+    if (propertyMapper == null) {
+      propertyMapper = modelMapper.createTypeMap(Post.class, PostDto.Response.Default.class);
+      propertyMapper.addMappings(modelMapper -> modelMapper.skip(PostDto.Response.Default::setLikes));
+      propertyMapper.addMappings(modelMapper -> modelMapper.skip(PostDto.Response.Default::setBookmarks));
     }
-    return convertToPostDtosList(postRepository.findByUserId(user.get().getId()));
-  }
 
-  public void enrichNewPost(Post post) {
-    //Add fields which weren`t specified in PostDTO - timestamp and likes count (current time and 0 likes for a new post)
-    post.setCreatedDate(LocalDateTime.now());
-    post.setLikes(0);
-  }
+    PostDto.Response.Default postDto = modelMapper.map(post, PostDto.Response.Default.class);
 
-  private List<PostDto> convertToPostDtosList(List<Post> posts) {
-    return posts.stream().map(post -> modelMapper.map(post, PostDto.class)).toList();
+    postDto.setLikes(likeService.getUsersLikesIdsForPost(post));
+    postDto.setBookmarks(bookmarkService.getUsersBookmarksIdsForPost(post));
+
+    if (postDto.getOriginalPost() != null) {
+      Post originalPost = findById(postDto.getOriginalPost().getId()).get();
+      postDto.getOriginalPost().setLikes(likeService.getUsersLikesIdsForPost(originalPost));
+      postDto.getOriginalPost().setBookmarks(bookmarkService.getUsersBookmarksIdsForPost(originalPost));
+    }
+
+    return postDto;
   }
 }
