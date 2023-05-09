@@ -3,6 +3,7 @@ package com.socialnetwork.api.models.base;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 @Data
 @Entity
@@ -35,6 +36,6 @@ public class Message {
   private boolean isRead;
 
   public Message() {
-    this.date = LocalDateTime.now().withNano(0);
+    this.date = LocalDateTime.now();
   }
 }

@@ -3,7 +3,6 @@ package com.socialnetwork.api.service;
 import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.exception.ResourceNotFoundException;
 import com.socialnetwork.api.models.base.Message;
-import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -58,7 +57,6 @@ public class MessageServiceImpl implements MessageService {
     List<Message> messages = messageRepository.findByMessageContainingIgnoreCase(keyword);
     return messages.stream().map(message -> modelMapper.map(message, MessageDto.class)).collect(Collectors.toList());
   }
-
 
 }
 

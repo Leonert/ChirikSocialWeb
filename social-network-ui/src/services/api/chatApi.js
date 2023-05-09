@@ -3,7 +3,7 @@ import {API_URL} from "../../util/url";
 
 export const ChatApi = {
     async getUserChats() {
-        const { data } = await axios.get(`${API_URL}/messages`);
+        const { data } = await axios.get(`${API_URL}/messages/users`);
 
         return data;
     },
