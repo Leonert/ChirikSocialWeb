@@ -15,11 +15,6 @@ const commonTheme = {
     ],
   },
   palette: {
-    error: {
-      light: 'rgb(255, 221, 237)',
-      main: 'rgb(244, 33, 46)',
-      dark: 'rgb(202, 32, 85)',
-    },
     common: {
       black: 'rgb(15, 20, 25)',
       white: 'rgb(255, 255, 255)',

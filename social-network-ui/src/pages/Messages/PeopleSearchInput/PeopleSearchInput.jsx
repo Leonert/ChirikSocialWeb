@@ -1,5 +1,5 @@
-import {withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField/TextField";
+import {withStyles} from "@mui/styles";
 
 export const PeopleSearchInput = withStyles((theme) => ({
     root: {
