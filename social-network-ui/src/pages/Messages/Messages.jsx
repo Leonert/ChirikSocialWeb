@@ -1,6 +1,6 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Link } from 'react-router-dom';
 
 import { CheckIcon, EmojiIcon, MediaIcon, SandMessageIcon, SearchIcon } from '../../icon';
@@ -10,6 +10,7 @@ import { MessageInput } from './MessageInput/MessageInput';
 import MessagesModal from './MessagesModal/MessagesModal';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
+import {ChatApi} from "../../services/api/chatApi";
 
 const Messages = () => {
   const classes = useMessagesStyles();
@@ -20,6 +21,14 @@ const Messages = () => {
   const [text, setText] = useState('');
   const [chat, setChat] = useState(null);
 
+  useEffect(() => {
+    async function fetchChats() {
+      const chatData = await ChatApi.getUserChats();
+      setChat(chatData);
+    }
+    fetchChats();
+  }, []);
+
   const onOpenModalWindow = () => {
     setVisibleModalWindow(true);
   };
@@ -29,6 +38,8 @@ const Messages = () => {
   };
 
   const handleListItemClick = (chat) => {
+    history.push("/messages");
+
     setParticipant(chat);
     setChat(chat);
   };

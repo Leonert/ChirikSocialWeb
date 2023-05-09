@@ -1,6 +1,7 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.models.base.User;
 
 import java.util.List;
 

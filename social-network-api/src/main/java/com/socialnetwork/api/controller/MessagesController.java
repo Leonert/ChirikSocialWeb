@@ -4,6 +4,7 @@ import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.Message;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
@@ -34,15 +35,13 @@ public class MessagesController {
     return ResponseEntity.ok(messageDto);
   }
 
-
   @GetMapping()
   public ResponseEntity<List<MessageDto>> getAllMessages() {
-
     List<MessageDto> messageDtos = messageService.getAllMessages();
     return ResponseEntity.ok(messageDtos);
   }
 
-  @PostMapping
+  @PostMapping("/add/message")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
     return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);

@@ -3,13 +3,16 @@ package com.socialnetwork.api.service;
 import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.exception.ResourceNotFoundException;
 import com.socialnetwork.api.models.base.Message;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,5 +58,8 @@ public class MessageServiceImpl implements MessageService {
     List<Message> messages = messageRepository.findByMessageContainingIgnoreCase(keyword);
     return messages.stream().map(message -> modelMapper.map(message, MessageDto.class)).collect(Collectors.toList());
   }
+
+
 }
+
 

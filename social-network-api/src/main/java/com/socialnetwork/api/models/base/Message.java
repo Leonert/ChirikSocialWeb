@@ -4,14 +4,13 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 @Data
 @Entity
 @Table(name = "messages")
 public class Message {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @SequenceGenerator(name = "chats_seq", sequenceName = "chats_seq", initialValue = 100, allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "messages_seq")
+  @SequenceGenerator(name = "messages_seq", sequenceName = "messages_seq", initialValue = 100, allocationSize = 1)
   @Column(name = "id")
   private int id;
 
@@ -34,8 +33,8 @@ public class Message {
 
   @Column(name = "is_read")
   private boolean isRead;
+
   public Message() {
     this.date = LocalDateTime.now().withNano(0);
   }
-
 }
