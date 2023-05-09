@@ -3,7 +3,6 @@ package com.socialnetwork.api.models.base;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.Reply;
-import com.socialnetwork.api.models.additional.Retweet;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
 
@@ -46,15 +45,11 @@ public class Post {
   @JoinColumn(name = "original_post_id", referencedColumnName = "id")
   private Post originalPost;
 
-  //relations
   @OneToMany(mappedBy = "seenPost")
   private List<View> views;
 
   @OneToMany(mappedBy = "likedPost")
   private List<Like> likes;
-
-  @OneToMany(mappedBy = "retweetedPost")
-  private List<Retweet> retweets;
 
   @OneToMany(mappedBy = "bookmarkedPost")
   private List<Bookmark> bookmarks;

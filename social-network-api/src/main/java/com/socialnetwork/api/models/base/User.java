@@ -1,6 +1,5 @@
 package com.socialnetwork.api.models.base;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
@@ -53,6 +52,7 @@ public class User {
 
   @Column(name = "profile_image")
   private String profileImage;
+
   //relations
   @OneToMany(mappedBy = "followerUser")
   private List<Follow> followers;

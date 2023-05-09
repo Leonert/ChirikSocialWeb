@@ -23,12 +23,12 @@ import java.util.Optional;
 @RequestMapping("/api/registration")
 @RequiredArgsConstructor
 public class RegistrationController {
-
   private static final String USERNAME_TAKEN = "User with such username already exists.";
   private static final String EMAIL_TAKEN = "User with such email address already exists.";
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final ModelMapper modelMapper;
+
 
   @PostMapping("check-email")
   public ResponseEntity<?> checkIfEmailExists(@RequestBody UserDto.Request.Email userDto) {
@@ -47,6 +47,7 @@ public class RegistrationController {
     Optional<User> optionalUserByUsername =
             userService.findByUsername(userDto.getUsername());
 
+
     if (optionalUserByUsername.isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN));
     }
@@ -60,6 +61,7 @@ public class RegistrationController {
     String rawPassword = userDto.getPassword();
     user.setPassword(passwordEncoder.encode(rawPassword));
     userService.save(user);
+
     return ResponseEntity.ok(new Response("Ok"));
   }
 

@@ -3,11 +3,11 @@ import MuiButton from '@mui/material/Button';
 
 const Button = styled(MuiButton)({
   textTransform: 'unset',
-  backgroundColor: 'white',
-  borderRadius: '10px',
-  color: 'black',
+  backgroundColor: 'rgb(63, 81, 181)',
+  borderRadius: '4px',
+  color: 'rgb(255, 255, 255)',
   '&:hover': {
-    backgroundColor: '#4fc3f7',
+    backgroundColor: 'rgb(48, 63, 159)',
   },
 });
 

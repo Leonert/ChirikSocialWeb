@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.Reply;
-import com.socialnetwork.api.models.additional.Retweet;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
 import org.springframework.lang.Nullable;
@@ -57,10 +56,6 @@ public enum PostDto {
 
   private interface Likes {
     List<Like> getLikes();
-  }
-
-  private interface Retweets {
-    List<Retweet> getRetweets();
   }
 
   private interface Bookmarks {

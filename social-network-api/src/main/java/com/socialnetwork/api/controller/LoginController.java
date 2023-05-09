@@ -30,6 +30,7 @@ public class LoginController {
   private final JwtTokenUtil jwtTokenUtil;
   private final ModelMapper modelMapper;
 
+
   @PostMapping("/authenticate")
   public ResponseEntity<?> createAuthToken(@RequestBody UserDto.Request.Credentials userDto) {
     Optional<User> optionalUser = userService.findByEmailAddress(userDto.getEmailAddress());
