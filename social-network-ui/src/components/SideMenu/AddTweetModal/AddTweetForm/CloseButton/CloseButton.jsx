@@ -1,19 +1,19 @@
-import React from "react";
-import { useCloseButtonStyles } from "./CloseButtonStyles";
-import {CloseIcon} from "../../../../../icon";
-import ActionIconButton from "../../../../ActionIconButton/ActionIconButton";
+import { Button } from '@material-ui/core';
+import React from 'react';
 
-
-
+import { CloseIcon } from '../../../../../icon';
+import { useCloseButtonStyles } from './CloseButtonStyles';
 
 const CloseButton = ({ onClose }) => {
-    const classes = useCloseButtonStyles();
+  const classes = useCloseButtonStyles();
 
-    return (
-        <div className={classes.close}>
-            <ActionIconButton actionText={"Close"} onClick={onClose} icon={CloseIcon} />
-        </div>
-    );
+  return (
+    <div className={classes.close}>
+      <Button onClick={onClose} className={classes.closeButton}>
+        {CloseIcon}
+      </Button>
+    </div>
+  );
 };
 
 export default CloseButton;

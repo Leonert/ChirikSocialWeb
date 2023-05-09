@@ -5,7 +5,6 @@ import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
-import { Notifications } from '../pages/Notifications/Notifications';
 
 export const router = createBrowserRouter([
   {
@@ -24,10 +23,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/notifications',
-        element: <Notifications />,
+        element: <div></div>,
       },
       {
         path: '/messages',
+
         element: <Messages />,
       },
       {

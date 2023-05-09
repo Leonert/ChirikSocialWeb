@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as yup from 'yup';
 
-import axiosIns from '../../axiosInstance';
+// import axiosIns from '../../axiosInstance';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import AccountProfileFields from './AccountProfileFields';
@@ -69,20 +69,16 @@ const RegistrationModal = () => {
     } else {
       handleNextStep();
       try {
-        const data = {
-          emailAddress: values.email,
-          username: values.username,
-          password: values.password,
-          firstName: values.name,
-          lastName: values.surname,
-          birthDate: values.birthDate,
-        };
-        const response = await axiosIns.post('/api/registration/save-user', data);
-        console.log(data);
-        console.log(response);
-      } catch (e) {
-        console.error(e);
-      }
+        // const data = {
+        //   emailAddress: values.email,
+        //   username: values.username,
+        //   password: values.password,
+        //   firstName: values.name,
+        //   lastName: values.surname,
+        //   birthDate: values.birthDate,
+        // };
+        // const response = await axiosIns.post('/api/registration/save-user', data);
+      } catch (e) {}
     }
   };
 
@@ -112,9 +108,9 @@ const RegistrationModal = () => {
     setOpen(false);
   };
 
-  const handlePrevStep = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-  };
+  // const handlePrevStep = () => {
+  //   setActiveStep((prevStep) => prevStep - 1);
+  // };
 
   const steps = [
     <InitialStep key={1} onCreateAccount={handleNextStep} />,

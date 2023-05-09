@@ -57,7 +57,7 @@ export default function Post(props) {
           justifyContent: 'space-around',
         }}
       >
-        <Tooltip title="Replay">
+        <Tooltip title="Reply">
           <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
             <Badge badgeContent={props.replay} color="primary">
               <ChatBubbleOutlineIcon />
