@@ -16,6 +16,7 @@ const authModalSlice = createSlice({
     handleLoginModal: (state, action) => {
       state.login = action.payload;
     },
+
     handleLogOutModal: (state, action) => {
       state.modalLogOut = action.payload;
     },
@@ -23,4 +24,5 @@ const authModalSlice = createSlice({
 });
 
 export const authModalReducer = authModalSlice.reducer;
+
 export const { handleModal, handleLoginModal, handleLogOutModal } = authModalSlice.actions;
