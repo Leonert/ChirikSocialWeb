@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 import { BottomLine } from '../components/BottomLine/BottomLine';
+// import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
+import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
 import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { useLayoutStyles } from './LayoutStyles';
@@ -20,6 +22,7 @@ export const Layout = () => {
         </Grid>
         <Grid container spacing={3}>
           <Outlet />
+          <CustomModalWindow />
         </Grid>
       </Container>
       <CustomSnackbar />
