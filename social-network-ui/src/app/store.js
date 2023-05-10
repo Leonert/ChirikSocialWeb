@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authModalReducer } from '../features/slices/authModalSlice';
 import { authReducer } from '../features/slices/authSlice';
 import homeSlice from '../features/slices/homeSlice';
+import settingSlice from '../features/slices/settingSlice';
 import { snackbarReducer } from '../features/slices/snackbarSlice';
 
 export const store = configureStore({
@@ -11,5 +12,6 @@ export const store = configureStore({
     authModal: authModalReducer,
     snackbar: snackbarReducer,
     home: homeSlice,
+    setting: settingSlice,
   },
 });
