@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, BookmarkPk> {
-  boolean existsByBookmarkedByAndBookmarkedPost(User user, Post post);
+  boolean existsByBookmarkPk(BookmarkPk bookmarkPk);
 
   Optional<Bookmark> findByBookmarkedByAndBookmarkedPost(User user, Post post);
 

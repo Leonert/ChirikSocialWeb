@@ -59,4 +59,10 @@ public class Post {
 
   @OneToOne(mappedBy = "replied")
   private Reply repliedTo;
+
+  public Post() {}
+
+  public Post(int id) {
+    this.id = id;
+  }
 }

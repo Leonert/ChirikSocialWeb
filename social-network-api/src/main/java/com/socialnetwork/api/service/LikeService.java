@@ -16,27 +16,18 @@ import java.util.Optional;
 public class LikeService {
   private final LikeRepository likeRepository;
 
-  public void save(User user, Post post) {
-    Like like = new Like();
-    LikePk likePk = new LikePk();
-
-    likePk.setUserId(user.getId());
-    likePk.setPostId(post.getId());
-
-    like.setLikePk(likePk);
-    like.setLikedBy(user);
-    like.setLikedPost(post);
-
-    likeRepository.save(like);
+  public void save(int userId, int postId) {
+    likeRepository.save(new Like(new User(userId), new Post(postId)));
   }
 
-  public void delete(User user, Post post) {
-    likeRepository.deleteByLikedByAndLikedPost(user, post);
+  public void delete(int userId, int postId) {
+    likeRepository.deleteByLikedByAndLikedPost(new User(userId), new Post(postId));
   }
 
-  public boolean existsByUserAndPost(User user, Post post) {
-    return likeRepository.existsByLikedByAndLikedPost(user, post);
+  public boolean existsByIds(int userId, int postId) {
+    return likeRepository.existsByLikePk(new LikePk(userId, postId));
   }
+
 
   public Optional<Like> findByUserAndPost(User user, Post post) {
     return likeRepository.findByLikedByAndLikedPost(user, post);

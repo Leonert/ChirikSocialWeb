@@ -1,6 +1,5 @@
 package com.socialnetwork.api.security;
 
-import com.socialnetwork.api.exception.AccessDeniedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Component
@@ -33,19 +31,6 @@ public class JwtTokenUtil {
 
   public String getUsernameFromToken(String token) {
     return getClaimsFromToken(token, Claims::getSubject);
-  }
-
-  public void verifyUsernames(String authHeader, String username) throws AccessDeniedException {
-    if (isTokenExists(authHeader)) {
-      String jwtUsername = getUsernameFromToken(authHeader.substring(BEARER.length()));
-
-      if (!Objects.equals(jwtUsername, username)) {
-        throw new AccessDeniedException();
-      }
-
-    } else {
-      throw new AccessDeniedException();
-    }
   }
 
   public Date getExpirationDateFromToken(String token) {

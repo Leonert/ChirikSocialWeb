@@ -68,6 +68,13 @@ public enum PostDto {
     }
 
     @Data
+    public static class Editable implements Id, Text, Image {
+      int id;
+      String text;
+      String image;
+    }
+
+    @Data
     public static class Created implements Id, User, Text, Image, OriginalPostId {
       int id;
       UserDto.Request.Default user;

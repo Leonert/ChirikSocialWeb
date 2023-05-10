@@ -14,4 +14,12 @@ public class LikePk implements Serializable {
 
   @Column(name = "post_id")
   private int postId;
+
+  public LikePk() {
+  }
+
+  public LikePk(int userId, int postId) {
+    this.userId = userId;
+    this.postId = postId;
+  }
 }

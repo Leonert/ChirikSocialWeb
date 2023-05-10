@@ -16,26 +16,16 @@ import java.util.Optional;
 public class BookmarkService {
   private final BookmarkRepository bookmarkRepository;
 
-  public void save(User user, Post post) {
-    Bookmark bookmark = new Bookmark();
-    BookmarkPk bookmarkPk = new BookmarkPk();
-
-    bookmarkPk.setUserId(user.getId());
-    bookmarkPk.setPostId(post.getId());
-
-    bookmark.setBookmarkPk(bookmarkPk);
-    bookmark.setBookmarkedBy(user);
-    bookmark.setBookmarkedPost(post);
-
-    bookmarkRepository.save(bookmark);
+  public void save(int userId, int postId) {
+    bookmarkRepository.save(new Bookmark(new User(userId), new Post(postId)));
   }
 
-  public void delete(User user, Post post) {
-    bookmarkRepository.deleteByBookmarkedByAndBookmarkedPost(user, post);
+  public void delete(int userId, int postId) {
+    bookmarkRepository.deleteByBookmarkedByAndBookmarkedPost(new User(userId), new Post(postId));
   }
 
-  public boolean existsByUserAndPost(User user, Post post) {
-    return bookmarkRepository.existsByBookmarkedByAndBookmarkedPost(user, post);
+  public boolean existsByIds(int userId, int postId) {
+    return bookmarkRepository.existsByBookmarkPk(new BookmarkPk(userId, postId));
   }
 
   public Optional<Bookmark> findByUserAndPost(User user, Post post) {

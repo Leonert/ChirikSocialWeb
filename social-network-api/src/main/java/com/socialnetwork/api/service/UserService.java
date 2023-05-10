@@ -33,6 +33,10 @@ public class UserService {
     return userRepository.existsById(id);
   }
 
+  public Optional<User> getByUsernameAndId(String username, int id) {
+    return userRepository.findByUsernameAndId(username, id);
+  }
+
   public void save(User user) {
     user.setCreatedDate(LocalDateTime.now());
 

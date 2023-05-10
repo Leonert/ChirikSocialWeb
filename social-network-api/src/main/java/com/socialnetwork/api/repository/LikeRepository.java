@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, LikePk> {
-  boolean existsByLikedByAndLikedPost(User user, Post post);
+  boolean existsByLikePk(LikePk likePk);
 
   Optional<Like> findByLikedByAndLikedPost(User user, Post post);
 
-  int countAllByLikedPost(Post post);
-
   List<Like> findAllByLikedPost(Post post);
+
+  int countAllByLikedPost(Post post);
 
   @Transactional
   void deleteByLikedByAndLikedPost(User user, Post post);

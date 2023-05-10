@@ -76,4 +76,12 @@ public class User {
   private List<Message> receivedMessages;
 
   private boolean isEnabled;
+
+  public User() {
+
+  }
+
+  public User(int id) {
+    this.id = id;
+  }
 }
