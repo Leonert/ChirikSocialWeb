@@ -22,34 +22,34 @@ const SettingMenu = () => {
   const handelClickYouAccount = () => {
     dispatch(selectYourAccount());
   };
-  const handelClickTwitterBlue = () => {
-    dispatch(selectTwitterBlue());
-  };
+  //   const handelClickTwitterBlue = () => {
+  //     dispatch(selectTwitterBlue());
+  //   };
 
-  const handelClickSecurity = () => {
-    dispatch(selectSecurity());
-  };
+  //   const handelClickSecurity = () => {
+  //     dispatch(selectSecurity());
+  //   };
 
-  const handelClickPrivacy = () => {
-    dispatch(selectPrivacy());
-  };
-  const handelClickNotifications = () => {
-    dispatch(selectNotifications());
-  };
-  const handelClickAccessibility = () => {
-    dispatch(selectAccessibility());
-  };
-  const handelClickAdditional = () => {
-    dispatch(selectAdditional());
-  };
+  //   const handelClickPrivacy = () => {
+  //     dispatch(selectPrivacy());
+  //   };
+  //   const handelClickNotifications = () => {
+  //     dispatch(selectNotifications());
+  //   };
+  //   const handelClickAccessibility = () => {
+  //     dispatch(selectAccessibility());
+  //   };
+  //   const handelClickAdditional = () => {
+  //     dispatch(selectAdditional());
+  //   };
 
   const account = useSelector((state) => state.setting.yourAccount);
-  const twitterBlue = useSelector((state) => state.setting.twitterBlue);
-  const security = useSelector((state) => state.setting.security);
-  const privacy = useSelector((state) => state.setting.privacy);
-  const notifications = useSelector((state) => state.setting.notifications);
-  const accessibility = useSelector((state) => state.setting.accessibility);
-  const additional = useSelector((state) => state.setting.additional);
+  //   const twitterBlue = useSelector((state) => state.setting.twitterBlue);
+  //   const security = useSelector((state) => state.setting.security);
+  //   const privacy = useSelector((state) => state.setting.privacy);
+  //   const notifications = useSelector((state) => state.setting.notifications);
+  //   const accessibility = useSelector((state) => state.setting.accessibility);
+  //   const additional = useSelector((state) => state.setting.additional);
   const theme = useTheme();
   const primaryColor = theme.palette.text.secondary;
   const secondaryColor = theme.palette.background.lightBlue;
@@ -66,12 +66,8 @@ const SettingMenu = () => {
           text="Your account"
           icon={<ArrowForwardIosIcon sx={{ color: account ? `${secondaryColor}` : `${primaryColor}` }} />}
         />
-        <SettingItem
-          handelClick={handelClickTwitterBlue}
-          text="Twitter Blue"
-          icon={<ArrowForwardIosIcon sx={{ color: twitterBlue ? `${secondaryColor}` : `${primaryColor}` }} />}
-        />
-        <SettingItem
+
+        {/* <SettingItem
           handelClick={handelClickSecurity}
           text="Security and account access"
           icon={<ArrowForwardIosIcon sx={{ color: security ? `${secondaryColor}` : `${primaryColor}` }} />}
@@ -95,7 +91,7 @@ const SettingMenu = () => {
           handelClick={handelClickAdditional}
           text="Additional resources"
           icon={<ArrowForwardIosIcon sx={{ color: additional ? `${secondaryColor}` : `${primaryColor}` }} />}
-        />
+        /> */}
       </MenuList>
     </>
   );

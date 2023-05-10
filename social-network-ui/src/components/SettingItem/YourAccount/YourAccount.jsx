@@ -1,8 +1,8 @@
-import ArchiveIcon from '@mui/icons-material/Archive';
+// import ArchiveIcon from '@mui/icons-material/Archive';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
+// import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
 import KeyIcon from '@mui/icons-material/Key';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+// import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PersonIcon from '@mui/icons-material/Person';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -35,7 +35,7 @@ const YourAccount = () => {
         information="Change your password at any time."
         icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
       />
-      <SettingItem
+      {/* <SettingItem
         iconItem=<ArchiveIcon sx={{ color: `${primaryColor}` }} />
         text="Download an archive of your data"
         information="Get insights into the type of information stored for your account."
@@ -52,7 +52,7 @@ const YourAccount = () => {
         text="Deactivate your account"
         information="Find out how you can deactivate your account."
         icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
-      />
+      /> */}
     </div>
   );
 };
