@@ -5,11 +5,15 @@ import KeyIcon from '@mui/icons-material/Key';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PersonIcon from '@mui/icons-material/Person';
 import { Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import React from 'react';
 
 import SettingItem from '../SettingItem';
 
 const YourAccount = () => {
+  const theme = useTheme();
+  const primaryColor = theme.palette.text.secondary;
+
   return (
     <div>
       <Typography variant={'h5'} sx={{ m: 3 }}>
@@ -20,34 +24,34 @@ const YourAccount = () => {
         options
       </Typography>
       <SettingItem
-        iconItem=<PersonIcon color="primary" />
+        iconItem=<PersonIcon sx={{ color: `${primaryColor}` }} />
         text="Account information"
         information="See your account information like your phone number and email address."
-        icon={<ArrowForwardIosIcon color="primary" />}
+        icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
       />
       <SettingItem
-        iconItem=<KeyIcon color="primary" />
+        iconItem=<KeyIcon sx={{ color: `${primaryColor}` }} />
         text="Change your password"
         information="Change your password at any time."
-        icon={<ArrowForwardIosIcon color="primary" />}
+        icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
       />
       <SettingItem
-        iconItem=<ArchiveIcon color="primary" />
+        iconItem=<ArchiveIcon sx={{ color: `${primaryColor}` }} />
         text="Download an archive of your data"
         information="Get insights into the type of information stored for your account."
-        icon={<ArrowForwardIosIcon color="primary" />}
+        icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
       />
       <SettingItem
-        iconItem=<PeopleAltIcon color="primary" />
+        iconItem=<PeopleAltIcon sx={{ color: `${primaryColor}` }} />
         text="TweetDeck Teams"
         information="Invite anyone to Tweet from this account using the Teams feature in TweetDeck."
-        icon={<ArrowForwardIosIcon color="primary" />}
+        icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
       />
       <SettingItem
-        iconItem=<DoNotTouchIcon color="primary" />
+        iconItem=<DoNotTouchIcon sx={{ color: `${primaryColor}` }} />
         text="Deactivate your account"
         information="Find out how you can deactivate your account."
-        icon={<ArrowForwardIosIcon color="primary" />}
+        icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
       />
     </div>
   );
