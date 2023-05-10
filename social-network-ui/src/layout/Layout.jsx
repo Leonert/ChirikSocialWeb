@@ -1,13 +1,16 @@
 import { Container, Grid } from '@material-ui/core';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 import { BottomLine } from '../components/BottomLine/BottomLine';
+import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { useLayoutStyles } from './LayoutStyles';
 
 export const Layout = () => {
   const classes = useLayoutStyles();
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <>
@@ -19,7 +22,8 @@ export const Layout = () => {
           <Outlet />
         </Grid>
       </Container>
-      <BottomLine />
+      <CustomSnackbar />
+      {!user && <BottomLine />}
     </>
   );
 };
