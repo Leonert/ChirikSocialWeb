@@ -28,15 +28,4 @@ public class MessageDto {
 
   private interface Read { boolean isRead();}
 
-  public enum Request {;
-    @Value public static class Default implements Id{
-      int id;
-    }
-  }
-
-  public enum Response {;
-    @Value public static class Default implements Id{
-      int id;
-    }
-  }
 }

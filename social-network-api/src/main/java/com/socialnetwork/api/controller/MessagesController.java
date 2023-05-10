@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/messages")
@@ -26,16 +25,16 @@ public class MessagesController {
     return ResponseEntity.ok(messageDto);
   }
 
-  @GetMapping()
+  @GetMapping("/messages")
   public ResponseEntity<List<MessageDto>> getAllMessages() {
     List<MessageDto> messageDtos = messageService.getAllMessages();
     return ResponseEntity.ok(messageDtos);
   }
 
-  @PostMapping("/add/message")
+  @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
-    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
+    return ResponseEntity.created(URI.create("/api/messages" + createdMessageDto.getId())).body(createdMessageDto);
   }
 
   @PutMapping("/{id}")
@@ -57,7 +56,7 @@ public class MessagesController {
     return ResponseEntity.ok(messages);
   }
 
-  private Message convertToMessage(MessageDto messageDto){
+  private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
   }
 }

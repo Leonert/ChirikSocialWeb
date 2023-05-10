@@ -3,7 +3,7 @@ import {API_URL} from "../../util/url";
 
 export const ChatApi = {
     async getUserChats() {
-        const { data } = await axios.get(`${API_URL}/messages/users`);
+        const { data } = await axios.get(`${API_URL}/messages`);
 
         return data;
     },
@@ -23,12 +23,12 @@ export const ChatApi = {
         return data;
     },
     async addMessage(chatMessage) {
-        const { data } = await axios.post(`${API_URL}/messages/add/message`, chatMessage);
+        const { data } = await axios.post(`${API_URL}/messages/create/message`, chatMessage);
 
         return data;
     },
     async addMessageWithTweet(chatMessage) {
-        const { data } = await axios.post(`${API_URL}/messages/add/message/tweet`, chatMessage);
+        const { data } = await axios.post(`${API_URL}/messages/create/message/tweet`, chatMessage);
 
         return data;
     },

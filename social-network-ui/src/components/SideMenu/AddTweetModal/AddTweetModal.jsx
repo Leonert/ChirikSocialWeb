@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import {Dialog, DialogContent, DialogTitle} from '@material-ui/core';
 import React from 'react';
 
 import AddTweetForm from './AddTweetForm/AddTweetForm';

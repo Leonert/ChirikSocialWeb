@@ -11,7 +11,6 @@ import MessagesModal from './MessagesModal/MessagesModal';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 import {ChatApi} from "../../services/api/chatApi";
-import {useSelector} from "react-redux";
 
 export const ChatMessageRequest = {
   chatId: 1,
