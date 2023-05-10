@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,10 +49,10 @@ public class Post {
   @OneToMany(mappedBy = "seenPost")
   private List<View> views;
 
-  @OneToMany(mappedBy = "likedPost")
+  @OneToMany(mappedBy = "likedPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Like> likes;
 
-  @OneToMany(mappedBy = "bookmarkedPost")
+  @OneToMany(mappedBy = "bookmarkedPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bookmark> bookmarks;
 
   @OneToMany(mappedBy = "reply")

@@ -8,12 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, LikePk> {
   boolean existsByLikePk(LikePk likePk);
-
-  Optional<Like> findByLikedByAndLikedPost(User user, Post post);
 
   List<Like> findAllByLikedPost(Post post);
 

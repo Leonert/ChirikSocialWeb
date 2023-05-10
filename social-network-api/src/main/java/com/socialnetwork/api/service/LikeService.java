@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +25,6 @@ public class LikeService {
 
   public boolean existsByIds(int userId, int postId) {
     return likeRepository.existsByLikePk(new LikePk(userId, postId));
-  }
-
-
-  public Optional<Like> findByUserAndPost(User user, Post post) {
-    return likeRepository.findByLikedByAndLikedPost(user, post);
   }
 
   public List<Integer> getUsersLikesIds(Post post) {

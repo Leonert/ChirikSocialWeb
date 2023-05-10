@@ -29,6 +29,8 @@ public class Like {
   @MapsId("postId")
   private Post likedPost;
 
+  public Like() {}
+
   public Like(User likedBy, Post likedPost) {
     this.likePk = new LikePk(likedBy.getId(), likedPost.getId());
     this.likedBy = likedBy;

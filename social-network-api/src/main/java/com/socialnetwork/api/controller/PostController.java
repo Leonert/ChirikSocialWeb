@@ -4,7 +4,6 @@ import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.AccessDeniedException;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.service.BookmarkService;

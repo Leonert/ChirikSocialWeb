@@ -13,8 +13,6 @@ import java.util.Optional;
 public interface BookmarkRepository extends JpaRepository<Bookmark, BookmarkPk> {
   boolean existsByBookmarkPk(BookmarkPk bookmarkPk);
 
-  Optional<Bookmark> findByBookmarkedByAndBookmarkedPost(User user, Post post);
-
   List<Bookmark> findAllByBookmarkedPost(Post post);
 
   int countAllByBookmarkedPost(Post post);

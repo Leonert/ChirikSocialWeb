@@ -28,10 +28,6 @@ public class BookmarkService {
     return bookmarkRepository.existsByBookmarkPk(new BookmarkPk(userId, postId));
   }
 
-  public Optional<Bookmark> findByUserAndPost(User user, Post post) {
-    return bookmarkRepository.findByBookmarkedByAndBookmarkedPost(user, post);
-  }
-
   public List<Integer> getUsersBookmarksIds(Post post) {
     return bookmarkRepository.findAllByBookmarkedPost(post)
             .stream()

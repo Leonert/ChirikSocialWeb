@@ -100,15 +100,5 @@ public enum PostDto {
       int bookmarksNumber;
       PostDto.Response.Default originalPost;
     }
-
-    @Data
-    public static class Likes implements LikesNumber {
-      int likesNumber;
-    }
-
-    @Data
-    public static class Bookmarks implements BookmarksNumber {
-      int bookmarksNumber;
-    }
   }
 }
