@@ -106,9 +106,11 @@ public class UserService {
         }).toList();
   }
 
-  public List<User> getListForExplorePage(String currentUserUsername, int page, int usersForPage) throws NoUserWithSuchCredentialsException {
+  public List<User> getListForExplorePage(String currentUserUsername, int page,
+                                          int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
-    return userRepository.findAll(PageRequest.of(page, usersForPage)).stream().filter(u -> !isFollowed(currentUser, u)).toList();
+    return userRepository.findAll(PageRequest.of(page, usersForPage))
+        .stream().filter(u -> !isFollowed(currentUser, u)).toList();
   }
 
   public boolean isFollowed(User currentUser, User user) {

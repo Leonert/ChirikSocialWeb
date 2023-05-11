@@ -35,8 +35,8 @@ public class UserController {
   private final JwtTokenUtil jwtTokenUtil;
 
   @GetMapping("p/{username}")
-  public UserDto.Response.Profile getProfileByUsername
-      (@PathVariable("username") String username, HttpServletRequest request) throws NoUserWithSuchCredentialsException {
+  public UserDto.Response.Profile getProfileByUsername(
+      @PathVariable("username") String username, HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return mapForProfile(userService.findByUsername(username),
         jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
