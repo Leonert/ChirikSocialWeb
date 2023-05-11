@@ -7,11 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.net.URI;
-
 import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/messages")
@@ -34,7 +32,8 @@ public class MessagesController {
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
-    return ResponseEntity.created(URI.create("/api/messages" + createdMessageDto.getId())).body(createdMessageDto);
+    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId()))
+            .body(createdMessageDto);
   }
 
   @PutMapping("/{id}")
@@ -55,8 +54,16 @@ public class MessagesController {
     List<MessageDto> messages = messageService.searchMessages(keyword);
     return ResponseEntity.ok(messages);
   }
-
+  @PutMapping("/{id}/read")
+  public ResponseEntity<Void> markMessageAsRead(@PathVariable int id) {
+    messageService.markAsRead(id);
+    return ResponseEntity.noContent().build();
+  }
   private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
+  }
+
+  private interface Read {
+    boolean isRead();
   }
 }

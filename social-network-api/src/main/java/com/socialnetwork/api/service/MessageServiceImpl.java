@@ -73,7 +73,13 @@ public class MessageServiceImpl implements MessageService {
     messageRepository.save(message);
     return convertToMessageDto(message);
   }
-
+  @Override
+  public void markAsRead(int id) {
+    Message message = messageRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Message not found with id: " + id));
+    message.setRead(true);
+    messageRepository.save(message);
+  }
 
   private MessageDto convertToMessageDto(Message message){
     return modelMapper.map(message, MessageDto.class);

@@ -11,4 +11,6 @@ public interface MessageService {
   MessageDto updateMessage(MessageDto messageDto);
   void deleteMessage(int id);
   List<MessageDto> searchMessages(String keyword);
+  void markAsRead(int id);
+
 }
