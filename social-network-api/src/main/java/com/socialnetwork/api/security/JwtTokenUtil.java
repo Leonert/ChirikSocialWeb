@@ -14,6 +14,7 @@ import java.util.function.Function;
 @Component
 @PropertySource("classpath:application.properties")
 public class JwtTokenUtil {
+  public static final String BEARER = "Bearer ";
 
   @Value("${jwt.secret}")
   private String jwtSecret;
@@ -23,6 +24,10 @@ public class JwtTokenUtil {
 
   @Value("${jwt.expire.remember}")
   private Long expirationRemember;
+
+  public boolean isTokenExists(String authHeader) {
+    return authHeader != null && authHeader.startsWith(BEARER);
+  }
 
   public String getUsernameFromToken(String token) {
     return getClaimsFromToken(token, Claims::getSubject);
