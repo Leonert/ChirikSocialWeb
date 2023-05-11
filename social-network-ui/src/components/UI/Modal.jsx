@@ -14,7 +14,7 @@ const CustomModal = styled(MuiDialog)(({ theme }) => ({
   },
 }));
 
-const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
+const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx, headerActions }) => {
   return (
     <CustomModal PaperProps={{ sx }} open={open} onClose={onClose}>
       <>
@@ -31,6 +31,7 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) 
               />
             )
           )}
+          {headerActions}
         </DialogTitle>
         <DialogContent> {children}</DialogContent>
       </>
