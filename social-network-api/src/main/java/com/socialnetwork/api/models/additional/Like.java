@@ -23,8 +23,17 @@ public class Like {
   @JoinColumn(name = "user_id")
   @MapsId("userId")
   private User likedBy;
+
   @ManyToOne
   @JoinColumn(name = "post_id")
   @MapsId("postId")
   private Post likedPost;
+
+  public Like() {}
+
+  public Like(User likedBy, Post likedPost) {
+    this.likePk = new LikePk(likedBy.getId(), likedPost.getId());
+    this.likedBy = likedBy;
+    this.likedPost = likedPost;
+  }
 }

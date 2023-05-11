@@ -23,6 +23,7 @@ public class Reply {
   @JoinColumn(name = "reply_id")
   @MapsId("replyId")
   private Post reply;
+
   @OneToOne
   @JoinColumn(name = "replied_id")
   @MapsId("repliedId")

@@ -32,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
         .and()
         .headers().frameOptions().disable();
+
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }
 }
