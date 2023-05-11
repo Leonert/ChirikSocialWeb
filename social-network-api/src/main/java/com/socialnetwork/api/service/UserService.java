@@ -1,12 +1,14 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.exception.EmailVerificationException;
+import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -27,7 +29,17 @@ public class UserService {
     return userRepository.findByEmailAddress(emailAddress);
   }
 
-  public void saveUser(User user) {
+  public boolean existsById(Integer id) {
+    return userRepository.existsById(id);
+  }
+
+  public Optional<User> getByUsernameAndId(String username, int id) {
+    return userRepository.findByUsernameAndId(username, id);
+  }
+
+  public void save(User user) {
+    user.setCreatedDate(LocalDateTime.now());
+
     userRepository.save(user);
 
     ConfirmationToken confirmationToken = new ConfirmationToken(user);
@@ -53,5 +65,9 @@ public class UserService {
 
   public Optional<User> findById(int id) {
     return userRepository.findById(id);
+  }
+
+  public User getReferenceById(int id) throws NoUserWithSuchCredentialsException {
+    return userRepository.getReferenceById(id);
   }
 }

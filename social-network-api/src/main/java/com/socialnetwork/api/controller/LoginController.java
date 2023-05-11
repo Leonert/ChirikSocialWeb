@@ -1,12 +1,12 @@
 package com.socialnetwork.api.controller;
 
+import com.socialnetwork.api.dto.UserDto;
 import com.socialnetwork.api.models.additional.Response;
-import com.socialnetwork.api.models.auth.Credentials;
-import com.socialnetwork.api.models.auth.UserResponse;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,24 +22,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginController {
 
-  private static final String NO_SUCH_USERNAME = "User with such username doesnt`t exist.";
+  private static final String NO_SUCH_EMAIL = "User with such email doesnt`t exist.";
   private static final String WRONG_PASSWORD = "You entered an incorrect password. Check the password.";
   private static final String CONFIRMATION_REQUIRED = "The account exists but needs to be activated.";
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;
+  private final ModelMapper modelMapper;
+
 
   @PostMapping("/authenticate")
-  public ResponseEntity<?> createAuthToken(@RequestBody Credentials credentials) {
-    Optional<User> optionalUser = userService.findByUsername(credentials.getUsername());
+  public ResponseEntity<?> createAuthToken(@RequestBody UserDto.Request.Credentials userDto) {
+    Optional<User> optionalUser = userService.findByEmailAddress(userDto.getEmailAddress());
 
     if (optionalUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(NO_SUCH_USERNAME));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(NO_SUCH_EMAIL));
     }
 
     User user = optionalUser.get();
 
-    if (!passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
+    if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(WRONG_PASSWORD));
     }
 
@@ -47,8 +49,16 @@ public class LoginController {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(CONFIRMATION_REQUIRED));
     }
 
-    String jwt = jwtTokenUtil.generateToken(credentials.getUsername(), credentials.isRememberMe());
+    String jwt = jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe());
 
-    return ResponseEntity.ok(new UserResponse(user, jwt));
+    UserDto.Response.AccountData userDtoResponse = new UserDto.Response.AccountData();
+    userDtoResponse.setUser(convertToUserDto(user));
+    userDtoResponse.setJwt(jwt);
+
+    return ResponseEntity.ok(userDtoResponse);
+  }
+
+  private UserDto.Response.Default convertToUserDto(User user) {
+    return modelMapper.map(user, UserDto.Response.Default.class);
   }
 }

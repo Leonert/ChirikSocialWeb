@@ -44,11 +44,15 @@ public class User {
   @Column(name = "created_date")
   private LocalDateTime createdDate;
 
-  @Column(name = "profile_background_image_url")
-  private String profileBackgroundImageUrl;
+  @Column(name = "birth_date")
+  private LocalDateTime birthDate;
 
-  @Column(name = "profile_image_url")
-  private String profileImageUrl;
+  @Column(name = "profile_background_image")
+  private String profileBackgroundImage;
+
+  @Column(name = "profile_image")
+  private String profileImage;
+
   //relations
   @OneToMany(mappedBy = "followerUser")
   private List<Follow> followers;
@@ -72,4 +76,12 @@ public class User {
   private List<Message> receivedMessages;
 
   private boolean isEnabled;
+
+  public User() {
+
+  }
+
+  public User(int id) {
+    this.id = id;
+  }
 }

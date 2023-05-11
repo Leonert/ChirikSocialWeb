@@ -3,7 +3,6 @@ package com.socialnetwork.api.models.base;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.Reply;
-import com.socialnetwork.api.models.additional.Retweet;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
 
@@ -17,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,17 +41,18 @@ public class Post {
 
   @Column(name = "created_date")
   private LocalDateTime createdDate;
-  //relations
+
+  @OneToOne
+  @JoinColumn(name = "original_post_id", referencedColumnName = "id")
+  private Post originalPost;
+
   @OneToMany(mappedBy = "seenPost")
   private List<View> views;
 
-  @OneToMany(mappedBy = "likedPost")
+  @OneToMany(mappedBy = "likedPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Like> likes;
 
-  @OneToMany(mappedBy = "retweetedPost")
-  private List<Retweet> retweets;
-
-  @OneToMany(mappedBy = "bookmarkedPost")
+  @OneToMany(mappedBy = "bookmarkedPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bookmark> bookmarks;
 
   @OneToMany(mappedBy = "reply")
@@ -59,4 +60,10 @@ public class Post {
 
   @OneToOne(mappedBy = "replied")
   private Reply repliedTo;
+
+  public Post() {}
+
+  public Post(int id) {
+    this.id = id;
+  }
 }
