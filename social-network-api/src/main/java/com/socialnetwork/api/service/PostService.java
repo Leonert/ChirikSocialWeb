@@ -1,6 +1,5 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.repository.PostRepository;

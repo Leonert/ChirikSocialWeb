@@ -9,50 +9,6 @@ import java.time.LocalDateTime;
 public enum PostDto {
   ;
 
-  private interface Id {
-    int getId();
-  }
-
-  private interface Text {
-    String getText();
-  }
-
-  private interface Image {
-    String getImage();
-  }
-
-  private interface CreatedDate {
-    LocalDateTime getCreatedDate();
-  }
-
-  private interface Post {
-    PostDto.Request.Default getPost();
-  }
-
-  private interface User {
-    UserDto.Request.Default getUser();
-  }
-
-  private interface Author {
-    UserDto.Response.Author getAuthor();
-  }
-
-  private interface OriginalPostId {
-    @Nullable Integer getOriginalPostId();
-  }
-
-  private interface OriginalPost {
-    @Nullable PostDto.Response.Default getOriginalPost();
-  }
-
-  private interface LikesNumber {
-    int getLikesNumber();
-  }
-
-  private interface BookmarksNumber {
-    int getBookmarksNumber();
-  }
-
   public enum Request {
     ;
 
@@ -89,7 +45,7 @@ public enum PostDto {
 
     @Data
     public static class Default implements Id, Author, CreatedDate, Text, Image,
-            LikesNumber, BookmarksNumber, OriginalPost {
+        LikesNumber, BookmarksNumber, OriginalPost {
       int id;
       UserDto.Response.Author author;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -100,5 +56,51 @@ public enum PostDto {
       int bookmarksNumber;
       PostDto.Response.Default originalPost;
     }
+  }
+
+  private interface Id {
+    int getId();
+  }
+
+  private interface Text {
+    String getText();
+  }
+
+  private interface Image {
+    String getImage();
+  }
+
+  private interface CreatedDate {
+    LocalDateTime getCreatedDate();
+  }
+
+  private interface Post {
+    PostDto.Request.Default getPost();
+  }
+
+  private interface User {
+    UserDto.Request.Default getUser();
+  }
+
+  private interface Author {
+    UserDto.Response.Author getAuthor();
+  }
+
+  private interface OriginalPostId {
+    @Nullable
+    Integer getOriginalPostId();
+  }
+
+  private interface OriginalPost {
+    @Nullable
+    PostDto.Response.Default getOriginalPost();
+  }
+
+  private interface LikesNumber {
+    int getLikesNumber();
+  }
+
+  private interface BookmarksNumber {
+    int getBookmarksNumber();
   }
 }

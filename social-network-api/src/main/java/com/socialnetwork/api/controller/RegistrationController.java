@@ -33,7 +33,7 @@ public class RegistrationController {
   @PostMapping("check-email")
   public ResponseEntity<?> checkIfEmailExists(@RequestBody UserDto.Request.Email userDto) {
     Optional<User> optionalUserByEmailAddress =
-            userService.findByEmailAddress(userDto.getEmailAddress());
+        userService.findByEmailAddress(userDto.getEmailAddress());
 
     if (optionalUserByEmailAddress.isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(EMAIL_TAKEN));
@@ -43,24 +43,18 @@ public class RegistrationController {
   }
 
   @PostMapping("check-username")
-  public ResponseEntity<?> checkIfUsernameExists(@RequestBody UserDto.Request.Name userDto) {
-    Optional<User> optionalUserByUsername =
-            userService.findByUsername(userDto.getUsername());
-
-    if (optionalUserByUsername.isPresent()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN));
-    }
-
-    return ResponseEntity.ok(new Response("Ok"));
+  public ResponseEntity<?> checkIfUsernameExists(@RequestBody UserDto.Request.Username userDto) {
+    return userService.existsByUsername(userDto.getUsername()) ?
+        ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN)) :
+        ResponseEntity.ok(new Response("Ok"));
   }
 
   @PostMapping("save-user")
   public ResponseEntity<?> saveUserAndSendConfirmation(@RequestBody UserDto.Request.Registration userDto) {
     User user = convertToUser(userDto);
-    String rawPassword = userDto.getPassword();
+    String rawPassword = user.getPassword();
     user.setPassword(passwordEncoder.encode(rawPassword));
     userService.save(user);
-
     return ResponseEntity.ok(new Response("Ok"));
   }
 

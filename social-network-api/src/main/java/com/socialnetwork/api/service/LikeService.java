@@ -29,9 +29,9 @@ public class LikeService {
 
   public List<Integer> getUsersLikesIds(Post post) {
     return likeRepository.findAllByLikedPost(post)
-            .stream()
-            .map(like -> like.getLikedBy().getId())
-            .toList();
+        .stream()
+        .map(like -> like.getLikedBy().getId())
+        .toList();
   }
 
   public int countPostLikes(Post post) {

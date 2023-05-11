@@ -1,6 +1,8 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.UserDto;
+import com.socialnetwork.api.exception.AccessDeniedException;
+import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/login")
@@ -32,14 +32,8 @@ public class LoginController {
 
 
   @PostMapping("/authenticate")
-  public ResponseEntity<?> createAuthToken(@RequestBody UserDto.Request.Credentials userDto) {
-    Optional<User> optionalUser = userService.findByEmailAddress(userDto.getEmailAddress());
-
-    if (optionalUser.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(NO_SUCH_EMAIL));
-    }
-
-    User user = optionalUser.get();
+  public ResponseEntity<?> createAuthToken(@RequestBody UserDto.Request.Credentials userDto) throws AccessDeniedException {
+    User user = userService.findByEmailAddress(userDto.getEmailAddress()).orElseThrow(AccessDeniedException::new);
 
     if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(WRONG_PASSWORD));
