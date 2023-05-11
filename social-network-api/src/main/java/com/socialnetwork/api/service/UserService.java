@@ -80,7 +80,8 @@ public class UserService {
     return userRepository.findById(id).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
 
-  public List<User> getFollowers(String queryUsername, String currentUserUsername, int page, int usersForPage) throws NoUserWithSuchCredentialsException {
+  public List<User> getFollowers(String queryUsername, String currentUserUsername,
+                                 int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
         .getFollowers().stream().map(Follow::getFollowerUser)
@@ -90,7 +91,8 @@ public class UserService {
         .toList();
   }
 
-  public List<User> getFollowed(String queryUsername, String currentUserUsername, int page, int usersForPage) throws NoUserWithSuchCredentialsException {
+  public List<User> getFollowed(String queryUsername, String currentUserUsername,
+                                int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
         .getFollowed().stream().map(Follow::getFollowedUser)
@@ -126,7 +128,9 @@ public class UserService {
     if (!isFollowed(user, currentUser)) {
       followsRepository.save(new Follow(user, currentUser));
       return true;
-    } else followsRepository.deleteById(new FollowPk(user.getId(), currentUser.getId()));
+    } else {
+      followsRepository.deleteById(new FollowPk(user.getId(), currentUser.getId()));
+    }
     return false;
   }
 

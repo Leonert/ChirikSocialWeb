@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
-  List<Post> findPostsByTextContainingIgnoreCase(String q, Pageable pageable);
+  List<Post> findPostsByTextContainingIgnoreCase(String query, Pageable pageable);
 }

@@ -18,12 +18,12 @@ public class SearchService {
 
 
   public List<Post> searchPosts(String query, int page, int postsPerPage) {
-    return postRepository.findPostsByTextContainingIgnoreCase
-        (query, PageRequest.of(page, postsPerPage));
+    return postRepository.findPostsByTextContainingIgnoreCase(
+        query, PageRequest.of(page, postsPerPage));
   }
 
-  public List<User> searchUsers(String q, int page, int usersPerPage) {
+  public List<User> searchUsers(String query, int page, int usersPerPage) {
     return userRepository
-        .findByUsernameContainingIgnoreCaseOrNameContaining(q, q, PageRequest.of(page, usersPerPage)).toList();
+        .findByUsernameContainingIgnoreCaseOrNameContaining(query, query, PageRequest.of(page, usersPerPage)).toList();
   }
 }

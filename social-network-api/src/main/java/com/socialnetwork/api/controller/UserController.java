@@ -29,14 +29,14 @@ import java.util.Optional;
 public class UserController {
   static final int PAGE_NUMBER = 0;
   static final int RESULTS_PER_PAGE = 10;
+  static final String AUTHORIZATION_HEADER = "Authorization";
   private final UserService userService;
   private final ModelMapper modelMapper;
   private final JwtTokenUtil jwtTokenUtil;
-  private final String AUTHORIZATION_HEADER = "Authorization";
 
   @GetMapping("p/{username}")
-  public UserDto.Response.Profile getProfileByUsername(@PathVariable("username") String username,
-                                                       HttpServletRequest request) throws NoUserWithSuchCredentialsException {
+  public UserDto.Response.Profile getProfileByUsername
+      (@PathVariable("username") String username, HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return mapForProfile(userService.findByUsername(username),
         jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
@@ -65,7 +65,8 @@ public class UserController {
   public List<UserDto.Response.Listing> getExplore(@RequestParam("p") Optional<Integer> page,
                                                    @RequestParam("n") Optional<Integer> postsPerPage,
                                                    HttpServletRequest request) throws NoUserWithSuchCredentialsException {
-    return mapForListing(userService.getListForExplorePage(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
+    return mapForListing(
+        userService.getListForExplorePage(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
         page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
   }
 
@@ -87,7 +88,8 @@ public class UserController {
         ResponseEntity.status(HttpStatus.OK).body(new Response("User was unsubscribed"));
   }
 
-  private UserDto.Response.Profile mapForProfile(User user, String currentUserName) throws NoUserWithSuchCredentialsException {
+  private UserDto.Response.Profile mapForProfile(User user, String currentUserName)
+      throws NoUserWithSuchCredentialsException {
     UserDto.Response.Profile profile = modelMapper.map(user, UserDto.Response.Profile.class);
     profile.setFollowedCounter(user.getFollowed().size());
     profile.setFollowersCounter(user.getFollowers().size());

@@ -44,8 +44,8 @@ public class RegistrationController {
 
   @PostMapping("check-username")
   public ResponseEntity<?> checkIfUsernameExists(@RequestBody UserDto.Request.Username userDto) {
-    return userService.existsByUsername(userDto.getUsername()) ?
-        ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN)) :
+    return userService.existsByUsername(userDto.getUsername())
+        ? ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN)) :
         ResponseEntity.ok(new Response("Ok"));
   }
 
