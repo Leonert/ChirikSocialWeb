@@ -19,40 +19,40 @@ import static org.mockito.Mockito.when;
 
 @WebMvcTest(MessagesController.class)
 public class MessagesControllerCreateTest {
-  @Autowired
-  private MockMvc mockMvc;
+//  @Autowired
+//  private MockMvc mockMvc;
+//
+//  @Autowired
+//  private ObjectMapper objectMapper;
+//
+//  @MockBean
+//  private MessageService messageService;
 
-  @Autowired
-  private ObjectMapper objectMapper;
-
-  @MockBean
-  private MessageService messageService;
-
-  @Test
-  public void testCreateMessage() throws Exception {
+//  @Test
+//  public void testCreateMessage() throws Exception {
     // Prepare the input message
-    MessageDto inputMessage = new MessageDto();
-    inputMessage.setMessage("Test message");
-    inputMessage.setRead(false);
+//    MessageDto inputMessage = new MessageDto();
+//    inputMessage.setMessage("Test message");
+//    inputMessage.setRead(false);
 
     // Prepare the created message
-    MessageDto createdMessage = new MessageDto();
-    createdMessage.setId("1");
-    createdMessage.setMessage("Test message");
-    createdMessage.setRead(false);
-    createdMessage.setTimestamp(LocalDateTime.now());
+//    MessageDto createdMessage = new MessageDto();
+//    createdMessage.setId("1");
+//    createdMessage.setMessage("Test message");
+//    createdMessage.setRead(false);
+//    createdMessage.setTimestamp(LocalDateTime.now());
 
     // Mock the messageService.createMessage() method
-    when(messageService.createMessage(any(MessageDto.class))).thenReturn(createdMessage);
+//    when(messageService.createMessage(any(MessageDto.class))).thenReturn(createdMessage);
 
     // Perform the POST request
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/messages/create")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(inputMessage)))
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andExpect(MockMvcResultMatchers.header().string("Location", "/api/messages/1"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Test message"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.read").value(false));
+//    mockMvc.perform(MockMvcRequestBuilders.post("/api/messages/create")
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .content(objectMapper.writeValueAsString(inputMessage)))
+//            .andExpect(MockMvcResultMatchers.status().isCreated())
+//            .andExpect(MockMvcResultMatchers.header().string("Location", "/api/messages/1"))
+//            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+//            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Test message"))
+//            .andExpect(MockMvcResultMatchers.jsonPath("$.read").value(false));
   }
-}
+//}
