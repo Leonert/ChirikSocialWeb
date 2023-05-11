@@ -42,6 +42,24 @@ export const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+        children: [
+          {
+            index: true,
+            element: <div>posts</div>,
+          },
+          {
+            path: 'replies',
+            element: <div>replies</div>,
+          },
+          {
+            path: 'media',
+            element: <div>media</div>,
+          },
+          {
+            path: 'likes',
+            element: <div>likes</div>,
+          },
+        ],
       },
     ],
   },
