@@ -109,7 +109,6 @@
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty -->
                     <repoToken>${env.COVERALLS_TOKEN}</repoToken>
                 </configuration>
                 <version>4.3.0</version>

@@ -28,3 +28,32 @@ Content-Type: application/json
   "password": "141",
   "birthDate": "2003-07-11T13:36:06.000Z"
 }
+
+###
+POST http://localhost:8080/api/messages/create
+Content-Type: application/json
+
+{
+  "id": "3",
+  "sender": {
+    "id": 1,
+    "username": "denіys"
+  },
+  "recipient": {
+    "id": 2,
+    "username":"denіys1"
+
+  },
+  "message": "Hello, Worldмчсмчясмчям!",
+  "timestamp": "2023-05-10T10:00:00",
+  "read": false
+}
+
+###
+GET http://localhost:8080/api/messages
+
+###
+DELETE http://localhost:8080/api/messages/100
+
+###
+PUT http://localhost:8080/api/messages/101/read
