@@ -2,6 +2,7 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.models.base.Message;
+import com.socialnetwork.api.repository.MessageRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -9,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/messages")
 public class MessagesController {
+  private final MessageRepository messageRepository;
   private final MessageService messageService;
   private final ModelMapper modelMapper;
 
@@ -23,12 +26,21 @@ public class MessagesController {
     return ResponseEntity.ok(messageDto);
   }
 
-  @GetMapping("/")
+  @GetMapping()
   public ResponseEntity<List<MessageDto>> getAllMessages() {
-    List<MessageDto> messageDtos = messageService.getAllMessages();
+    List<Message> messages = messageRepository.findAll();
+    List<MessageDto> messageDtos = messages.stream()
+            .map(message -> modelMapper.map(message, MessageDto.class))
+            .collect(Collectors.toList());
+
+    // Журналирование списка messageDtos
+    messageDtos.forEach(messageDto -> {
+      System.out.println("ID: " + messageDto.getId());
+      System.out.println("Message: " + messageDto.getMessage());
+    });
+
     return ResponseEntity.ok(messageDtos);
   }
-
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
@@ -38,7 +50,7 @@ public class MessagesController {
 
   @PutMapping("/{id}")
   public ResponseEntity<MessageDto> updateMessage(@PathVariable int id, @RequestBody MessageDto messageDto) {
-    messageDto.setId(String.valueOf(id));
+    messageDto.setId(Integer.parseInt(String.valueOf(id)));
     MessageDto updatedMessageDto = messageService.updateMessage(messageDto);
     return ResponseEntity.ok(updatedMessageDto);
   }
