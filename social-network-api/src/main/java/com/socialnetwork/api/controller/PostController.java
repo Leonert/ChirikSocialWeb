@@ -100,7 +100,7 @@ public class PostController {
 
   @PostMapping("/bookmark")
   public ResponseEntity<Integer> saveBookmark(@RequestBody PostDto.Request.Action postDto, HttpServletRequest request)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
+      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int userId = postDto.getUser().getId();
     int postId = postDto.getPost().getId();
 
