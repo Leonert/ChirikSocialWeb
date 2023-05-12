@@ -2,9 +2,7 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.models.base.Message;
-import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.MessageRepository;
-import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,6 +51,34 @@ public class MessagesController {
             .body(createdMessageDto);
   }
 
+  //@PostMapping("/create")
+//public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
+//  // Опрацювання отриманих даних про відправника і отримувача
+////    int senderId = messageDto.getSenderId();
+////    int recipientId = messageDto.getRecipientId();
+//  String username = messageDto.getUsername();
+//
+////    // Запит до бази даних для отримання користувача-відправника
+////    User sender = userRepository.findById(senderId)
+////            .orElseThrow(() -> new EntityNotFoundException("Sender not found with id: " + senderId));
+////
+////    // Запит до бази даних для отримання користувача-отримувача
+////    User recipient = userRepository.findById(recipientId)
+////            .orElseThrow(() -> new EntityNotFoundException("Recipient not found with id: " + recipientId));
+//
+//  // Оновлення інформації у messageDto
+////    messageDto.setSenderId(sender.getId());
+////    messageDto.setRecipientId(recipient.getId());
+//  messageDto.setUsername(username);
+//
+//  // Створення повідомлення через сервіс повідомлень
+//  MessageDto createdMessageDto = messageService.createMessage(messageDto);
+//
+//  // Повернення статусу 201 Created і створеного повідомлення
+//  return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId()))
+//          .body(createdMessageDto);
+//}
+
   @PutMapping("/{id}")
   public ResponseEntity<MessageDto> updateMessage(@PathVariable int id, @RequestBody MessageDto messageDto) {
     messageDto.setId(Integer.parseInt(String.valueOf(id)));
@@ -84,32 +109,3 @@ public class MessagesController {
   }
 }
 
-
-
-//@PostMapping("/create")
-//public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
-//  // Опрацювання отриманих даних про відправника і отримувача
-////    int senderId = messageDto.getSenderId();
-////    int recipientId = messageDto.getRecipientId();
-//  String username = messageDto.getUsername();
-//
-////    // Запит до бази даних для отримання користувача-відправника
-////    User sender = userRepository.findById(senderId)
-////            .orElseThrow(() -> new EntityNotFoundException("Sender not found with id: " + senderId));
-////
-////    // Запит до бази даних для отримання користувача-отримувача
-////    User recipient = userRepository.findById(recipientId)
-////            .orElseThrow(() -> new EntityNotFoundException("Recipient not found with id: " + recipientId));
-//
-//  // Оновлення інформації у messageDto
-////    messageDto.setSenderId(sender.getId());
-////    messageDto.setRecipientId(recipient.getId());
-//  messageDto.setUsername(username);
-//
-//  // Створення повідомлення через сервіс повідомлень
-//  MessageDto createdMessageDto = messageService.createMessage(messageDto);
-//
-//  // Повернення статусу 201 Created і створеного повідомлення
-//  return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId()))
-//          .body(createdMessageDto);
-//}
