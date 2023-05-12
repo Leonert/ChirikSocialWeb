@@ -2,6 +2,7 @@ package com.socialnetwork.api.models.base;
 
 import lombok.Data;
 
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
