@@ -1,4 +1,4 @@
-import { ListItemIcon, ListItemText, MenuItem, Typography, useMediaQuery } from '@mui/material';
+import { ListItemIcon, ListItemText, MenuItem, Typography } from '@mui/material';
 import React from 'react';
 
 const SettingItem = (props) => {
