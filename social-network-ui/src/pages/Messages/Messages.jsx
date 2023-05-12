@@ -40,9 +40,10 @@ const Messages = () => {
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({behavior: 'smooth'})
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
   const onOpenModalWindow = () => {
     setVisibleModalWindow(true);
   };
@@ -58,10 +59,16 @@ const Messages = () => {
     setChat(chat);
   };
 
-
-  const onSendMessage = () => {
+  const onSendMessage = async () => {
     if (message !== "") {
-      setMessage("");
+      const newMessage = { chatId: chat.id, text: message };
+
+      try {
+        await ChatApi.sendMessage(newMessage);
+        setMessage("");
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   };
 
