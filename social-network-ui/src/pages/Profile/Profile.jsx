@@ -1,8 +1,8 @@
 import { CalendarToday as CalendarIcon, Link as LinkIcon, LocationOn as LocationIcon } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Avatar, Box, Button, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
-import React, { useState } from 'react';
-import { Link, NavLink, Outlet, matchPath, useLocation } from 'react-router-dom';
+import { Avatar, Box, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
+import React from 'react';
+import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation } from 'react-router-dom';
 
 import EditProfileModal from './EditProfileModal';
 
@@ -45,6 +45,8 @@ const Profile = () => {
   const routeMatch = useRouteMatch(['profile', 'profile/replies', 'profile/media', 'profile/likes']);
   const currentTab = routeMatch?.pattern?.path;
 
+  const profile = useLoaderData();
+
   return (
     <>
       <Box sx={{ maxWidth: '598px', width: '100%', height: '2000px' }}>
@@ -71,13 +73,23 @@ const Profile = () => {
             </NavLink>
             <Stack>
               <Typography component="h2" fontSize="18px">
-                John Doe
+                {profile.firstName + ' ' + profile.lastName}
               </Typography>
-              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>2 Tweets</Typography>
+              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>
+                {Object.keys(profile.userTweets).length} Tweets
+              </Typography>
             </Stack>
           </Stack>
         </Box>
-        <Box sx={{ height: '200px', background: (theme) => theme.palette.background.lightDefault }}></Box>
+        <Box
+          sx={{
+            height: '193px',
+            background: (theme) =>
+              profile.profileBackground ? `url(${profile.profileBackground})` : theme.palette.background.lightDefault,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        ></Box>
         <Stack p="20px 20px 0" direction="row" alignItems="end" justifyContent="space-between">
           <Avatar
             alt="Profile Picture"
@@ -99,27 +111,27 @@ const Profile = () => {
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
           <Box>
-            <Typography variant="h6">John Doe</Typography>
+            <Typography variant="h6">{profile.firstName + ' ' + profile.lastName}</Typography>
             <Typography sx={{ mb: '10px' }} variant="body1">
-              @Doe
+              @{profile.username}
             </Typography>
             <Typography mb="12px" variant="body1">
-              My BIO
+              {profile.BIO}
             </Typography>
             <Stack direction="row">
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LocationIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">Kyiv</Typography>
+                <Typography variant="body1">{profile.location}</Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LinkIcon sx={{ marginRight: 1 }} />
                 <Typography variant="body1" component="a">
-                  instagram.com
+                  {profile.website}
                 </Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">Joined March 2020</Typography>
+                <Typography variant="body1">{profile.accCreateDate}</Typography>
               </div>
             </Stack>
             <Stack direction="row">
@@ -134,7 +146,7 @@ const Profile = () => {
                   }}
                   to="/profile/following"
                 >
-                  500 Followings
+                  {profile.followNumber} Followings
                 </NavLink>
                 <NavLink
                   style={{
@@ -146,7 +158,7 @@ const Profile = () => {
                   }}
                   to="/profile/followers"
                 >
-                  10 Follower
+                  {profile.subscriberNumber} Follower
                 </NavLink>
               </Stack>
             </Stack>
