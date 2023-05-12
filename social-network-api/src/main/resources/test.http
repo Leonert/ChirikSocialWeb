@@ -1,0 +1,30 @@
+###
+POST localhost:8080/api/registration/save-user
+Content-Type: application/json
+
+{
+  "username": "denys",
+  "emailAddress": "denyaaquapark@gmail.com",
+  "password": "141"
+}
+
+###
+POST localhost:8080/api/login/authenticate
+Content-Type: application/json
+
+{
+  "emailAddress": "denyaaquapark@gmail.com",
+  "password": "141",
+  "rememberMe": true
+}
+
+###
+POST localhost:8080/api/registration/save-user
+Content-Type: application/json
+
+{
+  "username": "denyss",
+  "emailAddress": "d.kozarenkoo@gmail.com",
+  "password": "141",
+  "birthDate": "2003-07-11T13:36:06.000Z"
+}
