@@ -6,12 +6,12 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  selectAccessibility,
-  selectAdditional,
-  selectNotifications,
-  selectPrivacy,
-  selectSecurity,
-  selectTwitterBlue,
+  //   selectAccessibility,
+  //   selectAdditional,
+  //   selectNotifications,
+  //   selectPrivacy,
+  //   selectSecurity,
+  //   selectTwitterBlue,
   selectYourAccount,
 } from '../../features/slices/settingSlice';
 import SettingItem from '../SettingItem/SettingItem';

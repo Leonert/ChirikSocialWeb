@@ -10,6 +10,9 @@ const settingSlice = createSlice({
     // notifications: false,
     // accessibility: false,
     // additional: false,
+    changePassword: false,
+    accountInformation: false,
+    sideSetting: true,
   },
   reducers: {
     selectYourAccount: (state) => {
@@ -76,6 +79,11 @@ const settingSlice = createSlice({
     //   state.accessibility = false;
     //   state.additional = true;
     // },
+    changePasswordModal: (state, action) => {
+      state.changePassword = action.payload;
+      state.sideSetting = !action.payload;
+    },
+    
   },
 });
 
@@ -88,4 +96,5 @@ export const {
   // selectAccessibility,
   // selectAdditional,
   selectSecurity,
+  changePasswordModal,
 } = settingSlice.actions;
