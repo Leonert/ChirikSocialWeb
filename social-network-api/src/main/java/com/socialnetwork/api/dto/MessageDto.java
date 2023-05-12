@@ -9,7 +9,6 @@ public class MessageDto {
   private boolean read;
   private String message;
   private LocalDateTime timestamp;
-  private User sender;
 
   public boolean isRead() {
     return read;
