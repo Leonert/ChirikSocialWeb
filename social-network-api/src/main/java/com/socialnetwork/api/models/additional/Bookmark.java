@@ -18,7 +18,6 @@ import javax.persistence.Table;
 public class Bookmark {
   @EmbeddedId
   private BookmarkPk bookmarkPk;
-
   @ManyToOne
   @JoinColumn(name = "user_id")
   @MapsId("userId")
@@ -29,7 +28,8 @@ public class Bookmark {
   @MapsId("postId")
   private Post bookmarkedPost;
 
-  public Bookmark() {}
+  public Bookmark() {
+  }
 
   public Bookmark(User bookmarkedBy, Post bookmarkedPost) {
     this.bookmarkPk = new BookmarkPk(bookmarkedBy.getId(), bookmarkedPost.getId());

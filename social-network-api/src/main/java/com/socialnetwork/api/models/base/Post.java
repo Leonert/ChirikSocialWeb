@@ -6,6 +6,7 @@ import com.socialnetwork.api.models.additional.Reply;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.CascadeType;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -61,7 +61,8 @@ public class Post {
   @OneToOne(mappedBy = "replied")
   private Reply repliedTo;
 
-  public Post() {}
+  public Post() {
+  }
 
   public Post(int id) {
     this.id = id;
