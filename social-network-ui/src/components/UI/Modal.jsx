@@ -23,7 +23,7 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx, he
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
           {headerText ? (
-            <Typography sx={{ justifySelf: 'center' }}> {headerText}</Typography>
+            <Typography sx={{ justifySelf: 'center' }}>{headerText}</Typography>
           ) : (
             hasLogoIcon && (
               <TwitterIcon
