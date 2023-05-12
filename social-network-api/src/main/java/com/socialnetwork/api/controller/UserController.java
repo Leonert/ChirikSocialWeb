@@ -63,12 +63,12 @@ public class UserController {
         page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
   }
 
-  @GetMapping("explore")
-  public List<UserDto.Response.Listing> getExplore(@RequestParam("p") Optional<Integer> page,
+  @GetMapping("connect")
+  public List<UserDto.Response.Listing> getConnect(@RequestParam("p") Optional<Integer> page,
                                                    @RequestParam("n") Optional<Integer> postsPerPage,
                                                    HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return mapForListing(
-        userService.getListForExplorePage(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
+        userService.getListForConnectPage(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
         page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
   }
 

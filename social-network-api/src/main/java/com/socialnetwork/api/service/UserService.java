@@ -106,7 +106,7 @@ public class UserService {
         }).toList();
   }
 
-  public List<User> getListForExplorePage(String currentUserUsername, int page,
+  public List<User> getListForConnectPage(String currentUserUsername, int page,
                                           int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return userRepository.findAll(PageRequest.of(page, usersForPage))
