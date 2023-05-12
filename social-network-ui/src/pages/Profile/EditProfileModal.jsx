@@ -97,6 +97,68 @@ const EditProfileModal = () => {
         sx={{ maxHeight: '650px', height: '100%' }}
       >
         <form onSubmit={formik.handleSubmit}>
+          <Box
+            position="relative"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="193px"
+            sx={{
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: 'rgba(0,0,0,0.3)',
+              },
+            }}
+          >
+            {!!loadedBackgroundPicture && <BackgroundImage src={URL.createObjectURL(backgroundBlob)} />}
+            <Stack direction="row" position="absolute" gap={1}>
+              <IconButton
+                component="label"
+                sx={{
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  zIndex: 1,
+                  height: '42px',
+                  width: '42px',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                  },
+                }}
+              >
+                <AddAPhotoIcon fontSize="small" />
+                <input
+                  value=""
+                  type="file"
+                  hidden
+                  onChange={(e) => {
+                    setLoadedBackgroundPicture(e.target.files[0]);
+                  }}
+                />
+              </IconButton>
+              {!!loadedBackgroundPicture && (
+                <IconButton
+                  onClick={(e) => {
+                    setLoadedBackgroundPicture(null);
+                  }}
+                  component="label"
+                  sx={{
+                    zIndex: 1,
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    height: '42px',
+                    width: '42px',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0,0,0,0.7)',
+                    },
+                  }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              )}
+            </Stack>
+          </Box>
           <TextField
             sx={{ mt: '20px', mb: '20px' }}
             fullWidth
