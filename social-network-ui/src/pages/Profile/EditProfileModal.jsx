@@ -23,6 +23,23 @@ import Modal from '../../components/UI/Modal';
 //   .typeError('Invalid date'),
 // });
 
+const BackgroundImage = styled('img')(({ theme }) => ({
+  '&': {
+    display: 'block',
+    width: '100%',
+    objectFit: 'cover',
+    height: '193px',
+  },
+}));
+
+const AvatarImage = styled('img')(({ theme }) => ({
+  '&': {
+    display: 'block',
+    width: '100%',
+    objectFit: 'cover',
+    height: '120px',
+  },
+}));
 const EditProfileModal = () => {
   const formik = useFormik({
     initialValues: {
