@@ -1,7 +1,7 @@
 import {makeStyles} from "@mui/styles";
 
 export const useMessagesStyles = makeStyles((theme) => ({
-  backgroundColor: theme.palette.background.paper,
+  // backgroundColor: theme.palette.background.paper,
 
   grid: {
     padding: '12px 0px 0px 0px !important',
@@ -15,8 +15,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
       minHeight: '100vh',
       borderTop: 0,
       borderBottom: 0,
-      backgroundColor: theme.palette.background.paper,
-      color: theme.palette.common.white,
+      // backgroundColor: theme.palette.background.paper,
+      // color: theme.palette.common.white,
 
 
     },
@@ -34,8 +34,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderRight: 0,
     borderRadius: 0,
     alignItems: 'center',
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.common.white,
+    // backgroundColor: theme.palette.background.paper,
+    // color: theme.palette.common.white,
 
 
     flex: 1,
@@ -60,7 +60,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 14,
     color: theme.palette.common.white,
     margin: '8px 30px 27px 30px',
-    backgroundColor: theme.palette.background.default,
+    // backgroundColor: theme.palette.background.default,
   },
   messagesButton: {
     marginLeft: 30,
@@ -129,7 +129,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
       borderLeft: 0,
       borderTop: 0,
       borderBottom: 0,
-      backgroundColor: theme.palette.background.default,
+      // backgroundColor: theme.palette.background.default,
 
     },
   },

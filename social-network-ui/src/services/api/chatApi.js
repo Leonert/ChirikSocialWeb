@@ -5,7 +5,7 @@ import {API_URL} from "../../util/url";
 export const ChatApi = {
     sendMessage: async (message) => {
         try {
-            await axios.post(`${API_URL}/create`, message);
+            await axios.post(`${API_URL}/messages/create`, message);
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -25,7 +25,7 @@ export const ChatApi = {
 
     createChat: async (userId) => {
         try {
-            const response = await axios.get(`${API_URL}/create/${userId}`);
+            const response = await axios.get(`${API_URL}/messages/create/${userId}`);
 
             return response.data;
         } catch (error) {
@@ -37,7 +37,7 @@ export const ChatApi = {
 
     getAllMessages: async () => {
         try {
-            const response = await axios.get(`${API_URL}`);
+            const response = await axios.get(`${API_URL}/messages`);
 
             return response.data;
         } catch (error) {
@@ -49,7 +49,7 @@ export const ChatApi = {
 
     getChatMessages: async (chatId) => {
         try {
-            const response = await axios.get(`${API_URL}/${chatId}/messages`);
+            const response = await axios.get(`${API_URL}/messages/${chatId}`);
 
             return response.data;
         } catch (error) {
@@ -61,19 +61,15 @@ export const ChatApi = {
 
     readChatMessages: async (chatId) => {
         try {
-            const response = await axios.get(`${API_URL}/${chatId}/read/messages`);
-
-            return response.data;
+            await axios.put(`${API_URL}/messages/${chatId}/read`);
         } catch (error) {
             console.error('Error marking chat messages as read:', error);
-
-            return [];
         }
     },
 
     addMessage: async (chatMessage) => {
         try {
-            const response = await axios.post(`${API_URL}/create/message`, chatMessage);
+            const response = await axios.post(`${API_URL}/messages/create`, chatMessage);
 
             return response.data;
         } catch (error) {
@@ -85,7 +81,7 @@ export const ChatApi = {
 
     addMessageWithTweet: async (chatMessage) => {
         try {
-            const response = await axios.post(`${API_URL}/create/message/tweet`, chatMessage);
+            const response = await axios.post(`${API_URL}/messages/create`, chatMessage);
 
             return response.data;
         } catch (error) {

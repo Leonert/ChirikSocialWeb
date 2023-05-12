@@ -14,6 +14,8 @@ public class Message {
   @SequenceGenerator(name = "messages_seq", sequenceName = "messages_seq", initialValue = 100, allocationSize = 1)
   @Column(name = "id")
   private int id;
+  @Column(name = "username")
+  private String username;
 
   @ManyToOne
   @JoinColumn(name = "sender_id", referencedColumnName = "id")

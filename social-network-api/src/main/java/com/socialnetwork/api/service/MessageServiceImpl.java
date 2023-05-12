@@ -45,7 +45,16 @@ public class MessageServiceImpl implements MessageService {
   public void deleteMessage(int id) {
     messageRepository.deleteById(id);
   }
-
+  //  @Override
+//  public MessageDto createMessage(MessageDto messageDto) {
+//    Message message = convertToMessage(messageDto);
+//
+//    // Set the username from the messageDto to the message
+//    message.setUsername(messageDto.getUsername());
+//
+//    message = messageRepository.save(message);
+//    return convertToMessageDto(message);
+//  }
   @Override
   public List<MessageDto> searchMessages(String keyword) {
     List<Message> messages = messageRepository.findByMessageContainingIgnoreCase(keyword);
