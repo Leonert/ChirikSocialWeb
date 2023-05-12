@@ -1,6 +1,6 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Box, Button, IconButton, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
