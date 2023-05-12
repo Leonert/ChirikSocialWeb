@@ -54,5 +54,17 @@ public enum PostDto {
       int bookmarksNumber;
       PostDto.Response.Default originalPost;
     }
+
+    @Data
+    public static class Profile {
+      int id;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+      LocalDateTime createdDate;
+      String text;
+      String image;
+      int likesNumber;
+      int bookmarksNumber;
+      PostDto.Response.Profile originalPost;
+    }
   }
 }

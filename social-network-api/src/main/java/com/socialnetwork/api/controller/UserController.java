@@ -2,6 +2,7 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.dto.UserDto;
+import com.socialnetwork.api.exception.AccessDeniedException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
@@ -73,9 +74,10 @@ public class UserController {
 
   @PatchMapping("p")
   public ResponseEntity<?> editProfile(@RequestBody UserDto.Request.ProfileEditing userDto,
-                                       HttpServletRequest request) throws NoUserWithSuchCredentialsException {
+                                       HttpServletRequest request)
+      throws NoUserWithSuchCredentialsException, AccessDeniedException {
     if (!userDto.getUsername().equals(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)))) {
-      throw new NoUserWithSuchCredentialsException();
+      throw new AccessDeniedException();
     }
     userService.editProfile(userDto);
     return ResponseEntity.ok(new Response("Profile was edited"));
@@ -89,13 +91,16 @@ public class UserController {
         ResponseEntity.status(HttpStatus.OK).body(new Response("User was unsubscribed"));
   }
 
-  private UserDto.Response.Profile mapForProfile(User user, String currentUserName)
-      throws NoUserWithSuchCredentialsException {
+  private UserDto.Response.Profile mapForProfile(User user, String currentUserName) {
     UserDto.Response.Profile profile = modelMapper.map(user, UserDto.Response.Profile.class);
     profile.setFollowedCounter(user.getFollowed().size());
     profile.setFollowersCounter(user.getFollowers().size());
-    profile.setCurrUserFollower(userService.isFollowed(userService.findByUsername(currentUserName), user));
-    profile.setPosts(user.getPosts().stream().map(p -> modelMapper.map(p, PostDto.Response.Default.class)).toList());
+    try {
+      profile.setCurrUserFollower(userService.isFollowed(userService.findByUsername(currentUserName), user));
+    } catch (NoUserWithSuchCredentialsException e) {
+      profile.setCurrUserFollower(false);
+    }
+    profile.setProfilePosts(user.getPosts().stream().map(p -> modelMapper.map(p, PostDto.Response.Profile.class)).toList());
     return profile;
   }
 

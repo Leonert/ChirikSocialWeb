@@ -74,7 +74,7 @@ public enum UserDto {
       String website;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
       LocalDateTime birthDate;
-      List<PostDto.Response.Default> posts;
+      List<PostDto.Response.Profile> profilePosts;
       int followersCounter;
       int followedCounter;
       boolean isCurrUserFollower;
