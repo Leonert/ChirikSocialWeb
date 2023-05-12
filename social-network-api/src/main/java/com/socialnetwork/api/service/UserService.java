@@ -59,6 +59,7 @@ public class UserService {
     confirmationTokenService.save(confirmationToken);
 
     emailService.sendEmail(user, confirmationToken);
+    System.out.println(confirmationToken);
   }
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
