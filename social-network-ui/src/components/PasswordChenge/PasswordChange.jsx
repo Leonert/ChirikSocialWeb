@@ -36,7 +36,7 @@ export default function PasswordChange() {
   return (
     <Box
       sx={{
-        border: '1px soled ',
+        maxWidth: "300px",
       }}
     >
       <CloseButton onClose={handelClickClose} />
