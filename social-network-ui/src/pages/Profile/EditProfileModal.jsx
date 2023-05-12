@@ -1,14 +1,15 @@
 import { Edit as EditIcon } from '@mui/icons-material';
-import { Button, TextField, Typography } from '@mui/material';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, Button, IconButton, Stack, TextField, Typography, styled } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import * as yup from 'yup';
+import { useLoaderData } from 'react-router-dom';
 
+// import * as yup from 'yup';
 import Modal from '../../components/UI/Modal';
 
 // const validationSchema = yup.object({
@@ -40,23 +41,30 @@ const AvatarImage = styled('img')(({ theme }) => ({
     height: '120px',
   },
 }));
+
 const EditProfileModal = () => {
+  const profile = useLoaderData();
   const formik = useFormik({
     initialValues: {
-      name: '',
-      BIO: '',
-      location: '',
-      website: '',
-      birthDate: new Date(),
+      name: `${profile.firstName} ${profile.lastName} `,
+      BIO: `${profile.BIO}`,
+      location: `${profile.location}`,
+      website: `${profile.website}`,
+      // birthDate: `${profile.birthDate}`,
     },
     //   validationSchema: validationSchema,
     onSubmit: (values) => {
       setOpenEditModal(false);
-      console.log(values);
+      // console.log(values);
     },
   });
   const [openEditModal, setOpenEditModal] = useState(false);
-
+  const [loadedBackgroundPicture, setLoadedBackgroundPicture] = useState();
+  const [loadedAvatarPicture, setLoadedAvatarPicture] = useState();
+  const backgroundBlob = new Blob([loadedBackgroundPicture], { type: 'image/png' });
+  const avatarBlob = new Blob([loadedAvatarPicture], { type: 'image/png' });
+  // відсилать loadedBackgroundPicture
+  // відсилать на бек formData
   const handleOpenEditModal = () => {
     setOpenEditModal(true);
   };
@@ -69,7 +77,11 @@ const EditProfileModal = () => {
       Save
     </Button>
   );
-  const ModalTitle = <Typography sx={{ fontSize: '22px' }}>Edit Profile</Typography>;
+  const ModalTitle = (
+    <Typography component="span" sx={{ fontSize: '22px' }}>
+      Edit Profile
+    </Typography>
+  );
 
   return (
     <>
@@ -159,6 +171,7 @@ const EditProfileModal = () => {
               )}
             </Stack>
           </Box>
+          {/* avatar */}
           <Box
             position="relative"
             display="flex"
