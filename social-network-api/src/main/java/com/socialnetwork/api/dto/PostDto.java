@@ -2,7 +2,6 @@ package com.socialnetwork.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -13,25 +12,25 @@ public enum PostDto {
     ;
 
     @Data
-    public static class Default implements Id {
+    public static class Default {
       int id;
     }
 
     @Data
-    public static class Action implements User, Post {
+    public static class Action {
       UserDto.Request.Default user;
       PostDto.Request.Default post;
     }
 
     @Data
-    public static class Editable implements Id, Text, Image {
+    public static class Editable {
       int id;
       String text;
       String image;
     }
 
     @Data
-    public static class Created implements Id, User, Text, Image, OriginalPostId {
+    public static class Created {
       int id;
       UserDto.Request.Default user;
       String text;
@@ -44,8 +43,7 @@ public enum PostDto {
     ;
 
     @Data
-    public static class Default implements Id, Author, CreatedDate, Text, Image,
-        LikesNumber, BookmarksNumber, OriginalPost {
+    public static class Default {
       int id;
       UserDto.Response.Author author;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -56,51 +54,5 @@ public enum PostDto {
       int bookmarksNumber;
       PostDto.Response.Default originalPost;
     }
-  }
-
-  private interface Id {
-    int getId();
-  }
-
-  private interface Text {
-    String getText();
-  }
-
-  private interface Image {
-    String getImage();
-  }
-
-  private interface CreatedDate {
-    LocalDateTime getCreatedDate();
-  }
-
-  private interface Post {
-    PostDto.Request.Default getPost();
-  }
-
-  private interface User {
-    UserDto.Request.Default getUser();
-  }
-
-  private interface Author {
-    UserDto.Response.Author getAuthor();
-  }
-
-  private interface OriginalPostId {
-    @Nullable
-    Integer getOriginalPostId();
-  }
-
-  private interface OriginalPost {
-    @Nullable
-    PostDto.Response.Default getOriginalPost();
-  }
-
-  private interface LikesNumber {
-    int getLikesNumber();
-  }
-
-  private interface BookmarksNumber {
-    int getBookmarksNumber();
   }
 }

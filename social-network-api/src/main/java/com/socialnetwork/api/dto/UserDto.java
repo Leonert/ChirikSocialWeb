@@ -68,10 +68,12 @@ public enum UserDto {
       String profileImage;
       String profileBackgroundImage;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-      String createdDate;
+      LocalDateTime createdDate;
       String bio;
       String location;
       String website;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+      LocalDateTime birthDate;
       List<Post> posts;
       int followersCounter;
       int followedCounter;
