@@ -159,6 +159,53 @@ const EditProfileModal = () => {
               )}
             </Stack>
           </Box>
+          <Box
+            position="relative"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="120px"
+            width="120px"
+            marginTop="-9%"
+            borderRadius="100%"
+            overflow="hidden"
+            sx={{
+              border: (theme) => `4px solid ${theme.palette.background.paper}`,
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: () => (loadedAvatarPicture ? 'rgba(15,22,30, 0.3)' : 'rgba(15,22,30)'),
+              },
+            }}
+          >
+            {!!loadedAvatarPicture && <AvatarImage src={URL.createObjectURL(avatarBlob)} />}
+            <Stack direction="row" position="absolute">
+              <IconButton
+                component="label"
+                sx={{
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  zIndex: 1,
+                  height: '42px',
+                  width: '42px',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                  },
+                }}
+              >
+                <AddAPhotoIcon fontSize="small" />
+                <input
+                  value=""
+                  type="file"
+                  hidden
+                  onChange={(e) => {
+                    setLoadedAvatarPicture(e.target.files[0]);
+                  }}
+                />
+              </IconButton>
+            </Stack>
+          </Box>
           <TextField
             sx={{ mt: '20px', mb: '20px' }}
             fullWidth
