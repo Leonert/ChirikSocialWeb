@@ -5,21 +5,22 @@ import lombok.Data;
 import java.time.LocalDateTime;
 @Data
 public class MessageDto {
-  private String id;
+  private int id;
   private boolean read;
   private String message;
   private LocalDateTime timestamp;
+  private User sender;
 
   public boolean isRead() {
     return read;
   }
 
-  public String getId() {
+  public int getId() {
     return id;
   }
 
   public void setId(String id) {
-    this.id = id;
+    this.id = Integer.parseInt(id);
   }
 
   public void setMessage(String message) {

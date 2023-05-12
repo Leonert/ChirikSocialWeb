@@ -39,7 +39,8 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public MessageDto getMessageById(int id) {
-    Message message = messageRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Message not found with id: " + id));
+    Message message = messageRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Message not found with id: " + id));
     return modelMapper.map(message, MessageDto.class);
   }
 
@@ -47,7 +48,7 @@ public class MessageServiceImpl implements MessageService {
   public MessageDto updateMessage(MessageDto messageDto) {
     Message message = convertToMessage(messageDto);
     message = messageRepository.save(message);
-    return modelMapper.map(message, MessageDto.class);
+    return convertToMessageDto(message);
   }
 
   @Override
@@ -67,12 +68,13 @@ public class MessageServiceImpl implements MessageService {
     return modelMapper.map(messageDto, Message.class);
   }
 
-
+  @Override
   public MessageDto createMessage(MessageDto messageDto) {
     Message message = convertToMessage(messageDto);
-    messageRepository.save(message);
+    message = messageRepository.save(message);
     return convertToMessageDto(message);
   }
+
   @Override
   public void markAsRead(int id) {
     Message message = messageRepository.findById(id)
@@ -81,7 +83,7 @@ public class MessageServiceImpl implements MessageService {
     messageRepository.save(message);
   }
 
-  private MessageDto convertToMessageDto(Message message){
+  private MessageDto convertToMessageDto(Message message) {
     return modelMapper.map(message, MessageDto.class);
   }
 }

@@ -23,7 +23,7 @@ public class MessagesController {
     return ResponseEntity.ok(messageDto);
   }
 
-  @GetMapping("/messages")
+  @GetMapping("/")
   public ResponseEntity<List<MessageDto>> getAllMessages() {
     List<MessageDto> messageDtos = messageService.getAllMessages();
     return ResponseEntity.ok(messageDtos);
@@ -61,9 +61,5 @@ public class MessagesController {
   }
   private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
-  }
-
-  private interface Read {
-    boolean isRead();
   }
 }

@@ -33,7 +33,7 @@ public class Message {
   private LocalDateTime timestamp;
 
   @Column(name = "is_read")
-  private boolean isRead;
+  private boolean read;
 
   public Message() {
     this.date = LocalDateTime.now();

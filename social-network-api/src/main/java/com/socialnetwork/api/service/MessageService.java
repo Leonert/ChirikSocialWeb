@@ -12,5 +12,4 @@ public interface MessageService {
   void deleteMessage(int id);
   List<MessageDto> searchMessages(String keyword);
   void markAsRead(int id);
-
 }
