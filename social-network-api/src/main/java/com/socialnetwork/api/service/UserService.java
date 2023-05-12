@@ -128,16 +128,16 @@ public class UserService {
   public boolean followUnfollow(String username, String currentUserUsername) throws NoUserWithSuchCredentialsException {
     User user = findByUsername(username);
     User currentUser = findByUsername(currentUserUsername);
-    if (!isFollowed(user, currentUser)) {
-      followsRepository.save(new Follow(user, currentUser));
+    if (!isFollowed(currentUser, user)) {
+      followsRepository.save(new Follow(currentUser, user));
       return true;
     } else {
-      followsRepository.deleteById(new FollowPk(user.getId(), currentUser.getId()));
+      followsRepository.deleteById(new FollowPk(currentUser.getId(), user.getId()));
     }
     return false;
   }
 
-  public User getReferenceById(int id) throws NoUserWithSuchCredentialsException {
+  public User getReferenceById(int id) {
     return userRepository.getReferenceById(id);
   }
 }
