@@ -156,7 +156,7 @@ const Messages = () => {
           </Paper>
         </div>
       </Grid>
-      <Grid className={classes.grid} md={5} item>
+      <Grid className={classes.grid} md={6} item>
         {participant?.id === undefined ? (
           <div className={classes.chatContainer}>
             <Paper variant="outlined">
@@ -316,5 +316,4 @@ const Messages = () => {
     </>
   );
 };
-
 export default Messages;
