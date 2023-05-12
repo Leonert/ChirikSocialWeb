@@ -7,7 +7,6 @@ import lombok.Value;
 
 import java.time.LocalDateTime;
 @Data
-
 public class MessageDto {
   private int id;
   private boolean read;
