@@ -1,34 +1,48 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
 
 import { changePasswordModal } from '../../features/slices/settingSlice';
 import CloseButton from '../SideMenu/AddTweetModal/AddTweetForm/CloseButton/CloseButton';
 
 export default function PasswordChange() {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [err, setErr] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const passwordComparison = newPassword === confirmPassword;
-  const passwordMatch = { error: false };
-  const passwordLength = newPassword.length;
-  const dispatch = useDispatch();
-  const handelClickSave = () => {
-    if (!passwordComparison) {
-      setErrorMessage('Passwords do not match');
-      setErr(true);
-    } else if (passwordLength < 8) {
-      setErrorMessage('Password must be at least 8 characters long');
-      setErr(true);
-    } else {
-      setErrorMessage('');
+  const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme();
+  const primaryColor = theme.palette.text.secondary;
+  const secondaryColor = theme.palette.background.lightBlue;
+  const formik = useFormik({
+    initialValues: {
+      CurrentPassword: '',
+      NewPassword: '',
+      ConfirmPassword: '',
+    },
+    validationSchema: yup.object({
+      CurrentPassword: yup.string().required('Mandatory fields'),
+      NewPassword: yup
+        .string()
+        .matches(
+          /^(?=.*[A-Za-zА-Яа-яЁё])(?=.*\d)[A-Za-zА-Яа-яЁё\d]{8,}$/,
+          'Password must be at least 8 characters long, including letters and numbers'
+        )
+        .required('Mandatory fields'),
+      ConfirmPassword: yup
+        .string()
+        .oneOf([yup.ref('NewPassword'), null], 'Passwords must match')
+        .required('Mandatory fields'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
       dispatch(changePasswordModal(false));
-    }
-  };
+    },
+  });
+
+  const dispatch = useDispatch();
+
   const handelClickClose = () => {
     dispatch(changePasswordModal(false));
   };
@@ -36,58 +50,65 @@ export default function PasswordChange() {
   return (
     <Box
       sx={{
-        maxWidth: "300px",
+        maxWidth: '400px',
+        p: '20px 10px',
       }}
     >
       <CloseButton onClose={handelClickClose} />
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
+      <form onSubmit={formik.handleSubmit}>
         <TextField
-          id="current-password"
+          sx={{ margin: '20px 0 ' }}
+          id="CurrentPassword"
           label="Current Password"
           variant="outlined"
-          type="password"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
+          type={showPassword ? 'text' : 'password'}
+          fullWidth
+          value={formik.values.CurrentPassword}
+          onChange={formik.handleChange}
+          error={formik.touched.CurrentPassword && Boolean(formik.errors.CurrentPassword)}
+          helperText={formik.touched.CurrentPassword && formik.errors.CurrentPassword}
+          disabled={false}
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                sx={{ color: showPassword ? `${secondaryColor}` : `${primaryColor}` }}
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+              </IconButton>
+            ),
+          }}
         />
         <TextField
-          id="new-password"
+          sx={{ margin: '20px 0 ' }}
+          id="NewPassword"
           label="New password"
           variant="outlined"
-          type="password"
-          value={newPassword}
-          onChange={(e) => {
-            setNewPassword(e.target.value);
-            setErr(false);
-            setErrorMessage('');
-          }}
-          error={err}
+          type={showPassword ? 'text' : 'password'}
+          fullWidth
+          value={formik.values.NewPassword}
+          onChange={formik.handleChange}
+          error={formik.touched.NewPassword && Boolean(formik.errors.NewPassword)}
+          helperText={formik.touched.NewPassword && formik.errors.NewPassword}
         />
         <TextField
-          id="confirm-password"
+          sx={{ margin: '20px 0 ' }}
+          id="ConfirmPassword"
           label="Confirm password"
           variant="outlined"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            setErr(false);
-            setErrorMessage('');
-          }}
-          {...passwordMatch}
-          helperText={errorMessage}
-          error={err}
+          type={showPassword ? 'text' : 'password'}
+          fullWidth
+          value={formik.values.ConfirmPassword}
+          onChange={formik.handleChange}
+          error={formik.touched.ConfirmPassword && Boolean(formik.errors.ConfirmPassword)}
+          helperText={formik.touched.ConfirmPassword && formik.errors.ConfirmPassword}
         />
-        <Button variant="contained" onClick={handelClickSave}>
+        <Button variant="contained" type="submit">
           Save
         </Button>
-      </Box>
+      </form>
     </Box>
   );
 }
