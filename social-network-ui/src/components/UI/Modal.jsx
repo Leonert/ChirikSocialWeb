@@ -4,17 +4,17 @@ import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui
 import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
 
-const CustomModal = styled(MuiDialog)({
+const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {
-    backgroundColor: 'black',
+    backgroundColor: theme.palette.background.default,
     maxWidth: '600px',
     width: '100%',
     borderRadius: '8px',
     color: 'white',
   },
-});
+}));
 
-const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) => {
+const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx, headerActions }) => {
   return (
     <CustomModal PaperProps={{ sx }} open={open} onClose={onClose}>
       <>
@@ -23,7 +23,7 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) 
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
           {headerText ? (
-            <Typography sx={{ justifySelf: 'center' }}> {headerText}</Typography>
+            <Typography sx={{ justifySelf: 'center' }}>{headerText}</Typography>
           ) : (
             hasLogoIcon && (
               <TwitterIcon
@@ -31,6 +31,7 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx }) 
               />
             )
           )}
+          {headerActions}
         </DialogTitle>
         <DialogContent> {children}</DialogContent>
       </>

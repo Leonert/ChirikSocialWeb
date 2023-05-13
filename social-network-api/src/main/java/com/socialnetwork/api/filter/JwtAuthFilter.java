@@ -21,12 +21,10 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-
-  private static final String BEARER = "Bearer ";
   private final JwtTokenUtil jwtTokenUtil;
   private final JwtUserDetailsService jwtUserDetailsService;
   private final List<String> globalPaths =
-      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration"));
+      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -44,8 +42,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String username = null;
     String jwtToken = null;
 
-    if (authHeader != null && authHeader.startsWith(BEARER)) {
-      jwtToken = authHeader.substring(BEARER.length());
+    if (jwtTokenUtil.isTokenExists(authHeader)) {
+      jwtToken = authHeader.substring(JwtTokenUtil.BEARER.length());
       try {
         username = jwtTokenUtil.getUsernameFromToken(jwtToken);
       } catch (Exception e) {

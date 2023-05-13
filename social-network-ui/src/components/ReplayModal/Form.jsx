@@ -1,7 +1,4 @@
-import { Avatar } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import { Avatar, Button, CircularProgress, TextareaAutosize } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,7 +50,7 @@ function FormModal({ buttonName }) {
             <Avatar aria-label="recipe" alt={targetPost.name} src={targetPost.avatar}></Avatar>
             <Typography className={classes.itemNick}>@{targetPost.nickname}</Typography>
           </div>
-          <Typography className={classes.item}>Send replay</Typography>
+          <Typography className={classes.item}>Send replay @{targetPost.nickname}</Typography>
           <div className={classes.content}>
             <Avatar />
             <Typography className={classes.itemNick}>@{userName}</Typography>
@@ -64,7 +61,6 @@ function FormModal({ buttonName }) {
               className={classes.contentTextarea}
               placeholder={'Enter replay...'}
               value={text}
-              maxRows={6}
             />
           </div>
           <div className={classes.footer}>
@@ -78,7 +74,9 @@ function FormModal({ buttonName }) {
             <div className={classes.footerAddForm}>
               {text && (
                 <>
-                  <span id={'textCount'}>{textCount}</span>
+                  <span id={'textCount'} className={classes.textCount}>
+                    {textCount}
+                  </span>
                   <div className={classes.footerAddFormCircleProgress}>
                     <CircularProgress
                       variant="determinate"
@@ -88,7 +86,7 @@ function FormModal({ buttonName }) {
                       style={text.length >= MAX_LENGTH ? { color: 'red' } : undefined}
                     />
                     <CircularProgress
-                      style={{ color: 'rgba(0, 0, 0, 0.1)' }}
+                      style={{ color: 'rgba(226, 216, 216, 0.1)' }}
                       variant="determinate"
                       size={20}
                       thickness={5}

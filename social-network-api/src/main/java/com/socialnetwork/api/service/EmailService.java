@@ -1,13 +1,11 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.model.ConfirmationToken;
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.auth.ConfirmationToken;
+import com.socialnetwork.api.models.base.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,19 +24,19 @@ public class EmailService {
 
   @Async
   public void sendEmail(User user, ConfirmationToken token) {
-    MimeMessagePreparator mailMessage = mimeMessage -> {
-      MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-      try {
-        message.setFrom(emailAddressFrom, "FP3 Social Network");
-        message.addTo(user.getEmailAddress());
-        message.setSubject("Complete Registration");
-        message.setText("To confirm your account, please click here: "
-            + confirmAccountUrl + token.getConfirmationToken());
-      } catch (Exception e) {
-        throw new Exception("Unexpected error");
-      }
-    };
-
-    javaMailSender.send(mailMessage);
+//    MimeMessagePreparator mailMessage = mimeMessage -> {
+//      MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+//      try {
+//        message.setFrom(emailAddressFrom, "FP3 Social Network");
+//        message.addTo(user.getEmailAddress());
+//        message.setSubject("Complete Registration");
+//        message.setText("To confirm your account, please click here: "
+//            + confirmAccountUrl + token.getConfirmationToken());
+//      } catch (Exception e) {
+//        throw new Exception("Unexpected error");
+//      }
+//    };
+//
+//    javaMailSender.send(mailMessage);
   }
 }

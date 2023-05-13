@@ -24,7 +24,8 @@ export default function Post(props) {
   return (
     <Card className={classes.Page}>
       <CardHeader
-        className={classes.pageItem}
+        className={classes.pageItem }
+
         avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
         action={
           <Tooltip title="More">
@@ -56,7 +57,7 @@ export default function Post(props) {
           justifyContent: 'space-around',
         }}
       >
-        <Tooltip title="Replay">
+        <Tooltip title="Reply">
           <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
             <Badge badgeContent={props.replay} color="primary">
               <ChatBubbleOutlineIcon />

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createTheme } from '@material-ui/core/styles';
 import { deepmerge } from '@mui/utils';
 
@@ -172,6 +171,8 @@ export const defaultTheme = createTheme(
         background: {
           default: 'rgb(21, 32, 43)',
           paper: 'rgb(21, 32, 43)',
+          lightBlue: 'rgb(63, 81, 181)',
+          lightDefault: 'rgb(19, 36, 51)',
         },
         secondary: {
           light: 'rgb(29, 155, 240, 0.1)',
@@ -236,7 +237,9 @@ export const defaultTheme = createTheme(
         },
         MuiButton: {
           contained: {
-            color: 'rgb(255, 255, 255)',
+
+            color: 'rgb(255, 255, 255) !important',
+
           },
         },
         MuiBackdrop: {
