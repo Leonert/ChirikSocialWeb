@@ -7,15 +7,15 @@ import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
@@ -38,9 +38,7 @@ public class MessagesController {
   @GetMapping()
   public ResponseEntity<List<MessageDto>> getAllMessages() {
     List<Message> messages = messageRepository.findAll();
-    List<MessageDto> messageDtos = messages.stream()
-            .map(message -> modelMapper.map(message, MessageDto.class))
-            .collect(Collectors.toList());
+    List<MessageDto> messageDtos = messages.stream().map(message -> modelMapper.map(message, MessageDto.class)).collect(Collectors.toList());
 
     // Журналирование списка messageDtos
     messageDtos.forEach(messageDto -> {
@@ -54,8 +52,7 @@ public class MessagesController {
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
-    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId()))
-            .body(createdMessageDto);
+    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
   }
 
   @PutMapping("/{id}")
