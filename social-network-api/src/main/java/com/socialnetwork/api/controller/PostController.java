@@ -1,4 +1,5 @@
 package com.socialnetwork.api.controller;
+
 import com.socialnetwork.api.dto.PostDto;
 import com.socialnetwork.api.exception.AccessDeniedException;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
