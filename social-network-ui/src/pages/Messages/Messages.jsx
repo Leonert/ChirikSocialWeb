@@ -50,12 +50,8 @@ const Messages = () => {
   };
 
   const handleListItemClick = (chat) => {
-
     setParticipant(chat);
     setChat(chat);
-
-    console.log(chat)
-
   };
 
   const onSendMessage = async () => {
@@ -67,11 +63,9 @@ const Messages = () => {
         setText('');
 
       } catch (error) {
-        console.error('Error sending message:', error);
       }
     }
   };
-
 
   const getAllMessages = async () => {
     try {
@@ -90,9 +84,7 @@ const Messages = () => {
       try {
         const messages = await getAllMessages();
         setMessages(messages);
-        console.log(messages);
       } catch (error) {
-        console.error('Error getting all messages:', error);
       }
     }
 

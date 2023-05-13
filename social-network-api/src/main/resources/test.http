@@ -52,7 +52,7 @@ Content-Type: application/json
 GET http://localhost:8080/api/messages
 
 ###
-DELETE http://localhost:8080/api/messages/100
+DELETE http://localhost:8080/api/messages/101
 
 ###
 PUT http://localhost:8080/api/messages/101/read

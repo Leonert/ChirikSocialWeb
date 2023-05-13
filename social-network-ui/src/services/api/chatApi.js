@@ -7,7 +7,7 @@ export const ChatApi = {
         try {
             await axios.post(`${API_URL}/messages/create`, message);
         } catch (error) {
-            console.error('Error sending message:', error);
+
         }
     },
 
@@ -17,7 +17,7 @@ export const ChatApi = {
 
             return response.data;
         } catch (error) {
-            console.error('Error getting user chats:', error);
+
 
             return [];
         }
@@ -29,7 +29,7 @@ export const ChatApi = {
 
             return response.data;
         } catch (error) {
-            console.error('Error creating chat:', error);
+
 
             return null;
         }
@@ -41,7 +41,7 @@ export const ChatApi = {
 
             return response.data;
         } catch (error) {
-            console.error('Error getting all messages:', error);
+
 
             return [];
         }
@@ -53,7 +53,7 @@ export const ChatApi = {
 
             return response.data;
         } catch (error) {
-            console.error('Error getting chat messages:', error);
+
 
             return [];
         }
@@ -63,7 +63,7 @@ export const ChatApi = {
         try {
             await axios.put(`${API_URL}/messages/${chatId}/read`);
         } catch (error) {
-            console.error('Error marking chat messages as read:', error);
+
         }
     },
 
@@ -73,7 +73,7 @@ export const ChatApi = {
 
             return response.data;
         } catch (error) {
-            console.error('Error adding message:', error);
+
 
             return null;
         }
@@ -85,7 +85,7 @@ export const ChatApi = {
 
             return response.data;
         } catch (error) {
-            console.error('Error adding message with tweet:', error);
+
 
             return null;
         }
