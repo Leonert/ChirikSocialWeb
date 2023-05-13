@@ -2,7 +2,6 @@ package com.socialnetwork.api.models.base;
 
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Like;
-import com.socialnetwork.api.models.additional.Reply;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
 
@@ -54,12 +53,6 @@ public class Post {
 
   @OneToMany(mappedBy = "bookmarkedPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bookmark> bookmarks;
-
-  @OneToMany(mappedBy = "reply")
-  private List<Reply> replies;
-
-  @OneToOne(mappedBy = "replied")
-  private Reply repliedTo;
 
   public Post() {
   }

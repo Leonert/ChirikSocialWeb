@@ -88,7 +88,7 @@ public class PostController {
 
   @PostMapping()
   public ResponseEntity<Void> addPost(@RequestBody PostDto.Request.Created postDto, HttpServletRequest request)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+      throws NoPostWithSuchIdException {
     User user = userService.getReferenceById(postDto.getUser().getId());
     Post post = convertToPost(postDto, user);
 

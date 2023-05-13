@@ -98,13 +98,7 @@ public class UserService {
     return findByUsername(queryUsername)
         .getFollowed().stream().map(Follow::getFollowedUser)
         .skip(page * usersForPage).limit(usersForPage)
-        .peek(f -> {
-          if (queryUsername.equals(currentUserUsername)) {
-            f.setCurrUserFollower(true);
-          } else {
-            f.setCurrUserFollower(isFollowed(currentUser, f));
-          }
-        }).toList();
+        .peek(f -> f.setCurrUserFollower(queryUsername.equals(currentUserUsername) || isFollowed(currentUser, f))).toList();
   }
 
   public List<User> getListForConnectPage(String currentUserUsername, int page,

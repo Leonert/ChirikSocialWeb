@@ -1,7 +1,6 @@
 package com.socialnetwork.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.socialnetwork.api.models.base.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -79,7 +78,6 @@ public enum UserDto {
       int followedCounter;
       boolean isCurrUserFollower;
     }
-
     @Data
     public static class Listing {
       int id;
@@ -89,11 +87,16 @@ public enum UserDto {
       String bio;
       boolean isCurrUserFollower;
     }
-
+    @Data
+    public static class Author {
+      int id;
+      String username;
+      String name;
+      String profileImage;
+    }
     public static class Default {
       String username;
-      String firstName;
-      String lastName;
+      String name;
       String emailAddress;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
       LocalDateTime createdDate;
@@ -101,20 +104,13 @@ public enum UserDto {
       LocalDateTime birthDate;
       String profileBackgroundImage;
       String profileImage;
-    }
 
+    }
     @Data
     public static class AccountData {
       UserDto.Response.Default user;
       String jwt;
-    }
 
-    @Data
-    public static class Author {
-      String username;
-      String firstName;
-      String lastName;
-      String profileImage;
     }
   }
 }
