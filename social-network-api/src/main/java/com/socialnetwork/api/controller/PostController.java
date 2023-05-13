@@ -69,7 +69,8 @@ public class PostController {
   }
 
   @GetMapping()
-  public List<PostDto.Response.Default> getPosts(@RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
+  public List<PostDto.Response.Default> getPosts(
+          @RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
     int pageNum = page.orElse(PAGE_NUMBER_DEFAULT);
     int postsNum = posts.orElse(POSTS_NUMBER_DEFAULT);
 

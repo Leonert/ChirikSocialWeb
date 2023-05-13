@@ -38,7 +38,8 @@ public class MessagesController {
   @GetMapping()
   public ResponseEntity<List<MessageDto>> getAllMessages() {
     List<Message> messages = messageRepository.findAll();
-    List<MessageDto> messageDtos = messages.stream().map(message -> modelMapper.map(message, MessageDto.class)).collect(Collectors.toList());
+    List<MessageDto> messageDtos = messages.stream().map(message ->
+            modelMapper.map(message, MessageDto.class)).collect(Collectors.toList());
 
     // Журналирование списка messageDtos
     messageDtos.forEach(messageDto -> {
