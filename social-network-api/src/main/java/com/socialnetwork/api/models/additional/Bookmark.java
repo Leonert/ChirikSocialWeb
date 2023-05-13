@@ -5,7 +5,14 @@ import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+
+
 
 @Entity
 @Data
