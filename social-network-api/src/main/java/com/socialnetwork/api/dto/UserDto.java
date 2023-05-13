@@ -1,7 +1,6 @@
 package com.socialnetwork.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.socialnetwork.api.models.base.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;

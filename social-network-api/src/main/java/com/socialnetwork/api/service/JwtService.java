@@ -16,17 +16,17 @@ public class JwtService {
   public void verifyById(String authHeader, int userId) throws AccessDeniedException {
     isTokenExists(authHeader);
     userService
-        .getByUsernameAndId(
-            jwtTokenUtil.getUsernameFromToken(authHeader.substring(JwtTokenUtil.BEARER.length())),
-            userId)
-        .orElseThrow(AccessDeniedException::new);
+            .getByUsernameAndId(
+                    jwtTokenUtil.getUsernameFromToken(authHeader.substring(JwtTokenUtil.BEARER.length())),
+                    userId)
+            .orElseThrow(AccessDeniedException::new);
   }
 
   public void verifyByUsername(String authHeader, String username) throws AccessDeniedException {
     isTokenExists(authHeader);
     if (!Objects.equals(
-        jwtTokenUtil.getUsernameFromToken(authHeader.substring(JwtTokenUtil.BEARER.length())),
-        username)) {
+            jwtTokenUtil.getUsernameFromToken(authHeader.substring(JwtTokenUtil.BEARER.length())),
+            username)) {
       throw new AccessDeniedException();
     }
   }

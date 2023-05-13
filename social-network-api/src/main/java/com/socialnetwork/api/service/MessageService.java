@@ -10,10 +10,15 @@ public interface MessageService {
 //  List<MessageDto> searchMessagesByUsername(String username);
 
   List<MessageDto> getAllMessages();
+
   MessageDto createMessage(MessageDto messageDto);
+
   MessageDto updateMessage(MessageDto messageDto);
+
   void deleteMessage(int id);
+
   List<MessageDto> searchMessages(String keyword);
+
   void markAsRead(int id);
 
 }

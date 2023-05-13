@@ -64,7 +64,7 @@ public class UserService {
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
     Optional<ConfirmationToken> optionalToken =
-        confirmationTokenService.findByConfirmationToken(confirmationToken);
+            confirmationTokenService.findByConfirmationToken(confirmationToken);
 
     if (optionalToken.isEmpty()) {
       throw new EmailVerificationException("Error: Couldn't verify email");
@@ -85,33 +85,33 @@ public class UserService {
                                  int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
-        .getFollowers().stream().map(Follow::getFollowerUser)
-        // 1  10    1*10=10           2*10=20
-        .skip(page * usersForPage).limit(usersForPage)
-        .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
-        .toList();
+            .getFollowers().stream().map(Follow::getFollowerUser)
+            // 1  10    1*10=10           2*10=20
+            .skip(page * usersForPage).limit(usersForPage)
+            .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
+            .toList();
   }
 
   public List<User> getFollowed(String queryUsername, String currentUserUsername,
                                 int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
-        .getFollowed().stream().map(Follow::getFollowedUser)
-        .skip(page * usersForPage).limit(usersForPage)
-        .peek(f -> {
-          if (queryUsername.equals(currentUserUsername)) {
-            f.setCurrUserFollower(true);
-          } else {
-            f.setCurrUserFollower(isFollowed(currentUser, f));
-          }
-        }).toList();
+            .getFollowed().stream().map(Follow::getFollowedUser)
+            .skip(page * usersForPage).limit(usersForPage)
+            .peek(f -> {
+              if (queryUsername.equals(currentUserUsername)) {
+                f.setCurrUserFollower(true);
+              } else {
+                f.setCurrUserFollower(isFollowed(currentUser, f));
+              }
+            }).toList();
   }
 
   public List<User> getListForConnectPage(String currentUserUsername, int page,
                                           int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return userRepository.findAll(PageRequest.of(page, usersForPage))
-        .stream().filter(u -> !isFollowed(currentUser, u)).toList();
+            .stream().filter(u -> !isFollowed(currentUser, u)).toList();
   }
 
   public boolean isFollowed(User currentUser, User user) {

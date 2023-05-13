@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDateTime;
+
 @Data
 public class MessageDto {
   private int id;
@@ -13,6 +14,7 @@ public class MessageDto {
   private String message;
   private LocalDateTime timestamp;
   private String username;
+
   public enum Request {
     ;
 

@@ -29,9 +29,9 @@ public class BookmarkService {
 
   public List<Integer> getUsersBookmarksIds(Post post) {
     return bookmarkRepository.findAllByBookmarkedPost(post)
-        .stream()
-        .map(bookmark -> bookmark.getBookmarkedBy().getId())
-        .toList();
+            .stream()
+            .map(bookmark -> bookmark.getBookmarkedBy().getId())
+            .toList();
   }
 
   public int countPostBookmarks(Post post) {

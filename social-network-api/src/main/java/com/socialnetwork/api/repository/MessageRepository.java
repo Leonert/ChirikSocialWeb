@@ -1,8 +1,5 @@
 package com.socialnetwork.api.repository;
 
-import java.util.List;
-
-import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.models.base.Message;
 import com.socialnetwork.api.models.base.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
@@ -20,6 +18,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
   List<Message> findBySender(User sender);
 
   List<Message> findByMessageContainingIgnoreCase(String keyword);
+
   List<Message> findAll();
 
   @Transactional

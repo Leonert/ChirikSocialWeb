@@ -41,8 +41,7 @@ Content-Type: application/json
   },
   "recipient": {
     "id": 2,
-    "username":"denіys1"
-
+    "username": "denіys1"
   },
   "message": "Hello, Worldмчсмчясмчям!",
   "timestamp": "2023-05-10T10:00:00",

@@ -1,7 +1,5 @@
 package com.socialnetwork.api.configs;
 
-import com.socialnetwork.api.security.JwtTokenUtil;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

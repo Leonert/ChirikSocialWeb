@@ -56,11 +56,11 @@ public class JwtTokenUtil {
     Date expiration = new Date(now.getTime() + (isToRemember ? expirationRemember : expirationDefault));
 
     return Jwts.builder()
-        .setSubject(username)
-        .setIssuedAt(now)
-        .setExpiration(expiration)
-        .signWith(SignatureAlgorithm.HS512, jwtSecret)
-        .compact();
+            .setSubject(username)
+            .setIssuedAt(now)
+            .setExpiration(expiration)
+            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .compact();
   }
 
   public Boolean isTokenValid(String token, UserDetails userDetails) {

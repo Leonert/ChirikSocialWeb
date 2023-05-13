@@ -2,14 +2,15 @@ package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.models.base.Message;
-
 import com.socialnetwork.api.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -27,6 +28,7 @@ public class MessageServiceImpl implements MessageService {
             })
             .collect(Collectors.toList());
   }
+
   @Override
   public MessageDto getMessageById(int id) {
     Message message = messageRepository.findById(id)
@@ -45,6 +47,7 @@ public class MessageServiceImpl implements MessageService {
   public void deleteMessage(int id) {
     messageRepository.deleteById(id);
   }
+
   //  @Override
 //  public MessageDto createMessage(MessageDto messageDto) {
 //    Message message = convertToMessage(messageDto);

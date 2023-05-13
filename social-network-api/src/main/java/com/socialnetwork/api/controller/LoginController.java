@@ -2,7 +2,6 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.UserDto;
 import com.socialnetwork.api.exception.AccessDeniedException;
-import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
