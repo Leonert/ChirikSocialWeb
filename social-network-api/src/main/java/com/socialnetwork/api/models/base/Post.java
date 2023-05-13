@@ -10,15 +10,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.GenerationType;
 import javax.persistence.Column;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Entity
 @Table(name = "posts")
