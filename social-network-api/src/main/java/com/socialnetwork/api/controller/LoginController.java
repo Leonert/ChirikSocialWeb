@@ -6,6 +6,7 @@ import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
+import com.socialnetwork.api.service.NotificationService;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,6 +30,7 @@ public class LoginController {
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;
   private final ModelMapper modelMapper;
+  private final NotificationService notificationService;
 
 
   @PostMapping("/authenticate")
@@ -48,6 +50,8 @@ public class LoginController {
     UserDto.Response.AccountData userDtoResponse = new UserDto.Response.AccountData();
     userDtoResponse.setUser(convertToUserDto(user));
     userDtoResponse.setJwt(jwt);
+
+    notificationService.saveLogin(user);
 
     return ResponseEntity.ok(userDtoResponse);
   }

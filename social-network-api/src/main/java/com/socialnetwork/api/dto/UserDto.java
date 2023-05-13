@@ -37,11 +37,11 @@ public enum UserDto {
       String website;
     }
 
+    @Data
     public static class Registration {
       String username;
       String emailAddress;
-      String firstName;
-      String lastName;
+      String name;
       String password;
       LocalDateTime birthDate;
     }
@@ -53,7 +53,6 @@ public enum UserDto {
       Boolean rememberMe;
     }
   }
-
 
   public enum Response {
     ;
@@ -78,6 +77,7 @@ public enum UserDto {
       int followedCounter;
       boolean isCurrUserFollower;
     }
+
     @Data
     public static class Listing {
       int id;
@@ -87,6 +87,7 @@ public enum UserDto {
       String bio;
       boolean isCurrUserFollower;
     }
+
     @Data
     public static class Author {
       int id;
@@ -94,6 +95,8 @@ public enum UserDto {
       String name;
       String profileImage;
     }
+
+    @Data
     public static class Default {
       String username;
       String name;
@@ -106,6 +109,7 @@ public enum UserDto {
       String profileImage;
 
     }
+
     @Data
     public static class AccountData {
       UserDto.Response.Default user;

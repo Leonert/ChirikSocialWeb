@@ -17,12 +17,6 @@ public enum PostDto {
     }
 
     @Data
-    public static class Action {
-      UserDto.Request.Default user;
-      PostDto.Request.Default post;
-    }
-
-    @Data
     public static class Editable {
       int id;
       String text;

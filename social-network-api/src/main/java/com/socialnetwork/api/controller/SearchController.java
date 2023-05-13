@@ -29,7 +29,8 @@ public class SearchController {
   public List<PostDto.Response.Default> searchPosts(@RequestParam("q") String query,
                                    @RequestParam("p") Optional<Integer> page,
                                    @RequestParam("n") Optional<Integer> postsPerPage) {
-    return mapPostsForListing(searchService.searchPosts(query, page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
+    return mapPostsForListing(searchService.searchPosts(query, page.orElse(PAGE_NUMBER),
+        postsPerPage.orElse(RESULTS_PER_PAGE)));
   }
 
   @GetMapping("/users")
@@ -37,7 +38,8 @@ public class SearchController {
                                                     @RequestParam("p") Optional<Integer> page,
                                                     @RequestParam("n") Optional<Integer> usersPerPage,
                                                     HttpServletRequest request) { //TODO
-    return mapUsersForListing(searchService.searchUsers(query, page.orElse(PAGE_NUMBER), usersPerPage.orElse(RESULTS_PER_PAGE)));
+    return mapUsersForListing(searchService.searchUsers(query, page.orElse(PAGE_NUMBER),
+        usersPerPage.orElse(RESULTS_PER_PAGE)));
   }
 
   private List<UserDto.Response.Listing> mapUsersForListing(List<User> users) {

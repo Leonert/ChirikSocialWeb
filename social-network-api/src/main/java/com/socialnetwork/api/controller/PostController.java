@@ -99,61 +99,22 @@ public class PostController {
   }
 
   @PostMapping("/bookmark")
-  public ResponseEntity<Integer> saveBookmark(@RequestBody PostDto.Request.Action postDto, HttpServletRequest request)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
-    int userId = postDto.getUser().getId();
-    int postId = postDto.getPost().getId();
-
-    if (!userService.existsById(userId)) {
-      throw new NoUserWithSuchCredentialsException();
-    }
-
-    if (!postService.existsById(postId)) {
-      throw new NoPostWithSuchIdException();
-    }
-
+  public ResponseEntity<Integer> bookmarkUnbookmark(@RequestBody PostDto.Request.Default postDto, HttpServletRequest request)
+      throws NoUserWithSuchCredentialsException {
     //      jwtService.verifyById(request.getHeader(AUTHORIZATION_HEADER), userId);
-
-    boolean bookmarkExists = bookmarkService.existsByIds(userId, postId);
-
-    if (bookmarkExists) {
-      bookmarkService.delete(userId, postId);
-    } else {
-      bookmarkService.save(userId, postId);
-    }
-
     return ResponseEntity
-        .status(bookmarkExists ? HttpStatus.OK : HttpStatus.CREATED)
-        .body(bookmarkService.countPostBookmarks(convertToPost(postDto.getPost())));
+        .status(bookmarkService.bookmarkUnBookmark(postDto.getId(), request.getHeader(AUTHORIZATION_HEADER))
+            ? HttpStatus.OK : HttpStatus.CREATED).body(bookmarkService.countPostBookmarks(convertToPost(postDto)));
   }
 
   @PostMapping("/like")
-  public ResponseEntity<Integer> saveLike(@RequestBody PostDto.Request.Action postDto, HttpServletRequest request)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
-    int userId = postDto.getUser().getId();
-    int postId = postDto.getPost().getId();
-
-    if (!userService.existsById(userId)) {
-      throw new NoUserWithSuchCredentialsException();
-    }
-
-    if (!postService.existsById(postId)) {
-      throw new NoPostWithSuchIdException();
-    }
-
+  public ResponseEntity<Integer> saveLike(@RequestBody PostDto.Request.Default postDto, HttpServletRequest request)
+      throws NoUserWithSuchCredentialsException {
     //      jwtService.verifyById(request.getHeader(AUTHORIZATION_HEADER), userId);
-
-    boolean likeExists = likeService.existsByIds(userId, postId);
-
-    if (likeExists) {
-      likeService.delete(userId, postId);
-    } else {
-      likeService.save(userId, postId);
-    }
-
     return ResponseEntity
-        .status(likeExists ? HttpStatus.OK : HttpStatus.CREATED)
-        .body(likeService.countPostLikes(convertToPost(postDto.getPost())));
+        .status(likeService.likeUnlike(userService.findByUsername(request.getHeader(AUTHORIZATION_HEADER)).getId(),
+            postDto.getId()) ? HttpStatus.CREATED : HttpStatus.OK)
+        .body(likeService.countPostLikes(convertToPost(postDto)));
   }
 
   private Post convertToPost(PostDto.Request.Created postDto, User user)

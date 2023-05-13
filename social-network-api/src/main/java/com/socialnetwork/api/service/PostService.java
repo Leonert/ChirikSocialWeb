@@ -18,11 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
   private final PostRepository postRepository;
+  private final NotificationService notificationService;
   private final ModelMapper modelMapper;
 
   public void save(Post post) {
     post.setCreatedDate(LocalDateTime.now());
     postRepository.save(post);
+    notificationService.saveReplyRetweet(post);
   }
 
   public List<Post> getPosts(int page, int postsNumber) {
