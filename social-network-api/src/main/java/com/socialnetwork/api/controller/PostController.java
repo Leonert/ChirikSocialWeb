@@ -59,7 +59,8 @@ public class PostController {
   }
 
   @PatchMapping()
-  public ResponseEntity<Void> editPost(@RequestBody PostDto.Request.Editable postDto) throws NoPostWithSuchIdException {
+  public ResponseEntity<Void>
+  editPost(@RequestBody PostDto.Request.Editable postDto) throws NoPostWithSuchIdException {
     if (!postService.existsById(postDto.getId())) {
       throw new NoPostWithSuchIdException();
     }
@@ -69,7 +70,8 @@ public class PostController {
   }
 
   @GetMapping()
-  public List<PostDto.Response.Default> getPosts(@RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
+  public List<PostDto.Response.Default>
+  getPosts(@RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
     int pageNum = page.orElse(PAGE_NUMBER_DEFAULT);
     int postsNum = posts.orElse(POSTS_NUMBER_DEFAULT);
 
@@ -83,7 +85,9 @@ public class PostController {
   }
 
   @PostMapping()
-  public ResponseEntity<Void> addPost(@RequestBody PostDto.Request.Created postDto, HttpServletRequest request) throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+  public ResponseEntity<Void> addPost
+          (@RequestBody PostDto.Request.Created postDto, HttpServletRequest request)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     User user = userService.getReferenceById(postDto.getUser().getId());
     Post post = convertToPost(postDto, user);
 
@@ -94,7 +98,9 @@ public class PostController {
   }
 
   @PostMapping("/bookmark")
-  public ResponseEntity<Integer> saveBookmark(@RequestBody PostDto.Request.Action postDto, HttpServletRequest request) throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+  public ResponseEntity<Integer> saveBookmark
+          (@RequestBody PostDto.Request.Action postDto, HttpServletRequest request)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int userId = postDto.getUser().getId();
     int postId = postDto.getPost().getId();
 
@@ -116,11 +122,15 @@ public class PostController {
       bookmarkService.save(userId, postId);
     }
 
-    return ResponseEntity.status(bookmarkExists ? HttpStatus.OK : HttpStatus.CREATED).body(bookmarkService.countPostBookmarks(convertToPost(postDto.getPost())));
+    return ResponseEntity.status
+            (bookmarkExists ? HttpStatus.OK : HttpStatus.CREATED)
+            .body(bookmarkService.countPostBookmarks(convertToPost(postDto.getPost())));
   }
 
   @PostMapping("/like")
-  public ResponseEntity<Integer> saveLike(@RequestBody PostDto.Request.Action postDto, HttpServletRequest request) throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
+  public ResponseEntity<Integer>
+  saveLike(@RequestBody PostDto.Request.Action postDto, HttpServletRequest request)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
     int userId = postDto.getUser().getId();
     int postId = postDto.getPost().getId();
 
@@ -142,7 +152,9 @@ public class PostController {
       likeService.save(userId, postId);
     }
 
-    return ResponseEntity.status(likeExists ? HttpStatus.OK : HttpStatus.CREATED).body(likeService.countPostLikes(convertToPost(postDto.getPost())));
+    return ResponseEntity.status
+            (likeExists ? HttpStatus.OK : HttpStatus.CREATED)
+            .body(likeService.countPostLikes(convertToPost(postDto.getPost())));
   }
 
   private Post convertToPost(PostDto.Request.Created postDto, User user) throws NoPostWithSuchIdException {
