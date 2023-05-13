@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static com.socialnetwork.api.controller.UserController.AUTHORIZATION_HEADER;
+import static com.socialnetwork.api.util.Const.Auth.AUTHORIZATION_HEADER;
 
 @RestController
 @RequestMapping("/api/notifications")

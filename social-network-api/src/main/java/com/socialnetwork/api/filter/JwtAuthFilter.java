@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.socialnetwork.api.util.Const.Auth.BEARER;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -43,7 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String jwtToken = null;
 
     if (jwtTokenUtil.isTokenExists(authHeader)) {
-      jwtToken = authHeader.substring(JwtTokenUtil.BEARER.length());
+      jwtToken = authHeader.substring(BEARER.length());
       try {
         username = jwtTokenUtil.getUsernameFromToken(jwtToken);
       } catch (Exception e) {

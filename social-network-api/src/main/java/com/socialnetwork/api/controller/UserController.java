@@ -25,13 +25,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import static com.socialnetwork.api.util.Const.Auth.AUTHORIZATION_HEADER;
+import static com.socialnetwork.api.util.Const.Response.PAGE_NUMBER_DEFAULT;
+import static com.socialnetwork.api.util.Const.Response.RESULTS_PER_PAGE_DEFAULT;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-  static final int PAGE_NUMBER = 0;
-  static final int RESULTS_PER_PAGE = 10;
-  static final String AUTHORIZATION_HEADER = "Authorization";
   private final UserService userService;
   private final ModelMapper modelMapper;
   private final JwtTokenUtil jwtTokenUtil;
@@ -50,7 +51,7 @@ public class UserController {
                                                      HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return mapForListing(userService.getFollowers(userDto.getUsername(),
         jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
-        page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
+        page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("followed")
@@ -60,7 +61,7 @@ public class UserController {
                                                     HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return mapForListing(userService.getFollowed(userDto.getUsername(),
         jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
-        page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
+        page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("connect")
@@ -69,7 +70,7 @@ public class UserController {
                                                    HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return mapForListing(
         userService.getListForConnectPage(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)),
-        page.orElse(PAGE_NUMBER), postsPerPage.orElse(RESULTS_PER_PAGE)));
+        page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @PatchMapping("p")

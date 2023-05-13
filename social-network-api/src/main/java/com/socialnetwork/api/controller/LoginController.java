@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.socialnetwork.api.util.Const.Auth.CONFIRMATION_REQUIRED;
+import static com.socialnetwork.api.util.Const.Auth.WRONG_PASSWORD;
+
 @RestController
 @RequestMapping("/api/login")
 @RequiredArgsConstructor
 public class LoginController {
 
-  private static final String NO_SUCH_EMAIL = "User with such email doesnt`t exist.";
-  private static final String WRONG_PASSWORD = "You entered an incorrect password. Check the password.";
-  private static final String CONFIRMATION_REQUIRED = "The account exists but needs to be activated.";
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;

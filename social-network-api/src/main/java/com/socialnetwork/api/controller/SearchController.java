@@ -16,12 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import static com.socialnetwork.api.util.Const.Response.PAGE_NUMBER_DEFAULT;
+import static com.socialnetwork.api.util.Const.Response.RESULTS_PER_PAGE_DEFAULT;
+
 @RestController
 @RequestMapping("/api/search")
 @AllArgsConstructor
 public class SearchController {
-  static final int PAGE_NUMBER = 0;
-  static final int RESULTS_PER_PAGE = 10;
   private final SearchService searchService;
   private final ModelMapper modelMapper;
 
@@ -29,8 +30,8 @@ public class SearchController {
   public List<PostDto.Response.Default> searchPosts(@RequestParam("q") String query,
                                    @RequestParam("p") Optional<Integer> page,
                                    @RequestParam("n") Optional<Integer> postsPerPage) {
-    return mapPostsForListing(searchService.searchPosts(query, page.orElse(PAGE_NUMBER),
-        postsPerPage.orElse(RESULTS_PER_PAGE)));
+    return mapPostsForListing(searchService.searchPosts(query, page.orElse(PAGE_NUMBER_DEFAULT),
+        postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("/users")
@@ -38,8 +39,8 @@ public class SearchController {
                                                     @RequestParam("p") Optional<Integer> page,
                                                     @RequestParam("n") Optional<Integer> usersPerPage,
                                                     HttpServletRequest request) { //TODO
-    return mapUsersForListing(searchService.searchUsers(query, page.orElse(PAGE_NUMBER),
-        usersPerPage.orElse(RESULTS_PER_PAGE)));
+    return mapUsersForListing(searchService.searchUsers(query, page.orElse(PAGE_NUMBER_DEFAULT),
+        usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   private List<UserDto.Response.Listing> mapUsersForListing(List<User> users) {

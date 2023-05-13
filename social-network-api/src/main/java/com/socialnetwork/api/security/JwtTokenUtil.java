@@ -11,10 +11,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.function.Function;
 
+import static com.socialnetwork.api.util.Const.Auth.BEARER;
+
 @Component
 @PropertySource("classpath:application.properties")
 public class JwtTokenUtil {
-  public static final String BEARER = "Bearer ";
 
   @Value("${jwt.secret}")
   private String jwtSecret;

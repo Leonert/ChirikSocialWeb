@@ -1,7 +1,6 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.PostDto;
-import com.socialnetwork.api.exception.AccessDeniedException;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.base.Post;
@@ -29,13 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import static com.socialnetwork.api.util.Const.Auth.AUTHORIZATION_HEADER;
+import static com.socialnetwork.api.util.Const.Response.PAGE_NUMBER_DEFAULT;
+import static com.socialnetwork.api.util.Const.Response.POSTS_PER_PAGE_DEFAULT;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController {
-  private static final String AUTHORIZATION_HEADER = "Authorization";
-  private static final Integer PAGE_NUMBER_DEFAULT = 0;
-  private static final Integer POSTS_NUMBER_DEFAULT = 3;
   private final PostService postService;
   private final LikeService likeService;
   private final BookmarkService bookmarkService;
@@ -72,7 +72,7 @@ public class PostController {
   public List<PostDto.Response.Default>
     getPosts(@RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
     int pageNum = page.orElse(PAGE_NUMBER_DEFAULT);
-    int postsNum = posts.orElse(POSTS_NUMBER_DEFAULT);
+    int postsNum = posts.orElse(POSTS_PER_PAGE_DEFAULT);
 
     return postService.getPosts(pageNum, postsNum)
         .stream()
