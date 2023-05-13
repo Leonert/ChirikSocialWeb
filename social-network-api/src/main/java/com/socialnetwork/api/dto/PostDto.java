@@ -37,6 +37,11 @@ public enum PostDto {
     ;
 
     @Data
+    public static class Id {
+      int id;
+    }
+
+    @Data
     public static class Default {
       int id;
       UserDto.Response.Author author;
