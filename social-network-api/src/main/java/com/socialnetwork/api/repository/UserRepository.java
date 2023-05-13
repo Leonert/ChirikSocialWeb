@@ -1,6 +1,8 @@
 package com.socialnetwork.api.repository;
 
-import com.socialnetwork.api.model.User;
+import com.socialnetwork.api.models.base.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
