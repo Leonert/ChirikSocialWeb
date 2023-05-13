@@ -56,7 +56,7 @@ const Messages = () => {
 
   const onSendMessage = async () => {
     if (text !== '') {
-      const newMessage = { chatId: chat.id, text: text };
+      const newMessage = { chatId: chat.id, text };
 
       try {
         await ChatApi.sendMessage(newMessage);
@@ -74,7 +74,6 @@ const Messages = () => {
       return messages;
     }
     catch (error) {
-      console.error('Error getting all messages:', error);
 
       return [];
     }
