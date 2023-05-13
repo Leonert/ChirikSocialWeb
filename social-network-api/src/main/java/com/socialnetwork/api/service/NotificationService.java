@@ -18,7 +18,7 @@ public class NotificationService {
   private final PostRepository postRepository;
 
   public void saveReplyRetweet(Post post) {
-    if (post.getOriginalPost() != null && post.getText() != null) {
+    if (post.getOriginalPost() != null && post.getText() != null && post.getImage() == null) {
       notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
           post.getAuthor(), post, NotificationType.REPLY));
     } else if (post.getOriginalPost() != null) {
