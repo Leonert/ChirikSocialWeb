@@ -33,8 +33,9 @@ public class NotificationService {
 
   public void saveLike(int userId, int postId) {
     Post post = postRepository.getReferenceById(postId);
-    if (userId != post.getAuthor().getId()) notificationRepository.save(
-        new Notification(post.getAuthor(), new User(userId), post, NotificationType.LIKE));
+    if (userId != post.getAuthor().getId()) {
+      notificationRepository.save(new Notification(post.getAuthor(), new User(userId), post, NotificationType.LIKE));
+    }
   }
 
   public void saveLogin(User user) {
