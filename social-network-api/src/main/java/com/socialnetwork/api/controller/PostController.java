@@ -123,7 +123,7 @@ public class PostController {
     }
 
     return ResponseEntity.status
-            (bookmarkExists ? HttpStatus.OK : HttpStatus.CREATED)
+                    (bookmarkExists ? HttpStatus.OK : HttpStatus.CREATED)
             .body(bookmarkService.countPostBookmarks(convertToPost(postDto.getPost())));
   }
 
@@ -153,7 +153,7 @@ public class PostController {
     }
 
     return ResponseEntity.status
-            (likeExists ? HttpStatus.OK : HttpStatus.CREATED)
+                    (likeExists ? HttpStatus.OK : HttpStatus.CREATED)
             .body(likeService.countPostLikes(convertToPost(postDto.getPost())));
   }
 
