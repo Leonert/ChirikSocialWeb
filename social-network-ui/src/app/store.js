@@ -5,7 +5,7 @@ import { authReducer } from '../features/slices/authSlice';
 import homeSlice from '../features/slices/homeSlice';
 import settingSlice from '../features/slices/settingSlice';
 import { snackbarReducer } from '../features/slices/snackbarSlice';
-
+import searchSlice from '../features/slices/searchSlice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -13,5 +13,6 @@ export const store = configureStore({
     snackbar: snackbarReducer,
     home: homeSlice,
     setting: settingSlice,
+    search:searchSlice
   },
 });
