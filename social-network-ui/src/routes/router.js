@@ -7,7 +7,6 @@ import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
 import Profile from '../pages/Profile/Profile';
 import profileLoader from '../pages/Profile/profileLoader';
-import SettingsPage from '../pages/SettingsPage/SettingsPage';
 
 export const router = createBrowserRouter([
   {
