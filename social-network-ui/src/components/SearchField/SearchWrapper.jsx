@@ -12,6 +12,7 @@ const SearchWrapper = () => {
   const delateResult = () => {
     dispatch(removeResult());
   };
+
   return (
     <Box>
       <Box display="flex" justifyContent="flex-end" sx={{ width: '88%' }}>

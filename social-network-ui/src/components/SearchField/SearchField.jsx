@@ -45,6 +45,7 @@ export default function SearchField() {
   const handleInputChange = (event) => {
     setSearchText(event.target.value);
   };
+  
   return (
     <Box>
       <Toolbar>
