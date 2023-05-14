@@ -10,7 +10,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { changePasswordModal } from '../../../features/slices/settingSlice';
-import PasswordChange from '../../PasswordChenge/PasswordChange';
+import PasswordChange from '../../PasswordChange/PasswordChange';
 import SettingItem from '../SettingItem';
 
 const YourAccount = () => {
@@ -22,7 +22,6 @@ const YourAccount = () => {
   const handelClickPassword = () => {
     dispatch(changePasswordModal(true));
   };
-  
 
   return (
     <div>
