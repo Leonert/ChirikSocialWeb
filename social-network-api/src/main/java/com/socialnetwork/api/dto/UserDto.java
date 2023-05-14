@@ -1,62 +1,124 @@
 package com.socialnetwork.api.dto;
 
-import com.socialnetwork.api.models.additional.Bookmark;
-import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.additional.Like;
-import com.socialnetwork.api.models.additional.View;
-import com.socialnetwork.api.models.base.Message;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UserDto {
-  private interface Id { int getId(); }
+import static com.socialnetwork.api.util.Const.Response.DATE_FORMAT;
+import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
 
-  private interface Username { String getUsername(); }
+public enum UserDto {
+  ;
 
-  private interface FirstName { String getFirstName(); }
+  public enum Request {
+    ;
 
-  private interface LastName { String getLastName(); }
-
-  private interface Password { String getPassword(); }
-
-  private interface EmailAddress { String getEmailAddress(); }
-
-  private interface CreatedDate { LocalDateTime getCreatedDate(); }
-
-  private interface ProfileBackgroundImageUrl { String getProfileBackgroundImageUrl(); }
-
-  private interface ProfileImageUrl { String getProfileImageUrl(); }
-
-  private interface Followers { List<Follow> getFollowers(); }
-
-  private interface Followed { List<Follow> getFollowed(); }
-
-  private interface SeenPosts { List<View> getSeenPosts(); }
-
-  private interface LikedPosts { List<Like> getLikedPosts(); }
-
-  private interface BookMarkedPosts { List<Bookmark> getBookmarkedPosts(); }
-
-  private interface SentMessages { List<Message> getSentMessages(); }
-
-  private interface ReceivedMessages { List<Message> getReceivedMessages(); }
-
-
-  public enum Request{;
-    @Value public static class Default implements Id, Username {
+    @Data
+    public static class Default {
       int id;
+    }
+
+    @Data
+    public static class Email {
+      String emailAddress;
+    }
+
+    @Data
+    public static class Username {
       String username;
+    }
+
+    @Data
+    public static class ProfileEditing {
+      String username;
+      String profileImage;
+      String profileBackgroundImage;
+      String bio;
+      String location;
+      String website;
+    }
+
+    @Data
+    public static class Registration {
+      String username;
+      String emailAddress;
+      String name;
+      String password;
+      LocalDateTime birthDate;
+    }
+
+    @Data
+    public static class Credentials {
+      String emailAddress;
+      String password;
+      Boolean rememberMe;
     }
   }
 
-  public enum Response{;
-    @Value public static class Default implements Id, Username {
+
+  public enum Response {
+    ;
+
+    @Data
+    public static class Profile {
       int id;
       String username;
+      String name;
+      String emailAddress;
+      String profileImage;
+      String profileBackgroundImage;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
+      LocalDateTime createdDate;
+      String bio;
+      String location;
+      String website;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+      LocalDateTime birthDate;
+      List<PostDto.Response.Profile> profilePosts;
+      int followersCounter;
+      int followedCounter;
+      boolean isCurrUserFollower;
+    }
+
+    @Data
+    public static class Listing {
+      int id;
+      String username;
+      String name;
+      String profileImage;
+      String bio;
+      boolean isCurrUserFollower;
+    }
+
+    @Data
+    public static class Author {
+      int id;
+      String username;
+      String name;
+      String profileImage;
+    }
+
+    @Data
+    public static class Default {
+      String username;
+      String name;
+      String emailAddress;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+      LocalDateTime createdDate;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+      LocalDateTime birthDate;
+      String profileBackgroundImage;
+      String profileImage;
+
+    }
+
+    @Data
+    public static class AccountData {
+      UserDto.Response.Default user;
+      String jwt;
+
     }
   }
 }
