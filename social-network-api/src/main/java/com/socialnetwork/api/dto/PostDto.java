@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
+
 public enum PostDto {
   ;
 
@@ -14,12 +16,6 @@ public enum PostDto {
     @Data
     public static class Default {
       int id;
-    }
-
-    @Data
-    public static class Action {
-      UserDto.Request.Default user;
-      PostDto.Request.Default post;
     }
 
     @Data
@@ -43,10 +39,15 @@ public enum PostDto {
     ;
 
     @Data
+    public static class Id {
+      int id;
+    }
+
+    @Data
     public static class Default {
       int id;
       UserDto.Response.Author author;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;
       String text;
       String image;
@@ -58,7 +59,7 @@ public enum PostDto {
     @Data
     public static class Profile {
       int id;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;
       String text;
       String image;

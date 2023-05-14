@@ -1,11 +1,13 @@
 package com.socialnetwork.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.socialnetwork.api.models.base.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.socialnetwork.api.util.Const.Response.DATE_FORMAT;
+import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
 
 public enum UserDto {
   ;
@@ -38,11 +40,11 @@ public enum UserDto {
       String website;
     }
 
+    @Data
     public static class Registration {
       String username;
       String emailAddress;
-      String firstName;
-      String lastName;
+      String name;
       String password;
       LocalDateTime birthDate;
     }
@@ -67,12 +69,12 @@ public enum UserDto {
       String emailAddress;
       String profileImage;
       String profileBackgroundImage;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;
       String bio;
       String location;
       String website;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
       LocalDateTime birthDate;
       List<PostDto.Response.Profile> profilePosts;
       int followersCounter;
@@ -90,31 +92,33 @@ public enum UserDto {
       boolean isCurrUserFollower;
     }
 
+    @Data
+    public static class Author {
+      int id;
+      String username;
+      String name;
+      String profileImage;
+    }
+
+    @Data
     public static class Default {
       String username;
-      String firstName;
-      String lastName;
+      String name;
       String emailAddress;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
       LocalDateTime createdDate;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
       LocalDateTime birthDate;
       String profileBackgroundImage;
       String profileImage;
+
     }
 
     @Data
     public static class AccountData {
       UserDto.Response.Default user;
       String jwt;
-    }
 
-    @Data
-    public static class Author {
-      String username;
-      String firstName;
-      String lastName;
-      String profileImage;
     }
   }
 }
