@@ -1,11 +1,9 @@
-import {makeStyles} from "@mui/styles";
+import {makeStyles} from "@material-ui/core";
 
 export const useMessagesStyles = makeStyles((theme) => ({
-  // backgroundColor: theme.palette.background.paper,
 
   grid: {
     padding: '12px 0px 0px 0px !important',
-    margin: 5
 
   },
   messagesContainer: {
@@ -201,7 +199,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     width: 384,
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: 'rgb(247, 249, 249)',
+      backgroundColor: 'rgb(9,204,204)',
     },
   },
   tweetUserInfoWrapper: {
@@ -226,7 +224,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     flexDirection: 'row-reverse',
     '& span': {
       backgroundColor: 'rgb(29, 161, 242)',
-      color: '#fff',
+      color: '#000000',
       padding: '11px 15px',
       maxWidth: 384,
     },
@@ -329,12 +327,13 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatFooter: {
     display: 'flex',
     position: 'fixed',
-    bottom: 3,
+    top: 1123,
     width: 598,
-    padding: 4,
+    padding: '4px',
     borderRight: 0,
     borderLeft: 0,
     borderBottom: 0,
+
   },
   chatIcon: {
     '& .MuiIconButton-root': {

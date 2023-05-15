@@ -1,8 +1,11 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.dto.UserDto;
 import com.socialnetwork.api.models.base.Message;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.MessageRepository;
+import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,6 +31,7 @@ public class MessagesController {
   private final MessageRepository messageRepository;
   private final MessageService messageService;
   private final ModelMapper modelMapper;
+  private final UserRepository userRepository;
 
   @GetMapping("/{id}")
   public ResponseEntity<MessageDto> getMessageById(@PathVariable int id) {
@@ -38,10 +42,10 @@ public class MessagesController {
   @GetMapping()
   public ResponseEntity<List<MessageDto>> getAllMessages() {
     List<Message> messages = messageRepository.findAll();
-    List<MessageDto> messageDtos = messages.stream().map(message ->
-            modelMapper.map(message, MessageDto.class)).collect(Collectors.toList());
+    List<MessageDto> messageDtos = messages.stream()
+            .map(message -> convertToMessageDto(message))
+            .collect(Collectors.toList());
 
-    // Журналирование списка messageDtos
     messageDtos.forEach(messageDto -> {
       System.out.println("ID: " + messageDto.getId());
       System.out.println("Message: " + messageDto.getMessage());
@@ -50,9 +54,40 @@ public class MessagesController {
     return ResponseEntity.ok(messageDtos);
   }
 
+//  @PostMapping("/create")
+//  public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
+//    Message createdMessage = convertToMessage(messageDto);
+//
+//    String senderUsername = messageDto.getSenderUsername();
+//    if (senderUsername == null || senderUsername.isEmpty()) {
+//      throw new IllegalArgumentException("Sender username is required");
+//    }
+//
+//    String recipientUsername = messageDto.getRecipientUsername();
+//    if (recipientUsername == null || recipientUsername.isEmpty()) {
+//      throw new IllegalArgumentException("Recipient username is required");
+//    }
+//
+//    Optional<User> senderOptional = userRepository.findByUsername(senderUsername);
+//    User sender = senderOptional.orElseThrow(() -> new IllegalArgumentException("Invalid sender username: " + senderUsername));
+//
+//    Optional<User> recipientOptional = userRepository.findByUsername(recipientUsername);
+//    User recipient = recipientOptional.orElseThrow(() -> new IllegalArgumentException("Invalid recipient username: " + recipientUsername));
+//
+//    createdMessage.setSender(sender);
+//    createdMessage.setRecipient(recipient);
+//    messageRepository.save(createdMessage);
+//
+//    MessageDto createdMessageDto = convertToMessageDto(createdMessage);
+//    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId()))
+//            .body(createdMessageDto);
+//  }
+
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
+    createdMessageDto.setRecipientId(messageDto.getRecipientId());
+    createdMessageDto.setSenderId(messageDto.getSenderId());
     return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
   }
 
@@ -65,7 +100,7 @@ public class MessagesController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteMessage(@PathVariable int id) {
-    messageService.deleteMessage(id);
+    messageRepository.deleteById(id);
     return ResponseEntity.noContent().build();
   }
 
@@ -81,8 +116,22 @@ public class MessagesController {
     return ResponseEntity.noContent().build();
   }
 
+  @GetMapping("/users")
+  public ResponseEntity<List<UserDto.Response.Listing>> getAllUsers() {
+    List<User> users = userRepository.findAll();
+    List<UserDto.Response.Listing> userDtos = users.stream()
+            .map(user ->
+                    modelMapper.map(user, UserDto.Response.Listing.class))
+            .collect(Collectors.toList());
+
+    return ResponseEntity.ok(userDtos);
+  }
+
   private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
   }
-}
 
+  private MessageDto convertToMessageDto(Message message) {
+    return modelMapper.map(message, MessageDto.class);
+  }
+}

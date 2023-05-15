@@ -104,7 +104,6 @@ public class UserController {
     profile.setProfilePosts(user.getPosts().stream().map(p -> modelMapper.map(p, PostDto.Response.Profile.class)).toList());
     return profile;
   }
-
   private List<UserDto.Response.Listing> mapForListing(List<User> users) {
     return users.stream().map(u -> modelMapper.map(u, UserDto.Response.Listing.class)).toList();
   }

@@ -9,7 +9,7 @@ export const PeopleSearchInput = withStyles((theme) => ({
             padding: 0,
             paddingLeft: 15,
             marginLeft: 15,
-            width: 385,
+            width: 288,
             '&.Mui-focused': {
                 backgroundColor: theme.palette.secondary.light,
                 '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },

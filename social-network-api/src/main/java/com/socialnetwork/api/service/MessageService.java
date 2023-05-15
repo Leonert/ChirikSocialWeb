@@ -1,11 +1,11 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.models.base.Message;
 
 import java.util.List;
 
 public interface MessageService {
-
   MessageDto getMessageById(int id);
 
   List<MessageDto> getAllMessages();
@@ -20,4 +20,7 @@ public interface MessageService {
 
   void markAsRead(int id);
 
+  MessageDto convertToMessageDto(Message message);
+
+  Message convertToMessage(MessageDto messageDto);
 }

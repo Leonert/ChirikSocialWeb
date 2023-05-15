@@ -1,5 +1,6 @@
 import { createTheme } from '@material-ui/core/styles';
-import { deepmerge } from '@mui/utils';
+import {deepmerge} from "@mui/utils";
+
 
 const commonTheme = {
   typography: {
@@ -158,7 +159,6 @@ const commonTheme = {
     },
   },
 };
-
 export const defaultTheme = createTheme(
   deepmerge(
     {

@@ -2,34 +2,42 @@ import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper
 import React, {useEffect, useRef, useState} from 'react';
 import { Link } from 'react-router-dom';
 
-import { CheckIcon, EmojiIcon, MediaIcon, SandMessageIcon, SearchIcon } from '../../icon';
-import { formatChatMessageDate, formatDate } from '../../util/formatDate';
-import { DEFAULT_PROFILE_IMG } from '../../util/url';
+import { EmojiIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
+import { DEFAULT_PROFILE_IMG} from '../../util/url';
 import { MessageInput } from './MessageInput/MessageInput';
 import MessagesModal from './MessagesModal/MessagesModal';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 import {ChatApi} from "../../services/api/chatApi";
-
+import {formatDistanceToNow} from "date-fns";
 
 
 const Messages = () => {
   const classes = useMessagesStyles();
   const chatEndRef = useRef(null);
+  const [chats, setChats] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [visibleModalWindow, setVisibleModalWindow] = useState(false);
-  const [participant, setParticipant] = useState(null);
+  const [selectedChatId, setSelectedChatId] = useState(null);
   const [text, setText] = useState('');
-  const [chat, setChat] = useState(null);
+  const [participant, setParticipant] = useState(null);
+  const [visibleModalWindow, setVisibleModalWindow] = useState(false);
+  const [groupChatId, setGroupChatId] = useState(null);
+
 
   useEffect(() => {
-    async function fetchChats() {
-
-      const chatData = await ChatApi.getUserChats();
-      setChat(chatData);
-    }
-    fetchChats();
+    getChats();
+    scrollToBottom();
   }, []);
+
+
+  const getChats = async () => {
+    try {
+      const chatList = await ChatApi.getUserChats();
+      setChats(chatList);
+    } catch (error) {
+      console.error('Error fetching user chats:', error);
+    }
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -49,50 +57,56 @@ const Messages = () => {
     setVisibleModalWindow(false);
   };
 
-  const handleListItemClick = (chat) => {
-    setParticipant(chat);
-    setChat(chat);
+  const handleListItemClick = async (chatId) => {
+    const selectedChat = chats.find((chat) => chat.id === chatId);
+    setSelectedChatId(chatId);
+    setParticipant(selectedChat);
+
+    try {
+      const chatMessages = await ChatApi.getChatMessages(chatId);
+      setMessages(chatMessages);
+      scrollToBottom();
+    } catch (error) {
+      console.error('Error fetching chat messages:', error);
+    }
   };
 
   const onSendMessage = async () => {
     if (text !== '') {
-      const newMessage = { chatId: chat.id, text };
+      let selectedChat;
+      if (groupChatId) {
+        selectedChat = await ChatApi.createChat(selectedChatId);
+      } else {
+        selectedChat = chats.find((chat) => chat.id === selectedChatId);
+      }
 
+      const newMessage = {
+        id: 100,
+        date: new Date(),
+        text,
+        isRead: false,
+        timestamp: new Date().toISOString(),
+        participantId: selectedChat.id,
+      };
+
+      console.log(newMessage);
       try {
-        await ChatApi.sendMessage(newMessage);
+        const createdMessage = await ChatApi.sendMessage(newMessage);
+        setMessages((prevMessages) => [...prevMessages, createdMessage]);
         setText('');
-
+        setSelectedChatId(createdMessage.participantId);
+        setParticipant(createdMessage);
+        scrollToBottom();
       } catch (error) {
+        console.error('Error sending message:', error);
       }
     }
   };
-
-  const getAllMessages = async () => {
-    try {
-      const messages = await ChatApi.getAllMessages();
-
-      return messages;
-    }
-    catch (error) {
-
-      return [];
-    }
-  };
-  useEffect(() => {
-    async function fetchAllMessages() {
-      try {
-        const messages = await getAllMessages();
-        setMessages(messages);
-      } catch (error) {
-      }
-    }
-
-    fetchAllMessages();
-  }, []);
 
   const isValidDate = (date) => {
     return date instanceof Date && !isNaN(date);
   };
+
 
   return (
       <>
@@ -104,7 +118,7 @@ const Messages = () => {
                   <Typography variant="h6">Messages</Typography>
                 </div>
               </Paper>
-              {messages.length === 0 ? (
+              {chats.length === 0 ? (
                   <>
                     <div className={classes.messagesTitle}>Send a message, get a message</div>
                     <div className={classes.messagesText}>
@@ -124,7 +138,7 @@ const Messages = () => {
                   <>
                     <div className={classes.searchWrapper}>
                       <PeopleSearchInput
-                          placeholder="Explore for people andgroups"
+                          placeholder="Explore for people and groups"
                           variant="outlined"
                           onChange={(event) => setText(event.target.value)}
                           value={text}
@@ -134,7 +148,7 @@ const Messages = () => {
                       />
                     </div>
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
-                      {messages.map((chat) => (
+                      {chats.map((chat) => (
                           <ListItem
                               key={chat && chat.id}
                               button
@@ -211,87 +225,47 @@ const Messages = () => {
                     </div>
                   </Paper>
                   <Paper className={classes.chat}>
-                    {messages.map((message) => (
-                        <React.Fragment key={message.id}>
-                          {message && message.author && message.author.id ? (
-                              <div className={classes.tweetContainer}>
-                                <Link to={`/home/tweet/${message.id}`}>
-                                  <div className={classes.tweetWrapper}>
-                                    <div className={classes.tweetUserInfoWrapper}>
-                                      <Avatar
-                                          className={classes.tweetAvatar}
-                                          src={message.user.avatar?.src ? message.user.avatar?.src : DEFAULT_PROFILE_IMG}
-                                      />
-                                      <span className={classes.tweetUserFullName}>{message.user.fullName}</span>
-                                      <span className={classes.tweetUsername}>@{message.user.username}</span>
-                                      <span className={classes.tweetUsername}>·</span>
-                                      <span className={classes.tweetUsername}>{formatDate(new Date(message.dateTime))}</span>
-                                    </div>
-                                    <span>{message.text}</span>
-                                  </div>
-                                </Link>
-                              </div>
-                          ) : (
-                              <div className={classes.participantContainer}>
-                                <Avatar
-                                    className={classes.participantAvatar}
-                                    src={
-                                      chat?.id
-                                          ? chat?.avatar?.src
-                                              ? chat?.avatar.src
-                                              : DEFAULT_PROFILE_IMG
-                                          : chat?.avatar?.src
-                                              ? chat?.avatar.src
-                                              : DEFAULT_PROFILE_IMG
-                                    }
-                                />
-                                <div>
-                                  {message && (
-                                      <div className={classes.participantTweetContainer}>
-                                        <Link to={`/home/tweet/${message.id}`}>
-                                          <div className={classes.participantTweetWrapper}>
-                                            <div className={classes.participantTweetInfoWrapper}>
-                                              <Avatar
-                                                  className={classes.tweetAvatar}
-                                                  src={message.user && message.user.avatar && message.user.avatar.src
-                                                      ? message.user.avatar.src : DEFAULT_PROFILE_IMG}
-                                              />
-                                              <span className={classes.tweetUserFullName}>
-                                                {message.user && message.user.fullName ? message.user.fullName : ''}
-                                              </span>
-
-                                              Copy code
-                                              <span className={classes.tweetUsername}>
-                                                {message.user && message.user.username ? `@${message.user.username}` : ''}
-                                              </span>
-                                              <span className={classes.tweetUsername}>·</span>
-                                              <span className={classes.tweetUsername}>
-                                                {message.dateTime && isValidDate(message.dateTime) ? formatDate(new Date(message.dateTime)) : ''}
-                                              </span>
-                                            </div>
-                                            <span>{message.text}</span>
-                                          </div>
-                                        </Link>
+                    { Array.isArray(messages) &&
+                        messages.map((message) => (
+                            <React.Fragment key={message.id}>
+                              {message && message.author && message.author.id ? (
+                                  <div className={classes.tweetContainer}>
+                                    <Link to={`/home/tweet/${message.id}`}>
+                                      <div className={classes.tweetWrapper}>
+                                        <div className={classes.tweetUserInfoWrapper}>
+                                          <Avatar
+                                              className={classes.tweetAvatar}
+                                              src={
+                                                message.user.avatar?.src ? message.user.avatar?.src : DEFAULT_PROFILE_IMG
+                                              }
+                                          />
+                                          <span className={classes.tweetUserFullName}>{message.user.fullName}</span>
+                                          <span className={classes.tweetUsername}>@{message.user.username}</span>
+                                          <span className={classes.tweetTimestamp}>
+                              {isValidDate(message.timestamp)
+                                  ? formatDistanceToNow(new Date(message.timestamp))
+                                  : ''}
+                            </span>
+                                        </div>
+                                        <div className={classes.tweetText}>{message.text}</div>
                                       </div>
-                                  )}
-                                </div>
-                              </div>
-                          )}
-                          <div className={classes.messageDate}>
-                            {message.author.id ? (
-                                <div className={classes.myMessageDate}>
-                                  <span>{CheckIcon}</span>
-                                  <span>{formatChatMessageDate(new Date(message.date))}</span>
-                                </div>
-                            ) : (
-                                <div className={classes.participantMessageDate}>
-                                  {formatChatMessageDate(new Date(message.date))}
-                                </div>
-                            )}
-                          </div>
-                        </React.Fragment>
-                    ))}
-                    <div ref={chatEndRef}></div>
+                                    </Link>
+                                  </div>
+                              ) : (
+                                  <div className={classes.messageContainer}>
+                                    <div className={classes.message}>
+                                      <div className={classes.messageText}>{message.text}</div>
+                                      <div className={classes.messageTimestamp}>
+                                        {isValidDate(message.timestamp)
+                                            ? formatDistanceToNow(new Date(message.timestamp))
+                                            : ''}
+                                      </div>
+                                    </div>
+                                  </div>
+                              )}
+                            </React.Fragment>
+                        ))}
+                    <div ref={chatEndRef} />
                   </Paper>
                   <Paper className={classes.chatFooter}>
                     <div className={classes.chatIcon}>
@@ -306,8 +280,8 @@ const Messages = () => {
                     </div>
                     <MessageInput
                         multiline
-                        value={messages}
-                        onChange={(event) => setMessages(event.target.value)}
+                        value={text}
+                        onChange={(event) => setText(event.target.value)}
                         variant="outlined"
                         placeholder="Start a new message"
                     />
@@ -323,6 +297,7 @@ const Messages = () => {
         </Grid>
         <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
       </>
+
   );
 };
 

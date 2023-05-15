@@ -9,6 +9,7 @@ import AccountProfileFields from './AccountProfileFields';
 import BIOFields from './BIOFields';
 import ConfirmMail from './ConfirmMail';
 import InitialStep from './InitialStep';
+import axiosIns from "../../axiosInstance";
 
 const accountProfileValidationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -69,15 +70,15 @@ const RegistrationModal = () => {
     } else {
       handleNextStep();
       try {
-        // const data = {
-        //   emailAddress: values.email,
-        //   username: values.username,
-        //   password: values.password,
-        //   firstName: values.name,
-        //   lastName: values.surname,
-        //   birthDate: values.birthDate,
-        // };
-        // const response = await axiosIns.post('/api/registration/save-user', data);
+        const data = {
+          emailAddress: values.email,
+          username: values.username,
+          password: values.password,
+          firstName: values.name,
+          lastName: values.surname,
+          birthDate: values.birthDate,
+        };
+        const response = await axiosIns.post('/api/registration/save-user', data);
       } catch (e) {}
     }
   };
@@ -107,7 +108,7 @@ const RegistrationModal = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  //
   // const handlePrevStep = () => {
   //   setActiveStep((prevStep) => prevStep - 1);
   // };

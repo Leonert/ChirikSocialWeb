@@ -1,50 +1,31 @@
-import format from "date-fns/format";
-import isYesterday from "date-fns/isYesterday";
-import isMonday from "date-fns/isMonday";
-import isTuesday from "date-fns/isTuesday";
-import isWednesday from "date-fns/isWednesday";
-import isThursday from "date-fns/isThursday";
-import isFriday from "date-fns/isFriday";
-import isSaturday from "date-fns/isSaturday";
-import isSunday from "date-fns/isSunday";
-import isToday from "date-fns/isToday";
-import usLang from "date-fns/locale/en-US/index";
-import differenceInDays from "date-fns/differenceInDays";
-import differenceInHours from "date-fns/differenceInHours";
-import differenceInMinutes from "date-fns/differenceInMinutes";
+import { isThisWeek, isToday, isYesterday } from "date-fns";
+import moment from "moment";
 
-export const formatDate = (date) => {
-    return format(date, 'MMM d');
+export const formatChatMessageDate = (dateString) => {
+    const dateTime = moment(dateString, "YYYY-MM-DD HH:mm:ss.SS");
+    const currentDate = moment();
+
+    const formattedDate = dateTime.format("MMM D");
+    const formattedTime = dateTime.format("h:mm A");
+
+    if (isToday(dateTime)) {
+        return formattedTime;
+    } else if (isYesterday(dateTime)) {
+        return `Yesterday at ${formattedTime}`;
+    } else if (isThisWeek(dateTime)) {
+        return dateTime.format("ddd") + " " + formattedTime;
+    } else if (dateTime.year() === currentDate.year()) {
+        return formattedDate + ", " + formattedTime;
+    } else {
+        return formattedDate + " " + dateTime.year() + ", " + formattedTime;
+    }
 };
 
-export const formatChatMessageDate = (date) => {
-    const datePattern = format(date, 'hh:mm a', {locale: usLang});
-
-    if (isToday(date)) return datePattern;
-
-    if (isYesterday(date)) return `Yesterday at ${datePattern}`;
-
-    if (isMonday(date)) return `Mon ${datePattern}`;
-
-    if (isTuesday(date)) return `Tue ${datePattern}`;
-
-    if (isWednesday(date)) return `Wed ${datePattern}`;
-
-    if (isThursday(date)) return `Thu ${datePattern}`;
-
-    if (isFriday(date)) return `Fri ${datePattern}`;
-
-    if (isSaturday(date)) return `Sat ${datePattern}`;
-
-    if (isSunday(date)) return `Sun ${datePattern}`;
-
-    return format(date, 'MMM dd, hh:mm a', {locale: usLang});
-};
-
-export const voteFormatDate = (poll) => {
-    const diffInDays = differenceInDays(new Date(poll?.dateTime), Date.now());
-    const diffInHours = differenceInHours(new Date(poll?.dateTime), Date.now());
-    const diffInMinutes = differenceInMinutes(new Date(poll?.dateTime), Date.now());
+export const formatDate = (dateTimeString) => {
+    const dateTime = moment(dateTimeString, "YYYY-MM-DD HH:mm:ss.SS");
+    const diffInDays = moment().diff(dateTime, "days");
+    const diffInHours = moment().diff(dateTime, "hours");
+    const diffInMinutes = moment().diff(dateTime, "minutes");
 
     if (diffInDays !== 0) {
         return diffInDays + " days";

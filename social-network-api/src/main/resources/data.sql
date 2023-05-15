@@ -30,6 +30,7 @@ insert into posts (created_date, image, text, user_id, original_post_id) values 
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Another original post from user2', 2, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Retweet post 2 with comment for post 2 from user4', 4, 2);
 
+
 insert into follows values (1, 2);
 insert into follows values (1, 3);
 insert into follows values (1, 4);
