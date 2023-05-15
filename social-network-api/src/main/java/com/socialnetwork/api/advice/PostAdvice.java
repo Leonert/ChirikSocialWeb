@@ -1,8 +1,8 @@
 package com.socialnetwork.api.advice;
 
-import com.socialnetwork.api.dto.Response;
 import com.socialnetwork.api.exception.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.models.additional.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
