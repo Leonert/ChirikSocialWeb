@@ -22,7 +22,9 @@ insert into users (bio, birth_date, created_date, email_address, is_enabled, loc
 
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Original post for user 1', 1, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Another original post for user 1', 1, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Retweeted post1 with comment from user2', 2, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Reply to post1 from user2', 2, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Reply to post1 from user4', 4, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, null, 3, 1);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', null, 2, 2);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Original post from user2', 2, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Original post from user3', 3, null);

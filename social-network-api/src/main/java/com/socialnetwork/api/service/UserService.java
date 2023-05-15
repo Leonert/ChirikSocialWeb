@@ -1,13 +1,11 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.UserDto;
-import com.socialnetwork.api.exception.EmailVerificationException;
-import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.additional.NotificationType;
 import com.socialnetwork.api.models.additional.keys.FollowPk;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
-import com.socialnetwork.api.models.base.Notification;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;

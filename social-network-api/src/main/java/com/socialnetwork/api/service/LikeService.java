@@ -1,5 +1,6 @@
 package com.socialnetwork.api.service;
 
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.keys.LikePk;
 import com.socialnetwork.api.models.base.Post;
@@ -14,6 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LikeService {
   private final LikeRepository likeRepository;
+
+  private final UserService userService;
+
   private final NotificationService notificationService;
 
   public void save(int userId, int postId) {
@@ -48,5 +52,15 @@ public class LikeService {
       delete(userId, postId);
       return false;
     }
+  }
+
+  public List<User> getLikes(int id, String username, int page, int usersForPage)
+          throws NoUserWithSuchCredentialsException {
+    User currentUser = userService.findByUsername(username);
+    return likeRepository.findUsersByLikedPost(id)
+            .stream()
+            .skip(page * usersForPage).limit(usersForPage)
+            .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
+            .toList();
   }
 }

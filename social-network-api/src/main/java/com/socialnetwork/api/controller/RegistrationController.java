@@ -1,12 +1,12 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.UserDto;
-import com.socialnetwork.api.exception.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.mapper.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-import static com.socialnetwork.api.util.Const.Auth.EMAIL_TAKEN;
-import static com.socialnetwork.api.util.Const.Auth.USERNAME_TAKEN;
+import static com.socialnetwork.api.util.Constants.Auth.EMAIL_TAKEN;
+import static com.socialnetwork.api.util.Constants.Auth.USERNAME_TAKEN;
 
 @RestController
 @RequestMapping("/api/registration")
@@ -28,7 +28,7 @@ import static com.socialnetwork.api.util.Const.Auth.USERNAME_TAKEN;
 public class RegistrationController {
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
-  private final ModelMapper modelMapper;
+  private final UserMapper userMapper;
 
 
   @PostMapping("check-email")
@@ -52,7 +52,7 @@ public class RegistrationController {
 
   @PostMapping("save-user")
   public ResponseEntity<?> saveUserAndSendConfirmation(@RequestBody UserDto.Request.Registration userDto) {
-    User user = convertToUser(userDto);
+    User user = userMapper.convertToUser(userDto);
     String rawPassword = user.getPassword();
     user.setPassword(passwordEncoder.encode(rawPassword));
     userService.save(user);
@@ -69,7 +69,4 @@ public class RegistrationController {
     }
   }
 
-  private User convertToUser(UserDto.Request.Registration userDto) {
-    return modelMapper.map(userDto, User.class);
-  }
 }
