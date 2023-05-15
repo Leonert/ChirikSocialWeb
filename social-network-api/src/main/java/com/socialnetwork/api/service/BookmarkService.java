@@ -1,5 +1,6 @@
 package com.socialnetwork.api.service;
 
+import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.keys.BookmarkPk;
 import com.socialnetwork.api.models.base.Post;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkService {
   private final BookmarkRepository bookmarkRepository;
+  private final UserService userService;
 
   public void save(int userId, int postId) {
     bookmarkRepository.save(new Bookmark(new User(userId), new Post(postId)));
@@ -36,5 +38,16 @@ public class BookmarkService {
 
   public int countPostBookmarks(Post post) {
     return bookmarkRepository.countAllByBookmarkedPost(post);
+  }
+
+  public boolean bookmarkUnBookmark(int postId, String username) throws NoUserWithSuchCredentialsException {
+    int userId = userService.findByUsername(username).getId();
+    if (!existsByIds(userId, postId)) {
+      save(userId, postId);
+      return true;
+    } else {
+      delete(userId, postId);
+      return false;
+    }
   }
 }

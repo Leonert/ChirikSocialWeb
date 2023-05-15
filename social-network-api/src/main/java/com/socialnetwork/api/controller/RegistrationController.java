@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
+import static com.socialnetwork.api.util.Const.Auth.EMAIL_TAKEN;
+import static com.socialnetwork.api.util.Const.Auth.USERNAME_TAKEN;
+
 @RestController
 @RequestMapping("/api/registration")
 @RequiredArgsConstructor
 public class RegistrationController {
-  private static final String USERNAME_TAKEN = "User with such username already exists.";
-  private static final String EMAIL_TAKEN = "User with such email address already exists.";
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final ModelMapper modelMapper;

@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LikeService {
   private final LikeRepository likeRepository;
+  private final NotificationService notificationService;
 
   public void save(int userId, int postId) {
     likeRepository.save(new Like(new User(userId), new Post(postId)));
@@ -36,5 +37,16 @@ public class LikeService {
 
   public int countPostLikes(Post post) {
     return likeRepository.countAllByLikedPost(post);
+  }
+
+  public boolean likeUnlike(int userId, int postId) {
+    if (!existsByIds(userId, postId)) {
+      save(userId, postId);
+      notificationService.saveLike(userId, postId);
+      return true;
+    } else {
+      delete(userId, postId);
+      return false;
+    }
   }
 }

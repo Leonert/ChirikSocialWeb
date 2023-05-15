@@ -4,8 +4,10 @@ import com.socialnetwork.api.dto.UserDto;
 import com.socialnetwork.api.exception.EmailVerificationException;
 import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Follow;
+import com.socialnetwork.api.models.additional.NotificationType;
 import com.socialnetwork.api.models.additional.keys.FollowPk;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
+import com.socialnetwork.api.models.base.Notification;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;
@@ -25,6 +27,7 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final FollowsRepository followsRepository;
+  private final NotificationService notificationService;
   private final ConfirmationTokenService confirmationTokenService;
   private final ModelMapper modelMapper;
 
@@ -64,7 +67,7 @@ public class UserService {
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
     Optional<ConfirmationToken> optionalToken =
-            confirmationTokenService.findByConfirmationToken(confirmationToken);
+        confirmationTokenService.findByConfirmationToken(confirmationToken);
 
     if (optionalToken.isEmpty()) {
       throw new EmailVerificationException("Error: Couldn't verify email");
@@ -85,33 +88,26 @@ public class UserService {
                                  int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
-            .getFollowers().stream().map(Follow::getFollowerUser)
-            // 1  10    1*10=10           2*10=20
-            .skip(page * usersForPage).limit(usersForPage)
-            .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
-            .toList();
+        .getFollowers().stream().map(Follow::getFollowerUser)
+        .skip(page * usersForPage).limit(usersForPage)
+        .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
+        .toList();
   }
 
   public List<User> getFollowed(String queryUsername, String currentUserUsername,
                                 int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
-            .getFollowed().stream().map(Follow::getFollowedUser)
-            .skip(page * usersForPage).limit(usersForPage)
-            .peek(f -> {
-              if (queryUsername.equals(currentUserUsername)) {
-                f.setCurrUserFollower(true);
-              } else {
-                f.setCurrUserFollower(isFollowed(currentUser, f));
-              }
-            }).toList();
+        .getFollowed().stream().map(Follow::getFollowedUser)
+        .skip(page * usersForPage).limit(usersForPage)
+        .peek(f -> f.setCurrUserFollower(queryUsername.equals(currentUserUsername) || isFollowed(currentUser, f))).toList();
   }
 
   public List<User> getListForConnectPage(String currentUserUsername, int page,
                                           int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return userRepository.findAll(PageRequest.of(page, usersForPage))
-            .stream().filter(u -> !isFollowed(currentUser, u)).toList();
+        .stream().filter(u -> !isFollowed(currentUser, u)).toList();
   }
 
   public boolean isFollowed(User currentUser, User user) {
@@ -130,6 +126,7 @@ public class UserService {
     User currentUser = findByUsername(currentUserUsername);
     if (!isFollowed(currentUser, user)) {
       followsRepository.save(new Follow(currentUser, user));
+      notificationService.saveFollow(currentUser, user);
       return true;
     } else {
       followsRepository.deleteById(new FollowPk(currentUser.getId(), user.getId()));

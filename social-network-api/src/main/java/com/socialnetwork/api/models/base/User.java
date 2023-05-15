@@ -5,6 +5,7 @@ import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
+import org.aspectj.weaver.ast.Not;
 
 
 import javax.persistence.Entity;
@@ -86,6 +87,9 @@ public class User {
 
   @OneToMany(mappedBy = "recipient")
   private List<Message> receivedMessages;
+
+  @OneToMany(mappedBy = "recipient")
+  private List<Notification> notifications;
 
   private boolean isEnabled;
 
