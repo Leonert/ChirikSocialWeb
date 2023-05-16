@@ -6,8 +6,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.socialnetwork.api.util.Const.Response.DATE_FORMAT;
-import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
+import static com.socialnetwork.api.util.Constants.Response.DATE_FORMAT;
+import static com.socialnetwork.api.util.Constants.Response.TIME_FORMAT;
 
 public enum UserDto {
   ;
@@ -18,11 +18,6 @@ public enum UserDto {
     @Data
     public static class Default {
       int id;
-    }
-
-    @Data
-    public static class Email {
-      String emailAddress;
     }
 
     @Data
@@ -76,7 +71,7 @@ public enum UserDto {
       String website;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
       LocalDateTime birthDate;
-      List<PostDto.Response.Profile> profilePosts;
+      List<PostDto.Response.PostInfo> profilePosts;
       int followersCounter;
       int followedCounter;
       boolean isCurrUserFollower;
@@ -111,14 +106,12 @@ public enum UserDto {
       LocalDateTime birthDate;
       String profileBackgroundImage;
       String profileImage;
-
     }
 
     @Data
     public static class AccountData {
       UserDto.Response.Default user;
       String jwt;
-
     }
   }
 }

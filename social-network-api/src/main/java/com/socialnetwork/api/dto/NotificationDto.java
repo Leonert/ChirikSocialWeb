@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
+import static com.socialnetwork.api.util.Constants.Response.TIME_FORMAT;
 
 @Data
 public class NotificationDto {
