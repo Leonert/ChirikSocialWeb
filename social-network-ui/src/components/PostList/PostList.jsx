@@ -6,7 +6,7 @@ import Post from '../Post/Post';
 
 export default function PostList() {
   const posts = useSelector((state) => state.home.post);
-
+  console.log(posts);
   const dispatch = useDispatch();
   const handleRetweet = (props) => {
     dispatch(openReplayModal(props));
@@ -25,16 +25,16 @@ export default function PostList() {
       {posts &&
         posts.map((post) => (
           <Post
-            key={+post.id}
-            avatar={post.avatar}
-            name={post.nickname}
+            key={post.id}
+            avatar={post.author.profileImage}
+            name={post.author.name}
             retweet={post.retweet}
-            like={post.like}
+            like={post.likesNumber}
             view={post.view}
-            replay={post.replay}
-            content={post.post}
-            data={post.data}
-            image={post.img}
+            replay={post.reply}
+            content={post.text}
+            data={post.createdDate}
+            image={post.image}
             handleClick={() => dispatch(getPostId(`${post.id}`))}
             handleClickLike={() => handelLike(`${post.id}`)}
             handleClickReplay={() => handleReplay(`${post.id}`)}

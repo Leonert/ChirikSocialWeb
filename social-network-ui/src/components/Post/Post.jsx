@@ -24,8 +24,7 @@ export default function Post(props) {
   return (
     <Card className={classes.Page}>
       <CardHeader
-        className={classes.pageItem }
-
+        className={classes.pageItem}
         avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
         action={
           <Tooltip title="More">
@@ -41,14 +40,14 @@ export default function Post(props) {
           </Typography>
         }
       />
-      {props.image && <CardMedia component="img" image={props.image} alt="Post" className={classes.iconImg} />}
+     
       {props.content && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>
             {props.content}
           </Typography>
         </CardContent>
-      )}
+      )} {props.image && <CardMedia component="img" image={props.image} alt="Post" className={classes.iconImg} />}
       <CardActions
         disableSpacing
         className={classes.pageItem}

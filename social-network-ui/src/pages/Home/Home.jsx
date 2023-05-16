@@ -10,6 +10,7 @@ import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
 import { getPost } from '../../features/slices/homeSlice';
+import { GetPosts } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
@@ -18,7 +19,7 @@ function Home() {
 
   const dispatch = useDispatch();
   const fetchPost = () => {
-    fetch('./data.json')
+    dispatch(GetPosts())
       .then((r) => r.json())
       .then((products) => {
         dispatch(getPost(products));
@@ -29,8 +30,12 @@ function Home() {
   };
 
   useEffect(() => {
-    fetchPost();
-  }, []);
+    dispatch(GetPosts(1)).then((result) => {
+      if (GetPosts.fulfilled.match(result)) {
+        dispatch(getPost(result.payload));
+      }
+    });
+  }, [dispatch]);
 
   return (
     <Grid container spacing={2}>
