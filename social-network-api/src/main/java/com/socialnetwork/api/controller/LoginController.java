@@ -31,8 +31,8 @@ public class LoginController {
   private final NotificationService notificationService;
 
 
-  @PostMapping("/authenticate")
-  public ResponseEntity<?> createAuthToken(@RequestBody UserDto.Request.Credentials userDto) throws AccessDeniedException {
+  @PostMapping()
+  public ResponseEntity<?> logIn(@RequestBody UserDto.Request.Credentials userDto) throws AccessDeniedException {
     User user = userService.findByEmailAddress(userDto.getEmailAddress()).orElseThrow(AccessDeniedException::new);
 
     if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {

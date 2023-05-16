@@ -21,11 +21,6 @@ public enum UserDto {
     }
 
     @Data
-    public static class Email {
-      String emailAddress;
-    }
-
-    @Data
     public static class Username {
       String username;
     }
@@ -111,14 +106,12 @@ public enum UserDto {
       LocalDateTime birthDate;
       String profileBackgroundImage;
       String profileImage;
-
     }
 
     @Data
     public static class AccountData {
       UserDto.Response.Default user;
       String jwt;
-
     }
   }
 }

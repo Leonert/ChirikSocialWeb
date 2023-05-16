@@ -35,6 +35,10 @@ public class UserService {
     return userRepository.existsByUsername(username);
   }
 
+  public boolean existsByEmailAddress(String email) {
+    return userRepository.existsByEmailAddress(email);
+  }
+
   public User findByUsername(String username) throws NoUserWithSuchCredentialsException {
     return userRepository.findByUsername(username).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
