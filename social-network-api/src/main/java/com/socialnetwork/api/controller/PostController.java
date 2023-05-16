@@ -8,9 +8,9 @@ import com.socialnetwork.api.mapper.UserMapper;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
-import com.socialnetwork.api.service.BookmarkService;
-import com.socialnetwork.api.service.LikeService;
 import com.socialnetwork.api.service.PostService;
+import com.socialnetwork.api.service.LikeService;
+import com.socialnetwork.api.service.BookmarkService;
 import com.socialnetwork.api.service.UserService;
 import com.socialnetwork.api.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +74,7 @@ public class PostController {
 
   @GetMapping()
   public List<PostDto.Response.PostInfo>
-    getPosts(@RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
+  getPosts(@RequestParam("p") Optional<Integer> page, @RequestParam("n") Optional<Integer> posts) {
     int pageNum = page.orElse(PAGE_NUMBER_DEFAULT);
     int postsNum = posts.orElse(POSTS_PER_PAGE_DEFAULT);
 
@@ -92,29 +92,25 @@ public class PostController {
 
   @PostMapping()
   public ResponseEntity<Void> addPost(@RequestBody PostDto.Request.Created postDto, HttpServletRequest request)
-          throws NoPostWithSuchIdException {
-    User user = userService.getReferenceById(postDto.getUser().getId());
+          throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+    User user = userService.findByUsername(jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
     Post post = postMapper.convertToPost(postDto, user);
-
-    //          jwtTokenUtil.verifyUsernames(request.getHeader(AUTHORIZATION_HEADER), user.getUsername());
-
     postService.save(post);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @GetMapping("/replies")
+  @GetMapping("{id}/replies")
   public List<PostDto.Response.PostInfo> getReplies(
-          @RequestParam("i") Optional<Integer> id,
+          @PathVariable("id") Optional<Integer> id,
           @RequestParam("p") Optional<Integer> page,
-          @RequestParam("n") Optional<Integer> usersForPage,
-          HttpServletRequest request) throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+          @RequestParam("n") Optional<Integer> usersForPage) throws NoPostWithSuchIdException {
     return postMapper.mapForListing(postService.getReplies(id.orElseThrow(NoPostWithSuchIdException::new),
             page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
-  @GetMapping("/retweets")
+  @GetMapping("{id}/retweets")
   public List<UserDto.Response.Listing> getRetweets(
-          @RequestParam("i") Optional<Integer> id,
+          @PathVariable("id") Optional<Integer> id,
           @RequestParam("p") Optional<Integer> page,
           @RequestParam("n") Optional<Integer> usersForPage,
           HttpServletRequest request) throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
@@ -123,9 +119,9 @@ public class PostController {
             page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
-  @GetMapping("/likes")
+  @GetMapping("{id}/likes")
   public List<UserDto.Response.Listing> getLikes(
-          @RequestParam("i") Optional<Integer> id,
+          @PathVariable("id") Optional<Integer> id,
           @RequestParam("p") Optional<Integer> page,
           @RequestParam("n") Optional<Integer> usersForPage,
           HttpServletRequest request) throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
@@ -134,9 +130,9 @@ public class PostController {
             page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
-  @GetMapping("/bookmarks")
+  @GetMapping("{id}/bookmarks")
   public List<UserDto.Response.Listing> getBookmarks(
-          @RequestParam("i") Optional<Integer> id,
+          @PathVariable("id") Optional<Integer> id,
           @RequestParam("p") Optional<Integer> page,
           @RequestParam("n") Optional<Integer> usersForPage,
           HttpServletRequest request) throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
@@ -145,24 +141,23 @@ public class PostController {
             page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
-  @PostMapping("/bookmarks")
-  public ResponseEntity<Integer> bookmarkUnbookmark(@RequestBody PostDto.Request.Default postDto, HttpServletRequest request)
-          throws NoUserWithSuchCredentialsException {
-    //      jwtService.verifyById(request.getHeader(AUTHORIZATION_HEADER), userId);
+  @PostMapping("{id}/bookmarks")
+  public ResponseEntity<Integer> bookmarkUnbookmark(@PathVariable("id") Optional<Integer> id, HttpServletRequest request)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     return ResponseEntity
-            .status(bookmarkService.bookmarkUnBookmark(postDto.getId(), request.getHeader(AUTHORIZATION_HEADER))
+            .status(bookmarkService.bookmarkUnBookmark(id.orElseThrow(NoPostWithSuchIdException::new),
+                    request.getHeader(AUTHORIZATION_HEADER))
                     ? HttpStatus.OK
                     : HttpStatus.CREATED)
-            .body(bookmarkService.countPostBookmarks(postMapper.convertToPost(postDto)));
+            .body(bookmarkService.countPostBookmarks(new Post(id.get())));
   }
 
-  @PostMapping("/likes")
-  public ResponseEntity<Integer> saveLike(@RequestBody PostDto.Request.Default postDto, HttpServletRequest request)
-          throws NoUserWithSuchCredentialsException {
-    //      jwtService.verifyById(request.getHeader(AUTHORIZATION_HEADER), userId);
+  @PostMapping("{id}/likes")
+  public ResponseEntity<Integer> saveLike(@PathVariable("id") Optional<Integer> id, HttpServletRequest request)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     return ResponseEntity
             .status(likeService.likeUnlike(userService.findByUsername(request.getHeader(AUTHORIZATION_HEADER)).getId(),
-                    postDto.getId()) ? HttpStatus.CREATED : HttpStatus.OK)
-            .body(likeService.countPostLikes(postMapper.convertToPost(postDto)));
+                    id.orElseThrow(NoPostWithSuchIdException::new)) ? HttpStatus.CREATED : HttpStatus.OK)
+            .body(likeService.countPostLikes(new Post(id.get())));
   }
 }
