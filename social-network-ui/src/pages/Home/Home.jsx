@@ -2,21 +2,31 @@ import { Box } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getPost } from '../../features/slices/homeSlice';
 import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
 import Following from '../../components/Following/Following';
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
 import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
-
+import { getPost } from '../../features/slices/homeSlice';
+import { loadFollowing } from '../../features/slices/userDatas/followingSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
+  const { user } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
+  const { users } = useSelector((state) => state.following);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token && user && !users) {
+      dispatch(loadFollowing(user.username, token));
+    }
+  }, [user, token, users]);
+
   const fetchPost = () => {
     fetch('./data.json')
       .then((r) => r.json())

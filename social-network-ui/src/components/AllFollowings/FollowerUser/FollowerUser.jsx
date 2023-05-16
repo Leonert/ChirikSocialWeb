@@ -7,10 +7,10 @@ import { CustomButton } from '../../Login/CustomButton';
 
 export const FollowerUser = ({ user }) => {
   const dispatch = useDispatch();
-  const { avatar, _id, name, username } = user;
+  // const { avatar, _id, name, username } = user;
 
   const handleFollow = useCallback(() => {
-    dispatch(followUser(_id));
+    // dispatch(followUser(_id));
   }, []);
 
   return (
@@ -27,15 +27,17 @@ export const FollowerUser = ({ user }) => {
     >
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mr: '10px' }}>
-          <Avatar alt="Remy Sharp" src={avatar} />
+          {/* <Avatar alt="Remy Sharp" src={avatar} /> */}
         </Box>
         <Box>
           <Typography sx={{ color: '#000000' }} variant="h6">
-            {name}
+            {/* {name} */}
+            name
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ mr: '10px', color: 'gray' }} variant="span">
-              @{username}
+              {/* @{username} */}
+              username
             </Typography>
             <Chip sx={{ backgroundColor: '#37474f' }} label="Follows you" />
           </Box>

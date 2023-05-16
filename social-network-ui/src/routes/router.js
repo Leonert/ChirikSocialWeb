@@ -3,9 +3,12 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
+import { FollowersPage } from '../pages/FollowersPage/FollowersPage';
+import { FollowingPage } from '../pages/FollowingPage/FollowingPage';
 import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
-import { Subscriptions } from '../pages/Subscriptions/Subscriptions';
+import Profile from '../pages/Profile/Profile';
+import profileLoader from '../pages/Profile/profileLoader';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +31,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/messages',
+
         element: <Messages />,
       },
       {
@@ -40,11 +44,34 @@ export const router = createBrowserRouter([
       },
       {
         path: '/profile',
-        element: <div></div>,
+        element: <Profile />,
+        loader: profileLoader,
+        children: [
+          {
+            index: true,
+            element: <div>posts</div>,
+          },
+          {
+            path: 'replies',
+            element: <div>replies</div>,
+          },
+          {
+            path: 'media',
+            element: <div>media</div>,
+          },
+          {
+            path: 'likes',
+            element: <div>likes</div>,
+          },
+        ],
       },
       {
-        path: '/subscriptions',
-        element: <Subscriptions />,
+        path: '/:username/following',
+        element: <FollowingPage />,
+      },
+      {
+        path: '/:username/followers',
+        element: <FollowersPage />,
       },
     ],
   },

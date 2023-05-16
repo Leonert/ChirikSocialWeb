@@ -18,15 +18,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.socialnetwork.api.util.Const.Auth.BEARER;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-
-  private static final String BEARER = "Bearer ";
   private final JwtTokenUtil jwtTokenUtil;
   private final JwtUserDetailsService jwtUserDetailsService;
   private final List<String> globalPaths =
-      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration"));
+      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -44,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String username = null;
     String jwtToken = null;
 
-    if (authHeader != null && authHeader.startsWith(BEARER)) {
+    if (jwtTokenUtil.isTokenExists(authHeader)) {
       jwtToken = authHeader.substring(BEARER.length());
       try {
         username = jwtTokenUtil.getUsernameFromToken(jwtToken);

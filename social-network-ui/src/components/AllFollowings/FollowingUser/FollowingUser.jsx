@@ -7,7 +7,7 @@ import { CustomButton } from '../../Login/CustomButton';
 
 export const FollowingUser = ({ user }) => {
   const dispatch = useDispatch();
-  const { avatar, _id, name, username } = user;
+  // const { avatar, _id, name, username } = user;
 
   const [onActive, setOnActive] = useState(false);
 
@@ -18,7 +18,7 @@ export const FollowingUser = ({ user }) => {
     setOnActive(false);
   }, []);
   const handleUnfollow = useCallback(() => {
-    dispatch(unfollowUser(_id));
+    // dispatch(unfollowUser(_id));
   }, []);
 
   return (
@@ -35,15 +35,17 @@ export const FollowingUser = ({ user }) => {
     >
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mr: '10px' }}>
-          <Avatar alt="Remy Sharp" src={avatar} />
+          {/* <Avatar alt="Remy Sharp" src={avatar} /> */}
         </Box>
         <Box>
           <Typography sx={{ color: '#000000' }} variant="h6">
-            {name}
+            {/* {name} */}
+            name
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ mr: '10px', color: 'gray' }} variant="span">
-              @{username}
+              {/* @{username} */}
+              username
             </Typography>
           </Box>
         </Box>

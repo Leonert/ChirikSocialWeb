@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState: {
-    followers: true,
+    followers: false,
     following: false,
   },
   reducers: {

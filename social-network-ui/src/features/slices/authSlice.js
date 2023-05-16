@@ -64,7 +64,7 @@ export const loginUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         data: {
-          username: email,
+          emailAddress: email,
           password,
           rememberMe,
         },
@@ -102,6 +102,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
     [loadFollowers.pending]: (state, action) => {
       state.loading = true;
       state.error = null;

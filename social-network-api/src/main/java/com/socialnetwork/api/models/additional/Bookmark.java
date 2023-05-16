@@ -27,4 +27,13 @@ public class Bookmark {
   @JoinColumn(name = "post_id")
   @MapsId("postId")
   private Post bookmarkedPost;
+
+  public Bookmark() {
+  }
+
+  public Bookmark(User bookmarkedBy, Post bookmarkedPost) {
+    this.bookmarkPk = new BookmarkPk(bookmarkedBy.getId(), bookmarkedPost.getId());
+    this.bookmarkedBy = bookmarkedBy;
+    this.bookmarkedPost = bookmarkedPost;
+  }
 }
