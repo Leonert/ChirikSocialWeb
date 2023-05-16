@@ -1,6 +1,7 @@
 package com.socialnetwork.api.security;
 
 import com.socialnetwork.api.filter.JwtAuthFilter;
+import com.socialnetwork.api.security.oauth2.CustomOAuth2UserService;
 import com.socialnetwork.api.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
