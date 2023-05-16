@@ -59,7 +59,7 @@ export const loginUser = createAsyncThunk(
     try {
       const { data } = await axiosIns({
         method: 'post',
-        url: `/api/login/authenticate`,
+        url: `/api/login`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,6 +69,15 @@ export const loginUser = createAsyncThunk(
           rememberMe,
         },
       });
+
+      localStorage.setItem(
+        'authData',
+        JSON.stringify({
+          email,
+          password,
+          rememberMe,
+        })
+      );
 
       return data;
     } catch (error) {
