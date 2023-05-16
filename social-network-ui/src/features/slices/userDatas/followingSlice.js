@@ -4,11 +4,11 @@ import axiosIns from '../../../../src/axiosInstance';
 
 export const loadFollowing = createAsyncThunk(
   'followingSlice/loadFollowing',
-  async ({ username, token, currentPage = 0 }, { rejectWithValue }) => {
+  async ({ username, token, currentPage = 0, quantity = 10 }, { rejectWithValue }) => {
     try {
       const { data } = await axiosIns({
         method: 'get',
-        url: `/api/user/following/`,
+        url: `/api/users/followed/p=${currentPage}&n=${quantity}`,
         headers: {
           'Content-Type': 'application/json',
           // Authorization: `Bearer ${token}`,
