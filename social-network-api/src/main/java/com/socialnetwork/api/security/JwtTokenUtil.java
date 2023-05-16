@@ -1,10 +1,12 @@
 package com.socialnetwork.api.security;
 
+import com.socialnetwork.api.configs.AppProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,8 @@ public class JwtTokenUtil {
 
   @Value("${jwt.expire.remember}")
   private Long expirationRemember;
+
+  private AppProperties appProperties;
 
   public boolean isTokenExists(String authHeader) {
     return authHeader != null && authHeader.startsWith(BEARER);
@@ -62,6 +66,20 @@ public class JwtTokenUtil {
         .setExpiration(expiration)
         .signWith(SignatureAlgorithm.HS512, jwtSecret)
         .compact();
+  }
+
+  public String createToken(Authentication authentication) {
+    UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+    Date now = new Date();
+    Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+
+    return Jwts.builder()
+            .setSubject(Long.toString(userPrincipal.getId()))
+            .setIssuedAt(new Date())
+            .setExpiration(expiryDate)
+            .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+            .compact();
   }
 
   public Boolean isTokenValid(String token, UserDetails userDetails) {

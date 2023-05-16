@@ -3,9 +3,15 @@ package com.socialnetwork.api.security;
 import com.socialnetwork.api.filter.JwtAuthFilter;
 import com.socialnetwork.api.security.oauth2.CustomOAuth2UserService;
 import com.socialnetwork.api.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final JwtAuthFilter jwtAuthFilter;
@@ -31,7 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-
   private CustomUserDetailsService customUserDetailsService;
 
   private CustomOAuth2UserService customOAuth2UserService;
@@ -42,9 +48,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-  public TokenAuthenticationFilter tokenAuthenticationFilter() {
-    return new TokenAuthenticationFilter();
-  }
+//  public TokenAuthenticationFilter tokenAuthenticationFilter() {
+//    return new TokenAuthenticationFilter();
+//  }
 
   @Bean
   public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
