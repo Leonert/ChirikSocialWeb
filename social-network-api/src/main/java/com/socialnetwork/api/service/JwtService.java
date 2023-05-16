@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+import static com.socialnetwork.api.util.Const.Auth.BEARER;
+
 @Service
 @RequiredArgsConstructor
 public class JwtService {
@@ -17,7 +19,7 @@ public class JwtService {
     isTokenExists(authHeader);
     userService
         .getByUsernameAndId(
-            jwtTokenUtil.getUsernameFromToken(authHeader.substring(JwtTokenUtil.BEARER.length())),
+            jwtTokenUtil.getUsernameFromToken(authHeader.substring(BEARER.length())),
             userId)
         .orElseThrow(AccessDeniedException::new);
   }
@@ -25,7 +27,7 @@ public class JwtService {
   public void verifyByUsername(String authHeader, String username) throws AccessDeniedException {
     isTokenExists(authHeader);
     if (!Objects.equals(
-        jwtTokenUtil.getUsernameFromToken(authHeader.substring(JwtTokenUtil.BEARER.length())),
+        jwtTokenUtil.getUsernameFromToken(authHeader.substring(BEARER.length())),
         username)) {
       throw new AccessDeniedException();
     }
