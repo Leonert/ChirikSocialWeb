@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.function.Function;
 
-import static com.socialnetwork.api.util.Const.Auth.BEARER;
+import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 
 @Component
 @PropertySource("classpath:application.properties")

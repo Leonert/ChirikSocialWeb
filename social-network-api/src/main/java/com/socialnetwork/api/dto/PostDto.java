@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
+import static com.socialnetwork.api.util.Constants.Response.TIME_FORMAT;
 
 public enum PostDto {
   ;
@@ -43,8 +43,22 @@ public enum PostDto {
       int id;
     }
 
+    public interface PostInfo {
+      void setLikesNumber(int likesNumber);
+
+      void setBookmarksNumber(int bookmarksNumber);
+
+      void setRetweetsNumber(int retweetsNumber);
+
+      void setRepliesNumber(int repliesNumber);
+
+      PostDto.Response.PostInfo getOriginalPost();
+
+      int getId();
+    }
+
     @Data
-    public static class Default {
+    public static class Default implements PostInfo {
       int id;
       UserDto.Response.Author author;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
@@ -53,11 +67,13 @@ public enum PostDto {
       String image;
       int likesNumber;
       int bookmarksNumber;
+      int retweetsNumber;
+      int repliesNumber;
       PostDto.Response.Default originalPost;
     }
 
     @Data
-    public static class Profile {
+    public static class Profile implements PostInfo {
       int id;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;
@@ -65,6 +81,8 @@ public enum PostDto {
       String image;
       int likesNumber;
       int bookmarksNumber;
+      int retweetsNumber;
+      int repliesNumber;
       PostDto.Response.Profile originalPost;
     }
   }
