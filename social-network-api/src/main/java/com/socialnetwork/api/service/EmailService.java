@@ -1,5 +1,6 @@
 package com.socialnetwork.api.service;
 
+import com.socialnetwork.api.exception.custom.EmailVerificationException;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class EmailService {
         message.setText("To confirm your account, please click here: "
             + confirmAccountUrl + token.getConfirmationToken());
       } catch (Exception e) {
-        throw new Exception("Unexpected error");
+        throw new EmailVerificationException("Unexpected error");
       }
     };
 

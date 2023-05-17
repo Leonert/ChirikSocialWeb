@@ -11,6 +11,15 @@ import java.io.Serializable;
 public class BookmarkPk implements Serializable {
   @Column(name = "user_id")
   private int userId;
+
   @Column(name = "post_id")
   private int postId;
+
+  public BookmarkPk() {
+  }
+
+  public BookmarkPk(int userId, int postId) {
+    this.userId = userId;
+    this.postId = postId;
+  }
 }

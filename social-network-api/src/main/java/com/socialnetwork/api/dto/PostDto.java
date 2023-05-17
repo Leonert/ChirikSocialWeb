@@ -1,52 +1,89 @@
 package com.socialnetwork.api.dto;
 
-
-import com.socialnetwork.api.models.additional.Bookmark;
-import com.socialnetwork.api.models.additional.Like;
-import com.socialnetwork.api.models.additional.Reply;
-import com.socialnetwork.api.models.additional.Retweet;
-import com.socialnetwork.api.models.additional.View;
-import com.socialnetwork.api.models.base.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.Value;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
-public class PostDto {
-  private interface Id {int getId(); }
+import static com.socialnetwork.api.util.Constants.Response.TIME_FORMAT;
 
-  private interface Author {User getAuthor(); }
+public enum PostDto {
+  ;
 
-  private interface Text {String getText(); }
+  public enum Request {
+    ;
 
-  private interface Image {String getImage(); }
-
-  private interface CreatedDate {LocalDateTime getCreatedDate(); }
-
-  private interface Views {List<View> getViews(); }
-
-  private interface Likes {List<Like> getLikes(); }
-
-  private interface Retweets {List<Retweet> getRetweets(); }
-
-  private interface Bookmarks {List<Bookmark> getBookmarks(); }
-
-  private interface Replies {List<Reply> getReplies(); }
-
-  private interface RepliedTo {Reply getRepliedTo(); }
-
-  public enum Request{;
-    @Value public static class Default implements Id, Author {
+    @Data
+    public static class Default {
       int id;
-      User author;
+    }
+
+    @Data
+    public static class Editable {
+      int id;
+      String text;
+      String image;
+    }
+
+    @Data
+    public static class Created {
+      int id;
+      UserDto.Request.Default user;
+      String text;
+      String image;
+      Integer originalPostId;
     }
   }
 
-  public enum Response{;
-    @Value public static class Default implements Id, Author {
+  public enum Response {
+    ;
+
+    @Data
+    public static class Id {
       int id;
-      User author;
+    }
+
+    public interface PostInfo {
+      void setLikesNumber(int likesNumber);
+
+      void setBookmarksNumber(int bookmarksNumber);
+
+      void setRetweetsNumber(int retweetsNumber);
+
+      void setRepliesNumber(int repliesNumber);
+
+      PostDto.Response.PostInfo getOriginalPost();
+
+      int getId();
+    }
+
+    @Data
+    public static class Default implements PostInfo {
+      int id;
+      UserDto.Response.Author author;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
+      LocalDateTime createdDate;
+      String text;
+      String image;
+      int likesNumber;
+      int bookmarksNumber;
+      int retweetsNumber;
+      int repliesNumber;
+      PostDto.Response.Default originalPost;
+    }
+
+    @Data
+    public static class Profile implements PostInfo {
+      int id;
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
+      LocalDateTime createdDate;
+      String text;
+      String image;
+      int likesNumber;
+      int bookmarksNumber;
+      int retweetsNumber;
+      int repliesNumber;
+      PostDto.Response.Profile originalPost;
     }
   }
 }

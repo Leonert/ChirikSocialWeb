@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.function.Function;
 
+import static com.socialnetwork.api.util.Constants.Auth.BEARER;
+
 @Component
 @PropertySource("classpath:application.properties")
 public class JwtTokenUtil {
@@ -23,6 +25,10 @@ public class JwtTokenUtil {
 
   @Value("${jwt.expire.remember}")
   private Long expirationRemember;
+
+  public boolean isTokenExists(String authHeader) {
+    return authHeader != null && authHeader.startsWith(BEARER);
+  }
 
   public String getUsernameFromToken(String token) {
     return getClaimsFromToken(token, Claims::getSubject);

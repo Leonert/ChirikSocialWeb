@@ -5,6 +5,7 @@ import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
+import org.aspectj.weaver.ast.Not;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +22,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -29,11 +30,8 @@ public class User {
   @Column(name = "username")
   private String username;
 
-  @Column(name = "first_name")
-  private String firstName;
-
-  @Column(name = "last_name")
-  private String lastName;
+  @Column(name = "name")
+  private String name;
 
   @Column(name = "password")
   private String password;
@@ -44,16 +42,32 @@ public class User {
   @Column(name = "created_date")
   private LocalDateTime createdDate;
 
-  @Column(name = "profile_background_image_url")
-  private String profileBackgroundImageUrl;
+  @Column(name = "bio")
+  private String bio;
 
-  @Column(name = "profile_image_url")
-  private String profileImageUrl;
+  @Column(name = "location")
+  private String location;
+
+  @Column(name = "website")
+  private String website;
+
+  @Column(name = "birth_date")
+  private LocalDateTime birthDate;
+
+  @Column(name = "profile_background_image", length = 1250000)
+  private String profileBackgroundImage;
+
+  @Column(name = "profile_image", length = 1250000)
+  private String profileImage;
+
   //relations
-  @OneToMany(mappedBy = "followerUser")
-  private List<Follow> followers;
+  @OneToMany(mappedBy = "author")
+  private List<Post> posts;
 
   @OneToMany(mappedBy = "followedUser")
+  private List<Follow> followers;
+
+  @OneToMany(mappedBy = "followerUser")
   private List<Follow> followed;
 
   @OneToMany(mappedBy = "seenPost")
@@ -71,5 +85,23 @@ public class User {
   @OneToMany(mappedBy = "recipient")
   private List<Message> receivedMessages;
 
+  @OneToMany(mappedBy = "recipient")
+  private List<Notification> notifications;
+
   private boolean isEnabled;
+
+  @Transient
+  private boolean isCurrUserFollower;
+
+  public User() {
+
+  }
+
+  public User(int id) {
+    this.id = id;
+  }
+
+  private void setId(int id) {
+    this.id = id;
+  }
 }
