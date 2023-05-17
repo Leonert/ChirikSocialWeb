@@ -35,8 +35,10 @@ function Home() {
     const authData = JSON.parse(authDatals);
     const token = localStorage.getItem('token');
 
-    if (authData.email && authData.password && authData.rememberMe && token) {
-      dispatch(loginUser({ email: authData.email, password: authData.password, rememberMe: authData.rememberMe }));
+    if (authData) {
+      if (authData.email && authData.password && authData.rememberMe && token) {
+        dispatch(loginUser({ email: authData.email, password: authData.password, rememberMe: authData.rememberMe }));
+      }
     }
   }, []);
 

@@ -6,13 +6,13 @@ export const getNotifications = createAsyncThunk(
   'notifications/getNotifications',
   async ({ token }, { rejectWithValue }) => {
     console.log(token);
+
     try {
       const { data } = await axiosIns({
-        method: 'get',
-        url: `/api/notifications`,
+        method: 'GET',
+        url: `api/notifications`,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
       });
 
