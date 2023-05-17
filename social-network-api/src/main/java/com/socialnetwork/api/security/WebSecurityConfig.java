@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -35,8 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
 
-
-
+  private UserDetailsService userDetailsService;
 
   private CustomUserDetailsService customUserDetailsService;
 
@@ -77,11 +77,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
 
-
-
-
-
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and()
@@ -92,8 +87,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     http
             .authorizeRequests()
-                    .antMatchers("/oauth2/**")
-                            .permitAll();
+            .antMatchers("/auth/**", "/oauth2/**")
+            .permitAll();
 
     http
             .oauth2Login()

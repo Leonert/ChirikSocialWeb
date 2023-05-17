@@ -3,13 +3,15 @@ package com.socialnetwork.api.security;
 import com.socialnetwork.api.exception.ResourceNotFoundException;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Component
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
   UserRepository userRepository;
 

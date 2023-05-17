@@ -72,13 +72,13 @@ public class JwtTokenUtil {
     UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+    Date expiryDate = new Date(now.getTime() + expirationDefault);
 
     return Jwts.builder()
             .setSubject(Long.toString(userPrincipal.getId()))
             .setIssuedAt(new Date())
             .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+            .signWith(SignatureAlgorithm.HS512, jwtSecret)
             .compact();
   }
 

@@ -4,6 +4,7 @@ import com.socialnetwork.api.configs.AppProperties;
 import com.socialnetwork.api.exception.BadRequestException;
 import com.socialnetwork.api.security.JwtTokenUtil;
 import com.socialnetwork.api.util.CookieUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
