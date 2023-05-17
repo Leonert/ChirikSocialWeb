@@ -22,7 +22,7 @@ export default function Post(props) {
   const classes = usePostStyle();
 
   return (
-    <Card className={classes.Page}>
+    <Card className={props.classes}>
       <CardHeader
         className={classes.pageItem}
         avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
@@ -35,11 +35,18 @@ export default function Post(props) {
         }
         title={props.name}
         subheader={
-          <Typography variant="body1" color="#fff">
+          <Typography variant="body2" color="#fff">
             {props.data}
           </Typography>
         }
       />
+
+      {props.originalPost && (
+        <Typography variant="body1" color="#fff" sx={{ p: '10px 20px' }}>
+          {props.content === null && props.image === null ? 'retweet' : 'reply'}
+        </Typography>
+      )}
+      {props.children}
       {props.content && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>
@@ -48,25 +55,7 @@ export default function Post(props) {
         </CardContent>
       )}
       {props.image && <CardMedia component="img" image={props.image} alt="Post" className={classes.iconImg} />}
-      {props.retweet && (
-        <CardHeader
-          className={classes.pageItem}
-          avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
-          action={
-            <Tooltip title="More">
-              <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
-                <MoreHorizIcon />
-              </IconButton>
-            </Tooltip>
-          }
-          title={props.name}
-          subheader={
-            <Typography variant="body1" color="#fff">
-              {props.data}
-            </Typography>
-          }
-        />
-      )}
+
       <CardActions
         disableSpacing
         className={classes.pageItem}

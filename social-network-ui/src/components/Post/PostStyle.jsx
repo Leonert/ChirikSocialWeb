@@ -6,6 +6,10 @@ export const usePostStyle = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     border: `1px solid ${theme.palette.divider}`,
   },
+  PageSmall: {
+    margin: '0 30px',
+    border: `1px solid ${theme.palette.divider}`,
+  },
   pageItem: {
     color: theme.palette.text.primary,
     backgroundColor: theme.palette.background.paper,
