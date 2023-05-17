@@ -26,9 +26,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-
-
-
   private final CustomOAuth2UserService customOAuth2UserService;
 
   private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -42,8 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new HttpCookieOAuth2AuthorizationRequestRepository();
   }
 
-
-
   @Bean
   public PasswordEncoder encoder() {
     return new BCryptPasswordEncoder();
@@ -55,26 +50,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
-            .headers().frameOptions().disable()
-            .and()
-            .authorizeRequests()
-//            .antMatchers("/",
-//                    "/error",
-//                    "/favicon.ico",
-//                    "/**/*.png",
-//                    "/**/*.gif",
-//                    "/**/*.svg",
-//                    "/**/*.jpg",
-//                    "/**/*.html",
-//                    "/**/*.css",
-//                    "/**/*.js")
-//            .permitAll()
+            .headers().frameOptions().disable();
+
+    http.authorizeRequests()
             .antMatchers("/auth/**", "/oauth2/**")
             .permitAll()
             .anyRequest()
-            .authenticated()
-            .and()
-            .oauth2Login()
+            .authenticated();
+
+    http.oauth2Login()
             .authorizationEndpoint()
             .baseUri("/oauth2/authorize")
             .authorizationRequestRepository(cookieAuthorizationRequestRepository())
@@ -87,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .successHandler(oAuth2AuthenticationSuccessHandler)
             .failureHandler(oAuth2AuthenticationFailureHandler);
+
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }
 }
