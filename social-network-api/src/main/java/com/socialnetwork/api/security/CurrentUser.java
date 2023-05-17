@@ -1,4 +1,4 @@
-package com.socialnetwork.api.security.oauth2;
+package com.socialnetwork.api.security;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
