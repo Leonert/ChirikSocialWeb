@@ -28,10 +28,10 @@ export default function PostList() {
             key={post.id}
             avatar={post.author.profileImage}
             name={post.author.name}
-            retweet={post.retweet}
+            retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
-            replay={post.reply}
+            reply={post.repliesNumber}
             content={post.text}
             data={post.createdDate}
             image={post.image}

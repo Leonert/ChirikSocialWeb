@@ -19,7 +19,7 @@ function Home() {
 
   const dispatch = useDispatch();
   const fetchPost = () => {
-    dispatch(GetPosts())
+    dispatch(GetPosts(0))
       .then((r) => r.json())
       .then((products) => {
         dispatch(getPost(products));

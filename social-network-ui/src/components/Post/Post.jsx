@@ -40,14 +40,33 @@ export default function Post(props) {
           </Typography>
         }
       />
-     
       {props.content && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>
             {props.content}
           </Typography>
         </CardContent>
-      )} {props.image && <CardMedia component="img" image={props.image} alt="Post" className={classes.iconImg} />}
+      )}
+      {props.image && <CardMedia component="img" image={props.image} alt="Post" className={classes.iconImg} />}
+      {props.retweet && (
+        <CardHeader
+          className={classes.pageItem}
+          avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
+          action={
+            <Tooltip title="More">
+              <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
+                <MoreHorizIcon />
+              </IconButton>
+            </Tooltip>
+          }
+          title={props.name}
+          subheader={
+            <Typography variant="body1" color="#fff">
+              {props.data}
+            </Typography>
+          }
+        />
+      )}
       <CardActions
         disableSpacing
         className={classes.pageItem}
@@ -58,7 +77,7 @@ export default function Post(props) {
       >
         <Tooltip title="Reply">
           <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
-            <Badge badgeContent={props.replay} color="primary">
+            <Badge badgeContent={props.reply} color="primary">
               <ChatBubbleOutlineIcon />
             </Badge>
           </IconButton>
