@@ -23,6 +23,7 @@ export default function Post(props) {
 
   return (
     <Card className={props.classes}>
+      {props.replay}
       <CardHeader
         className={classes.pageItem}
         avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
@@ -40,13 +41,11 @@ export default function Post(props) {
           </Typography>
         }
       />
-
       {props.originalPost && (
         <Typography variant="body1" color="#fff" sx={{ p: '10px 20px' }}>
           {props.content === null && props.image === null ? 'retweet' : 'reply'}
         </Typography>
       )}
-      {props.children}
       {props.content && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>
@@ -54,38 +53,40 @@ export default function Post(props) {
           </Typography>
         </CardContent>
       )}
+      {props.children}
       {props.image && <CardMedia component="img" image={props.image} alt="Post" className={classes.iconImg} />}
-
-      <CardActions
-        disableSpacing
-        className={classes.pageItem}
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-around',
-        }}
-      >
-        <Tooltip title="Reply">
-          <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
-            <Badge badgeContent={props.reply} color="primary">
-              <ChatBubbleOutlineIcon />
-            </Badge>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Retweet">
-          <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickRetweet}>
-            <Badge badgeContent={props.retweet} color="primary">
-              <RepeatIcon />
-            </Badge>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Like">
-          <IconButton aria-label="add to favorites" className={classes.iconColor} onClick={props.handleClickLike}>
-            <Badge badgeContent={props.like} color="primary">
-              <FavoriteIcon />
-            </Badge>
-          </IconButton>
-        </Tooltip>
-      </CardActions>
+      {!props.originalPost && (
+        <CardActions
+          disableSpacing
+          className={classes.pageItem}
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <Tooltip title="Reply">
+            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
+              <Badge badgeContent={props.reply} color="primary">
+                <ChatBubbleOutlineIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Retweet">
+            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickRetweet}>
+              <Badge badgeContent={props.retweet} color="primary">
+                <RepeatIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Like">
+            <IconButton aria-label="add to favorites" className={classes.iconColor} onClick={props.handleClickLike}>
+              <Badge badgeContent={props.like} color="primary">
+                <FavoriteIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+        </CardActions>
+      )}
     </Card>
   );
 }

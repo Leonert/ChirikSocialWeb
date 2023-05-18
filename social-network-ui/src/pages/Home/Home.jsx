@@ -18,16 +18,7 @@ function Home() {
   const modalUserState = useSelector((state) => state.home.modalUser);
 
   const dispatch = useDispatch();
-  const fetchPost = () => {
-    dispatch(GetPosts(0))
-      .then((r) => r.json())
-      .then((products) => {
-        dispatch(getPost(products));
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
+  
 
   useEffect(() => {
     dispatch(GetPosts(1)).then((result) => {

@@ -5,10 +5,12 @@ export const usePostStyle = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper + ' !important',
     color: theme.palette.text.primary,
     border: `1px solid ${theme.palette.divider}`,
+    padding: '20px 0',
   },
   PageSmall: {
     margin: '0 30px',
     border: `1px solid ${theme.palette.divider}`,
+    borderRadius: '10px  !important',
   },
   pageItem: {
     color: theme.palette.text.primary,
