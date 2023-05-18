@@ -34,6 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .headers().frameOptions().disable();
 
-//    http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }
 }
