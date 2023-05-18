@@ -20,7 +20,7 @@ import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
 
 @RestController
-@RequestMapping("/api/unauth/search")
+@RequestMapping("/api/search/unauth")
 @AllArgsConstructor
 public class NonAuthSearchController {
   private final NonAuthSearchService nonAuthSearchService;

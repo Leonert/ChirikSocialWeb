@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,30 +42,50 @@ public class UserController {
 
   @GetMapping("p/{username}")
   public UserDto.Response.Profile getProfileByUsername(
-      @PathVariable("username") String username, HttpServletRequest request) throws NoUserWithSuchCredentialsException {
+      @PathVariable("username") String username, HttpServletRequest request, HttpServletResponse response)
+      throws NoUserWithSuchCredentialsException, IOException {
+    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+      response.sendRedirect("/api/users/unauth/p/" + username);
+      return null;
+    }
     return userMapper.mapForProfile(userService.findByUsername(username),
             jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
 
-  @GetMapping("followers")
-  public List<UserDto.Response.Listing> getFollowers(@RequestParam(QUERY) String username,
+  @GetMapping("{username}/followers")
+  public List<UserDto.Response.Listing> getFollowers(@PathVariable("username") String username,
                                                      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-                                                     HttpServletRequest request)
-          throws NoUserWithSuchCredentialsException {
+                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
+                                                     HttpServletRequest request, HttpServletResponse response)
+      throws NoUserWithSuchCredentialsException, IOException {
+    int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
+    int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+      response.sendRedirect("/api/users/unauth/" + username + "/followers?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      return null;
+    }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(userService.getFollowers(username, currentUserUsername,
-        page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
+        pageD, resultsD), currentUserUsername);
   }
 
-  @GetMapping("followed")
-  public List<UserDto.Response.Listing> getFollowed(@RequestParam(QUERY) String username,
+  @GetMapping("{username}/followed")
+  public List<UserDto.Response.Listing> getFollowed(@PathVariable("username") String username,
                                                     @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-                                                    @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-                                                    HttpServletRequest request) throws NoUserWithSuchCredentialsException {
+                                                    @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
+                                                    HttpServletRequest request, HttpServletResponse response)
+      throws NoUserWithSuchCredentialsException, IOException {
+    int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
+    int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+      response.sendRedirect("/api/users/unauth/" + username + "/followed?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      return null;
+    }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(userService.getFollowed(username, currentUserUsername,
-        page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
+        page.orElse(PAGE_NUMBER_DEFAULT), usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
   }
 
   @GetMapping("connect")

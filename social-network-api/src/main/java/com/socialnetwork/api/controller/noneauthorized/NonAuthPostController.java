@@ -26,7 +26,7 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/unauth/posts")
+@RequestMapping("/api/posts/unauth")
 public class NonAuthPostController {
   private final NonAuthPostService nonAuthPostService;
   private final NonAuthLikeService nonAuthLikeService;
@@ -39,7 +39,7 @@ public class NonAuthPostController {
     return nonAuthPostMapper.convertToPostDtoDefault(nonAuthPostService.getReferenceById(id));
   }
 
-  @GetMapping()
+  @GetMapping("")
   public List<NonAuthPostDto.Response.WithAuthor> getPosts(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> posts) {
     return nonAuthPostMapper.mapForListing(nonAuthPostService.getPosts(page.orElse(PAGE_NUMBER_DEFAULT),

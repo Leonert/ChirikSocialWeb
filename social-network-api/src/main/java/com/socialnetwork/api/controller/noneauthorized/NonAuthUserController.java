@@ -22,7 +22,7 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/unauth/users")
+@RequestMapping("/api/users/unauth")
 public class NonAuthUserController {
   private final NonAuthUserService nonAuthUserService;
   private final NonAuthUserMapper nonAuthUserMapper;
@@ -33,8 +33,8 @@ public class NonAuthUserController {
     return nonAuthUserMapper.mapForProfile(nonAuthUserService.findByUsername(username));
   }
 
-  @GetMapping("followers")
-  public List<NonAuthUserDto.Response.Listing> getFollowers(@RequestParam(QUERY) String username,
+  @GetMapping("{username}/followers")
+  public List<NonAuthUserDto.Response.Listing> getFollowers(@PathVariable("username") String username,
                                                      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage)
           throws NoUserWithSuchCredentialsException {
@@ -42,8 +42,8 @@ public class NonAuthUserController {
         page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
-  @GetMapping("followed")
-  public List<NonAuthUserDto.Response.Listing> getFollowed(@RequestParam(QUERY) String username,
+  @GetMapping("{username}/followed")
+  public List<NonAuthUserDto.Response.Listing> getFollowed(@PathVariable("username") String username,
                                                     @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage)
           throws NoUserWithSuchCredentialsException {
