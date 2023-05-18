@@ -58,7 +58,7 @@ public class SearchController {
                                                     @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
                                                     HttpServletRequest request, HttpServletResponse response)
-          throws NoUserWithSuchCredentialsException, IOException {
+      throws NoUserWithSuchCredentialsException, IOException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {

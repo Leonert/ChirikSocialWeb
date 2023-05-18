@@ -41,13 +41,13 @@ public class LikeService {
   }
 
   public List<User> getLikes(int id, String username, int page, int usersForPage)
-          throws NoUserWithSuchCredentialsException {
+      throws NoUserWithSuchCredentialsException {
     User currentUser = userService.findByUsername(username);
     return likeRepository.findUsersByLikedPost(id)
-            .stream()
-            .skip(page * usersForPage).limit(usersForPage)
-            .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
-            .toList();
+        .stream()
+        .skip(page * usersForPage).limit(usersForPage)
+        .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
+        .toList();
   }
 
   public int countPostLikes(Post post) {

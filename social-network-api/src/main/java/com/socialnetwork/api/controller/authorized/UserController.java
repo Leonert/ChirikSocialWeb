@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
@@ -49,7 +48,7 @@ public class UserController {
       return null;
     }
     return userMapper.mapForProfile(userService.findByUsername(username),
-            jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
+        jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
 
   @GetMapping("{username}/followers")
@@ -95,7 +94,7 @@ public class UserController {
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(
         userService.getListForConnectPage(currentUserUsername, page.orElse(PAGE_NUMBER_DEFAULT),
-                postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
+            postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
   }
 
   @PatchMapping("p")

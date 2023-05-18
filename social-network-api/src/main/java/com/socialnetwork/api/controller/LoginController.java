@@ -52,12 +52,12 @@ public class LoginController {
     notificationService.saveLogin(user);
 
     return ResponseEntity.ok(userMapper.convertToAccountData(user,
-            jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
+        jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
   }
 
   @GetMapping("jwt")
   public ResponseEntity<?> loginByToken(HttpServletRequest request)
-          throws TokenExpiredException, InvalidTokenUsernameException, NoUserWithSuchCredentialsException {
+      throws TokenExpiredException, InvalidTokenUsernameException, NoUserWithSuchCredentialsException {
     String auth = request.getHeader(AUTHORIZATION_HEADER);
     User user = userService.findByUsername(jwtTokenUtil.getUsernameFromTokenAndCheckIt(auth));
     return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));

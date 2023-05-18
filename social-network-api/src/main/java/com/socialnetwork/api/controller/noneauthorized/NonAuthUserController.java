@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
@@ -34,20 +33,22 @@ public class NonAuthUserController {
   }
 
   @GetMapping("{username}/followers")
-  public List<NonAuthUserDto.Response.Listing> getFollowers(@PathVariable("username") String username,
-                                                     @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage)
-          throws NoUserWithSuchCredentialsException {
+  public List<NonAuthUserDto.Response.Listing>
+    getFollowers(@PathVariable("username") String username,
+                 @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                 @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage)
+      throws NoUserWithSuchCredentialsException {
     return nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowers(username,
         page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("{username}/followed")
-  public List<NonAuthUserDto.Response.Listing> getFollowed(@PathVariable("username") String username,
-                                                    @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-                                                    @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage)
-          throws NoUserWithSuchCredentialsException {
+  public List<NonAuthUserDto.Response.Listing>
+    getFollowed(@PathVariable("username") String username,
+                @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage)
+      throws NoUserWithSuchCredentialsException {
     return nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowed(username,
-            page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
+        page.orElse(PAGE_NUMBER_DEFAULT), postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 }
