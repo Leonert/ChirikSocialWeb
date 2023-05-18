@@ -61,8 +61,8 @@ public class UserController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/users/unauth/" + username + "/followers?" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/users/unauth/" + username + "/followers?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
@@ -79,8 +79,8 @@ public class UserController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/users/unauth/" + username + "/followed?" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/users/unauth/" + username + "/followed?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));

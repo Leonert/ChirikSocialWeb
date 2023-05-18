@@ -80,14 +80,14 @@ public class PostController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("posts/unauth?" + PAGE_NUMBER_QUERY + "=" + pageD +
-         "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("posts/unauth?" + PAGE_NUMBER_QUERY + "=" + pageD
+          + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     String username = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     List<PostDto.Response.WithAuthor> outcome = new ArrayList<>();
-    List<Post> posts = showViewedPosts.orElse(false) ?
-        postService.getPosts(pageD, resultsD) :
+    List<Post> posts = showViewedPosts.orElse(false)
+        ? postService.getPosts(pageD, resultsD) :
         postService.getUnviewedPosts(pageD, resultsD, username);
     for (Post post: posts) {
       outcome.add(postMapper.convertToPostDtoDefault(post, username));
@@ -103,8 +103,8 @@ public class PostController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/posts/unauth/" + id + "/replies" + "?" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/posts/unauth/" + id + "/replies" + "?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     return postMapper.mapForListing(postService.getReplies(id, pageD, resultsD),
@@ -121,8 +121,8 @@ public class PostController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/posts/unauth/" + id + "/retweets" + "?" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/posts/unauth/" + id + "/retweets" + "?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
@@ -140,8 +140,8 @@ public class PostController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/posts/unauth/" + id + "/likes" + "?" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/posts/unauth/" + id + "/likes" + "?"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));

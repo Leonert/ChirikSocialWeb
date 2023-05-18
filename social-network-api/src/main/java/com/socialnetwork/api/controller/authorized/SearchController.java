@@ -45,8 +45,8 @@ public class SearchController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/search/unauth/posts" + "?" + QUERY + "=" + query + "&" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/search/unauth/posts" + "?" + QUERY + "=" + query + "&"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     return postMapper.mapForListing(searchService.searchPosts(query, pageD,
@@ -62,8 +62,8 @@ public class SearchController {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/search/unauth/users" + "?" + QUERY + "=" + query + "&" +
-          PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
+      response.sendRedirect("/api/search/unauth/users" + "?" + QUERY + "=" + query + "&"
+          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
       return null;
     }
     return userMapper.mapForListing(searchService.searchUsers(query, pageD,
