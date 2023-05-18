@@ -41,36 +41,35 @@ public class NonAuthPostController {
 
   @GetMapping("")
   public List<NonAuthPostDto.Response.WithAuthor> getPosts(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-                                                           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> posts) {
+                                                    @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> posts) {
     return nonAuthPostMapper.mapForListing(nonAuthPostService.getPosts(page.orElse(PAGE_NUMBER_DEFAULT),
-        posts.orElse(POSTS_PER_PAGE_DEFAULT)));
+            posts.orElse(POSTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("{id}/replies")
-  public List<NonAuthPostDto.Response.WithAuthor>
-    getReplies(@PathVariable("id") int id,
-             @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-             @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage)
-      throws NoPostWithSuchIdException {
+  public List<NonAuthPostDto.Response.WithAuthor> getReplies(@PathVariable("id") int id,
+                                                      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                                                      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage)
+          throws NoPostWithSuchIdException {
     return nonAuthPostMapper.mapForListing(nonAuthPostService.getReplies(id,
-        page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
+            page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("{id}/retweets")
   public List<NonAuthUserDto.Response.Listing> getRetweets(
-      @PathVariable("id") int id,
-      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage) {
+          @PathVariable("id") int id,
+          @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+          @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage) {
     return nonAuthUserMapper.mapForListing(nonAuthPostService.getRetweets(id,
-        page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
+            page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("{id}/likes")
   public List<NonAuthUserDto.Response.Listing> getLikes(
-      @PathVariable("id") int id,
-      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage) {
+          @PathVariable("id") int id,
+          @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+          @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage) {
     return nonAuthUserMapper.mapForListing(nonAuthLikeService.getLikes(id,
-        page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
+            page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 }

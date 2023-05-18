@@ -15,7 +15,7 @@ public class NonAuthLikeService {
 
   public List<User> getLikes(int id, int page, int usersForPage) {
     return likeRepository.findUsersByLikedPost(id).stream()
-        .skip(page * usersForPage).limit(usersForPage).toList();
+            .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public int countPostLikes(Post post) {

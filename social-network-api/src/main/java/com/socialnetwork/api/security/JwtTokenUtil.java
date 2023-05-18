@@ -41,12 +41,12 @@ public class JwtTokenUtil {
 
   public String getUsernameFromToken(String authHeader) {
     return getClaimsFromToken(authHeader.startsWith(BEARER) ? authHeader.substring(BEARER.length())
-        : authHeader, Claims::getSubject);
+            : authHeader, Claims::getSubject);
 
   }
 
   public String getUsernameFromTokenAndCheckIt(String authHeader)
-      throws TokenExpiredException, InvalidTokenUsernameException {
+          throws TokenExpiredException, InvalidTokenUsernameException {
     authHeader = authHeader.startsWith(BEARER) ? authHeader.substring(BEARER.length()) : authHeader;
     checkTokenExpired(authHeader);
     return Optional.of(getClaimsFromToken(authHeader, Claims::getSubject)).orElseThrow(InvalidTokenUsernameException::new);

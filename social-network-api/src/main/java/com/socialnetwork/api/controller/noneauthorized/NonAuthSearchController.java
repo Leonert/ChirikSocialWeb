@@ -27,19 +27,17 @@ public class NonAuthSearchController {
   private final NonAuthUserMapper nonAuthUserMapper;
 
   @GetMapping("/posts")
-  public List<NonAuthPostDto.Response.WithAuthor>
-    searchPosts(@RequestParam(QUERY) String query,
-              @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-              @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage) {
+  public List<NonAuthPostDto.Response.WithAuthor> searchPosts(@RequestParam(QUERY) String query,
+                                   @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                                   @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage) {
     return nonAuthUserMapper.mapPostsForListing(nonAuthSearchService.searchPosts(query, page.orElse(PAGE_NUMBER_DEFAULT),
         postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }
 
   @GetMapping("/users")
-  public List<NonAuthUserDto.Response.Listing>
-    searchUsers(@RequestParam(QUERY) String query,
-              @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-              @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage) {
+  public List<NonAuthUserDto.Response.Listing> searchUsers(@RequestParam(QUERY) String query,
+                                                    @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                                                    @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage) {
     return nonAuthUserMapper.mapUsersForListing(nonAuthSearchService.searchUsers(query, page.orElse(PAGE_NUMBER_DEFAULT),
         usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
   }

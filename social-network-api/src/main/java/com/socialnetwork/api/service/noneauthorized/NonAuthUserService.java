@@ -18,16 +18,16 @@ public class NonAuthUserService {
   private final ModelMapper modelMapper;
 
   public List<User> getFollowers(String queryUsername, int page, int usersForPage)
-      throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return findByUsername(queryUsername).getFollowers().stream().map(Follow::getFollowerUser)
-        .skip(page * usersForPage).limit(usersForPage).toList();
+            .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public List<User> getFollowed(String queryUsername, int page, int usersForPage)
-      throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return findByUsername(queryUsername)
-        .getFollowed().stream().map(Follow::getFollowedUser)
-        .skip(page * usersForPage).limit(usersForPage).toList();
+            .getFollowed().stream().map(Follow::getFollowedUser)
+            .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public User findByUsername(String username) throws NoUserWithSuchCredentialsException {

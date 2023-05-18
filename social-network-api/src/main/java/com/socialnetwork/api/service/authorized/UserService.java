@@ -99,9 +99,9 @@ public class UserService {
   }
 
   public List<User> getFollowersUnauth(String queryUsername, int page, int usersForPage)
-      throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return findByUsername(queryUsername).getFollowers().stream().map(Follow::getFollowerUser)
-        .skip(page * usersForPage).limit(usersForPage).toList();
+            .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public List<User> getFollowed(String queryUsername, String currentUserUsername,

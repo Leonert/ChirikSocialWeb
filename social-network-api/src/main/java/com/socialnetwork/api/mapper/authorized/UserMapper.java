@@ -30,11 +30,11 @@ public class UserMapper {
   }
 
   public List<UserDto.Response.Listing> mapForListing(List<User> users, String currentUserUsername)
-      throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     User currentUser = userService.findByUsername(currentUserUsername);
     return users.stream().map(u -> modelMapper.map(u, UserDto.Response.Listing.class))
-        .peek(u -> u.setCurrUserFollower(userService.isFollowed(currentUser, new User(u.getId()))))
-        .toList();
+            .peek(u -> u.setCurrUserFollower(userService.isFollowed(currentUser, new User(u.getId()))))
+            .toList();
   }
 
   public UserDto.Response.Profile mapForProfile(User user, String currentUserName) {
