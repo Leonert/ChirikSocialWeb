@@ -10,10 +10,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 
 @Component
@@ -31,6 +33,10 @@ public class JwtTokenUtil {
 
   public boolean isTokenExists(String authHeader) {
     return authHeader != null && authHeader.startsWith(BEARER);
+  }
+
+  public boolean isAuthTokenExists(HttpServletRequest request) {
+    return request.getHeader(AUTHORIZATION_HEADER) != null && !request.getHeader(AUTHORIZATION_HEADER).isBlank();
   }
 
   public String getUsernameFromToken(String authHeader) {

@@ -35,10 +35,11 @@ public class PostService {
     return postRepository.getReferenceById(id);
   }
 
-  public void save(Post post) {
+  public int save(Post post) {
     post.setCreatedDate(LocalDateTime.now());
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
+    return post.getId();
   }
 
   public void edit(Post editedPost, Post originalPost) {
