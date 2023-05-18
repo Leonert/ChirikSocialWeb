@@ -77,37 +77,37 @@ public class PostController {
     return outcome;
   }
 
-  @GetMapping("/replies")
+  @GetMapping("/{id}/replies]")
   public List<PostDto.Response.WithAuthor> getReplies(
-          @RequestParam(ID_QUERY) Optional<Integer> id,
+          @PathVariable("id") int id,
           @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
           HttpServletRequest request) throws NoPostWithSuchIdException {
-    return postMapper.mapForListing(postService.getReplies(id.orElseThrow(NoPostWithSuchIdException::new),
+    return postMapper.mapForListing(postService.getReplies(id,
             page.orElse(PAGE_NUMBER_DEFAULT), usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)),
             jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
 
-  @GetMapping("/retweets")
+  @GetMapping("/{id}/retweets")
   public List<UserDto.Response.Listing> getRetweets(
-          @RequestParam(ID_QUERY) Optional<Integer> id,
+          @PathVariable("id") int id,
           @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
           HttpServletRequest request) throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
-    return userMapper.mapForListing(postService.getRetweets(id.orElseThrow(NoPostWithSuchIdException::new),
+    return userMapper.mapForListing(postService.getRetweets(id,
             currentUserUsername, page.orElse(PAGE_NUMBER_DEFAULT),
             usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
   }
 
-  @GetMapping("/likes")
+  @GetMapping("/{id}/likes")
   public List<UserDto.Response.Listing> getLikes(
-          @RequestParam(ID_QUERY) Optional<Integer> id,
+          @PathVariable("id") int id,
           @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-          HttpServletRequest request) throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+          HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
-    return userMapper.mapForListing(likeService.getLikes(id.orElseThrow(NoPostWithSuchIdException::new),
+    return userMapper.mapForListing(likeService.getLikes(id,
             currentUserUsername, page.orElse(PAGE_NUMBER_DEFAULT),
             usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
   }
@@ -139,7 +139,7 @@ public class PostController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @PostMapping("/bookmarks/{id}")
+  @PostMapping("/{id}/bookmarks")
   public ResponseEntity<Integer> bookmarkUnbookmark(@PathVariable(ID_QUERY) int postId,
                                                     HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return ResponseEntity
@@ -148,7 +148,7 @@ public class PostController {
             .body(bookmarkService.countPostBookmarks(new Post(postId)));
   }
 
-  @PostMapping("/likes/{id}")
+  @PostMapping("/{id}/likes")
   public ResponseEntity<Integer> saveLike(@PathVariable(ID_QUERY) int postId, HttpServletRequest request)
           throws NoUserWithSuchCredentialsException {
     return ResponseEntity
@@ -158,7 +158,7 @@ public class PostController {
             .body(likeService.countPostLikes(new Post(postId)));
   }
 
-  @PostMapping("/views/{id}")
+  @PostMapping("/{id}/views")
   public void saveView(@PathVariable(ID_QUERY) int postId, HttpServletRequest request)
           throws NoUserWithSuchCredentialsException {
     postService.saveView(userService.findByUsername(
