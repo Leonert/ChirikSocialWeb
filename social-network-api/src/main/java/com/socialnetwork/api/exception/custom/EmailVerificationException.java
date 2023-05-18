@@ -1,4 +1,4 @@
-package com.socialnetwork.api.exception;
+package com.socialnetwork.api.exception.custom;
 
 public class EmailVerificationException extends Exception {
   public EmailVerificationException(String errorMessage) {

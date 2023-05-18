@@ -34,11 +34,16 @@ export const useStylesItemUser = makeStyles((theme) =>
       borderRadius: '50%',
       width: '50px',
       height: '50px',
-      backgroundColor: 'red',
+      backgroundColor: 'gray',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: '20px',
+    },
+    avatarImg: {
+      borderRadius: '50%',
+      width: '50px',
+      height: '50px',
     },
     name: {
       fontSize: '20px',

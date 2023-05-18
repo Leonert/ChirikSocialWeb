@@ -7,7 +7,7 @@ import { CustomButton } from '../../Login/CustomButton';
 import { useStylesItemUser } from './ItemUserStyles';
 
 export const ItemUser = ({ user }) => {
-  // const { name, username, id } = user;
+  const { name, username, id, profileImage, currUserFollower } = user;
   const classes = useStylesItemUser();
 
   // const handleFollow = useCallback(() => {
@@ -17,17 +17,19 @@ export const ItemUser = ({ user }) => {
   return (
     <li className={classes.item}>
       <Link to={`/`} className={classes.user}>
-        <div className={classes.avatar}>Avatar</div>
+        <div className={classes.avatar}>
+          <img src={profileImage} alt={name} className={classes.avatarImg} />
+        </div>
         <div>
           {' '}
-          <div className={classes.name}>Name</div>
-          <div className={classes.username}>Username</div>
+          <div className={classes.name}>{name}</div>
+          <div className={classes.username}>{username}</div>
         </div>
       </Link>
       <div>
-        <CustomButton>
+        <CustomButton disabled={currUserFollower}>
           {/* <CustomButton handleClick={handleFollow}> */}
-          <Typography variant="span">Follow</Typography>
+          <Typography>Follow</Typography>
         </CustomButton>
       </div>
     </li>
