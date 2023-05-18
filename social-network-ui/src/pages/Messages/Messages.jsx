@@ -1,6 +1,5 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
-import { Link } from 'react-router-dom';
 
 import { EmojiIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG} from '../../util/url';
@@ -34,6 +33,7 @@ const Messages = () => {
     try {
       const chatList = await ChatApi.getUserChats();
       setChats(chatList);
+      console.log(chatList, 10)
     } catch (error) {
       console.error('Error fetching user chats:', error);
     }
@@ -66,9 +66,13 @@ const Messages = () => {
       const chatMessages = await ChatApi.getChatMessages(chatId);
       setMessages(chatMessages);
       scrollToBottom();
+
+      console.log(chatMessages, 3)
+
     } catch (error) {
       console.error('Error fetching chat messages:', error);
     }
+
   };
 
   const onSendMessage = async () => {
@@ -79,7 +83,6 @@ const Messages = () => {
       } else {
         selectedChat = chats.find((chat) => chat.id === selectedChatId);
       }
-
       const newMessage = {
         id: 100,
         date: new Date(),
@@ -107,6 +110,7 @@ const Messages = () => {
     return date instanceof Date && !isNaN(date);
   };
 
+  console.log(messages,4)
 
   return (
       <>
@@ -230,7 +234,6 @@ const Messages = () => {
                             <React.Fragment key={message.id}>
                               {message && message.author && message.author.id ? (
                                   <div className={classes.tweetContainer}>
-                                    <Link to={`/home/tweet/${message.id}`}>
                                       <div className={classes.tweetWrapper}>
                                         <div className={classes.tweetUserInfoWrapper}>
                                           <Avatar
@@ -247,9 +250,8 @@ const Messages = () => {
                                   : ''}
                             </span>
                                         </div>
-                                        <div className={classes.tweetText}>{message.text}</div>
+                                        <div key={message.id} className={classes.tweetText}>{message.text}</div>
                                       </div>
-                                    </Link>
                                   </div>
                               ) : (
                                   <div className={classes.messageContainer}>

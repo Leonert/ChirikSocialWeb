@@ -1,6 +1,5 @@
 import axiosIns from "../../axiosInstance";
 import {API_URL} from "../../util/url";
-import axios from "axios";
 
 
 export const ChatApi = {

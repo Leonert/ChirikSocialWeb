@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,35 +54,6 @@ public class MessagesController {
 
     return ResponseEntity.ok(messageDtos);
   }
-
-//  @PostMapping("/create")
-//  public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
-//    Message createdMessage = convertToMessage(messageDto);
-//
-//    String senderUsername = messageDto.getSenderUsername();
-//    if (senderUsername == null || senderUsername.isEmpty()) {
-//      throw new IllegalArgumentException("Sender username is required");
-//    }
-//
-//    String recipientUsername = messageDto.getRecipientUsername();
-//    if (recipientUsername == null || recipientUsername.isEmpty()) {
-//      throw new IllegalArgumentException("Recipient username is required");
-//    }
-//
-//    Optional<User> senderOptional = userRepository.findByUsername(senderUsername);
-//    User sender = senderOptional.orElseThrow(() -> new IllegalArgumentException("Invalid sender username: " + senderUsername));
-//
-//    Optional<User> recipientOptional = userRepository.findByUsername(recipientUsername);
-//    User recipient = recipientOptional.orElseThrow(() -> new IllegalArgumentException("Invalid recipient username: " + recipientUsername));
-//
-//    createdMessage.setSender(sender);
-//    createdMessage.setRecipient(recipient);
-//    messageRepository.save(createdMessage);
-//
-//    MessageDto createdMessageDto = convertToMessageDto(createdMessage);
-//    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId()))
-//            .body(createdMessageDto);
-//  }
 
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
@@ -127,8 +99,8 @@ public class MessagesController {
     return ResponseEntity.ok(userDtos);
   }
 
-  private Message convertToMessage(MessageDto messageDto) {
-    return modelMapper.map(messageDto, Message.class);
+  private MessageDto convertToMessage(MessageDto messageDto) {
+    return modelMapper.map((Object) messageDto, (Type) Message.class);
   }
 
   private MessageDto convertToMessageDto(Message message) {

@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,11 +25,7 @@ public class MessageServiceImpl implements MessageService {
   public List<MessageDto> getAllMessages() {
     List<Message> messages = messageRepository.findAll();
     return messages.stream()
-            .map(message -> {
-              MessageDto messageDto = modelMapper.map(message, MessageDto.class);
-              messageDto.setId(message.getId());
-              return messageDto;
-            })
+            .map(this::convertToMessageDto)
             .collect(Collectors.toList());
   }
 
@@ -36,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
   public MessageDto getMessageById(int id) {
     Message message = messageRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Message not found with id: " + id));
-    return modelMapper.map(message, MessageDto.class);
+    return convertToMessageDto(message);
   }
 
   @Override
@@ -55,14 +52,9 @@ public class MessageServiceImpl implements MessageService {
   public List<MessageDto> searchMessages(String keyword) {
     List<Message> messages = messageRepository.findByMessageContainingIgnoreCase(keyword);
     return messages.stream()
-            .map(message -> modelMapper.map(message, MessageDto.class))
+            .map(this::convertToMessageDto)
             .collect(Collectors.toList());
   }
-
-  public Message convertToMessage(MessageDto messageDto) {
-    return modelMapper.map(messageDto, Message.class);
-  }
-
 
   @Override
   public void markAsRead(int id) {
@@ -71,6 +63,7 @@ public class MessageServiceImpl implements MessageService {
     message.setRead(true);
     messageRepository.save(message);
   }
+
   @Override
   public MessageDto createMessage(MessageDto messageDto) {
     Message message = convertToMessage(messageDto);
@@ -83,10 +76,20 @@ public class MessageServiceImpl implements MessageService {
     message.setRecipient(recipient);
     message.setSender(sender);
     message.setRead(false);
+    message.setDate(LocalDateTime.now());
     message = messageRepository.save(message);
-    return convertToMessageDto(message);
+
+    messageDto.setRecipientId(recipient.getId());
+    messageDto.setSenderId(sender.getId());
+
+    return messageDto;
   }
+
   public MessageDto convertToMessageDto(Message message) {
     return modelMapper.map(message, MessageDto.class);
+  }
+
+  public Message convertToMessage(MessageDto messageDto) {
+    return modelMapper.map(messageDto, Message.class);
   }
 }

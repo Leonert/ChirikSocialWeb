@@ -1,10 +1,8 @@
 package com.socialnetwork.api.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.socialnetwork.api.models.base.User;
+
 import lombok.Data;
-import lombok.Value;
 
 import java.time.LocalDateTime;
 
@@ -19,47 +17,26 @@ public class MessageDto {
   private int recipientId;
   private int senderId;
 
-  public enum Request {
-    ;
-
-    @Value
-    public static class Default implements Id {
-      int id;
+  public static class Request {
+    @Data
+    public static class Create {
+      private boolean isRead;
+      private String message;
+      private int recipientId;
+      private int senderId;
     }
   }
 
-  public enum Response {
-    ;
-
-    @Value
-    public static class Default implements Id {
-      int id;
+  public static class Response {
+    @Data
+    public static class Default {
+      private int id;
+      private boolean isRead;
+      private String message;
+      private LocalDateTime timestamp;
+      private String username;
+      private int recipientId;
+      private int senderId;
     }
-  }
-
-  private interface Id {
-    int getId();
-  }
-
-  private interface Sender {
-    User getSender();
-  }
-
-  private interface Recipient {
-    User getRecipient();
-  }
-
-  private interface Message {
-    String getMessage();
-  }
-
-  private interface Timestamp {
-    LocalDateTime getTimestamp();
-  }
-
-  private interface Read {
-    boolean isRead();
   }
 }
-
-
