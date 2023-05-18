@@ -5,7 +5,6 @@ import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
-import org.aspectj.weaver.ast.Not;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -2,6 +2,7 @@ package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.security.JwtTokenUtil;
+import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
