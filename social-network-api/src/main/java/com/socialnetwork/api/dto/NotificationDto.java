@@ -1,6 +1,8 @@
 package com.socialnetwork.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.socialnetwork.api.dto.authorized.PostDto;
+import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.models.additional.NotificationType;
 import lombok.Data;
 

@@ -1,5 +1,7 @@
 package com.socialnetwork.api.security;
 
+import com.socialnetwork.api.exception.custom.InvalidTokenUsernameException;
+import com.socialnetwork.api.exception.custom.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
@@ -30,8 +33,17 @@ public class JwtTokenUtil {
     return authHeader != null && authHeader.startsWith(BEARER);
   }
 
-  public String getUsernameFromToken(String token) {
-    return getClaimsFromToken(token, Claims::getSubject);
+  public String getUsernameFromToken(String authHeader) {
+    return getClaimsFromToken(authHeader.startsWith(BEARER) ? authHeader.substring(BEARER.length())
+            : authHeader, Claims::getSubject);
+
+  }
+
+  public String getUsernameFromTokenAndCheckIt(String authHeader)
+          throws TokenExpiredException, InvalidTokenUsernameException {
+    authHeader = authHeader.startsWith(BEARER) ? authHeader.substring(BEARER.length()) : authHeader;
+    checkTokenExpired(authHeader);
+    return Optional.of(getClaimsFromToken(authHeader, Claims::getSubject)).orElseThrow(InvalidTokenUsernameException::new);
   }
 
   public Date getExpirationDateFromToken(String token) {
@@ -47,25 +59,24 @@ public class JwtTokenUtil {
     return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
   }
 
-  private Boolean isTokenExpired(String token) {
-    final Date expiration = getExpirationDateFromToken(token);
-    return expiration.before(new Date());
+  private void checkTokenExpired(String token) throws TokenExpiredException {
+    if (getExpirationDateFromToken(token).before(new Date())) {
+      throw new TokenExpiredException();
+    }
   }
 
   public String generateToken(String username, boolean isToRemember) {
     Date now = new Date();
-    Date expiration = new Date(now.getTime() + (isToRemember ? expirationRemember : expirationDefault));
 
     return Jwts.builder()
         .setSubject(username)
         .setIssuedAt(now)
-        .setExpiration(expiration)
+        .setExpiration(new Date(now.getTime() + (isToRemember ? expirationRemember : expirationDefault)))
         .signWith(SignatureAlgorithm.HS512, jwtSecret)
         .compact();
   }
 
-  public Boolean isTokenValid(String token, UserDetails userDetails) {
-    String username = getUsernameFromToken(token);
-    return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+  public Boolean isTokenValid(String username, UserDetails userDetails) {
+    return (username.equals(userDetails.getUsername()));
   }
 }

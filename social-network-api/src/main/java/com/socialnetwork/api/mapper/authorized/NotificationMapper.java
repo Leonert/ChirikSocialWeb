@@ -1,4 +1,4 @@
-package com.socialnetwork.api.mapper;
+package com.socialnetwork.api.mapper.authorized;
 
 import com.socialnetwork.api.dto.NotificationDto;
 import com.socialnetwork.api.models.base.Notification;
