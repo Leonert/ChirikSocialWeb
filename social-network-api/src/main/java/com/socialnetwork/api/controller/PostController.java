@@ -45,6 +45,7 @@ import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.ID_QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
+import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.POSTS_PER_PAGE_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
@@ -69,11 +70,11 @@ public class PostController {
   public PostDtoInterface getPostById(@PathVariable(ID_QUERY) Integer id,
                                       HttpServletRequest request)
       throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
-    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+    if (request.getAttribute("username") == null) {
       return nonAuthPostMapper.convertToPostDtoDefault(nonAuthPostService.getReferenceById(id));
     }
     return postMapper.convertToPostDtoDefault(postService.getReferenceById(id),
-            jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
+        (String) request.getAttribute(USERNAME_ATTRIBUTE));
   }
 
   @GetMapping("")
@@ -84,10 +85,10 @@ public class PostController {
             HttpServletRequest request) throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
-    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+    if (request.getAttribute("username") == null) {
       return nonAuthPostMapper.mapForListing(nonAuthPostService.getPosts(pageD, resultsD));
     }
-    String username = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
+    String username = (String) request.getAttribute(USERNAME_ATTRIBUTE);
     List<PostDto.Response.WithAuthor> outcome = new ArrayList<>();
     List<Post> posts = showViewedPosts.orElse(false)
         ? postService.getPosts(pageD, resultsD) :
@@ -105,12 +106,12 @@ public class PostController {
           HttpServletRequest request) throws NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
-    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+    if (request.getAttribute("username") == null) {
       return nonAuthPostMapper.mapForListing(nonAuthPostService.getReplies(id,
           pageD, resultsD));
     }
     return postMapper.mapForListing(postService.getReplies(id, pageD, resultsD),
-            jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
+        (String) request.getAttribute(USERNAME_ATTRIBUTE));
   }
 
   @GetMapping("/{id}/retweets")
@@ -121,11 +122,11 @@ public class PostController {
           HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
-    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+    if (request.getAttribute("username") == null) {
       return nonAuthUserMapper.mapForListing(nonAuthPostService.getRetweets(id,
           pageD, resultsD));
     }
-    String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
+    String currentUserUsername = (String) request.getAttribute(USERNAME_ATTRIBUTE);
     return userMapper.mapForListing(postService.getRetweets(id,
             currentUserUsername, pageD, resultsD), currentUserUsername);
   }
@@ -138,11 +139,11 @@ public class PostController {
           HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
-    if (!jwtTokenUtil.isAuthTokenExists(request)) {
+    if (request.getAttribute("username") == null) {
       return nonAuthUserMapper.mapForListing(nonAuthLikeService.getLikes(id,
           pageD, resultsD));
     }
-    String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
+    String currentUserUsername = (String) request.getAttribute(USERNAME_ATTRIBUTE);
     return userMapper.mapForListing(likeService.getLikes(id,
             currentUserUsername, pageD, resultsD), currentUserUsername);
   }
@@ -177,8 +178,8 @@ public class PostController {
   public ResponseEntity<Integer> bookmarkUnbookmark(@PathVariable(ID_QUERY) int postId,
                                                     HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     return ResponseEntity
-            .status(bookmarkService.bookmarkUnBookmark(postId, jwtTokenUtil.getUsernameFromToken(
-                    request.getHeader(AUTHORIZATION_HEADER))) ? HttpStatus.OK : HttpStatus.CREATED)
+            .status(bookmarkService.bookmarkUnBookmark(postId,
+                (String) request.getAttribute(USERNAME_ATTRIBUTE)) ? HttpStatus.OK : HttpStatus.CREATED)
             .body(bookmarkService.countPostBookmarks(new Post(postId)));
   }
 
@@ -186,8 +187,8 @@ public class PostController {
   public ResponseEntity<Integer> saveLike(@PathVariable(ID_QUERY) int postId, HttpServletRequest request)
           throws NoUserWithSuchCredentialsException {
     return ResponseEntity
-            .status(likeService.likeUnlike(userService.findByUsername(jwtTokenUtil.getUsernameFromToken(
-                    request.getHeader(AUTHORIZATION_HEADER))).getId(),
+            .status(likeService.likeUnlike(userService.findByUsername(
+                (String) request.getAttribute(USERNAME_ATTRIBUTE)).getId(),
                     postId) ? HttpStatus.CREATED : HttpStatus.OK)
             .body(likeService.countPostLikes(new Post(postId)));
   }
@@ -196,19 +197,17 @@ public class PostController {
   public void saveView(@PathVariable(ID_QUERY) int postId, HttpServletRequest request)
           throws NoUserWithSuchCredentialsException {
     postService.saveView(userService.findByUsername(
-        jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER))), postId);
+        (String) request.getAttribute(USERNAME_ATTRIBUTE)), postId);
   }
 
   private void checkAuthentication(Post post, HttpServletRequest request) throws AccessDeniedException {
-    if (!jwtTokenUtil.getUsernameFromToken(
-        request.getHeader(AUTHORIZATION_HEADER)).equals(post.getAuthor().getUsername())) {
+    if (!((String) request.getAttribute(USERNAME_ATTRIBUTE)).equals(post.getAuthor().getUsername())) {
       throw new AccessDeniedException();
     }
   }
 
   private void checkAuthentication(User user, HttpServletRequest request) throws AccessDeniedException {
-    if (!jwtTokenUtil.getUsernameFromToken(
-        request.getHeader(AUTHORIZATION_HEADER)).equals(user.getUsername())) {
+    if (!((String) request.getAttribute(USERNAME_ATTRIBUTE)).equals(user.getUsername())) {
       throw new AccessDeniedException();
     }
   }

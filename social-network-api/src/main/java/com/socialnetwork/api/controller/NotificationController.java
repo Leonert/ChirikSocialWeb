@@ -28,6 +28,6 @@ public class NotificationController {
   public ResponseEntity<List<NotificationDto>> getUserNotifications(HttpServletRequest request)
           throws NoUserWithSuchCredentialsException {
     return ResponseEntity.ok(notificationMapper.mapNotifications(userService.findByUsername(
-            jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER))).getNotifications()));
+        (String) request.getAttribute("username")).getNotifications()));
   }
 }

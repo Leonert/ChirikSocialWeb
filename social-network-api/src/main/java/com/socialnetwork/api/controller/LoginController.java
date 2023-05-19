@@ -57,9 +57,9 @@ public class LoginController {
 
   @GetMapping("jwt")
   public ResponseEntity<?> loginByToken(HttpServletRequest request)
-          throws TokenExpiredException, InvalidTokenUsernameException, NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     String auth = request.getHeader(AUTHORIZATION_HEADER);
-    User user = userService.findByUsername(jwtTokenUtil.getUsernameFromTokenAndCheckIt(auth));
+    User user = userService.findByUsername((String) request.getAttribute("username"));
     return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));
   }
 }
