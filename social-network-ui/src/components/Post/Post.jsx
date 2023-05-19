@@ -24,28 +24,27 @@ export default function Post(props) {
   return (
     <Card className={props.classes}>
       {props.replay}
-      <CardHeader
-        className={classes.pageItem}
-        avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
-        action={
-          <Tooltip title="More">
-            <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
-              <MoreHorizIcon />
-            </IconButton>
-          </Tooltip>
-        }
-        title={props.name}
-        subheader={
-          <Typography variant="body2" color="#fff">
-            {props.data}
-          </Typography>
-        }
-      />
-      {props.originalPost && (
-        <Typography variant="body1" color="#fff" sx={{ p: '10px 20px' }}>
-          {props.content === null && props.image === null ? 'retweet' : 'reply'}
-        </Typography>
+
+      { props.content != null && (
+        <CardHeader
+          className={classes.pageItem}
+          avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
+          action={
+            <Tooltip title="More">
+              <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
+                <MoreHorizIcon />
+              </IconButton>
+            </Tooltip>
+          }
+          title={props.name}
+          subheader={
+            <Typography variant="body2" color="#fff">
+              {props.data}
+            </Typography>
+          }
+        />
       )}
+
       {props.content && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>

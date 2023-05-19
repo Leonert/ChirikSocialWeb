@@ -26,4 +26,14 @@ export const usePostStyle = makeStyles((theme) => ({
     margin: 'auto',
     borderRadius: '2%',
   },
+  replyHeader: {
+    padding: '15px',
+    display: 'flex',
+    columnGap: '15px',
+  },
+  reply: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: '20px',
+  },
 }));

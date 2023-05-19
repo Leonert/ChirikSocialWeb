@@ -33,10 +33,10 @@ function FormModal({ buttonName }) {
     }
   };
 
-  const targetPost = post.find((post) => post.id === id);
+  const targetPost = post.find((item) => +item.id === +id);
 
   const sendRequest = (follower) => {
-    alert(`${follower} replay ${text} on tweet ${targetPost.id} to user ${targetPost.nickname}`);
+    alert(`${follower} replay ${text} on tweet ${targetPost.id} to user ${targetPost.author.name}`);
     dispatch(clothReplayModal());
     setText('');
   };
@@ -47,10 +47,10 @@ function FormModal({ buttonName }) {
       {targetPost && (
         <>
           <div className={classes.content}>
-            <Avatar aria-label="recipe" alt={targetPost.name} src={targetPost.avatar}></Avatar>
-            <Typography className={classes.itemNick}>@{targetPost.nickname}</Typography>
+            <Avatar aria-label="recipe" alt={targetPost.author.name} src={targetPost.author.profileImage}></Avatar>
+            <Typography className={classes.itemNick}>@{targetPost.author.name}</Typography>
           </div>
-          <Typography className={classes.item}>Send replay @{targetPost.nickname}</Typography>
+          <Typography className={classes.item}>Send replay @{targetPost.author.name}</Typography>
           <div className={classes.content}>
             <Avatar />
             <Typography className={classes.itemNick}>@{userName}</Typography>
@@ -59,7 +59,7 @@ function FormModal({ buttonName }) {
             <TextareaAutosize
               onChange={handleTextChange}
               className={classes.contentTextarea}
-              placeholder={'Enter replay...'}
+              placeholder={'Enter Reply...'}
               value={text}
             />
           </div>

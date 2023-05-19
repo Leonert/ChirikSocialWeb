@@ -1,12 +1,12 @@
 import RepeatIcon from '@mui/icons-material/Repeat';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react';
 
 import { usePostStyle } from './PostStyle';
 
 const ReplyHeader = (props) => {
   const classes = usePostStyle();
-
   return (
     <Box className={classes.replyHeader}>
       <RepeatIcon />

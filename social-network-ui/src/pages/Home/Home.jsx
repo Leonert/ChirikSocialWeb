@@ -9,8 +9,7 @@ import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
-import { getPost } from '../../features/slices/homeSlice';
-import { GetPosts } from '../../features/slices/homeSlice';
+import { GetPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
@@ -18,7 +17,6 @@ function Home() {
   const modalUserState = useSelector((state) => state.home.modalUser);
 
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
     dispatch(GetPosts(1)).then((result) => {

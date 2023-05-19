@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -28,7 +29,16 @@ export default function PostList() {
       {posts &&
         posts.map((post) => (
           <Post
-            replay={<ReplyHeader repeat={post.author.name} />}
+            replay={
+              post.originalPost ? (
+                post.text === null && post.image === null ? (
+                  <ReplyHeader repeat={post.author.name} />
+                ) : (
+                  <Typography className={classes.reply}>Reply</Typography>
+                )
+              ) : null
+            }
+            // post.text === null && post.image === null
             classes={classes.Page}
             key={post.id}
             avatar={post.author.profileImage}
