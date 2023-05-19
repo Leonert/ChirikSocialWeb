@@ -1,4 +1,4 @@
-package com.socialnetwork.api.service;
+package com.socialnetwork.api.service.authorized;
 
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;

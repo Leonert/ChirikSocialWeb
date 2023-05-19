@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.EmbeddedId;
 
 
+
 @Entity
 @Data
 @Table(name = "follows")

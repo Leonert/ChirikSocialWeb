@@ -1,16 +1,17 @@
-package com.socialnetwork.api.service;
+package com.socialnetwork.api.service.authorized;
 
-import com.socialnetwork.api.dto.UserDto;
-import com.socialnetwork.api.exception.EmailVerificationException;
-import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.dto.authorized.UserDto;
+import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.additional.NotificationType;
 import com.socialnetwork.api.models.additional.keys.FollowPk;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
-import com.socialnetwork.api.models.base.Notification;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;
+import com.socialnetwork.api.service.ConfirmationTokenService;
+import com.socialnetwork.api.service.EmailService;
+import com.socialnetwork.api.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
@@ -37,6 +38,10 @@ public class UserService {
     return userRepository.existsByUsername(username);
   }
 
+  public boolean existsByEmailAddress(String email) {
+    return userRepository.existsByEmailAddress(email);
+  }
+
   public User findByUsername(String username) throws NoUserWithSuchCredentialsException {
     return userRepository.findByUsername(username).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
@@ -60,9 +65,8 @@ public class UserService {
 
     ConfirmationToken confirmationToken = new ConfirmationToken(user);
     confirmationTokenService.save(confirmationToken);
-
-    emailService.sendEmail(user, confirmationToken);
-    System.out.println(confirmationToken);
+    //    emailService.sendEmail(user, confirmationToken);
+    System.out.println(confirmationToken.getConfirmationToken());
   }
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
@@ -92,6 +96,12 @@ public class UserService {
         .skip(page * usersForPage).limit(usersForPage)
         .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
         .toList();
+  }
+
+  public List<User> getFollowersUnauth(String queryUsername, int page, int usersForPage)
+          throws NoUserWithSuchCredentialsException {
+    return findByUsername(queryUsername).getFollowers().stream().map(Follow::getFollowerUser)
+            .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public List<User> getFollowed(String queryUsername, String currentUserUsername,

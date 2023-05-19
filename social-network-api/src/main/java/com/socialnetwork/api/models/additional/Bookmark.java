@@ -14,6 +14,7 @@ import javax.persistence.MapsId;
 
 
 
+
 @Entity
 @Data
 @Table(name = "bookmarks")

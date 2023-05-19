@@ -4,6 +4,7 @@ import com.socialnetwork.api.models.additional.keys.ViewPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -12,9 +13,11 @@ import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 import javax.persistence.EmbeddedId;
 
+
 @Entity
 @Data
 @Table(name = "views")
+@NoArgsConstructor
 public class View {
   @ManyToOne
   @MapsId("userId")
@@ -26,4 +29,10 @@ public class View {
   Post seenPost;
   @EmbeddedId
   private ViewPk viewPk;
+
+  public View(User viewer, Post seenPost) {
+    this.viewer = viewer;
+    this.seenPost = seenPost;
+    viewPk = new ViewPk(viewer.getId(), seenPost.getId());
+  }
 }

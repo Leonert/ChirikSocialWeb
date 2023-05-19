@@ -1,13 +1,14 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.exception.AccessDeniedException;
+import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.security.JwtTokenUtil;
+import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-import static com.socialnetwork.api.util.Const.Auth.BEARER;
+import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 
 @Service
 @RequiredArgsConstructor

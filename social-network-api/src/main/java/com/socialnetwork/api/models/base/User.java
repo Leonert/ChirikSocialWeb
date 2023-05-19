@@ -5,7 +5,6 @@ import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
-import org.aspectj.weaver.ast.Not;
 
 
 import javax.persistence.Entity;
@@ -57,10 +56,10 @@ public class User {
   @Column(name = "birth_date")
   private LocalDateTime birthDate;
 
-  @Column(name = "profile_background_image")
+  @Column(name = "profile_background_image", length = 1250000)
   private String profileBackgroundImage;
 
-  @Column(name = "profile_image")
+  @Column(name = "profile_image", length = 1250000)
   private String profileImage;
 
   //relations

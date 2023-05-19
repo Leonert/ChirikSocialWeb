@@ -20,15 +20,18 @@ insert into users (bio, birth_date, created_date, email_address, is_enabled, loc
 insert into users (bio, birth_date, created_date, email_address, is_enabled, location, name, password, profile_background_image, profile_image, username, website) values ('Varvara bio', '2007-12-03 10:15:30', current_date, 'varvara@gmail.com', true, 'location', 'Varvara V.', '$2a$10$FgDVYsJxJNu6CCwpprnnKOkT8by0Uf9aX6q5MNdh/LA6qc80spZ86', 'image', 'image',  'varvara', 'website');
 insert into users (bio, birth_date, created_date, email_address, is_enabled, location, name, password, profile_background_image, profile_image, username, website) values ('Vladlena bio', '2007-12-03 10:15:30', current_date, 'vladlena@gmail.com', true, 'location', 'Vladlena V.', '$2a$10$FgDVYsJxJNu6CCwpprnnKOkT8by0Uf9aX6q5MNdh/LA6qc80spZ86', 'image', 'image',  'vladlena', 'website');
 
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Original post for user 1', 1, null);
+
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date,  'image', 'Original post for user 1', 1, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Another original post for user 1', 1, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Retweeted post1 with comment from user2', 2, 1);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', null, 2, 2);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Original post from user2', 2, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Original post from user3', 3, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Another original post from user3', 3, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Another original post from user2', 2, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Retweet post 2 with comment for post 2 from user4', 4, 2);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Reply to post1 from user2', 2, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Reply to post1 from user4', 4, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, null, 3, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, null, 2, 2);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date,  'image', 'Original post from user2', 2, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Original post from user3', 3, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Another original post from user3', 3, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Another original post from user2', 2, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Retweet post 2 with comment for post 2 from user4', 4, 2);
 
 
 insert into follows values (1, 2);
@@ -53,6 +56,10 @@ insert into follows values (7, 1);
 insert into follows values (8, 1);
 
 insert into bookmarks values (1, 1);
+insert into bookmarks values (2, 1);
+insert into bookmarks values (3, 1);
+insert into bookmarks values (4, 1);
+insert into bookmarks values (5, 1);
 insert into bookmarks values (1, 2);
 insert into bookmarks values (1, 3);
 insert into bookmarks values (1, 4);
@@ -73,3 +80,49 @@ insert into likes values (1, 7);
 insert into likes values (1, 8);
 insert into likes values (1, 9);
 insert into likes values (1, 10);
+
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 2, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 3, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 4, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 5, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 6, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 7, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 8, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 9, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 11, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 12, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 13, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 14, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 15, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('FOLLOWER', CURRENT_DATE, 16, null, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 2, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 3, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 4, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 5, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 6, 1, 1);
+
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 7, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 8, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 9, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('LIKE', CURRENT_DATE, 10, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 2, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 3, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 4, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 5, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 6, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 7, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 8, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 9, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('RETWEET', CURRENT_DATE, 10, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 2, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 3, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 4, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 5, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 6, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 7, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 8, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 9, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('REPLY', CURRENT_DATE, 10, 1, 1);
+INSERT INTO NOTIFICATIONS (NOTIFICATION_TYPE, TIMESTAMP, INITIATOR, POST, RECIPIENT) VALUES ('ENTRANCE', CURRENT_DATE, null, null, 1);
+
+insert into views values (1, 1);

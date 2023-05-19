@@ -5,21 +5,18 @@ import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
 import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Entity
 @Table(name = "posts")
@@ -37,17 +34,17 @@ public class Post {
   @Column(name = "text")
   private String text;
 
-  @Column(name = "image")
+  @Column(name = "image", length = 1250000)
   private String image;
 
   @Column(name = "created_date")
   private LocalDateTime createdDate;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "original_post_id", referencedColumnName = "id")
   private Post originalPost;
 
-  @OneToMany(mappedBy = "seenPost")
+  @OneToMany(mappedBy = "seenPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<View> views;
 
   @OneToMany(mappedBy = "likedPost", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -55,6 +52,13 @@ public class Post {
 
   @OneToMany(mappedBy = "bookmarkedPost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bookmark> bookmarks;
+
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Notification> notifications;
+
+  // needed only for post deleting
+  @OneToMany(mappedBy = "originalPost", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Post> retweetsAndReplies;
 
   public Post() {
   }

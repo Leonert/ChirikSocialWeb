@@ -1,13 +1,14 @@
-package com.socialnetwork.api.dto;
+package com.socialnetwork.api.dto.noneauthorized;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.socialnetwork.api.dto.authorized.UserDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
-import static com.socialnetwork.api.util.Const.Response.TIME_FORMAT;
+import static com.socialnetwork.api.util.Constants.Response.TIME_FORMAT;
 
-public enum PostDto {
+public enum NonAuthPostDto {
   ;
 
   public enum Request {
@@ -43,21 +44,20 @@ public enum PostDto {
       int id;
     }
 
-    @Data
-    public static class Default {
-      int id;
+    public static class WithAuthor extends WithoutAuthor {
       UserDto.Response.Author author;
-      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
-      LocalDateTime createdDate;
-      String text;
-      String image;
-      int likesNumber;
-      int bookmarksNumber;
-      PostDto.Response.Default originalPost;
+
+      public UserDto.Response.Author getAuthor() {
+        return author;
+      }
+
+      public void setAuthor(UserDto.Response.Author author) {
+        this.author = author;
+      }
     }
 
     @Data
-    public static class Profile {
+    public static class WithoutAuthor {
       int id;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;
@@ -65,7 +65,9 @@ public enum PostDto {
       String image;
       int likesNumber;
       int bookmarksNumber;
-      PostDto.Response.Profile originalPost;
+      int retweetsNumber;
+      int repliesNumber;
+      NonAuthPostDto.Response.WithAuthor originalPost;
     }
   }
 }
