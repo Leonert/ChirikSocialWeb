@@ -1,5 +1,5 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import { MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG} from '../../util/url';
@@ -7,39 +7,41 @@ import { DEFAULT_PROFILE_IMG} from '../../util/url';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
-import {format, formatDistanceToNow} from "date-fns";
+import {formatDistanceToNow} from "date-fns";
 import {ChatApi} from "../../services/api/chatApi";
 import {MessageInput} from "./MessageInput/MessageInput";
 import MessagesModal from "./MessagesModal/MessagesModal";
+import {
+  fetchChatMessages,
+  fetchChats,
+  selectChats,
+  selectMessages,
+  selectParticipant,
+  selectSelectedChatId,
+  selectText, selectVisibleModalWindow, sendMessage, setSelectedChatId, setText, toggleModalWindow
+} from "../../features/slices/massagesSlise";
+import {useDispatch, useSelector} from "react-redux";
+import {formatChatMessageDate} from "../../util/formatDate";
 
 const Messages = () => {
   const classes = useMessagesStyles();
   const chatEndRef = useRef(null);
-  const [chats, setChats] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [selectedChatId, setSelectedChatId] = useState(null);
-  const [text, setText] = useState('');
-  const [participant, setParticipant] = useState(null);
-  const [visibleModalWindow, setVisibleModalWindow] = useState(false);
-  const [groupChatId, setGroupChatId] = useState(null);
-  const [showMessageInput, setShowMessageInput] = useState(false);
+  const dispatch = useDispatch();
 
-  const getChats = async () => {
-    try {
-      const chatList = await ChatApi.getUserChats();
-      setChats(chatList);
-    } catch (error) {
-      console.error('Error fetching user chats:', error);
-    }
-  };
+  const chats = useSelector(selectChats);
+  const messages = useSelector(selectMessages);
+  const selectedChatId = useSelector(selectSelectedChatId);
+  const text = useSelector(selectText);
+  const participant = useSelector(selectParticipant);
+  const visibleModalWindow = useSelector(selectVisibleModalWindow);
 
   const handleSearchChange = async (event) => {
     const keyword = event.target.value;
-    setText(keyword);
+    dispatch(setText(keyword));
 
     try {
       const userList = await ChatApi.getUserList(keyword);
-      setChats(userList);
+      dispatch(fetchChats(userList));
     } catch (error) {
       console.error('Error searching users:', error);
     }
@@ -52,37 +54,37 @@ const Messages = () => {
   };
 
   const onOpenModalWindow = () => {
-    setVisibleModalWindow(true);
+    dispatch(toggleModalWindow());
   };
 
   const onCloseModalWindow = () => {
-    setVisibleModalWindow(false);
+    dispatch(toggleModalWindow());
   };
 
   const handleListItemClick = async (chatId) => {
-    const selectedChat = chats.find((chat) => chat.id === chatId);
-    setSelectedChatId(chatId);
-    setParticipant(selectedChat);
+    dispatch(setSelectedChatId(chatId));
 
     try {
-      const chatMessages = await ChatApi.getChatMessages(chatId);
-      const messageArray = Array.from(chatMessages);
-      setMessages((prevMessages) => [...prevMessages, ...messageArray]);
+      dispatch(fetchChatMessages(chatId));
       scrollToBottom();
-
-      console.log(chatMessages, 3);
     } catch (error) {
       console.error('Error fetching chat messages:', error);
     }
   };
+
   const onSendMessage = async () => {
     if (text !== '') {
       let selectedChat;
-      if (groupChatId) {
-        selectedChat = await ChatApi.createChat(selectedChatId);
-      } else {
+
+      // Проверка на наличие выбранного чата
+      if (selectedChatId) {
         selectedChat = chats.find((chat) => chat.id === selectedChatId);
+      } else {
+        console.error('Selected chat is undefined');
+
+        return;
       }
+
       if (selectedChat) {
         const newMessage = {
           id: selectedChat.id,
@@ -93,12 +95,12 @@ const Messages = () => {
 
         try {
           const createdMessage = await ChatApi.sendMessage(newMessage);
-          setMessages((prevMessages) => [...prevMessages, createdMessage]);
-          setText('');
-          setSelectedChatId(createdMessage.id);
-          setParticipant(createdMessage);
+          dispatch(sendMessage(createdMessage));
+          dispatch(setText(''));
+          dispatch(setSelectedChatId(createdMessage.id));
           scrollToBottom();
-          setShowMessageInput(false);
+          // setShowMessageInput(false);
+
         } catch (error) {
           console.error('Error sending message:', error);
         }
@@ -108,41 +110,18 @@ const Messages = () => {
     }
   };
 
-  const formatDate = (date) => {
-    return format(date, 'MM/dd/yyyy');
-  };
-
-  const formatChatMessageDate = (date) => {
-    if (isValidDate(date)) {
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-      const messageDate = date.toDateString();
-
-      if (messageDate === today.toDateString()) {
-        return 'Today';
-      } else if (messageDate === yesterday.toDateString()) {
-        return 'Yesterday';
-      } else {
-        return formatDate(date);
-      }
-    }
-
-    return '';
-  };
-
-  const isValidDate = (date) => {
-    return date instanceof Date && !isNaN(date);
-  };
-
   useEffect(() => {
-    getChats();
+    dispatch(fetchChats());
     scrollToBottom();
   }, []);
+
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  function isValidDate(date) {
+    return date instanceof Date && !isNaN(date);
+  }
 
   return (
       <>

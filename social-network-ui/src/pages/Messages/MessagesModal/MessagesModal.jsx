@@ -17,15 +17,6 @@ import { useMessagesModalStyles } from './MessagesModalStyles';
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
 
 const MessagesModal = ({ visible, onClose }) => {
-  const users = [
-    {
-      avatar: { src: 'fff.jpeg' },
-      fullName: 'John Smith',
-      username: 'john_smith',
-      id: 1,
-    },
-  ];
-
   const classes = useMessagesModalStyles();
   const [selectedIndex] = useState();
 

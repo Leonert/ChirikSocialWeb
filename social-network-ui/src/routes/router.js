@@ -7,6 +7,7 @@ import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
 import Profile from '../pages/Profile/Profile';
 import profileLoader from '../pages/Profile/profileLoader';
+import FullTweet from "../pages/FullTweet/FullTweet";
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/lists',
-        element: <div></div>,
+        element: <FullTweet />,
       },
       {
         path: '/profile',

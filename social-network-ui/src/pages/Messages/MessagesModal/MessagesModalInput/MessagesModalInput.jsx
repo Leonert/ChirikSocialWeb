@@ -1,12 +1,12 @@
 import TextField from "@material-ui/core/TextField/TextField";
-import {withStyles} from "@mui/styles";
+import {withStyles} from "@material-ui/core";
 
 export const MessagesModalInput = withStyles((theme) => ({
     root: {
         '& .MuiOutlinedInput-root': {
             '&.Mui-focused': {
                 '& svg path': {
-                    fill: theme.palette.primary.main,
+                    fill: theme.palette.primary.dark,
                 },
             },
             '& fieldset': {
