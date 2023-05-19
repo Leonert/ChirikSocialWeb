@@ -9,7 +9,7 @@ import ReplyHeader from '../Post/ReplyHeader';
 
 export default function PostList() {
   const posts = useSelector((state) => state.home.post);
-  console.log(posts);
+
   const classes = usePostStyle();
   const dispatch = useDispatch();
   const handleRetweet = (props) => {
@@ -38,7 +38,6 @@ export default function PostList() {
                 )
               ) : null
             }
-            // post.text === null && post.image === null
             classes={classes.Page}
             key={post.id}
             avatar={post.author.profileImage}
