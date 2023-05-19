@@ -29,9 +29,9 @@ textarea,
 button,
 select {
   border: none;
+  outline: none;
   font-family: inherit;
   font-size: inherit;
-  outline: none;
   background-color: transparent;
   appearance: none;
 }
