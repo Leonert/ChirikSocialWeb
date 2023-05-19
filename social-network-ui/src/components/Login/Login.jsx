@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { handleModal } from '../../features/slices/authModalSlice';
+import { handleModal, handleRegistrationModal } from '../../features/slices/authModalSlice';
 import { loginUser } from '../../features/slices/authSlice';
 import { handleSnackbar } from '../../features/slices/snackbarSlice';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
@@ -38,6 +38,11 @@ export const Login = () => {
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((state) => state.auth);
+
+  const openRegistrationModal = () => {
+    dispatch(handleRegistrationModal(true));
+    dispatch(handleModal(false));
+  };
 
   const handleNextPage = () => {
     const err = Object.keys(formik.errors);
@@ -84,7 +89,7 @@ export const Login = () => {
     >
       {loading && <CustomLoader />}
       <TitleLogin firstPage={firstPage} />
-      {firstPage && (
+      {/* {firstPage && (
         <>
           <CustomButton styles={{ width: '100%', marginBottom: '20px' }}>
             <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
@@ -94,7 +99,7 @@ export const Login = () => {
           </CustomButton>
           <Divider sx={{ marginBottom: '20px', color: 'white' }}>or</Divider>
         </>
-      )}
+      )} */}
 
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -141,6 +146,7 @@ export const Login = () => {
                 variant="span"
                 onClick={() => {
                   dispatch(handleModal(false));
+                  openRegistrationModal();
                 }}
                 style={{
                   cursor: 'pointer',
@@ -210,9 +216,7 @@ export const Login = () => {
               </Typography>
               <Typography
                 variant="span"
-                onClick={() => {
-                  dispatch(handleModal(false));
-                }}
+                onClick={openRegistrationModal}
                 sx={{
                   cursor: 'pointer',
                   color: 'rgb(63, 81, 181)',
