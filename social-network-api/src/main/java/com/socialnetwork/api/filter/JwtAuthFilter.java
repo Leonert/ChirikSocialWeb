@@ -49,8 +49,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
     else if (globalPaths.stream().anyMatch(request.getRequestURI()::startsWith)
         && request.getAttribute(USERNAME_ATTRIBUTE) == null) {
+      if (request.getAttribute(USERNAME_ATTRIBUTE) != null) request.setAttribute(USERNAME_ATTRIBUTE, null);
       chain.doFilter(request, response);
     }
-    else throw new AccessDeniedException("denied");
+    else {
+      response.setStatus(401);
+    }
   }
 }
