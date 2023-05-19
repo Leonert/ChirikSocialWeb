@@ -1,5 +1,5 @@
-import GoogleIcon from '@mui/icons-material/Google';
-import { Box, Divider, Link, Typography } from '@mui/material';
+// import GoogleIcon from '@mui/icons-material/Google';
+import { Box, Link, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 

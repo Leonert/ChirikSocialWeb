@@ -2,8 +2,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
   Box,
-  Checkbox,
-  Divider,
+  Checkbox, // Divider,
   FormControlLabel,
   IconButton,
   InputAdornment,
@@ -12,7 +11,7 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
+// import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
