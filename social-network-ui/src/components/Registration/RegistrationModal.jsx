@@ -12,7 +12,7 @@ import InitialStep from './InitialStep';
 
 async function emailAsyncValidation(email) {
   const response = await axiosIns.get('/api/registration/email', {
-    params: { e: email },
+    params: { q: email },
   });
 
   return response;
@@ -20,7 +20,7 @@ async function emailAsyncValidation(email) {
 
 async function usernameAsyncValidation(username) {
   const response = await axiosIns.get('/api/registration/username', {
-    params: { u: username },
+    params: { q: username },
   });
 
   return response;
@@ -163,7 +163,7 @@ const RegistrationModal = () => {
   };
 
   const steps = [
-    <InitialStep key={1} onCreateAccount={handleNextStep} />,
+    <InitialStep key={1} handleClose={handleClose} onCreateAccount={handleNextStep} />,
     <AccountProfileFields formik={formik} key={2} onSubmit={handleSubmit.bind(null, formik.values, formik)} />,
     <BIOFields key={3} formik={formik} />,
     <ConfirmMail key={4} onSubmit={handleLastStep} formik={formik} />,
