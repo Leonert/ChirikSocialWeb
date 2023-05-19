@@ -10,6 +10,7 @@ export const ListUsersLike = forwardRef(function ListUsersLike(props, ref) {
   const { loading } = useSelector((state) => state.likes);
   const { listUsers } = useSelector((state) => state.likes);
   const [currentPage, setCurrentPage] = useState(0);
+
   const totalUsers = 10;
 
   const handleScroll = useCallback(
@@ -40,10 +41,12 @@ export const ListUsersLike = forwardRef(function ListUsersLike(props, ref) {
   }, [ref, listUsers]);
 
   useEffect(() => {
-    if (listUsers === null) {
+    if (listUsers.length === 0) {
       dispatch(getUsersLike({ id: 1, currentPage }));
     }
   }, []);
+
+  useEffect(() => {}, [listUsers]);
 
   return (
     <ul>

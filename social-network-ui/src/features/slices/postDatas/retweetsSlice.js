@@ -24,7 +24,7 @@ export const getUsersRetweet = createAsyncThunk(
 const retweetsSlice = createSlice({
   name: 'retweets',
   initialState: {
-    listUsers: null,
+    listUsers: [],
     error: null,
     loading: false,
     isOpenRetweetModal: false,
@@ -32,6 +32,10 @@ const retweetsSlice = createSlice({
   reducers: {
     handleOpenRetweetModal: (state, action) => {
       state.isOpenRetweetModal = action.payload;
+    },
+    changeStatusUserRetweet: (state, action) => {
+      const elem = state.listUsers.findIndex((user) => user.username === action.payload.username);
+      state.listUsers[elem].currUserFollower = !state.listUsers[elem].currUserFollower;
     },
   },
   extraReducers: {
@@ -56,4 +60,4 @@ const retweetsSlice = createSlice({
 });
 
 export const retweetsReducer = retweetsSlice.reducer;
-export const { handleOpenRetweetModal } = retweetsSlice.actions;
+export const { handleOpenRetweetModal, changeStatusUserRetweet } = retweetsSlice.actions;

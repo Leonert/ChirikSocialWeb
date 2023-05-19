@@ -40,10 +40,12 @@ export const ListUsersRetweer = forwardRef(function ListUsersRetweer(props, ref)
   }, [ref, listUsers]);
 
   useEffect(() => {
-    if (listUsers === null) {
+    if (listUsers.length === 0) {
       dispatch(getUsersRetweet({ id: 1, currentPage }));
     }
   }, []);
+
+  useEffect(() => {}, [listUsers]);
 
   return (
     <ul>

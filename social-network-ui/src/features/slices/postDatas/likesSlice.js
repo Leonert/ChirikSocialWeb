@@ -5,7 +5,6 @@ import axiosIns from '../../../axiosInstance';
 export const getUsersLike = createAsyncThunk(
   'likes/getUsersLike',
   async ({ id, currentPage = 0 }, { rejectWithValue }) => {
-    // console.log(currentPage);
     try {
       const { data } = await axiosIns({
         method: 'GET',
@@ -25,7 +24,7 @@ export const getUsersLike = createAsyncThunk(
 const likesSlice = createSlice({
   name: 'likes',
   initialState: {
-    listUsers: null,
+    listUsers: [],
     error: null,
     loading: false,
     isOpenLikeModal: false,
@@ -33,6 +32,10 @@ const likesSlice = createSlice({
   reducers: {
     handleOpenLikeModal: (state, action) => {
       state.isOpenLikeModal = action.payload;
+    },
+    changeStatusUserLike: (state, action) => {
+      const elem = state.listUsers.findIndex((user) => user.username === action.payload.username);
+      state.listUsers[elem].currUserFollower = !state.listUsers[elem].currUserFollower;
     },
   },
   extraReducers: {
@@ -57,4 +60,4 @@ const likesSlice = createSlice({
 });
 
 export const likesReducer = likesSlice.reducer;
-export const { handleOpenLikeModal } = likesSlice.actions;
+export const { handleOpenLikeModal, changeStatusUserLike } = likesSlice.actions;
