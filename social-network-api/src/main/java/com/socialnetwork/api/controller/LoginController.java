@@ -1,22 +1,29 @@
 package com.socialnetwork.api.controller;
 
-import com.socialnetwork.api.dto.UserDto;
+import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
-import com.socialnetwork.api.mapper.UserMapper;
+import com.socialnetwork.api.exception.custom.InvalidTokenUsernameException;
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.TokenExpiredException;
+import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
 import com.socialnetwork.api.service.NotificationService;
-import com.socialnetwork.api.service.UserService;
+import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.CONFIRMATION_REQUIRED;
 import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 
@@ -42,15 +49,17 @@ public class LoginController {
     if (!user.isEnabled()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(CONFIRMATION_REQUIRED));
     }
-
-    String jwt = jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe());
-
-    UserDto.Response.AccountData userDtoResponse = new UserDto.Response.AccountData();
-    userDtoResponse.setUser(userMapper.convertToUserDto(user));
-    userDtoResponse.setJwt(jwt);
-
     notificationService.saveLogin(user);
 
-    return ResponseEntity.ok(userDtoResponse);
+    return ResponseEntity.ok(userMapper.convertToAccountData(user,
+            jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
+  }
+
+  @GetMapping("jwt")
+  public ResponseEntity<?> loginByToken(HttpServletRequest request)
+          throws TokenExpiredException, InvalidTokenUsernameException, NoUserWithSuchCredentialsException {
+    String auth = request.getHeader(AUTHORIZATION_HEADER);
+    User user = userService.findByUsername(jwtTokenUtil.getUsernameFromTokenAndCheckIt(auth));
+    return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));
   }
 }

@@ -3,6 +3,7 @@ package com.socialnetwork.api.models.auth;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
