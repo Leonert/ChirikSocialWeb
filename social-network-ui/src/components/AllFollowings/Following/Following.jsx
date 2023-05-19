@@ -4,18 +4,29 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { loadFollowing } from '../../../features/slices/authSlice';
 import { handleFollowers, handleFollowing } from '../../../features/slices/subscriptionsSlice';
+import { loadFollowing } from '../../../features/slices/userDatas/followingSlice';
 import Spinner from '../../Spinner/Spinner';
 import { FollowingUser } from '../FollowingUser/FollowingUser';
 import { Subscriptions } from '../Subscriptions/Subscriptions';
 
 export const Following = () => {
-  const dispatch = useDispatch();
-
   const location = useLocation();
 
   const path = location.pathname.split('/')[location.pathname.split('/').length - 1];
+
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { followingUsers, loading } = useSelector((state) => state.following);
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalUsers = 10;
+
+  useEffect(() => {
+    if (token && user && followingUsers.length === 0) {
+      dispatch(loadFollowing({ username: user.username, token }));
+    }
+  }, []);
 
   useEffect(() => {
     if (path === 'following') {
@@ -24,36 +35,31 @@ export const Following = () => {
     }
   }, [path]);
 
-  // const { users } = useSelector((state) => state.auth.user.following);
-  // const { totalUsers } = useSelector((state) => state.auth.following);
-  // const { loading } = useSelector((state) => state.auth);
-  // const [currentPage, setCurrentPage] = useState(0);
+  const handleScroll = useCallback(
+    (e) => {
+      if (
+        e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
+        followingUsers.length < totalUsers
+      ) {
+        if (loading) return;
+        if (followingUsers.length < totalUsers) {
+          dispatch(loadFollowing({ username: user.username, currentPage: currentPage + 1 }));
+          document.removeEventListener('scroll', handleScroll);
+        }
+      }
+    },
+    [dispatch, loading, totalUsers, currentPage]
+  );
 
-  // const handleScroll = useCallback(
-  //   (e) => {
-  //     if (
-  //       e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
-  //       users.length < totalUsers
-  //     ) {
-  //       setCurrentPage((prevState) => prevState + 1);
-  //       dispatch(loadFollowing(currentPage));
-  //     }
-  //   },
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll);
 
-  //   [loading, loadFollowing]
-  // );
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
-  // useEffect(() => {
-  //   dispatch(loadFollowing());
-  // }, [loadFollowing]);
-
-  // useEffect(() => {
-  //   document.addEventListener('scroll', handleScroll);
-
-  //   return () => {
-  //     document.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, [handleScroll]);
+  console.log('render.......');
 
   return (
     <Subscriptions>
@@ -68,33 +74,29 @@ export const Following = () => {
             flexDirection: 'column',
           }}
         >
-          {/* {loading && <Spinner />} */}
-          {/* {users.map((user) => {
-          return <FollowingUser key={user._id} user={user} />;
-        })} */}
-
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
-          <FollowingUser />
+          {loading && <Spinner />}
+          {followingUsers.length > 0 &&
+            followingUsers.map((user) => {
+              return <FollowingUser key={user.username} user={user} />;
+            })}
         </List>
       </Box>
     </Subscriptions>
   );
 };
+
+// const handleScroll = useCallback(
+//   (e) => {
+//     if (
+//       e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
+//       followingUsers.length < totalUsers
+//     ) {
+//       if (loading) return;
+//       setCurrentPage((prevState) => prevState + 1);
+//       dispatch(loadFollowing({ username: user.username, currentPage: currentPage + 1 }));
+//       document.removeEventListener('scroll', handleScroll);
+//     }
+//   },
+
+//   [loading, loadFollowing]
+// );

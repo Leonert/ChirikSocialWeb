@@ -8,6 +8,7 @@ import { likesReducer } from '../features/slices/postDatas/likesSlice';
 import { retweetsReducer } from '../features/slices/postDatas/retweetsSlice';
 import { snackbarReducer } from '../features/slices/snackbarSlice';
 import { subscriptionsReducer } from '../features/slices/subscriptionsSlice';
+import { followersReducer } from '../features/slices/userDatas/followersSlice';
 import { followingReducer } from '../features/slices/userDatas/followingSlice';
 import { notificationsReducer } from '../features/slices/userDatas/notificationsSlice';
 
@@ -19,6 +20,7 @@ export const store = configureStore({
     home: homeSlice,
     subscriptions: subscriptionsReducer,
     following: followingReducer,
+    followers: followersReducer,
     notifications: notificationsReducer,
     likes: likesReducer,
     retweets: retweetsReducer,

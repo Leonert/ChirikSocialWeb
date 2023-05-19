@@ -3,28 +3,23 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosIns from '../../../../src/axiosInstance';
 import { changeStatusUserLike } from '../postDatas/likesSlice';
 import { changeStatusUserRetweet } from '../postDatas/retweetsSlice';
+import { changeStatusUserFollower } from './followersSlice';
 
 export const loadFollowing = createAsyncThunk(
   'followingSlice/loadFollowing',
-  async ({ username, token, currentPage = 0, quantity = 10 }, { rejectWithValue }) => {
-    console.log(username);
-    // console.log(token);
+  async ({ username, currentPage = 0, quantity = 5 }, { rejectWithValue }) => {
     try {
       const { data } = await axiosIns({
-        method: 'get',
-        url: `api/users/followed`,
+        method: 'GET',
+        url: `/api/users/${username}/followed`,
         params: {
           p: currentPage,
           n: quantity,
-          username: username,
         },
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(username);
 
       return data;
     } catch (error) {
@@ -40,6 +35,7 @@ export const followUser = createAsyncThunk('following/followUser', async ({ user
       url: `/api/users/p/${user.username}`,
     });
 
+    dispatch(changeStatusUserFollower(user));
     dispatch(changeStatusUserLike(user));
     dispatch(changeStatusUserRetweet(user));
 
@@ -55,6 +51,8 @@ export const followUser = createAsyncThunk('following/followUser', async ({ user
       };
     }
   } catch (error) {
+    console.log(error);
+
     return rejectWithValue(error.response.data.message);
   }
 });
@@ -75,7 +73,11 @@ const followingSlice = createSlice({
     [loadFollowing.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      state.user.following.push(action.payload);
+      if (state.followingUsers.length === 0) {
+        state.followingUsers.push(...action.payload);
+      } else {
+        state.followingUsers = [...state.followingUsers, ...action.payload];
+      }
     },
     [loadFollowing.rejected]: (state, action) => {
       state.loading = false;
@@ -83,16 +85,17 @@ const followingSlice = createSlice({
     },
 
     [followUser.pending]: (state, action) => {
-      state.loading = true;
       state.error = null;
     },
     [followUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
       if (action.payload.type === 'unsubscribed') {
-        state.followingUsers.filter((user) => user.username !== action.payload.username);
+        state.followingUsers = state.followingUsers.filter((user) => user.username !== action.payload.username);
       } else {
-        state.followingUsers.push(action.payload.user);
+        const newFol = { ...action.payload.user, currUserFollower: !action.payload.user.currUserFollower };
+
+        state.followingUsers.push(newFol);
       }
     },
     [followUser.rejected]: (state, action) => {

@@ -35,7 +35,9 @@ const retweetsSlice = createSlice({
     },
     changeStatusUserRetweet: (state, action) => {
       const elem = state.listUsers.findIndex((user) => user.username === action.payload.username);
-      state.listUsers[elem].currUserFollower = !state.listUsers[elem].currUserFollower;
+      if (state.listUsers.length !== 0) {
+        state.listUsers[elem].currUserFollower = !state.listUsers[elem].currUserFollower;
+      }
     },
   },
   extraReducers: {

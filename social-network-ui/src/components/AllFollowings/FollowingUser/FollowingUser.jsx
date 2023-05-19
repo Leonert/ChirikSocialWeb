@@ -2,12 +2,12 @@ import { Avatar, Box, ListItem, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { unfollowUser } from '../../../features/slices/authSlice';
+import { followUser } from '../../../features/slices/userDatas/followingSlice';
 import { CustomButton } from '../../Login/CustomButton';
 
 export const FollowingUser = ({ user }) => {
   const dispatch = useDispatch();
-  // const { avatar, _id, name, username } = user;
+  const { profileImage, id, name, username, bio, currUserFollower } = user;
 
   const [onActive, setOnActive] = useState(false);
 
@@ -17,9 +17,10 @@ export const FollowingUser = ({ user }) => {
   const handleMouseleave = useCallback(() => {
     setOnActive(false);
   }, []);
-  const handleUnfollow = useCallback(() => {
-    // dispatch(unfollowUser(_id));
-  }, []);
+
+  const handleFollow = useCallback(() => {
+    dispatch(followUser({ user }));
+  }, [user]);
 
   return (
     <ListItem
@@ -35,18 +36,14 @@ export const FollowingUser = ({ user }) => {
     >
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mr: '10px' }}>
-          {/* <Avatar alt="Remy Sharp" src={avatar} /> */}
+          <Avatar alt="Remy Sharp" src={profileImage} />
         </Box>
         <Box>
           <Typography sx={{ color: '#000000' }} variant="h6">
-            {/* {name} */}
-            name
+            {name}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ mr: '10px', color: 'gray' }}>
-              {/* @{username} */}
-              username
-            </Typography>
+            <Typography sx={{ mr: '10px', color: 'gray' }}>@{username}</Typography>
           </Box>
         </Box>
       </Box>
@@ -54,7 +51,7 @@ export const FollowingUser = ({ user }) => {
         <CustomButton
           handleEnter={handleMouseenter}
           handleLeave={handleMouseleave}
-          handleClick={handleUnfollow}
+          handleClick={handleFollow}
           styles={{
             backgroundColor: 'none',
             border: '1px solid gray',
@@ -65,7 +62,9 @@ export const FollowingUser = ({ user }) => {
             },
           }}
         >
-          <Typography style={onActive ? { color: '#c62828' } : {}}>{onActive ? 'Unfollow' : ' Following'}</Typography>
+          <Typography style={currUserFollower ? { color: '#c62828' } : {}}>
+            {currUserFollower ? 'Unfollow' : ' Following'}
+          </Typography>
         </CustomButton>
       </Box>
     </ListItem>

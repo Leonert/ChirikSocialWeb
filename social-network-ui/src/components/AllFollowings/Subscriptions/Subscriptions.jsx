@@ -13,6 +13,7 @@ export const Subscriptions = (props) => {
   const classes = useStyles();
   const { followers } = useSelector((state) => state.subscriptions);
   const { following } = useSelector((state) => state.subscriptions);
+  const { user } = useSelector((state) => state.auth);
 
   const hadeleFollowersCLick = () => {
     dispatch(handleFollowers(true));
@@ -32,10 +33,10 @@ export const Subscriptions = (props) => {
           </Box>
           <Box>
             <Typography className={classes.name} variant="h6">
-              Name
+              {user && user?.name}
             </Typography>
 
-            <Typography className={classes.username}>@username</Typography>
+            <Typography className={classes.username}>@{user && user?.username}</Typography>
           </Box>
         </Box>
         <Box className={classes.followersWrap}>

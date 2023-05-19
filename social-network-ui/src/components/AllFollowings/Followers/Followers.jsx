@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
-import { loadFollowers } from '../../../features/slices/authSlice';
 import { handleFollowers, handleFollowing } from '../../../features/slices/subscriptionsSlice';
+import { loadFollowers } from '../../../features/slices/userDatas/followersSlice';
 import Spinner from '../../Spinner/Spinner';
 import { FollowerUser } from '../FollowerUser/FollowerUser';
 import { Subscriptions } from '../Subscriptions/Subscriptions';
@@ -15,6 +15,9 @@ export const Followers = () => {
   const location = useLocation();
 
   const path = location.pathname.split('/')[location.pathname.split('/').length - 1];
+  const { token, user } = useSelector((state) => state.auth);
+  const { followersUsers, loading } = useSelector((state) => state.followers);
+  const totalUsers = 10;
 
   useEffect(() => {
     if (path === 'followers') {
@@ -22,36 +25,39 @@ export const Followers = () => {
       dispatch(handleFollowers(true));
     }
   }, [path]);
-  // const { users } = useSelector((state) => state.auth.user.followers);
-  // const { totalUsers } = useSelector((state) => state.auth.followers);
-  // const { loading } = useSelector((state) => state.auth);
-  // const [currentPage, setCurrentPage] = useState(0);
 
-  // const handleScroll = useCallback(
-  //   (e) => {
-  //     if (
-  //       e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
-  //       users.length < totalUsers
-  //     ) {
-  //       setCurrentPage((prevState) => prevState + 1);
-  //       dispatch(loadFollowers(currentPage));
-  //     }
-  //   },
+  useEffect(() => {
+    if (token && user && followersUsers.length === 0) {
+      dispatch(loadFollowers({ username: user.username }));
+    }
+  }, []);
 
-  //   [loading, loadFollowers]
-  // );
+  const [currentPage, setCurrentPage] = useState(0);
 
-  // useEffect(() => {
-  //   dispatch(loadFollowers());
-  // }, [loadFollowers]);
+  const handleScroll = useCallback(
+    (e) => {
+      if (
+        e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
+        followersUsers.length < totalUsers
+      ) {
+        if (loading) return;
+        setCurrentPage((prevState) => prevState + 1);
+        dispatch(loadFollowers({ username: user.username, currentPage: currentPage + 1 }));
+        document.removeEventListener('scroll', handleScroll);
+        console.log('load data....');
+      }
+    },
 
-  // useEffect(() => {
-  //   document.addEventListener('scroll', handleScroll);
+    [loading, loadFollowers]
+  );
 
-  //   return () => {
-  //     document.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, [handleScroll]);
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll);
+
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   return (
     <Subscriptions>
@@ -66,13 +72,11 @@ export const Followers = () => {
             flexDirection: 'column',
           }}
         >
-          {/* {loading && <Spinner />} */}
-          {/* {users.map((user) => {
-          return <FollowingUser key={user._id} user={user} />;
-        })} */}
-          <FollowerUser />
-          <FollowerUser />
-          <FollowerUser />
+          {loading && <Spinner />}
+          {followersUsers.length > 0 &&
+            followersUsers.map((user) => {
+              return <FollowerUser key={user.username} user={user} />;
+            })}
         </List>
       </Box>
     </Subscriptions>
