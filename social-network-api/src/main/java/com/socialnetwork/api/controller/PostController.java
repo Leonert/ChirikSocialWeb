@@ -73,7 +73,7 @@ public class PostController {
 
   @GetMapping("")
   public List<? extends PostDtoInterface>
-  getFeed(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+    getFeed(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
           @RequestParam("viewed") Optional<Boolean> showViewedPosts,
           HttpServletRequest request) throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
