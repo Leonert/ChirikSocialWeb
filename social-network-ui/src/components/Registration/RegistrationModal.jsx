@@ -1,8 +1,10 @@
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 
 import axiosIns from '../../axiosInstance';
+import { handleRegistrationModal } from '../../features/slices/authModalSlice';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import AccountProfileFields from './AccountProfileFields';
@@ -92,9 +94,9 @@ const validationSchema = (activeStep) => {
 };
 
 const RegistrationModal = () => {
-  const [open, setOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-
+  const dispatch = useDispatch();
+  const open = useSelector((state) => state.authModal.registrationModal);
   const handleNextStep = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
@@ -120,15 +122,12 @@ const RegistrationModal = () => {
 
       const formattedBirthDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
       try {
-        const data = {
+        await axiosIns.post('/api/registration', {
           emailAddress: formik.values.email,
           username: formik.values.username,
           password: formik.values.password,
           name: formik.values.name + ' ' + formik.values.surname,
           birthDate: formattedBirthDate,
-        };
-        await axiosIns.post('/api/registration', {
-          body: data,
         });
       } catch (e) {
         // console.error('Error: ', e.response.status);
@@ -137,7 +136,7 @@ const RegistrationModal = () => {
   };
 
   const handleLastStep = () => {
-    setOpen(false);
+    dispatch(handleRegistrationModal(false));
   };
 
   const formik = useFormik({
@@ -156,17 +155,17 @@ const RegistrationModal = () => {
 
   const handleOpen = () => {
     setActiveStep(0);
-    setOpen(true);
+    dispatch(handleRegistrationModal(true));
   };
   const handleClose = () => {
-    setOpen(false);
+    dispatch(handleRegistrationModal(false));
   };
 
   const steps = [
     <InitialStep key={1} handleClose={handleClose} onCreateAccount={handleNextStep} />,
     <AccountProfileFields formik={formik} key={2} onSubmit={handleSubmit.bind(null, formik.values, formik)} />,
     <BIOFields key={3} formik={formik} />,
-    <ConfirmMail key={4} onSubmit={handleLastStep} formik={formik} />,
+    <ConfirmMail key={4} handleClose={handleClose} onSubmit={handleLastStep} formik={formik} />,
   ];
 
   return (
