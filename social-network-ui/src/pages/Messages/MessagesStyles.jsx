@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core";
+import {makeStyles} from "@mui/styles";
 
 export const useMessagesStyles = makeStyles((theme) => ({
 
@@ -13,8 +13,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
       minHeight: '100vh',
       borderTop: 0,
       borderBottom: 0,
-      // backgroundColor: theme.palette.background.paper,
-      // color: theme.palette.common.white,
+      backgroundColor: theme.palette.background.paper,
+      color: theme.palette.common.white,
 
 
     },
@@ -32,8 +32,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderRight: 0,
     borderRadius: 0,
     alignItems: 'center',
-    // backgroundColor: theme.palette.background.paper,
-    // color: theme.palette.common.white,
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.common.white,
 
 
     flex: 1,
@@ -58,7 +58,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 14,
     color: theme.palette.common.white,
     margin: '8px 30px 27px 30px',
-    // backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.default,
   },
   messagesButton: {
     marginLeft: 30,
@@ -74,19 +74,18 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   list: {
     '& .Mui-selected': {
-      borderRight: '2px solid rgb(27, 149, 224)',
+      borderRight: '1px solid rgb(27, 149, 224)',
     },
   },
   listItem: {
     padding: 0,
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.background.paper,
     '& :hover': {
-      backgroundColor: '#edf3f6',
+      backgroundColor: theme.palette.background.paper,
     },
   },
   userWrapper: {
     height: 76,
-    borderTop: '1px solid #EFF3F4',
     width: '100%',
     display: 'flex',
     alignItems: 'flex-start',
@@ -107,7 +106,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   userFullName: {
     display: 'inline-block',
-    color: 'rgb(15, 20, 25)',
+    color: 'rgb(83, 100, 113)',
     fontWeight: 800,
     fontSize: 15,
   },
@@ -127,7 +126,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
       borderLeft: 0,
       borderTop: 0,
       borderBottom: 0,
-      // backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.background.default,
 
     },
   },
@@ -135,16 +134,19 @@ export const useMessagesStyles = makeStyles((theme) => ({
     width: 320,
     margin: '0px auto',
     paddingTop: 300,
+
   },
   chatInfoTitle: {
     lineHeight: 1.1,
     fontSize: 29,
     fontWeight: 800,
+
   },
   chatInfoText: {
     fontSize: 14,
     color: 'rgb(83, 100, 113)',
     margin: '8px 0px 27px 0px',
+
   },
   chatInfoButton: {
     height: 48,
@@ -168,6 +170,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderBottom: '1px solid #EFF3F4',
     borderRadius: 0,
     alignItems: 'center',
+    backgroundColor: theme.palette.background.default,
+
     flex: 1,
     '& h6': {
       fontWeight: 800,
@@ -182,6 +186,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     padding: '53px 15px',
     height: 900,
     overflowY: 'auto',
+    backgroundColor: theme.palette.background.default,
+
   },
   tweetContainer: {
     marginTop: 10,
@@ -199,7 +205,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     width: 384,
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: 'rgb(9,204,204)',
     },
   },
   tweetUserInfoWrapper: {
@@ -272,7 +277,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     width: 384,
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: 'rgb(247, 249, 249)',
+
     },
   },
   participantTweetInfoWrapper: {

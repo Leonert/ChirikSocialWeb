@@ -1,6 +1,7 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.models.base.Message;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.MessageRepository;
@@ -29,6 +30,13 @@ public class MessageServiceImpl implements MessageService {
             .collect(Collectors.toList());
   }
 
+  @Override
+  public List<UserDto.Response.Listing> searchUsers(String keyword) {
+    List<User> users = userRepository.findByUsernameContainingIgnoreCase(keyword);
+    return users.stream()
+            .map(user -> modelMapper.map(user, UserDto.Response.Listing.class))
+            .collect(Collectors.toList());
+  }
   @Override
   public MessageDto getMessageById(int id) {
     Message message = messageRepository.findById(id)
@@ -66,7 +74,10 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public MessageDto createMessage(MessageDto messageDto) {
-    Message message = convertToMessage(messageDto);
+    Message message = new Message();
+    message.setRead(false);
+    message.setMessage(messageDto.getMessage());
+    message.setTimestamp(LocalDateTime.now());
 
     User recipient = userRepository.findById(messageDto.getRecipientId())
             .orElseThrow(() -> new EntityNotFoundException("Recipient not found with id: " + messageDto.getRecipientId()));
@@ -75,14 +86,10 @@ public class MessageServiceImpl implements MessageService {
 
     message.setRecipient(recipient);
     message.setSender(sender);
-    message.setRead(false);
-    message.setDate(LocalDateTime.now());
+
     message = messageRepository.save(message);
 
-    messageDto.setRecipientId(recipient.getId());
-    messageDto.setSenderId(sender.getId());
-
-    return messageDto;
+    return convertToMessageDto(message);
   }
 
   public MessageDto convertToMessageDto(Message message) {

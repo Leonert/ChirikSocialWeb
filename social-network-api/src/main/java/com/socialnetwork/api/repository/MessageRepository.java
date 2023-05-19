@@ -19,7 +19,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
   List<Message> findByMessageContainingIgnoreCase(String keyword);
 
-  List<Message> findAll();
 
   @Transactional
   @Modifying

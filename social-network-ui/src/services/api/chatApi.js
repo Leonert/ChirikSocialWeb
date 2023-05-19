@@ -1,6 +1,4 @@
 import axiosIns from "../../axiosInstance";
-import {API_URL} from "../../util/url";
-
 
 export const ChatApi = {
     sendMessage: async (message) => {
@@ -23,8 +21,6 @@ export const ChatApi = {
             throw error;
         }
     },
-
-
 
     getUserChats: async () => {
         try {
@@ -76,7 +72,7 @@ export const ChatApi = {
 
     readChatMessages: async (chatId) => {
         try {
-            await axiosIns.put(`${API_URL}/messages/${chatId}/read`);
+            await axiosIns.put(`/messages/${chatId}/read`);
         } catch (error) {
             console.error('Error marking chat messages as read:', error);
         }
@@ -84,7 +80,7 @@ export const ChatApi = {
 
     addMessage: async (chatMessage) => {
         try {
-            const response = await axiosIns.post(`${API_URL}/messages/create`, chatMessage);
+            const response = await axiosIns.post(`/messages/create`, chatMessage);
 
             return response.data;
         } catch (error) {
@@ -96,7 +92,7 @@ export const ChatApi = {
 
     addMessageWithTweet: async (chatMessage) => {
         try {
-            const response = await axiosIns.post(`${API_URL}/messages/create`, chatMessage);
+            const response = await axiosIns.post(`/messages/create`, chatMessage);
 
             return response.data;
         } catch (error) {
@@ -104,11 +100,11 @@ export const ChatApi = {
 
             return null;
         }
-
     },
-    getUserList: async () => {
+
+    getUserList: async (keyword) => {
         try {
-            const response = await axiosIns.get(`${API_URL}/messages/users`);
+            const response = await axiosIns.get(`/messages/users/search`);
 
             return response.data;
         } catch (error) {
@@ -117,4 +113,4 @@ export const ChatApi = {
             return [];
         }
     },
-}
+};

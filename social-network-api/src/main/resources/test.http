@@ -34,11 +34,9 @@ POST http://localhost:8080/api/messages/create
 Content-Type: application/json
 
 {
-  "id": 1,
-  "senderId": 1,
-  "recipientId": 2,
+  "senderId": 12,
+  "recipientId": 1,
   "message": "Hello, Worldмчсмчясмчям!",
-  "timestamp": "2023-05-10T10:00:00",
   "read": false
 }
 

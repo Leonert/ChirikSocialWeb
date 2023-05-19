@@ -1,6 +1,7 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.models.base.Message;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface MessageService {
   MessageDto convertToMessageDto(Message message);
 
   Message convertToMessage(MessageDto messageDto);
+  List<UserDto.Response.Listing> searchUsers(String keyword);
+
 }

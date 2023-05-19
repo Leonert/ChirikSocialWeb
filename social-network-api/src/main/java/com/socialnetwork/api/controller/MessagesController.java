@@ -1,7 +1,7 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.MessageDto;
-import com.socialnetwork.api.dto.UserDto;
+import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.models.base.Message;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.MessageRepository;
@@ -9,6 +9,9 @@ import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +33,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/messages")
 public class MessagesController {
-  private final MessageRepository messageRepository;
   private final MessageService messageService;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
@@ -42,10 +45,7 @@ public class MessagesController {
 
   @GetMapping()
   public ResponseEntity<List<MessageDto>> getAllMessages() {
-    List<Message> messages = messageRepository.findAll();
-    List<MessageDto> messageDtos = messages.stream()
-            .map(message -> convertToMessageDto(message))
-            .collect(Collectors.toList());
+    List<MessageDto> messageDtos = messageService.getAllMessages();
 
     messageDtos.forEach(messageDto -> {
       System.out.println("ID: " + messageDto.getId());
@@ -65,14 +65,14 @@ public class MessagesController {
 
   @PutMapping("/{id}")
   public ResponseEntity<MessageDto> updateMessage(@PathVariable int id, @RequestBody MessageDto messageDto) {
-    messageDto.setId(Integer.parseInt(String.valueOf(id)));
+    messageDto.setId(id);
     MessageDto updatedMessageDto = messageService.updateMessage(messageDto);
     return ResponseEntity.ok(updatedMessageDto);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteMessage(@PathVariable int id) {
-    messageRepository.deleteById(id);
+    messageService.deleteMessage(id);
     return ResponseEntity.noContent().build();
   }
 
@@ -92,18 +92,25 @@ public class MessagesController {
   public ResponseEntity<List<UserDto.Response.Listing>> getAllUsers() {
     List<User> users = userRepository.findAll();
     List<UserDto.Response.Listing> userDtos = users.stream()
-            .map(user ->
-                    modelMapper.map(user, UserDto.Response.Listing.class))
+            .map(user -> modelMapper.map(user, UserDto.Response.Listing.class))
             .collect(Collectors.toList());
 
     return ResponseEntity.ok(userDtos);
   }
 
-  private MessageDto convertToMessage(MessageDto messageDto) {
-    return modelMapper.map((Object) messageDto, (Type) Message.class);
+  @GetMapping("/users/search")
+  public ResponseEntity<Page<UserDto.Response.Listing>> searchUsers(
+          @RequestParam("keyword") String keyword,
+          Pageable pageable
+  ) {
+    Page<User> usersPage = userRepository.findByUsernameContainingIgnoreCaseOrNameContaining(keyword, keyword, pageable);
+    List<UserDto.Response.Listing> userDtos = usersPage.getContent().stream()
+            .map(user -> modelMapper.map(user, UserDto.Response.Listing.class))
+            .collect(Collectors.toList());
+
+    Page<UserDto.Response.Listing> userDtosPage = new PageImpl<>(userDtos, pageable, usersPage.getTotalElements());
+
+    return ResponseEntity.ok(userDtosPage);
   }
 
-  private MessageDto convertToMessageDto(Message message) {
-    return modelMapper.map(message, MessageDto.class);
-  }
 }

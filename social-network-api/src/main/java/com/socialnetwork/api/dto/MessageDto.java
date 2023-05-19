@@ -2,9 +2,12 @@ package com.socialnetwork.api.dto;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+
+import static com.socialnetwork.api.util.Constants.Response.DATE_FORMAT;
 
 
 @Data

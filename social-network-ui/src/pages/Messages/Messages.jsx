@@ -1,15 +1,16 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 
-import { EmojiIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
+import { MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG} from '../../util/url';
-import { MessageInput } from './MessageInput/MessageInput';
-import MessagesModal from './MessagesModal/MessagesModal';
+
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
-import {ChatApi} from "../../services/api/chatApi";
-import {formatDistanceToNow} from "date-fns";
 
+import {format, formatDistanceToNow} from "date-fns";
+import {ChatApi} from "../../services/api/chatApi";
+import {MessageInput} from "./MessageInput/MessageInput";
+import MessagesModal from "./MessagesModal/MessagesModal";
 
 const Messages = () => {
   const classes = useMessagesStyles();
@@ -21,27 +22,28 @@ const Messages = () => {
   const [participant, setParticipant] = useState(null);
   const [visibleModalWindow, setVisibleModalWindow] = useState(false);
   const [groupChatId, setGroupChatId] = useState(null);
-
-
-  useEffect(() => {
-    getChats();
-    scrollToBottom();
-  }, []);
-
+  const [showMessageInput, setShowMessageInput] = useState(false);
 
   const getChats = async () => {
     try {
       const chatList = await ChatApi.getUserChats();
       setChats(chatList);
-      console.log(chatList, 10)
     } catch (error) {
       console.error('Error fetching user chats:', error);
     }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const handleSearchChange = async (event) => {
+    const keyword = event.target.value;
+    setText(keyword);
+
+    try {
+      const userList = await ChatApi.getUserList(keyword);
+      setChats(userList);
+    } catch (error) {
+      console.error('Error searching users:', error);
+    }
+  };
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
@@ -64,17 +66,15 @@ const Messages = () => {
 
     try {
       const chatMessages = await ChatApi.getChatMessages(chatId);
-      setMessages(chatMessages);
+      const messageArray = Array.from(chatMessages);
+      setMessages((prevMessages) => [...prevMessages, ...messageArray]);
       scrollToBottom();
 
-      console.log(chatMessages, 3)
-
+      console.log(chatMessages, 3);
     } catch (error) {
       console.error('Error fetching chat messages:', error);
     }
-
   };
-
   const onSendMessage = async () => {
     if (text !== '') {
       let selectedChat;
@@ -83,34 +83,66 @@ const Messages = () => {
       } else {
         selectedChat = chats.find((chat) => chat.id === selectedChatId);
       }
-      const newMessage = {
-        id: 100,
-        date: new Date(),
-        text,
-        isRead: false,
-        timestamp: new Date().toISOString(),
-        participantId: selectedChat.id,
-      };
+      if (selectedChat) {
+        const newMessage = {
+          id: selectedChat.id,
+          date: new Date(),
+          text: text,
+          isRead: false,
+        };
 
-      console.log(newMessage);
-      try {
-        const createdMessage = await ChatApi.sendMessage(newMessage);
-        setMessages((prevMessages) => [...prevMessages, createdMessage]);
-        setText('');
-        setSelectedChatId(createdMessage.participantId);
-        setParticipant(createdMessage);
-        scrollToBottom();
-      } catch (error) {
-        console.error('Error sending message:', error);
+        try {
+          const createdMessage = await ChatApi.sendMessage(newMessage);
+          setMessages((prevMessages) => [...prevMessages, createdMessage]);
+          setText('');
+          setSelectedChatId(createdMessage.id);
+          setParticipant(createdMessage);
+          scrollToBottom();
+          setShowMessageInput(false);
+        } catch (error) {
+          console.error('Error sending message:', error);
+        }
+      } else {
+        console.error('Selected chat is undefined');
       }
     }
+  };
+
+  const formatDate = (date) => {
+    return format(date, 'MM/dd/yyyy');
+  };
+
+  const formatChatMessageDate = (date) => {
+    if (isValidDate(date)) {
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const messageDate = date.toDateString();
+
+      if (messageDate === today.toDateString()) {
+        return 'Today';
+      } else if (messageDate === yesterday.toDateString()) {
+        return 'Yesterday';
+      } else {
+        return formatDate(date);
+      }
+    }
+
+    return '';
   };
 
   const isValidDate = (date) => {
     return date instanceof Date && !isNaN(date);
   };
 
-  console.log(messages,4)
+  useEffect(() => {
+    getChats();
+    scrollToBottom();
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
       <>
@@ -144,7 +176,7 @@ const Messages = () => {
                       <PeopleSearchInput
                           placeholder="Explore for people and groups"
                           variant="outlined"
-                          onChange={(event) => setText(event.target.value)}
+                          onChange={handleSearchChange}
                           value={text}
                           InputProps={{
                             startAdornment: <InputAdornment position="start">{SearchIcon}</InputAdornment>,
@@ -176,7 +208,7 @@ const Messages = () => {
                               />
                               <div style={{ flex: 1 }}>
                                 <div className={classes.userHeader}>
-                                  <div style={{ width: 300 }}>
+                                  <div>
                                     <Typography className={classes.userFullName}>
                                       {chat.id ? chat.fullName : chat.fullName}
                                     </Typography>
@@ -229,29 +261,29 @@ const Messages = () => {
                     </div>
                   </Paper>
                   <Paper className={classes.chat}>
-                    { Array.isArray(messages) &&
+                    {Array.isArray(messages) &&
                         messages.map((message) => (
                             <React.Fragment key={message.id}>
                               {message && message.author && message.author.id ? (
                                   <div className={classes.tweetContainer}>
-                                      <div className={classes.tweetWrapper}>
-                                        <div className={classes.tweetUserInfoWrapper}>
-                                          <Avatar
-                                              className={classes.tweetAvatar}
-                                              src={
-                                                message.user.avatar?.src ? message.user.avatar?.src : DEFAULT_PROFILE_IMG
-                                              }
-                                          />
-                                          <span className={classes.tweetUserFullName}>{message.user.fullName}</span>
-                                          <span className={classes.tweetUsername}>@{message.user.username}</span>
-                                          <span className={classes.tweetTimestamp}>
+                                    <div className={classes.tweetWrapper}>
+                                      <div className={classes.tweetUserInfoWrapper}>
+                                        <Avatar
+                                            className={classes.tweetAvatar}
+                                            src={
+                                              message.user.avatar?.src ? message.user.avatar?.src : DEFAULT_PROFILE_IMG
+                                            }
+                                        />
+                                        <span className={classes.tweetUserFullName}>{message.user.fullName}</span>
+                                        <span className={classes.tweetUsername}>@{message.user.username}</span>
+                                        <span className={classes.tweetTimestamp}>
                               {isValidDate(message.timestamp)
                                   ? formatDistanceToNow(new Date(message.timestamp))
                                   : ''}
                             </span>
-                                        </div>
-                                        <div key={message.id} className={classes.tweetText}>{message.text}</div>
                                       </div>
+                                      <div key={message.id} className={classes.tweetText}>{message.text}</div>
+                                    </div>
                                   </div>
                               ) : (
                                   <div className={classes.messageContainer}>
@@ -259,7 +291,7 @@ const Messages = () => {
                                       <div className={classes.messageText}>{message.text}</div>
                                       <div className={classes.messageTimestamp}>
                                         {isValidDate(message.timestamp)
-                                            ? formatDistanceToNow(new Date(message.timestamp))
+                                            ? formatChatMessageDate(new Date(message.timestamp))
                                             : ''}
                                       </div>
                                     </div>
@@ -273,11 +305,6 @@ const Messages = () => {
                     <div className={classes.chatIcon}>
                       <IconButton color="primary">
                         <span>{MediaIcon}</span>
-                      </IconButton>
-                    </div>
-                    <div className={classes.chatIcon}>
-                      <IconButton color="primary">
-                        <span>{EmojiIcon}</span>
                       </IconButton>
                     </div>
                     <MessageInput
@@ -299,7 +326,6 @@ const Messages = () => {
         </Grid>
         <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
       </>
-
   );
 };
 
