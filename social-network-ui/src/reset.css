@@ -30,9 +30,9 @@ button,
 select {
   border: none;
   outline: none;
+  background-color: transparent;
   font-family: inherit;
   font-size: inherit;
-  background-color: transparent;
   appearance: none;
 }
 
