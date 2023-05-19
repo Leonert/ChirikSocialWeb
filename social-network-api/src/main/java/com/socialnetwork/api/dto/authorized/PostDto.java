@@ -28,10 +28,9 @@ public enum PostDto {
 
     @Data
     public static class Created {
-      UserDto.Request.Default user;
       String text;
       String image;
-      Integer originalPostId;
+      Integer originalPost;
     }
   }
 

@@ -1,7 +1,5 @@
 package com.socialnetwork.api.security;
 
-import com.socialnetwork.api.exception.custom.TokenExpiredException;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,9 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.function.Function;
-
-import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 
 @Component
 @PropertySource("classpath:application.properties")

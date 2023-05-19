@@ -14,19 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
-
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
-  private final JwtTokenUtil jwtTokenUtil;
   private final UserService userService;
   private final NotificationMapper notificationMapper;
 
   @GetMapping()
   public ResponseEntity<List<NotificationDto>> getUserNotifications(HttpServletRequest request)
-          throws NoUserWithSuchCredentialsException {
+      throws NoUserWithSuchCredentialsException {
     return ResponseEntity.ok(notificationMapper.mapNotifications(userService.findByUsername(
         (String) request.getAttribute("username")).getNotifications()));
   }

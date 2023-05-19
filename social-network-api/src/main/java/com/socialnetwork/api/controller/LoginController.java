@@ -2,9 +2,7 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
-import com.socialnetwork.api.exception.custom.InvalidTokenUsernameException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.exception.custom.TokenExpiredException;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
@@ -52,12 +50,12 @@ public class LoginController {
     notificationService.saveLogin(user);
 
     return ResponseEntity.ok(userMapper.convertToAccountData(user,
-            jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
+        jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
   }
 
   @GetMapping("jwt")
   public ResponseEntity<?> loginByToken(HttpServletRequest request)
-          throws NoUserWithSuchCredentialsException {
+      throws NoUserWithSuchCredentialsException {
     String auth = request.getHeader(AUTHORIZATION_HEADER);
     User user = userService.findByUsername((String) request.getAttribute("username"));
     return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));

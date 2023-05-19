@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class NotificationMapper{
+public class NotificationMapper {
 
   private final ModelMapper modelMapper;
 
