@@ -2,33 +2,26 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../../axiosInstance';
 
-export const getNotifications = createAsyncThunk(
-  'notifications/getNotifications',
-  async ({ token }, { rejectWithValue }) => {
-    console.log(token);
+export const getNotifications = createAsyncThunk('notifications/getNotifications', async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosIns({
+      method: 'GET',
+      url: `api/notifications`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-    try {
-      const { data } = await axiosIns({
-        method: 'GET',
-        url: `api/notifications`,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log(data);
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.response.data.message);
-    }
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.response.data.message);
   }
-);
+});
 
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {
-    list: null,
+    list: [],
     error: null,
     loading: false,
   },

@@ -8,7 +8,7 @@ export const getUsersLike = createAsyncThunk(
     try {
       const { data } = await axiosIns({
         method: 'GET',
-        url: `/api/posts/1/likes?p=${currentPage}&n=5`,
+        url: `/api/posts/1/likes?p=${currentPage}&n=10`,
         headers: {
           'Content-Type': 'application/json',
         },
