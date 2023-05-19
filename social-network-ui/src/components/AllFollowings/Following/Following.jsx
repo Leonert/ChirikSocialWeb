@@ -42,13 +42,13 @@ export const Following = () => {
         followingUsers.length < totalUsers
       ) {
         if (loading) return;
-        if (followingUsers.length < totalUsers) {
-          dispatch(loadFollowing({ username: user.username, currentPage: currentPage + 1 }));
-          document.removeEventListener('scroll', handleScroll);
-        }
+        setCurrentPage((prevState) => prevState + 1);
+        dispatch(loadFollowing({ username: user.username, currentPage: currentPage + 1 }));
+        document.removeEventListener('scroll', handleScroll);
       }
     },
-    [dispatch, loading, totalUsers, currentPage]
+
+    [loading, loadFollowing]
   );
 
   useEffect(() => {
@@ -58,8 +58,6 @@ export const Following = () => {
       document.removeEventListener('scroll', handleScroll);
     };
   }, [handleScroll]);
-
-  console.log('render.......');
 
   return (
     <Subscriptions>

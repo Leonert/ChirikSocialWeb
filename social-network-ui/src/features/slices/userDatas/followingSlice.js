@@ -7,7 +7,7 @@ import { changeStatusUserFollower } from './followersSlice';
 
 export const loadFollowing = createAsyncThunk(
   'followingSlice/loadFollowing',
-  async ({ username, currentPage = 0, quantity = 5 }, { rejectWithValue }) => {
+  async ({ username, currentPage = 0, quantity = 10 }, { rejectWithValue }) => {
     try {
       const { data } = await axiosIns({
         method: 'GET',
