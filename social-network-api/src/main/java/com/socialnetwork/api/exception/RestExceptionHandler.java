@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import static com.socialnetwork.api.util.Constants.Exception.MISSING_PATH_VARIABLE;
+import static com.socialnetwork.api.util.Constants.Exception.MISSING_REQUEST_PARAMETER;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static com.socialnetwork.api.util.Constants.Exception.MISSING_REQUEST_PARAMETER;
-import static com.socialnetwork.api.util.Constants.Exception.MISSING_PATH_VARIABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {

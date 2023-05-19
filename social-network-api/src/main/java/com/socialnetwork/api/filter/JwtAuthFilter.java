@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 
 @Component
@@ -26,11 +27,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   private final JwtTokenUtil jwtTokenUtil;
   private final JwtUserDetailsService jwtUserDetailsService;
   private final List<String> globalPaths =
-      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users"));
+          new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users",
+                  "/api/search"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
 
     String requestUri = request.getRequestURI();
 
@@ -39,7 +41,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       return;
     }
 
-    String authHeader = request.getHeader("Authorization");
+    String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+
 
     String username = null;
     String jwtToken = null;
@@ -60,9 +63,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
       if (jwtTokenUtil.isTokenValid(jwtToken, userDetails)) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.getAuthorities());
+                userDetails, null, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken
-            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
       } else {
         response.setStatus(401);
@@ -72,4 +75,3 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     chain.doFilter(request, response);
   }
 }
-
