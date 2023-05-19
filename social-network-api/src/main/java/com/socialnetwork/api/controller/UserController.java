@@ -1,12 +1,15 @@
-package com.socialnetwork.api.controller.authorized;
+package com.socialnetwork.api.controller;
 
+import com.socialnetwork.api.dto.UserDtoInterface;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
+import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.security.JwtTokenUtil;
 import com.socialnetwork.api.service.authorized.UserService;
+import com.socialnetwork.api.service.noneauthorized.NonAuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,34 +39,36 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
+  private final JwtTokenUtil jwtTokenUtil;
   private final UserService userService;
   private final UserMapper userMapper;
-  private final JwtTokenUtil jwtTokenUtil;
+  private final NonAuthUserService nonAuthUserService;
+  private final NonAuthUserMapper nonAuthUserMapper;
 
   @GetMapping("p/{username}")
-  public UserDto.Response.Profile getProfileByUsername(
-      @PathVariable("username") String username, HttpServletRequest request, HttpServletResponse response)
-      throws NoUserWithSuchCredentialsException, IOException {
+  public UserDtoInterface getProfileByUsername(
+      @PathVariable("username") String username, HttpServletRequest request)
+      throws NoUserWithSuchCredentialsException {
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/users/unauth/p/" + username);
-      return null;
+      return nonAuthUserMapper.mapForProfile(nonAuthUserService.findByUsername(username));
+
     }
     return userMapper.mapForProfile(userService.findByUsername(username),
             jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
 
   @GetMapping("{username}/followers")
-  public List<UserDto.Response.Listing> getFollowers(@PathVariable("username") String username,
+  public List<? extends UserDtoInterface> getFollowers(@PathVariable("username") String username,
                                                      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-                                                     HttpServletRequest request, HttpServletResponse response)
-      throws NoUserWithSuchCredentialsException, IOException {
+                                                     HttpServletRequest request)
+      throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/users/unauth/" + username + "/followers?"
-          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
-      return null;
+      return nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowers(username,
+          pageD, resultsD));
+
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(userService.getFollowers(username, currentUserUsername,
@@ -71,25 +76,25 @@ public class UserController {
   }
 
   @GetMapping("{username}/followed")
-  public List<UserDto.Response.Listing> getFollowed(@PathVariable("username") String username,
+  public List<? extends UserDtoInterface> getFollowed(@PathVariable("username") String username,
                                                     @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-                                                    HttpServletRequest request, HttpServletResponse response)
-      throws NoUserWithSuchCredentialsException, IOException {
+                                                    HttpServletRequest request)
+      throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/users/unauth/" + username + "/followed?"
-          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
-      return null;
+      return nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowed(username,
+          pageD, resultsD));
+
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(userService.getFollowed(username, currentUserUsername,
-        page.orElse(PAGE_NUMBER_DEFAULT), usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername);
+        pageD, resultsD), currentUserUsername);
   }
 
   @GetMapping("connect")
-  public List<UserDto.Response.Listing> getConnect(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+  public List<? extends UserDtoInterface> getConnect(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                    @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
                                                    HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));

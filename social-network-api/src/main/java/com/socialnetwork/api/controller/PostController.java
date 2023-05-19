@@ -1,5 +1,7 @@
-package com.socialnetwork.api.controller.authorized;
+package com.socialnetwork.api.controller;
 
+import com.socialnetwork.api.dto.PostDtoInterface;
+import com.socialnetwork.api.dto.UserDtoInterface;
 import com.socialnetwork.api.dto.authorized.PostDto;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
@@ -8,6 +10,7 @@ import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException
 import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
+import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.JwtTokenUtil;
@@ -15,6 +18,7 @@ import com.socialnetwork.api.service.BookmarkService;
 import com.socialnetwork.api.service.authorized.LikeService;
 import com.socialnetwork.api.service.authorized.PostService;
 import com.socialnetwork.api.service.authorized.UserService;
+import com.socialnetwork.api.service.noneauthorized.NonAuthLikeService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,12 +32,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,40 +53,39 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController {
+  private final JwtTokenUtil jwtTokenUtil;
   private final PostService postService;
   private final LikeService likeService;
   private final BookmarkService bookmarkService;
   private final UserService userService;
   private final PostMapper postMapper;
   private final UserMapper userMapper;
-  private final JwtTokenUtil jwtTokenUtil;
+  private final NonAuthPostMapper nonAuthPostMapper;
+  private final NonAuthUserMapper nonAuthUserMapper;
+  private final NonAuthPostService nonAuthPostService;
+  private final NonAuthLikeService nonAuthLikeService;
 
   @GetMapping("/{id}")
-  public PostDto.Response.WithAuthor getPostById(@PathVariable(ID_QUERY) Integer id,
-                                                 HttpServletRequest request,
-                                                 HttpServletResponse response)
-      throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException, IOException {
+  public PostDtoInterface getPostById(@PathVariable(ID_QUERY) Integer id,
+                                      HttpServletRequest request)
+      throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("unauth/" + id);
-      return null;
+      return nonAuthPostMapper.convertToPostDtoDefault(nonAuthPostService.getReferenceById(id));
     }
     return postMapper.convertToPostDtoDefault(postService.getReferenceById(id),
             jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
 
   @GetMapping("")
-  public List<PostDto.Response.WithAuthor>
+  public List<? extends PostDtoInterface>
     getFeed(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
             @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
             @RequestParam("viewed") Optional<Boolean> showViewedPosts,
-            HttpServletRequest request, HttpServletResponse response)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, IOException {
+            HttpServletRequest request) throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("posts/unauth?" + PAGE_NUMBER_QUERY + "=" + pageD
-          + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
-      return null;
+      return nonAuthPostMapper.mapForListing(nonAuthPostService.getPosts(pageD, resultsD));
     }
     String username = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     List<PostDto.Response.WithAuthor> outcome = new ArrayList<>();
@@ -96,34 +99,31 @@ public class PostController {
   }
 
   @GetMapping("/{id}/replies")
-  public List<PostDto.Response.WithAuthor> getReplies(
+  public List<? extends PostDtoInterface> getReplies(
           @PathVariable("id") int id, @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-          HttpServletRequest request, HttpServletResponse response) throws NoPostWithSuchIdException, IOException {
+          HttpServletRequest request) throws NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/posts/unauth/" + id + "/replies" + "?"
-          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
-      return null;
+      return nonAuthPostMapper.mapForListing(nonAuthPostService.getReplies(id,
+          pageD, resultsD));
     }
     return postMapper.mapForListing(postService.getReplies(id, pageD, resultsD),
             jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER)));
   }
 
   @GetMapping("/{id}/retweets")
-  public List<UserDto.Response.Listing> getRetweets(
+  public List<? extends UserDtoInterface> getRetweets(
           @PathVariable("id") int id,
           @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-          HttpServletRequest request, HttpServletResponse response)
-      throws NoUserWithSuchCredentialsException, IOException {
+          HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/posts/unauth/" + id + "/retweets" + "?"
-          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
-      return null;
+      return nonAuthUserMapper.mapForListing(nonAuthPostService.getRetweets(id,
+          pageD, resultsD));
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(postService.getRetweets(id,
@@ -131,18 +131,16 @@ public class PostController {
   }
 
   @GetMapping("/{id}/likes")
-  public List<UserDto.Response.Listing> getLikes(
+  public List<? extends UserDtoInterface> getLikes(
           @PathVariable("id") int id,
           @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-          HttpServletRequest request, HttpServletResponse response)
-      throws NoUserWithSuchCredentialsException, IOException {
+          HttpServletRequest request) throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (!jwtTokenUtil.isAuthTokenExists(request)) {
-      response.sendRedirect("/api/posts/unauth/" + id + "/likes" + "?"
-          + PAGE_NUMBER_QUERY + "=" + pageD + "&" + RESULTS_PER_PAGE_QUERY + "=" + resultsD);
-      return null;
+      return nonAuthUserMapper.mapForListing(nonAuthLikeService.getLikes(id,
+          pageD, resultsD));
     }
     String currentUserUsername = jwtTokenUtil.getUsernameFromToken(request.getHeader(AUTHORIZATION_HEADER));
     return userMapper.mapForListing(likeService.getLikes(id,
