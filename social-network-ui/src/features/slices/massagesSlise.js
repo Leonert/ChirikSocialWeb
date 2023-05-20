@@ -1,6 +1,5 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../services/api/chatApi";
-
 export const sendMessage = createAsyncThunk('messages/sendMessage', async (message) => {
     try {
         const createdMessage = await ChatApi.sendMessage(message);
@@ -11,9 +10,8 @@ export const sendMessage = createAsyncThunk('messages/sendMessage', async (messa
     }
 });
 
-export const fetchChats = createAsyncThunk('messages/fetchChats', async () => {
+export const fetchChat = createAsyncThunk('messages/fetchChat', async () => {
     try {
-
         return await ChatApi.getUserChats();
     } catch (error) {
         throw new Error('Error fetching user chats:', error);
@@ -54,31 +52,31 @@ const messagesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchChats.fulfilled, (state, action) => {
+            .addCase(sendMessage.fulfilled, (state, action) => {
+                const { chatId, message } = action.payload;
+                state.messages[chatId] = [...(state.messages[chatId] || []), message];
+            })
+            .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;
             })
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
                 state.messages[chatId] = messages;
-            })
-            .addCase(sendMessage.fulfilled, (state, action) => {
-                const { chatId, message } = action.payload;
-                state.messages[chatId] = [...(state.messages[chatId] || []), message];
             });
     },
 });
-export  const {
+
+export const {
     setSelectedChatId,
     setText,
     toggleModalWindow,
 } = messagesSlice.actions;
 
-export const selectChats = (state) => state.messages?.chats || [];
-export const selectMessages = (state) => state.messages?.messages || {};
-export const selectSelectedChatId = (state) => state.messages?.selectedChatId;
-export const selectParticipant = (state) => state.messages?.participant;
-export const selectText = (state) => state.messages?.text;
-export const selectVisibleModalWindow = (state) => state.messages?.visibleModalWindow;
+export const selectChats = (state) => state.messages.chats;
+export const selectMessages = (state) => state.messages.messages;
+export const selectSelectedChatId = (state) => state.messages.selectedChatId;
+export const selectParticipant = (state) => state.messages.participant;
+export const selectText = (state) => state.messages.text;
+export const selectVisibleModalWindow = (state) => state.messages.visibleModalWindow;
 
-
-export default messagesSlice.reducer
+export default messagesSlice.reducer;

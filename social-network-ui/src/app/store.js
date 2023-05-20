@@ -6,7 +6,7 @@ import homeSlice from '../features/slices/homeSlice';
 import searchSlice from '../features/slices/searchSlice';
 import settingSlice from '../features/slices/settingSlice';
 import { snackbarReducer } from '../features/slices/snackbarSlice';
-
+import messagesSlice from '../features/slices/massagesSlise';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -15,5 +15,6 @@ export const store = configureStore({
     home: homeSlice,
     setting: settingSlice,
     search: searchSlice,
+    messages: messagesSlice
   },
 });

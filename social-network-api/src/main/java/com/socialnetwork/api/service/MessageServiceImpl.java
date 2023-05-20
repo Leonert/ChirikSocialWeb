@@ -90,7 +90,9 @@ public class MessageServiceImpl implements MessageService {
 
     message = messageRepository.save(message);
 
-    return convertToMessageDto(message);
+    messageDto.setTimestamp(message.getTimestamp());
+
+    return messageDto;
   }
 
   public MessageDto convertToMessageDto(Message message) {

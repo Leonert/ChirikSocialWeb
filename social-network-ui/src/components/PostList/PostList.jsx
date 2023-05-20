@@ -10,6 +10,7 @@ import ReplyHeader from '../Post/ReplyHeader';
 export default function PostList() {
   const posts = useSelector((state) => state.home.post);
 
+  console.log(posts);
   const classes = usePostStyle();
   const dispatch = useDispatch();
   const handleRetweet = (props) => {

@@ -22,9 +22,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
   @Transactional
   @Modifying
   @Query("DELETE FROM Message m WHERE m.id = :id")
-
-  void deleteMessage(
-          @Param("id")
-          int id
-  );
+  void deleteMessage(@Param("id") int id);
 }

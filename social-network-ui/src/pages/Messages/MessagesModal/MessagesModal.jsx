@@ -21,6 +21,14 @@ const MessagesModal = ({ visible, onClose }) => {
   const [selectedIndex] = useState();
 
   const [text, setText] = useState('');
+  const users = [
+    {
+      avatar: { src: 'fff.jpeg' },
+      fullName: 'John Smith',
+      username: 'john_smith',
+      id: 1,
+    },
+  ];
 
   const handleClickSearch = (event) => {
     setText(event.target.value);
@@ -33,6 +41,7 @@ const MessagesModal = ({ visible, onClose }) => {
     }
   };
   const handleListItemClick = () => {};
+
 
   return (
     <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">

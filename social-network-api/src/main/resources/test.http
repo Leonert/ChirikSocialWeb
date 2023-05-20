@@ -34,17 +34,18 @@ POST http://localhost:8080/api/messages/create
 Content-Type: application/json
 
 {
-  "senderId": 12,
+  "senderId": 15,
   "recipientId": 1,
   "message": "Hello, Worldмчсмчясмчям!",
   "read": false
+
 }
 
 ###
 GET http://localhost:8080/api/messages
 
 ###
-DELETE http://localhost:8080/api/messages/101
+DELETE http://localhost:8080/api/messages/100
 
 ###
-PUT http://localhost:8080/api/messages/101/read
+PUT http://localhost:8080/api/messages/102/read

@@ -7,13 +7,13 @@ import { DEFAULT_PROFILE_IMG} from '../../util/url';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
-import {formatDistanceToNow} from "date-fns";
+import {format, formatDistanceToNow} from "date-fns";
 import {ChatApi} from "../../services/api/chatApi";
 import {MessageInput} from "./MessageInput/MessageInput";
 import MessagesModal from "./MessagesModal/MessagesModal";
 import {
+  fetchChat,
   fetchChatMessages,
-  fetchChats,
   selectChats,
   selectMessages,
   selectParticipant,
@@ -36,12 +36,14 @@ const Messages = () => {
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
 
   const handleSearchChange = async (event) => {
+    event.preventDefault(); // Остановка стандартного поведения формы
     const keyword = event.target.value;
     dispatch(setText(keyword));
 
     try {
       const userList = await ChatApi.getUserList(keyword);
-      dispatch(fetchChats(userList));
+      dispatch(fetchChat(userList));
+      console.log(userList,2)
     } catch (error) {
       console.error('Error searching users:', error);
     }
@@ -63,32 +65,46 @@ const Messages = () => {
 
   const handleListItemClick = async (chatId) => {
     dispatch(setSelectedChatId(chatId));
-
+    console.log(chatId);
     try {
       dispatch(fetchChatMessages(chatId));
+      const chatMessages = await ChatApi.getChatMessages(chatId);
+      const lastMessage = chatMessages[chatMessages.length - 1];
+      if (Array.isArray(chatMessages) && chatMessages.length > 0) {
+        const lastMessage = chatMessages[chatMessages.length - 1];
+        dispatch(setText(lastMessage.text));
+        console.log(chatMessages);
+        console.log(lastMessage.text);
+        console.log(lastMessage.date);
+      } else {
+        dispatch(setText(''));
+      }
+      if (lastMessage) {
+        dispatch(setText(lastMessage.text));
+        console.log(chatMessages);
+
+
+        console.log(lastMessage.text);
+        console.log(lastMessage.date);
+      } else {
+        dispatch(setText(''));
+      }
       scrollToBottom();
     } catch (error) {
       console.error('Error fetching chat messages:', error);
     }
   };
 
+  console.log(messages);
+
+
   const onSendMessage = async () => {
     if (text !== '') {
-      let selectedChat;
-
-      // Проверка на наличие выбранного чата
-      if (selectedChatId) {
-        selectedChat = chats.find((chat) => chat.id === selectedChatId);
-      } else {
-        console.error('Selected chat is undefined');
-
-        return;
-      }
-
+      let selectedChat = chats.find((chat) => chat.id === selectedChatId);
       if (selectedChat) {
         const newMessage = {
           id: selectedChat.id,
-          date: new Date(),
+          date: new Date().toISOString(), // Используем ISO-строку для даты
           text: text,
           isRead: false,
         };
@@ -97,10 +113,8 @@ const Messages = () => {
           const createdMessage = await ChatApi.sendMessage(newMessage);
           dispatch(sendMessage(createdMessage));
           dispatch(setText(''));
-          dispatch(setSelectedChatId(createdMessage.id));
+          dispatch(setSelectedChatId(createdMessage.chatId)); // Исправлено на createdMessage.chatId
           scrollToBottom();
-          // setShowMessageInput(false);
-
         } catch (error) {
           console.error('Error sending message:', error);
         }
@@ -112,7 +126,7 @@ const Messages = () => {
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
-      await dispatch(fetchChats());
+      await dispatch(fetchChat());
       scrollToBottom();
     };
 
@@ -134,7 +148,7 @@ const Messages = () => {
             <Paper variant="outlined">
               <Paper className={classes.header}>
                 <div>
-                  <Typography variant="h6">Messages</Typography>
+                  <Typography  variant="h6">Messages</Typography>
                 </div>
               </Paper>
               {chats.length === 0 ? (
@@ -243,27 +257,25 @@ const Messages = () => {
                     {Array.isArray(messages) &&
                         messages.map((message) => (
                             <React.Fragment key={message.id}>
-                              {message && message.author && message.author.id ? (
+                              {message.author ? (
                                   <div className={classes.tweetContainer}>
                                     <div className={classes.tweetWrapper}>
                                       <div className={classes.tweetUserInfoWrapper}>
                                         <Avatar
                                             className={classes.tweetAvatar}
-                                            src={
-                                              message.author.avatar?.src
-                                                  ? message.author.avatar?.src
-                                                  : DEFAULT_PROFILE_IMG
-                                            }
+                                            src={message.author.avatar?.src || DEFAULT_PROFILE_IMG}
                                         />
                                         <span className={classes.tweetUserFullName}>{message.author.fullName}</span>
                                         <span className={classes.tweetUsername}>@{message.author.username}</span>
                                         <span className={classes.tweetTimestamp}>
-                                {isValidDate(message.timestamp)
-                                    ? formatDistanceToNow(new Date(message.timestamp))
-                                    : ''}
-                              </span>
+                                            {isValidDate(message.timestamp) ?
+                                                format(new Date(message.timestamp),
+                                                    'dd/MM/yyyy HH:mm:ss') :
+                                                ''}
+
+                                        </span>
                                       </div>
-                                      <div key={message.id} className={classes.tweetText}>{message.text}</div>
+                                      <div>{message.text}</div>
                                     </div>
                                   </div>
                               ) : (
@@ -308,6 +320,7 @@ const Messages = () => {
         <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
       </>
   );
+
 };
 
 export default Messages;

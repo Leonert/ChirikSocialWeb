@@ -1,5 +1,5 @@
 import TextField from "@material-ui/core/TextField/TextField";
-import {withStyles} from "@material-ui/core";
+import {withStyles} from "@mui/styles";
 
 export const MessagesModalInput = withStyles((theme) => ({
     root: {
