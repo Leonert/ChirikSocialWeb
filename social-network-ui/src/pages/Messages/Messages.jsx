@@ -111,14 +111,18 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchChats());
-    scrollToBottom();
-  }, []);
+    const fetchChatsAndScroll = async () => {
+      await dispatch(fetchChats());
+      scrollToBottom();
+    };
 
+    fetchChatsAndScroll();
+  }, [dispatch]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
   function isValidDate(date) {
     return date instanceof Date && !isNaN(date);
   }
@@ -176,23 +180,19 @@ const Messages = () => {
                               <Avatar
                                   className={classes.userAvatar}
                                   src={
-                                    chat.id
-                                        ? chat.avatar?.src
-                                            ? chat.avatar.src
-                                            : DEFAULT_PROFILE_IMG
-                                        : chat.avatar?.src
-                                            ? chat.avatar.src
-                                            : DEFAULT_PROFILE_IMG
+                                    chat.avatar?.src
+                                        ? chat.avatar.src
+                                        : DEFAULT_PROFILE_IMG
                                   }
                               />
                               <div style={{ flex: 1 }}>
                                 <div className={classes.userHeader}>
                                   <div>
                                     <Typography className={classes.userFullName}>
-                                      {chat.id ? chat.fullName : chat.fullName}
+                                      {chat.fullName}
                                     </Typography>
                                     <Typography className={classes.username}>
-                                      {chat.id ? '@' + chat.username : '@' + chat.username}
+                                      @{chat.username}
                                     </Typography>
                                   </div>
                                 </div>
@@ -250,16 +250,18 @@ const Messages = () => {
                                         <Avatar
                                             className={classes.tweetAvatar}
                                             src={
-                                              message.user.avatar?.src ? message.user.avatar?.src : DEFAULT_PROFILE_IMG
+                                              message.author.avatar?.src
+                                                  ? message.author.avatar?.src
+                                                  : DEFAULT_PROFILE_IMG
                                             }
                                         />
-                                        <span className={classes.tweetUserFullName}>{message.user.fullName}</span>
-                                        <span className={classes.tweetUsername}>@{message.user.username}</span>
+                                        <span className={classes.tweetUserFullName}>{message.author.fullName}</span>
+                                        <span className={classes.tweetUsername}>@{message.author.username}</span>
                                         <span className={classes.tweetTimestamp}>
-                              {isValidDate(message.timestamp)
-                                  ? formatDistanceToNow(new Date(message.timestamp))
-                                  : ''}
-                            </span>
+                                {isValidDate(message.timestamp)
+                                    ? formatDistanceToNow(new Date(message.timestamp))
+                                    : ''}
+                              </span>
                                       </div>
                                       <div key={message.id} className={classes.tweetText}>{message.text}</div>
                                     </div>

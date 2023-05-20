@@ -4,6 +4,7 @@ import {ChatApi} from "../../services/api/chatApi";
 export const sendMessage = createAsyncThunk('messages/sendMessage', async (message) => {
     try {
         const createdMessage = await ChatApi.sendMessage(message);
+
         return { chatId: createdMessage.id, message: createdMessage };
     } catch (error) {
         throw new Error('Error sending message:', error);
@@ -12,6 +13,7 @@ export const sendMessage = createAsyncThunk('messages/sendMessage', async (messa
 
 export const fetchChats = createAsyncThunk('messages/fetchChats', async () => {
     try {
+
         return await ChatApi.getUserChats();
     } catch (error) {
         throw new Error('Error fetching user chats:', error);
@@ -21,6 +23,7 @@ export const fetchChats = createAsyncThunk('messages/fetchChats', async () => {
 export const fetchChatMessages = createAsyncThunk('messages/fetchChatMessages', async (chatId) => {
     try {
         const chatMessages = await ChatApi.getChatMessages(chatId);
+
         return { chatId, messages: chatMessages };
     } catch (error) {
         throw new Error('Error fetching chat messages:', error);
@@ -70,12 +73,12 @@ export  const {
     toggleModalWindow,
 } = messagesSlice.actions;
 
-export const selectChats = (state) => state.messages.chats;
-export const selectMessages = (state) => state.messages.messages;
-export const selectSelectedChatId = (state) => state.messages.selectedChatId;
-export const selectParticipant = (state) => state.messages.participant;
-export const selectText = (state) => state.messages.text;
-export const selectVisibleModalWindow = (state) =>
-    state.messages.visibleModalWindow;
+export const selectChats = (state) => state.messages?.chats || [];
+export const selectMessages = (state) => state.messages?.messages || {};
+export const selectSelectedChatId = (state) => state.messages?.selectedChatId;
+export const selectParticipant = (state) => state.messages?.participant;
+export const selectText = (state) => state.messages?.text;
+export const selectVisibleModalWindow = (state) => state.messages?.visibleModalWindow;
+
 
 export default messagesSlice.reducer
