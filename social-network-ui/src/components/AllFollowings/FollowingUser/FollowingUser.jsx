@@ -7,7 +7,7 @@ import { CustomButton } from '../../Login/CustomButton';
 
 export const FollowingUser = ({ user }) => {
   const dispatch = useDispatch();
-  const { profileImage, id, name, username, currUserFollower } = user;
+  const { profileImage, name, username, currUserFollower } = user;
 
   const handleFollow = useCallback(() => {
     dispatch(followUser({ user }));

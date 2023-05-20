@@ -10,7 +10,7 @@ import { CustomButton } from '../../Login/CustomButton';
 import { useStylesItemUser } from './ItemUserStyles';
 
 export const ItemUser = ({ user }) => {
-  const { name, username, id, profileImage, currUserFollower } = user;
+  const { name, username, profileImage, currUserFollower } = user;
   const classes = useStylesItemUser();
   const dispatch = useDispatch();
 
