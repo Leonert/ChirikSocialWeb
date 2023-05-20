@@ -1,7 +1,7 @@
 import { Container, Grid } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 import { BottomLine } from '../components/BottomLine/BottomLine';
 import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
@@ -19,6 +19,11 @@ export const Layout = () => {
           <SideMenu />
         </Grid>
         <Grid container>
+          <ScrollRestoration
+            getKey={(location) => {
+              return location.pathname === '/' ? location.pathname : location.key;
+            }}
+          />
           <Outlet />
         </Grid>
       </Container>
