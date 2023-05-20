@@ -11,6 +11,7 @@ import com.socialnetwork.api.service.authorized.SearchService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthSearchService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,28 +42,28 @@ public class SearchController {
   public List<? extends PostDtoInterface> searchPosts(@RequestParam(QUERY) String query,
                                                       @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                       @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-                                                      HttpServletRequest request) {
+                                                      @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username) {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
-    if (request.getHeader(USERNAME_ATTRIBUTE) == null) {
+    if (username.isEmpty()) {
       return nonAuthUserMapper.mapPostsForListing(nonAuthSearchService.searchPosts(query, pageD, resultsD));
     }
     return postMapper.mapForListing(searchService.searchPosts(query, pageD,
-        resultsD), (String) request.getAttribute(USERNAME_ATTRIBUTE));
+        resultsD), username.get());
   }
 
   @GetMapping("/users")
   public List<? extends UserDtoInterface> searchUsers(@RequestParam(QUERY) String query,
                                                       @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                       @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-                                                      HttpServletRequest request)
+                                                      @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
       throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
-    if (request.getAttribute(USERNAME_ATTRIBUTE) == null) {
+    if (username.isEmpty()) {
       return nonAuthUserMapper.mapUsersForListing(nonAuthSearchService.searchUsers(query, pageD, resultsD));
     }
     return userMapper.mapForListing(searchService.searchUsers(query, pageD,
-        resultsD), (String) request.getAttribute(USERNAME_ATTRIBUTE));
+        resultsD), username.get());
   }
 }

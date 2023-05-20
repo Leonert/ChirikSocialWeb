@@ -124,8 +124,9 @@ public class UserService {
     return followsRepository.existsById(new FollowPk(currentUser.getId(), user.getId()));
   }
 
-  public void editProfile(UserDto.Request.ProfileEditing editedUser) throws NoUserWithSuchCredentialsException {
-    User userToUpdate = findByUsername(editedUser.getUsername());
+  public void editProfile(UserDto.Request.ProfileEditing editedUser, String username)
+      throws NoUserWithSuchCredentialsException {
+    User userToUpdate = findByUsername(username);
     modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
     modelMapper.map(editedUser, userToUpdate);
     userRepository.save(userToUpdate);

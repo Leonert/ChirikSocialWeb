@@ -8,11 +8,14 @@ import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -22,9 +25,9 @@ public class NotificationController {
   private final NotificationMapper notificationMapper;
 
   @GetMapping()
-  public ResponseEntity<List<NotificationDto>> getUserNotifications(HttpServletRequest request)
+  public ResponseEntity<List<NotificationDto>> getUserNotifications(@RequestAttribute(USERNAME_ATTRIBUTE) String username)
       throws NoUserWithSuchCredentialsException {
     return ResponseEntity.ok(notificationMapper.mapNotifications(userService.findByUsername(
-        (String) request.getAttribute("username")).getNotifications()));
+        username).getNotifications()));
   }
 }
