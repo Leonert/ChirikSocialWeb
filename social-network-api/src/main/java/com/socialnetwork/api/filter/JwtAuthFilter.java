@@ -26,12 +26,12 @@ import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 public class JwtAuthFilter extends OncePerRequestFilter {
   private final JwtTokenUtil jwtTokenUtil;
   private final List<String> globalPaths =
-      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users",
-          "/api/search"));
+          new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users",
+                  "/api/search"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
     if (authHeader != null) {
       if (authHeader.startsWith(BEARER)) {

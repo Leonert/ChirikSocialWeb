@@ -2,21 +2,22 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../axiosInstance';
 
-export const GetPosts = createAsyncThunk('posts/getPost', async (postId, { rejectWithValue }) => {
+export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { rejectWithValue }) => {
   try {
     const { data } = await axiosIns({
       method: 'GET',
-      url: `api/posts?p=${postId - 1}&n=10`,
+      url: `api/posts?p=${portion}&n=25`,
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    return data;
+    return data.reverse();
   } catch (error) {
     return rejectWithValue(error.response.data.message);
   }
 });
+
 const homeSlice = createSlice({
   name: 'home',
   initialState: {
