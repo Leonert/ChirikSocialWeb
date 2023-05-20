@@ -2,8 +2,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
   Box,
-  Checkbox,
-  Divider,
+  Checkbox, // Divider,
   FormControlLabel,
   IconButton,
   InputAdornment,
@@ -12,12 +11,12 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
+// import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { handleModal } from '../../features/slices/authModalSlice';
+import { handleModal, handleRegistrationModal } from '../../features/slices/authModalSlice';
 import { loginUser } from '../../features/slices/authSlice';
 import { handleSnackbar } from '../../features/slices/snackbarSlice';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
@@ -28,7 +27,7 @@ const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
   password: yup
     .string('Enter your password')
-    .min(8, 'Password should be of minimum 8 characters length')
+    // .min(8, 'Password should be of minimum 8 characters length')
     .required('Password is required'),
 });
 
@@ -38,6 +37,11 @@ export const Login = () => {
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((state) => state.auth);
+
+  const openRegistrationModal = () => {
+    dispatch(handleRegistrationModal(true));
+    dispatch(handleModal(false));
+  };
 
   const handleNextPage = () => {
     const err = Object.keys(formik.errors);
@@ -84,7 +88,7 @@ export const Login = () => {
     >
       {loading && <CustomLoader />}
       <TitleLogin firstPage={firstPage} />
-      {firstPage && (
+      {/* {firstPage && (
         <>
           <CustomButton styles={{ width: '100%', marginBottom: '20px' }}>
             <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
@@ -94,7 +98,7 @@ export const Login = () => {
           </CustomButton>
           <Divider sx={{ marginBottom: '20px', color: 'white' }}>or</Divider>
         </>
-      )}
+      )} */}
 
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -141,6 +145,7 @@ export const Login = () => {
                 variant="span"
                 onClick={() => {
                   dispatch(handleModal(false));
+                  openRegistrationModal();
                 }}
                 style={{
                   cursor: 'pointer',
@@ -210,9 +215,7 @@ export const Login = () => {
               </Typography>
               <Typography
                 variant="span"
-                onClick={() => {
-                  dispatch(handleModal(false));
-                }}
+                onClick={openRegistrationModal}
                 sx={{
                   cursor: 'pointer',
                   color: 'rgb(63, 81, 181)',
