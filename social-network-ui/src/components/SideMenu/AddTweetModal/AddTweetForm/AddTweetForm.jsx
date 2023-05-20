@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
-import { GetPosts } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
@@ -28,14 +27,6 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
 
   const handleClickImage = () => {
     fileInputRef.current.click();
-  };
-
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-
-    if (files.length > 0) {
-      const file = files[0];
-    }
   };
 
   const getBase64Image = async () => {
@@ -134,13 +125,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
                 <InsertEmoticonIcon />
               </IconButton>
               <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
+              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} />
             </div>
           )}
         </div>

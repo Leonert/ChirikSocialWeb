@@ -15,12 +15,12 @@ function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
-  const [portion, setPortion] = useState(0);
+  // const [portion, setPortion] = useState(0);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(GetPosts(portion)).then((result) => {
+    dispatch(GetPosts(0)).then((result) => {
       if (GetPosts.fulfilled.match(result)) {
         dispatch(getPost(result.payload));
       }

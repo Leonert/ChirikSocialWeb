@@ -37,10 +37,13 @@ function FormModal({ buttonName }) {
   const targetPost = post.find((item) => +item.id === +id);
 
   const sendRequest = async () => {
-    const data = { text, originalPost: targetPost.id };
-    const response = await axiosIns.post('/api/posts', data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
-    });
+    await axiosIns.post(
+      '/api/posts',
+      { text, originalPost: targetPost.id },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+      }
+    );
 
     dispatch(clothReplayModal());
     setText('');
