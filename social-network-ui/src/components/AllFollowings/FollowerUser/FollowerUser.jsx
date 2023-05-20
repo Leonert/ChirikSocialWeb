@@ -30,36 +30,29 @@ export const FollowerUser = ({ user }) => {
           <Avatar alt="Remy Sharp" src={profileImage} />
         </Box>
         <Box>
-          <Typography sx={{ color: '#000000' }} variant="h6">
+          <Typography sx={{ color: '#000000', fontSize: '16px' }} variant="h6">
             {name}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ mr: '10px', color: 'gray' }}>@{username}</Typography>
-            <Chip sx={{ backgroundColor: '#37474f' }} label="Follows you" />
+            <Typography sx={{ mr: '10px', color: 'gray', fontSize: '14px' }}>@{username}</Typography>
+            <Chip sx={{ backgroundColor: '#37474f', fontSize: '12px' }} label="Follows you" />
           </Box>
         </Box>
       </Box>
-      {/* <Box>
-        <CustomButton handleClick={handleFollow}>
-          <Typography>Follow</Typography>
-        </CustomButton>
-      </Box> */}
+
       <Box>
         <CustomButton
-          // handleEnter={handleMouseenter}
-          // handleLeave={handleMouseleave}
           handleClick={handleFollow}
           styles={{
             backgroundColor: 'none',
             border: '1px solid gray',
             color: 'rgb(48, 63, 159)',
-            minWidth: '100px',
             '&:hover': {
               backgroundColor: '#ffcdd2',
             },
           }}
         >
-          <Typography style={currUserFollower ? { color: '#c62828' } : {}}>
+          <Typography sx={{ fontSize: '14px' }} style={currUserFollower ? { color: '#c62828' } : {}}>
             {currUserFollower ? 'Unfollow' : ' Following'}
           </Typography>
         </CustomButton>

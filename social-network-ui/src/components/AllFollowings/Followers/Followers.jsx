@@ -15,9 +15,17 @@ export const Followers = () => {
   const location = useLocation();
 
   const path = location.pathname.split('/')[location.pathname.split('/').length - 1];
+
   const { token, user } = useSelector((state) => state.auth);
   const { followersUsers, loading } = useSelector((state) => state.followers);
+  const [currentPage, setCurrentPage] = useState(0);
   const totalUsers = 10;
+
+  useEffect(() => {
+    if (token && user && followersUsers.length === 0) {
+      dispatch(loadFollowers({ username: user.username }));
+    }
+  }, [user]);
 
   useEffect(() => {
     if (path === 'followers') {
@@ -25,14 +33,6 @@ export const Followers = () => {
       dispatch(handleFollowers(true));
     }
   }, [path]);
-
-  useEffect(() => {
-    if (token && user && followersUsers.length === 0) {
-      dispatch(loadFollowers({ username: user.username }));
-    }
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(0);
 
   const handleScroll = useCallback(
     (e) => {
@@ -44,7 +44,6 @@ export const Followers = () => {
         setCurrentPage((prevState) => prevState + 1);
         dispatch(loadFollowers({ username: user.username, currentPage: currentPage + 1 }));
         document.removeEventListener('scroll', handleScroll);
-        console.log('load data....');
       }
     },
 

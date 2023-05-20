@@ -1,5 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import axiosIns from '../../axiosInstance';
+
+export const GetPosts = createAsyncThunk('posts/getPost', async (postId, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosIns({
+      method: 'GET',
+      url: `api/posts?p=${postId - 1}&n=10`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.response.data.message);
+  }
+});
 const homeSlice = createSlice({
   name: 'home',
   initialState: {
@@ -20,8 +37,12 @@ const homeSlice = createSlice({
       state.recommendation = false;
       state.following = true;
     },
-    getPost: (state, actions) => {
-      state.post.push(...actions.payload);
+    getPost: (state, action) => {
+      if (Array.isArray(action.payload)) {
+        state.post.push(...action.payload);
+      } else {
+        state.post.push(action.payload);
+      }
     },
     getPostId: (state, actions) => {
       state.postId = actions.payload;

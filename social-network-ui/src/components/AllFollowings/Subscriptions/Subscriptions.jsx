@@ -40,10 +40,7 @@ export const Subscriptions = (props) => {
           </Box>
         </Box>
         <Box className={classes.followersWrap}>
-          <Link
-            to="/username/followers"
-            // // to={`/${username}/followers`}
-          >
+          <Link to={`/${user.username}/followers`}>
             <Box onClick={hadeleFollowersCLick} className={classes.follower}>
               <Typography
                 style={followers ? { borderBottom: '5px solid rgb(48, 63, 159)' } : {}}
@@ -53,10 +50,7 @@ export const Subscriptions = (props) => {
               </Typography>
             </Box>
           </Link>
-          <Link
-            to="/username/following"
-            // to={`"/${username}/following"`}
-          >
+          <Link to={`/${user.username}/following`}>
             <Box onClick={hadeleFollowingCLick} className={classes.follower}>
               <Typography
                 style={following ? { borderBottom: '5px solid rgb(48, 63, 159)' } : {}}

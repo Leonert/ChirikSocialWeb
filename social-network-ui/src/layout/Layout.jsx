@@ -1,5 +1,5 @@
 import { Container, Grid } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { BottomLine } from '../components/BottomLine/BottomLine';
 import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
 import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
-import { loginUser, loginUserWithJwt } from '../features/slices/authSlice';
+import { loginUserWithJwt } from '../features/slices/authSlice';
 import { useLayoutStyles } from './LayoutStyles';
 
 export const Layout = () => {
@@ -16,7 +16,7 @@ export const Layout = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const token = localStorage.getItem('token');
 
     if (token) {
@@ -30,7 +30,7 @@ export const Layout = () => {
         <Grid sm={1} md={2} item style={{ minWidth: '256px' }}>
           <SideMenu />
         </Grid>
-        <Grid container spacing={3}>
+        <Grid container>
           <Outlet />
           <CustomModalWindow />
         </Grid>

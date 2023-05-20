@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,9 +9,10 @@ import HeaderMain from '../../components/HeaderMain/HeaderMain';
 import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
+import SearchField from '../../components/SearchField/SearchField';
 import { UsersLikeModal } from '../../components/SocialActionsUser/Like/ListUsersLike/UsersLikeModal';
 import { UsersRetweetModal } from '../../components/SocialActionsUser/Retweet/ListUsersRetweet/UsersRetweetModal';
-import { getPost } from '../../features/slices/homeSlice';
+import { GetPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
@@ -23,40 +24,31 @@ function Home() {
 
   const dispatch = useDispatch();
 
-  const fetchPost = () => {
-    fetch('./data.json')
-      .then((r) => r.json())
-      .then((products) => {
-        dispatch(getPost(products));
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
-
   useEffect(() => {
-    fetchPost();
-  }, []);
+    dispatch(GetPosts(1)).then((result) => {
+      if (GetPosts.fulfilled.match(result)) {
+        dispatch(getPost(result.payload));
+      }
+    });
+  }, [dispatch]);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: ' #1e2028',
-        display: 'grid',
-        paddingBottom: '20px',
-        border: '1px solid #faf5f5',
-      }}
-    >
-      <HeaderMain />
-      <ButtonShowMore />
-      <AATestPostComponent />
-      {recommendation && <PostList />}
-      {following && <Following />}
-      {modalUserState && <ModalUser />}
-      <ReplayModal />
-      {isOpenLikeModal && <UsersLikeModal />}
-      {isOpenRetweetModal && <UsersRetweetModal />}
-    </Box>
+    <Grid container spacing={2}>
+      <Grid item xs={7}>
+        <HeaderMain />
+        <ButtonShowMore />
+        <AATestPostComponent />
+        {recommendation && <PostList />}
+        {following && <Following />}
+        {modalUserState && <ModalUser />}
+        <ReplayModal />
+        {isOpenLikeModal && <UsersLikeModal />}
+        {isOpenRetweetModal && <UsersRetweetModal />}
+      </Grid>
+      <Grid item xs={5}>
+        <SearchField />
+      </Grid>
+    </Grid>
   );
 }
 

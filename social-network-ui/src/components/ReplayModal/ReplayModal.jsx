@@ -23,11 +23,9 @@ const ReplayModal = () => {
         <CloseButton onClose={handleClose} />
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        <FormModal buttonName={'Replay'} />
+        <FormModal buttonName={'Reply'} />
       </DialogContent>
     </Dialog>
   );
 };
 export default ReplayModal;
-
-// maxRows={6} minRows={6} title={"What's happening?"} buttonName={'Tweet'}

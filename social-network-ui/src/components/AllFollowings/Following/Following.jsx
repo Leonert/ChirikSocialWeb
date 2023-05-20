@@ -2,7 +2,7 @@ import { List } from '@mui/material';
 import { Box } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { handleFollowers, handleFollowing } from '../../../features/slices/subscriptionsSlice';
 import { loadFollowing } from '../../../features/slices/userDatas/followingSlice';
@@ -12,10 +12,10 @@ import { Subscriptions } from '../Subscriptions/Subscriptions';
 
 export const Following = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const path = location.pathname.split('/')[location.pathname.split('/').length - 1];
 
-  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.auth);
   const { followingUsers, loading } = useSelector((state) => state.following);
@@ -26,7 +26,7 @@ export const Following = () => {
     if (token && user && followingUsers.length === 0) {
       dispatch(loadFollowing({ username: user.username, token }));
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (path === 'following') {
@@ -82,19 +82,3 @@ export const Following = () => {
     </Subscriptions>
   );
 };
-
-// const handleScroll = useCallback(
-//   (e) => {
-//     if (
-//       e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
-//       followingUsers.length < totalUsers
-//     ) {
-//       if (loading) return;
-//       setCurrentPage((prevState) => prevState + 1);
-//       dispatch(loadFollowing({ username: user.username, currentPage: currentPage + 1 }));
-//       document.removeEventListener('scroll', handleScroll);
-//     }
-//   },
-
-//   [loading, loadFollowing]
-// );

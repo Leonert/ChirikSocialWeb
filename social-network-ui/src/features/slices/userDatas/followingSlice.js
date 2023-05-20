@@ -51,8 +51,6 @@ export const followUser = createAsyncThunk('following/followUser', async ({ user
       };
     }
   } catch (error) {
-    console.log(error);
-
     return rejectWithValue(error.response.data.message);
   }
 });
