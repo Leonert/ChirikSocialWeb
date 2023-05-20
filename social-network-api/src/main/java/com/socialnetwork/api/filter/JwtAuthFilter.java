@@ -35,7 +35,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
     if (authHeader != null) {
       if (authHeader.startsWith(BEARER)) {
-        authHeader = authHeader.substring(BEARER.length()); }
+        authHeader = authHeader.substring(BEARER.length());
+      }
       try {
         request.setAttribute(USERNAME_ATTRIBUTE, jwtTokenUtil.checkTokenValidAndReturnUsername(authHeader));
       } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException
