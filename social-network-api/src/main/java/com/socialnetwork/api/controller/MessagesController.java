@@ -2,9 +2,7 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.MessageDto;
 import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.models.base.Message;
 import com.socialnetwork.api.models.base.User;
-import com.socialnetwork.api.repository.MessageRepository;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;

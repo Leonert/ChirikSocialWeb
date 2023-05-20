@@ -37,6 +37,7 @@ public class MessageServiceImpl implements MessageService {
             .map(user -> modelMapper.map(user, UserDto.Response.Listing.class))
             .collect(Collectors.toList());
   }
+
   @Override
   public MessageDto getMessageById(int id) {
     Message message = messageRepository.findById(id)
