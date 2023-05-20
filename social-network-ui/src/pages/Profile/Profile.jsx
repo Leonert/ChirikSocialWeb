@@ -1,8 +1,9 @@
 import { CalendarToday as CalendarIcon, Link as LinkIcon, LocationOn as LocationIcon } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Avatar, Box, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
+import { format } from 'date-fns';
 import React from 'react';
-import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation, useParams } from 'react-router-dom';
 
 import EditProfileModal from './EditProfileModal';
 
@@ -41,11 +42,13 @@ function useRouteMatch(patterns) {
   return null;
 }
 
-const Profile = () => {
-  const routeMatch = useRouteMatch(['profile', 'profile/replies', 'profile/media', 'profile/likes']);
+const Profile = (props) => {
+  const { username } = useParams();
+  const routeMatch = useRouteMatch([`${username}`, `${username}/replies`, `${username}/media`, `${username}/likes`]);
   const currentTab = routeMatch?.pattern?.path;
+  const { data } = useLoaderData();
 
-  const profile = useLoaderData();
+  const formattedDate = format(new Date(data.createdDate), 'MMMM yyyy');
 
   return (
     <>
@@ -73,10 +76,11 @@ const Profile = () => {
             </NavLink>
             <Stack>
               <Typography component="h2" fontSize="18px">
-                {profile.firstName + ' ' + profile.lastName}
+                {data.name}
               </Typography>
               <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>
-                {Object.keys(profile.userTweets).length} Tweets
+                {/* {Object.keys(data.userTweets).length} Tweets */}
+                {data.userPosts.length} Tweets
               </Typography>
             </Stack>
           </Stack>
@@ -84,13 +88,17 @@ const Profile = () => {
         <Box
           sx={{
             height: '193px',
+            // задній фон треба тру або фолс
             background: (theme) =>
-              profile.profileBackground ? `url(${profile.profileBackground})` : theme.palette.background.lightDefault,
+              data.profileBackgroundImage
+                ? `url(${data.profileBackgroundImage})`
+                : theme.palette.background.lightDefault,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         ></Box>
         <Stack p="20px 20px 0" direction="row" alignItems="end" justifyContent="space-between">
+          {/* todo avatar  */}
           <Avatar
             alt="Profile Picture"
             src=""
@@ -107,31 +115,31 @@ const Profile = () => {
             }}
           />
 
-          <EditProfileModal />
+          <EditProfileModal data={data} />
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
           <Box>
-            <Typography variant="h6">{profile.firstName + ' ' + profile.lastName}</Typography>
+            <Typography variant="h6">{data.name}</Typography>
             <Typography sx={{ mb: '10px' }} variant="body1">
-              @{profile.username}
+              @{data.username}
             </Typography>
             <Typography mb="12px" variant="body1">
-              {profile.BIO}
+              {data.bio}
             </Typography>
             <Stack direction="row">
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LocationIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">{profile.location}</Typography>
+                <Typography variant="body1">{data.location}</Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LinkIcon sx={{ marginRight: 1 }} />
                 <Typography variant="body1" component="a">
-                  {profile.website}
+                  {data.website}
                 </Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">{profile.accCreateDate}</Typography>
+                <Typography variant="body1">Joined {formattedDate}</Typography>
               </div>
             </Stack>
             <Stack direction="row">
@@ -146,8 +154,9 @@ const Profile = () => {
                   }}
                   to="/profile/following"
                 >
-                  {profile.followNumber} Followings
+                  {data.followedCounter} Followings
                 </NavLink>
+                {/* паменять */}
                 <NavLink
                   style={{
                     textDecoration: 'none',
@@ -158,16 +167,17 @@ const Profile = () => {
                   }}
                   to="/profile/followers"
                 >
-                  {profile.subscriberNumber} Follower
+                  {/* паменять */}
+                  {data.followersCounter} Follower
                 </NavLink>
               </Stack>
             </Stack>
           </Box>
           <ProfileTabs value={currentTab}>
-            <ProfileTab label="Posts" value="profile" to="/profile" component={Link} />
-            <ProfileTab label="Replies" value="profile/replies" to="replies" component={Link} />
-            <ProfileTab label="Media" value="profile/media" to="media" component={Link} />
-            <ProfileTab label="Likes" value="profile/likes" to="likes" component={Link} />
+            <ProfileTab label="Posts" value={username} to={`/${username}`} component={Link} />
+            <ProfileTab label="Replies" value={`${username}/replies`} to="replies" component={Link} />
+            <ProfileTab label="Media" value={`${username}/media`} to="media" component={Link} />
+            <ProfileTab label="Likes" value={`${username}/likes`} to="likes" component={Link} />
           </ProfileTabs>
           <Box>
             <Outlet />
