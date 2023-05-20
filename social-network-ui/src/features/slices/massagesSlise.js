@@ -1,16 +1,16 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../services/api/chatApi";
-export const sendMessage = createAsyncThunk('messages/sendMessage', async (message) => {
+export const sendMessage = createAsyncThunk('api/messages/sendMessage', async (message) => {
     try {
         const createdMessage = await ChatApi.sendMessage(message);
 
-        return { chatId: createdMessage.id, message: createdMessage };
+        return { chatId: createdMessage.chatId, message: createdMessage };
     } catch (error) {
         throw new Error('Error sending message:', error);
     }
 });
 
-export const fetchChat = createAsyncThunk('messages/fetchChat', async () => {
+export const fetchChat = createAsyncThunk('api/messages/fetchChat', async () => {
     try {
         return await ChatApi.getUserChats();
     } catch (error) {
@@ -18,11 +18,12 @@ export const fetchChat = createAsyncThunk('messages/fetchChat', async () => {
     }
 });
 
-export const fetchChatMessages = createAsyncThunk('messages/fetchChatMessages', async (chatId) => {
+export const fetchChatMessages = createAsyncThunk('api/messages/fetchChatMessages', async (chatId, { getState }) => {
     try {
         const chatMessages = await ChatApi.getChatMessages(chatId);
+        const { message } = getState().messages; // получаем значение поля "message" из состояния
 
-        return { chatId, messages: chatMessages };
+        return { chatId, messages: chatMessages, message };
     } catch (error) {
         throw new Error('Error fetching chat messages:', error);
     }
@@ -32,7 +33,7 @@ const messagesSlice = createSlice({
     name: 'messages',
     initialState: {
         chats: [],
-        messages: {},
+        messages: [],
         selectedChatId: null,
         participant: null,
         text: '',
@@ -44,8 +45,10 @@ const messagesSlice = createSlice({
             state.participant = state.chats.find((chat) => chat.id === action.payload);
         },
         setText: (state, action) => {
+            console.log(action.payload)
             state.text = action.payload;
         },
+
         toggleModalWindow: (state) => {
             state.visibleModalWindow = !state.visibleModalWindow;
         },
@@ -61,7 +64,12 @@ const messagesSlice = createSlice({
             })
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
-                state.messages[chatId] = messages;
+
+                if (Array.isArray(state.messages[chatId])) {
+                    state.messages[chatId] = [...state.messages[chatId], ...messages];
+                } else {
+                    state.messages[chatId] = messages;
+                }
             });
     },
 });
@@ -74,6 +82,7 @@ export const {
 
 export const selectChats = (state) => state.messages.chats;
 export const selectMessages = (state) => state.messages.messages;
+
 export const selectSelectedChatId = (state) => state.messages.selectedChatId;
 export const selectParticipant = (state) => state.messages.participant;
 export const selectText = (state) => state.messages.text;

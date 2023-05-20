@@ -231,17 +231,21 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   tweetText:{
+    display: 'flex',
+    flexDirection: 'row-reverse',
     color: theme.palette.text.primary,
+    backgroundColor: 'rgb(29, 161, 242)',
+    padding: '11px 15px',
     marginLeft: 3,
     fontSize: 15,
   },
   myMessage: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    '& span': {
-      backgroundColor: 'rgb(29, 161, 242)',
-      color: '#ffffff',
-      padding: '11px 15px',
+    display: "block",
+    flexDirection: "row-reverse",
+    "& span": {
+      backgroundColor: "rgb(29, 161, 242)",
+      color: "#fff",
+      padding: "11px 15px",
       maxWidth: 384,
     },
   },

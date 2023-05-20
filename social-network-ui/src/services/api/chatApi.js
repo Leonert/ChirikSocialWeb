@@ -5,8 +5,10 @@ import axiosIns from "../../axiosInstance";
 
 export const ChatApi = {
     sendMessage: async (message) => {
+        console.log('Message to be sent:', message);
+
         try {
-            const response = await axiosIns.post(`/messages/create`, {
+            const response = await axiosIns.post(`api/messages/create`, {
                 id: message.id,
                 date: message.date,
                 message: message.text,
@@ -27,7 +29,7 @@ export const ChatApi = {
 
     getUserChats: async () => {
         try {
-            const response = await axiosIns.get(`/messages`);
+            const response = await axiosIns.get(`api/messages`);
 
             return response.data;
         } catch (error) {
@@ -39,7 +41,7 @@ export const ChatApi = {
 
     createChat: async (userId) => {
         try {
-            const response = await axiosIns.get(`/messages/create/${userId}`);
+            const response = await axiosIns.get(`api/messages/create/${userId}`);
 
             return response.data;
         } catch (error) {
@@ -51,7 +53,7 @@ export const ChatApi = {
 
     getAllMessages: async () => {
         try {
-            const response = await axiosIns.get(`/messages`);
+            const response = await axiosIns.get(`api/messages`);
 
             return response.data;
         } catch (error) {
@@ -63,7 +65,9 @@ export const ChatApi = {
 
     getChatMessages: async (chatId) => {
         try {
-            const response = await axiosIns.get(`/messages/${chatId}`);
+            const response = await axiosIns.get(`api/messages/${chatId}`);
+            console.log('Message sent successfully');
+            console.log('Created Message:', chatId);
 
             return response.data;
         } catch (error) {
@@ -75,39 +79,16 @@ export const ChatApi = {
 
     readChatMessages: async (chatId) => {
         try {
-            await axiosIns.put(`/messages/${chatId}/read`);
+            await axiosIns.put(`api/messages/${chatId}/read`);
         } catch (error) {
             console.error('Error marking chat messages as read:', error);
         }
     },
 
-    addMessage: async (chatMessage) => {
-        try {
-            const response = await axiosIns.post(`/messages/create`, chatMessage);
-
-            return response.data;
-        } catch (error) {
-            console.error('Error adding chat message:', error);
-
-            return null;
-        }
-    },
-
-    addMessageWithTweet: async (chatMessage) => {
-        try {
-            const response = await axiosIns.post(`/messages/create`, chatMessage);
-
-            return response.data;
-        } catch (error) {
-            console.error('Error adding chat message with tweet:', error);
-
-            return null;
-        }
-    },
 
     getUserList: async (keyword) => {
         try {
-            const response = await axiosIns.get(`/messages/users/search`);
+            const response = await axiosIns.get(`api/messages/users/search`);
 
             return response.data;
         } catch (error) {

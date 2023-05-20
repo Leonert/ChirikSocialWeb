@@ -29,6 +29,9 @@ public class Message {
   @Column(name = "username")
   private String username;
 
+  @Column(name = "username")
+  private String senderUsername;
+
   @ManyToOne
   @JoinColumn(name = "sender_id", referencedColumnName = "id")
   private User sender;

@@ -1,5 +1,5 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import { MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG} from '../../util/url';
@@ -7,7 +7,7 @@ import { DEFAULT_PROFILE_IMG} from '../../util/url';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
-import {format, formatDistanceToNow} from "date-fns";
+import {format} from "date-fns";
 import {ChatApi} from "../../services/api/chatApi";
 import {MessageInput} from "./MessageInput/MessageInput";
 import MessagesModal from "./MessagesModal/MessagesModal";
@@ -22,6 +22,8 @@ import {
 } from "../../features/slices/massagesSlise";
 import {useDispatch, useSelector} from "react-redux";
 import {formatChatMessageDate} from "../../util/formatDate";
+import classNames from "classnames";
+
 
 const Messages = () => {
   const classes = useMessagesStyles();
@@ -30,10 +32,12 @@ const Messages = () => {
 
   const chats = useSelector(selectChats);
   const messages = useSelector(selectMessages);
+  console.log(chats,1)
   const selectedChatId = useSelector(selectSelectedChatId);
   const text = useSelector(selectText);
   const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
+  const [messageText, setMessageText] = useState('');
 
   const handleSearchChange = async (event) => {
     event.preventDefault(); // Остановка стандартного поведения формы
@@ -43,7 +47,6 @@ const Messages = () => {
     try {
       const userList = await ChatApi.getUserList(keyword);
       dispatch(fetchChat(userList));
-      console.log(userList,2)
     } catch (error) {
       console.error('Error searching users:', error);
     }
@@ -62,40 +65,18 @@ const Messages = () => {
   const onCloseModalWindow = () => {
     dispatch(toggleModalWindow());
   };
-
-  const handleListItemClick = async (chatId) => {
+  const handleListItemClick = async (chatId, message) => {
     dispatch(setSelectedChatId(chatId));
-    console.log(chatId);
     try {
-      dispatch(fetchChatMessages(chatId));
+      await dispatch(fetchChatMessages(chatId));
       const chatMessages = await ChatApi.getChatMessages(chatId);
-      const lastMessage = chatMessages[chatMessages.length - 1];
-      if (Array.isArray(chatMessages) && chatMessages.length > 0) {
-        const lastMessage = chatMessages[chatMessages.length - 1];
-        dispatch(setText(lastMessage.text));
-        console.log(chatMessages);
-        console.log(lastMessage.text);
-        console.log(lastMessage.date);
-      } else {
-        dispatch(setText(''));
-      }
-      if (lastMessage) {
-        dispatch(setText(lastMessage.text));
-        console.log(chatMessages);
-
-
-        console.log(lastMessage.text);
-        console.log(lastMessage.date);
-      } else {
-        dispatch(setText(''));
-      }
+      const lastMessage = chatMessages.message;
       scrollToBottom();
-    } catch (error) {
-      console.error('Error fetching chat messages:', error);
+    } catch (e) {
+      console.error(e);
     }
   };
-
-  console.log(messages);
+  console.log(messages)
 
 
   const onSendMessage = async () => {
@@ -113,7 +94,7 @@ const Messages = () => {
           const createdMessage = await ChatApi.sendMessage(newMessage);
           dispatch(sendMessage(createdMessage));
           dispatch(setText(''));
-          dispatch(setSelectedChatId(createdMessage.chatId)); // Исправлено на createdMessage.chatId
+          dispatch(setSelectedChatId(selectedChatId));
           scrollToBottom();
         } catch (error) {
           console.error('Error sending message:', error);
@@ -254,46 +235,52 @@ const Messages = () => {
                     </div>
                   </Paper>
                   <Paper className={classes.chat}>
-                    {Array.isArray(messages) &&
-                        messages.map((message) => (
-                            <React.Fragment key={message.id}>
-                              {message.author ? (
-                                  <div className={classes.tweetContainer}>
-                                    <div className={classes.tweetWrapper}>
-                                      <div className={classes.tweetUserInfoWrapper}>
-                                        <Avatar
-                                            className={classes.tweetAvatar}
-                                            src={message.author.avatar?.src || DEFAULT_PROFILE_IMG}
-                                        />
-                                        <span className={classes.tweetUserFullName}>{message.author.fullName}</span>
-                                        <span className={classes.tweetUsername}>@{message.author.username}</span>
-                                        <span className={classes.tweetTimestamp}>
-                                            {isValidDate(message.timestamp) ?
-                                                format(new Date(message.timestamp),
-                                                    'dd/MM/yyyy HH:mm:ss') :
-                                                ''}
+                    {messages.map((message) =>  (
+                        <React.Fragment key={message}>
+                          {message.author ? (
+                              <div className={classes.tweetContainer}>
+                                <div className={classes.tweetWrapper}>
+                                  <div className={classes.tweetUserInfoWrapper}>
+                                    <Avatar
+                                        className={classes.tweetAvatar}
+                                        src={message.author.avatar?.src || DEFAULT_PROFILE_IMG}
+                                    />
+                                    <span className={classes.tweetUserFullName}>{message.author.fullName}</span>
+                                    <span className={classes.tweetUsername}>@{message.author.username}</span>
+                                    <span className={classes.tweetTimestamp}>
 
-                                        </span>
-                                      </div>
-                                      <div>{message.text}</div>
-                                    </div>
+                                      {isValidDate(message.timestamp)
+                                          ? format(new Date(message.timestamp), 'dd/MM/yyyy HH:mm:ss')
+                                          : ''}
+                                    </span>
                                   </div>
-                              ) : (
-                                  <div className={classes.messageContainer}>
-                                    <div className={classes.message}>
-                                      <div className={classes.messageText}>{message.text}</div>
-                                      <div className={classes.messageTimestamp}>
-                                        {isValidDate(message.timestamp)
-                                            ? formatChatMessageDate(new Date(message.timestamp))
-                                            : ''}
+                                  {message.text && (
+                                      <div className={classNames(
+                                          classes.myMessage,
+                                          message.tweet ? classes.myMessageWithTweet : classes.myMessageCommon
+                                      )}>
+                                        <span>{message.text}</span>
                                       </div>
-                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                          ) : (
+                              <div className={classes.messageContainer}>
+                                <div className={classes.message}>
+                                  <div className={classes.messageText}>{message.message}</div>
+                                  <div className={classes.messageTimestamp}>
+                                    {isValidDate(message.timestamp)
+                                        ? formatChatMessageDate(new Date(message.timestamp))
+                                        : ''}
                                   </div>
-                              )}
-                            </React.Fragment>
+                                </div>
+                              </div>
+                          )}
+                        </React.Fragment>
                         ))}
                     <div ref={chatEndRef} />
                   </Paper>
+
                   <Paper className={classes.chatFooter}>
                     <div className={classes.chatIcon}>
                       <IconButton color="primary">
@@ -317,7 +304,13 @@ const Messages = () => {
               </div>
           )}
         </Grid>
-        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
+        <MessageInput
+            multiline
+            value={messageText}
+            onChange={(event) => setMessageText(event.target.value)}
+            variant="outlined"
+            placeholder="Start a new message"
+        />
       </>
   );
 
