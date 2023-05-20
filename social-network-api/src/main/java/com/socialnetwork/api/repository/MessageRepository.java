@@ -13,7 +13,6 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
-
   List<Message> findByRecipient(User recipient);
 
   List<Message> findBySender(User sender);
