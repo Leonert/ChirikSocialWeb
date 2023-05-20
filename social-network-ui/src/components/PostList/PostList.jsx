@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import axiosIns from '../../axiosInstance';
 import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
@@ -12,13 +13,21 @@ export default function PostList() {
 
   const classes = usePostStyle();
   const dispatch = useDispatch();
-  const handleRetweet = (props) => {
-    dispatch(openReplayModal(props));
-    alert(`past ${props}  add to Retweet`);
+
+  const handleRetweet = (id) => {
+    axiosIns.post(
+      '/api/posts',
+      { originalPost: id },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+      }
+    );
   };
+
   const handleReplay = (props) => {
     dispatch(openReplayModal(props));
   };
+
   const handelLike = (props) => {
     dispatch(openReplayModal(props));
     alert(`past ${props}  add to like`);

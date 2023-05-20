@@ -56,10 +56,10 @@ public class User {
   @Column(name = "birth_date")
   private LocalDateTime birthDate;
 
-  @Column(name = "profile_background_image", length = 1250000)
+  @Column(name = "profile_background_image", length = 15000000)
   private String profileBackgroundImage;
 
-  @Column(name = "profile_image", length = 1250000)
+  @Column(name = "profile_image", length = 15000000)
   private String profileImage;
 
   //relations

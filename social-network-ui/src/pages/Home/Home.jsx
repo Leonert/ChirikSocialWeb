@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
@@ -15,11 +15,12 @@ function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
+  const [portion, setPortion] = useState(0);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(GetPosts(1)).then((result) => {
+    dispatch(GetPosts(portion)).then((result) => {
       if (GetPosts.fulfilled.match(result)) {
         dispatch(getPost(result.payload));
       }

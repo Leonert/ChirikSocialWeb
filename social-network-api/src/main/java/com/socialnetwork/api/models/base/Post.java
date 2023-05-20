@@ -37,7 +37,7 @@ public class Post {
   @Column(name = "text")
   private String text;
 
-  @Column(name = "image", length = 1250000)
+  @Column(name = "image", length = 15000000)
   private String image;
 
   @Column(name = "created_date")

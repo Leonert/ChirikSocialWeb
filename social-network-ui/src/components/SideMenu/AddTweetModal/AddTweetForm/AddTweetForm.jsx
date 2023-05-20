@@ -5,12 +5,15 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import axiosIns from '../../../../axiosInstance';
+import { GetPosts } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
 import ProfileAvatar from './ProfileAvatar/ProfileAvatar';
 
 const MAX_LENGTH = 280;
+
 const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onCloseModal }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -26,12 +29,31 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleClickImage = () => {
     fileInputRef.current.click();
   };
+
   const handleFileChange = (event) => {
     const files = event.target.files;
+
     if (files.length > 0) {
       const file = files[0];
-      console.log('Loading File:', file); // eslint-disable-line no-console
     }
+  };
+
+  const getFile = async () => {
+    const reader = new FileReader();
+
+    await new Promise((resolve, reject) => {
+      reader.onload = function (e) {
+        resolve(e.target.result);
+      };
+
+      reader.onerror = function (e) {
+        reject(e);
+      };
+
+      reader.readAsDataURL(fileInputRef.current.files[0]);
+    });
+
+    return reader.result;
   };
 
   const handleChangeTextarea = (event) => {
@@ -41,42 +63,22 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
       setText(event.target.value);
     }
   };
-  const uploadTweetImages = async () => {};
-  const handleClickAddTweet = async () => {
-    const result = await uploadTweetImages();
 
-    if (visiblePoll) {
-      dispatch({
-        type: 'ADD_TWEET',
-        payload: {
-          images: result,
-        },
-      });
-    } else if (selectedScheduleDate !== null && unsentTweet === undefined) {
-      dispatch({
-        type: 'ADD_TWEET',
-        payload: {
-          images: result,
-          scheduledDate: selectedScheduleDate,
-        },
-      });
-    } else if (unsentTweet) {
-      dispatch({
-        type: 'UPDATE_TWEET',
-        payload: {
-          id: unsentTweet.id,
-          images: result,
-        },
-      });
-      if (onCloseModal) onCloseModal();
-    }
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      payload: selectedScheduleDate ? 'Your Tweet will be sent on' : 'Your tweet was sent.',
+  const uploadTweetImages = async () => {};
+
+  const handleClickAddTweet = async () => {
+    const base64Image = fileInputRef.current.files[0] ? await getFile() : null;
+    const data = { text, image: base64Image };
+    await axiosIns.post('/api/posts', data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
     });
+
+    dispatch(GetPosts(1));
+
     setText('');
     setVisiblePoll(false);
     setSelectedScheduleDate(null);
+    onCloseModal();
   };
 
   const handleClickQuoteTweet = async () => {
