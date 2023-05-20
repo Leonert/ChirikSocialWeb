@@ -41,7 +41,7 @@ function FormModal({ buttonName }) {
       '/api/posts',
       { text, originalPost: targetPost.id },
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }
     );
 

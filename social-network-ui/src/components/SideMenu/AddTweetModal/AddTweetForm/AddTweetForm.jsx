@@ -63,7 +63,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
       '/api/posts',
       { text, image: base64Image },
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }
     );
 

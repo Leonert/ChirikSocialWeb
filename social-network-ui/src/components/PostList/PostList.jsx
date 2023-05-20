@@ -19,7 +19,7 @@ export default function PostList() {
       '/api/posts',
       { originalPost: id },
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }
     );
   };
