@@ -38,7 +38,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
     }
   };
 
-  const getFile = async () => {
+  const getBase64Image = async () => {
     const reader = new FileReader();
 
     await new Promise((resolve, reject) => {
@@ -67,13 +67,14 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const uploadTweetImages = async () => {};
 
   const handleClickAddTweet = async () => {
-    const base64Image = fileInputRef.current.files[0] ? await getFile() : null;
-    const data = { text, image: base64Image };
-    await axiosIns.post('/api/posts', data, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
-    });
-
-    dispatch(GetPosts(1));
+    const base64Image = fileInputRef.current.files[0] ? await getBase64Image() : null;
+    await axiosIns.post(
+      '/api/posts',
+      { text, image: base64Image },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+      }
+    );
 
     setText('');
     setVisiblePoll(false);
