@@ -21,6 +21,7 @@ public class Constants {
     public static final String PAGE_NUMBER_QUERY = "p";
     public static final String RESULTS_PER_PAGE_QUERY = "n";
     public static final String ID_QUERY = "id";
+    public static final String USERNAME_ATTRIBUTE = "username";
   }
 
   public static class Exception {

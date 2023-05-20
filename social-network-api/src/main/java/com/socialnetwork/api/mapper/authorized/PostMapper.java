@@ -29,13 +29,13 @@ public class PostMapper {
   private final NonAuthUserService nonAuthUserService;
 
   public Post convertToPost(PostDto.Request.Created postDto, User user)
-          throws NoPostWithSuchIdException {
-    Integer originalPostId = postDto.getOriginalPostId();
+      throws NoPostWithSuchIdException {
+    Integer originalPost = postDto.getOriginalPost();
     Post post = modelMapper.map(postDto, Post.class);
     post.setAuthor(user);
 
-    if (originalPostId != null && postService.existsById(originalPostId)) {
-      post.setOriginalPost(postService.getReferenceById(originalPostId));
+    if (originalPost != null) {
+      post.setOriginalPost(postService.getReferenceById(originalPost));
     }
 
     return post;
@@ -60,7 +60,7 @@ public class PostMapper {
   }
 
   public PostDto.Response.WithAuthor convertToPostDtoDefault(Post post, String currentUserUsername)
-          throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+      throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
     User currentUser = nonAuthUserService.findByUsername(currentUserUsername);
     PostDto.Response.WithAuthor postDto = modelMapper.map(post, PostDto.Response.WithAuthor.class);
     fillMissingFields(postDto, post, currentUser);
@@ -75,7 +75,7 @@ public class PostMapper {
   }
 
   private void fillMissingFields(PostDto.Response.WithoutAuthor postDto, Post post, User currentUser)
-          throws NoPostWithSuchIdException {
+      throws NoPostWithSuchIdException {
     setPostDtoDetailsEnhanced(postDto, post, currentUser);
 
     if (postDto.getOriginalPost() != null) {

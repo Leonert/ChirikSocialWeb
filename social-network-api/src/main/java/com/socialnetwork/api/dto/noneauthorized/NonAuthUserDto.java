@@ -1,6 +1,7 @@
 package com.socialnetwork.api.dto.noneauthorized;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.socialnetwork.api.dto.UserDtoInterface;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -57,7 +58,7 @@ public enum NonAuthUserDto {
     ;
 
     @Data
-    public static class Profile {
+    public static class Profile implements UserDtoInterface {
       int id;
       String username;
       String name;
@@ -77,7 +78,7 @@ public enum NonAuthUserDto {
     }
 
     @Data
-    public static class Listing {
+    public static class Listing implements UserDtoInterface {
       int id;
       String username;
       String name;

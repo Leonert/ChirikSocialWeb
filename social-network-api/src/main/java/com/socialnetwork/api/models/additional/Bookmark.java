@@ -4,6 +4,8 @@ import com.socialnetwork.api.models.additional.keys.BookmarkPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,7 +16,8 @@ import javax.persistence.Table;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "bookmarks")
 public class Bookmark {
   @EmbeddedId

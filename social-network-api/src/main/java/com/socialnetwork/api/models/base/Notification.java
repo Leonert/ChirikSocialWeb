@@ -2,6 +2,8 @@ package com.socialnetwork.api.models.base;
 
 import com.socialnetwork.api.models.additional.NotificationType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
-@Data
+@Getter
+@Setter
 public class Notification {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
