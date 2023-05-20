@@ -18,7 +18,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
   List<Message> findBySender(User sender);
 
   List<Message> findByMessageContainingIgnoreCase(String keyword);
-
   @Transactional
   @Modifying
   @Query("DELETE FROM Message m WHERE m.id = :id")
