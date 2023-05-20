@@ -145,7 +145,6 @@ const Profile = () => {
                     marginRight: '14px',
                   }}
                   to="/profile/following"
-                  // to={`"/${username}/following"`}
                 >
                   {profile.followNumber} Followings
                 </NavLink>
@@ -158,7 +157,6 @@ const Profile = () => {
                     marginRight: '14px',
                   }}
                   to="/profile/followers"
-                  // to={`/${username}/followers`}
                 >
                   {profile.subscriberNumber} Follower
                 </NavLink>

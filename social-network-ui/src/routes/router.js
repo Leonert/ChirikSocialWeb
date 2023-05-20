@@ -3,11 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
-import { FollowersPage } from '../pages/FollowersPage/FollowersPage';
-import { FollowingPage } from '../pages/FollowingPage/FollowingPage';
 import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
-import { Notifications } from '../pages/Notifications/Notifications';
 import Profile from '../pages/Profile/Profile';
 import profileLoader from '../pages/Profile/profileLoader';
 
@@ -28,7 +25,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/notifications',
-        element: <Notifications />,
+        element: <div></div>,
       },
       {
         path: '/messages',
@@ -65,14 +62,6 @@ export const router = createBrowserRouter([
             element: <div>likes</div>,
           },
         ],
-      },
-      {
-        path: '/:username/following',
-        element: <FollowingPage />,
-      },
-      {
-        path: '/:username/followers',
-        element: <FollowersPage />,
       },
     ],
   },
