@@ -1,19 +1,15 @@
 import axiosIns from "../../axiosInstance";
 
 
-
-
 export const ChatApi = {
     sendMessage: async (message) => {
         console.log('Message to be sent:', message);
 
         try {
-            const response = await axiosIns.post(`api/messages/create`, {
-                id: message.id,
-                date: message.date,
+            const response = await axiosIns.post(`api/messages/addMessage`, {
                 message: message.text,
-                isRead: message.isRead,
-                timestamp: new Date().toISOString(),
+                recipientId: message.recipientId,
+                senderId: message.senderId,
             });
 
             const createdMessage = response.data;
@@ -85,10 +81,9 @@ export const ChatApi = {
         }
     },
 
-
     getUserList: async (keyword) => {
         try {
-            const response = await axiosIns.get(`api/messages/users/search`);
+            const response = await axiosIns.get(`api/messages/users/search?keyword=${keyword}`);
 
             return response.data;
         } catch (error) {

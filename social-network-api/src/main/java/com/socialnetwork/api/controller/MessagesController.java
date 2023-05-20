@@ -96,6 +96,12 @@ public class MessagesController {
     return ResponseEntity.ok(userDtos);
   }
 
+  @PostMapping("/add/message")
+  public ResponseEntity<MessageDto> addMessage(@RequestBody MessageDto messageDto) {
+    MessageDto createdMessageDto = messageService.addMessage(messageDto);
+    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
+  }
+
   @GetMapping("/users/search")
   public ResponseEntity<Page<UserDto.Response.Listing>> searchUsers(
           @RequestParam("keyword") String keyword,
@@ -110,5 +116,4 @@ public class MessagesController {
 
     return ResponseEntity.ok(userDtosPage);
   }
-
 }

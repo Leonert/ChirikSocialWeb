@@ -26,5 +26,6 @@ public interface MessageService {
   Message convertToMessage(MessageDto messageDto);
 
   List<UserDto.Response.Listing> searchUsers(String keyword);
+  MessageDto addMessage(MessageDto messageDto);
 
 }

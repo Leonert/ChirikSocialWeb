@@ -46,6 +46,30 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
+  public MessageDto addMessage(MessageDto messageDto) {
+    User recipient = userRepository.findById(messageDto.getRecipientId())
+            .orElseThrow(() -> new EntityNotFoundException("Recipient not found with id: " + messageDto.getRecipientId()));
+
+    User sender = userRepository.findById(messageDto.getSenderId())
+            .orElseThrow(() -> new EntityNotFoundException("Sender not found with id: " + messageDto.getSenderId()));
+
+    Message message = new Message();
+    message.setRecipient(recipient);
+    message.setSender(sender);
+    message.setMessage(messageDto.getMessage());
+    message.setTimestamp(LocalDateTime.now());
+    message.setRead(false);
+
+    message = messageRepository.save(message);
+
+    return convertToDto(message);
+  }
+
+  private MessageDto convertToDto(Message message) {
+    return modelMapper.map(message, MessageDto.class);
+  }
+
+  @Override
   public MessageDto updateMessage(MessageDto messageDto) {
     Message message = convertToMessage(messageDto);
     message = messageRepository.save(message);
