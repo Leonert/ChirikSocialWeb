@@ -1,13 +1,6 @@
 import { Button } from '@mui/material';
 
-export const CustomButton = ({
-  children,
-  styles = '',
-  onSubmit = false,
-  handleClick = Function.prototype,
-  handleEnter = Function.prototype,
-  handleLeave = Function.prototype,
-}) => {
+export const CustomButton = ({ children, styles = '', onSubmit = false, handleClick = Function.prototype }) => {
   const settings = {
     textTransform: 'unset',
     backgroundColor: 'rgb(63, 81, 181)',
@@ -19,13 +12,7 @@ export const CustomButton = ({
   };
 
   return (
-    <Button
-      type={onSubmit ? 'submit' : ''}
-      onClick={handleClick}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      sx={{ ...settings, ...styles }}
-    >
+    <Button type={onSubmit ? 'submit' : ''} onClick={handleClick} sx={{ ...settings, ...styles }}>
       {children}
     </Button>
   );
