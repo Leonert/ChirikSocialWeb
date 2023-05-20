@@ -3,6 +3,10 @@ import moment from "moment";
 
 export const formatChatMessageDate = (dateString) => {
     const dateTime = moment(dateString, "YYYY-MM-DD HH:mm:ss.SS");
+
+    if (!dateTime.isValid()) {
+        return "";
+    }
     const currentDate = moment();
 
     const formattedDate = dateTime.format("MMM D");

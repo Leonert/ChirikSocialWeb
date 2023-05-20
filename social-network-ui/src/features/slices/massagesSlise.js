@@ -57,7 +57,10 @@ const messagesSlice = createSlice({
         builder
             .addCase(sendMessage.fulfilled, (state, action) => {
                 const { chatId, message } = action.payload;
-                state.messages[chatId] = [...(state.messages[chatId] || []), message];
+                state.messages = {
+                    ...state.messages,
+                    [chatId]: [...(state.messages[chatId] || []), message],
+                };
             })
             .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;

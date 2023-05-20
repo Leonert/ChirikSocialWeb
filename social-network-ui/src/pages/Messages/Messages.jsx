@@ -22,6 +22,9 @@ import {
 } from "../../features/slices/massagesSlise";
 import {useDispatch, useSelector} from "react-redux";
 import MessagesModalUser from "./MessagesModal/MessagesModalUser/MessagesModalUser";
+import classNames from "classnames";
+import {formatChatMessageDate} from "../../util/formatDate";
+import moment from "moment";
 
 
 
@@ -83,7 +86,7 @@ const Messages = () => {
       if (selectedChat) {
         const newMessage = {
           id: selectedChat.id,
-          date: new Date().toISOString(), // Используем ISO-строку для даты
+          date: new Date().toISOString(),
           text: text,
           isRead: false,
         };
@@ -166,7 +169,7 @@ const Messages = () => {
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
                       {chats.map((chat) => (
                           <ListItem
-                              key={chat.id}
+                              key={chat && chat.id}
                               button
                               className={classes.listItem}
                               id={participant && participant.id === chat.id ? 'selected' : ''}
@@ -245,20 +248,22 @@ const Messages = () => {
                                   <Typography>{message.text}</Typography>
                                 </div>
                                 <div className={classes.tweetInfo}>
-                                  <Typography className={classes.tweetDate}>
-                                    {isValidDate(new Date(message.date)) ? format(new Date(message.date), 'hh:mm a') : ''}
-                                  </Typography>
+                                  <div className={classes.participantMessageDate}>
+                                    {isValidDate(new Date(message.date)) ? moment(new Date(message.date)).format("MMM D, h:mm A") : ""}
+                                  </div>
                                 </div>
                               </div>
                           ) : (
                               <div className={classes.tweetContainer}>
-                                <div className={classes.tweetContent}>
-                                  <Typography>{message.message}</Typography>
-                                </div>
-                                <div className={classes.tweetInfo}>
-                                  <Typography className={classes.tweetDate}>
-                                    {isValidDate(new Date(message.date)) ? format(new Date(message.date), 'hh:mm a') : ''}
-                                  </Typography>
+                                {message.message && (
+                                    <div className={classNames(
+                                        classes.participantMessage,
+                                    )}>
+                                      <span>{message.message}</span>
+                                    </div>
+                                )}
+                                <div className={classes.participantMessageDate}>
+                                  {isValidDate(message.date) ? `${message.date.toLocaleString("en-US", { month: "short", day: "numeric" })}, ${message.date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}` : ""}
                                 </div>
                               </div>
                           )}
@@ -291,11 +296,7 @@ const Messages = () => {
               </div>
           )}
         </Grid>
-        {visibleModalWindow && (
-            <MessagesModalUser
-                onClose={onCloseModalWindow}
-            />
-        )}
+        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow}/>
       </>
   );
 };

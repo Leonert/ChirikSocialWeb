@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core";
+import {makeStyles} from "@mui/styles";
 
 export const useMessagesModalUserStyles = makeStyles((theme) => ({
   container: {
@@ -9,6 +9,8 @@ export const useMessagesModalUserStyles = makeStyles((theme) => ({
     paddingTop: 8,
     paddingBottom: 8,
     cursor: 'pointer',
+    backgroundColor: theme.palette.background.lightDefault,
+
   },
   link: {
     textDecoration: 'none',
@@ -22,6 +24,7 @@ export const useMessagesModalUserStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+
   },
   fullName: {
     color: 'rgb(255,255,255)',

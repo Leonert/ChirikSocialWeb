@@ -10,8 +10,9 @@ export const PeopleSearchInput = withStyles((theme) => ({
             paddingLeft: 15,
             marginLeft: 15,
             width: 288,
+            color: theme.palette.text.primary,
+
             '&.Mui-focused': {
-                backgroundColor: theme.palette.secondary.light,
                 '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
                 '& svg path': {
                     fill: theme.palette.primary.main,
@@ -26,7 +27,7 @@ export const PeopleSearchInput = withStyles((theme) => ({
             },
             "& .MuiInputAdornment-root": {
                 "& svg" : {
-                    color: "rgb(83, 100, 113)",
+
                     height: "1.25em"
                 }
             },

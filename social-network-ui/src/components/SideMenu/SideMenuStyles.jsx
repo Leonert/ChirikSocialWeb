@@ -82,7 +82,6 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     marginLeft: 10,
     width: 19,
     height: 19,
-    borderRadius: '50%',
     backgroundColor: theme.palette.primary.main,
     fontSize: 10,
     color: theme.palette.common.white,
@@ -120,7 +119,6 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     height: '52px !important',
     padding: theme.spacing(3.2),
     marginTop: theme.spacing(2),
-    borderRadius: '30px !important',
     '& .MuiButton-label': {
       fontSize: 19,
     },

@@ -54,12 +54,12 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 29,
     fontWeight: 800,
     margin: '0px 30px',
-    color: theme.palette.text.primary,
+    color: theme.palette.text.secondary,
 
   },
   messagesText: {
     fontSize: 14,
-    color: theme.palette.text.primary,
+    color: theme.palette.text.secondary,
     margin: '8px 30px 27px 30px',
     backgroundColor: theme.palette.background.lightDefault,
   },
@@ -67,7 +67,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     marginLeft: 30,
     height: 48,
     padding: theme.spacing(3.2),
-    borderRadius:50,
     '& .MuiButton-label': {
       fontSize: 15,
     },
@@ -143,6 +142,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     lineHeight: 1.1,
     fontSize: 29,
     fontWeight: 800,
+    color: theme.palette.text.secondary,
+
 
   },
   chatInfoText: {
@@ -198,13 +199,16 @@ export const useMessagesStyles = makeStyles((theme) => ({
   tweetContainer: {
     marginTop: 10,
     display: 'flex',
+
     flexDirection: 'row-reverse',
     '& a': {
+
       color: 'inherit',
       textDecoration: 'none',
     },
   },
   tweetWrapper: {
+
     border: '1px solid rgb(29, 161, 242)',
     borderRadius: '16px 16px 0px 16px',
     padding: 12,
@@ -224,17 +228,20 @@ export const useMessagesStyles = makeStyles((theme) => ({
     marginLeft: 3,
     fontWeight: 700,
     fontSize: 15,
+    color: theme.palette.text.secondary,
+
   },
   tweetUsername: {
     marginLeft: 3,
-    color: theme.palette.text.primary,
+    color: theme.palette.text.secondary,
     fontSize: 15,
   },
   tweetText:{
     display: 'flex',
     flexDirection: 'row-reverse',
-    color: theme.palette.text.primary,
+    color: theme.palette.text.primaryChannel,
     backgroundColor: 'rgb(29, 161, 242)',
+
     padding: '11px 15px',
     marginLeft: 3,
     fontSize: 15,
@@ -303,6 +310,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     height: '18px !important',
   },
   participantTweetFullName: {
+
     marginLeft: 3,
     fontWeight: 700,
     fontSize: 15,
@@ -313,12 +321,14 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   participantMessageCommon: {
+    backgroundColor: theme.palette.background.default,
     marginTop: 10,
     '& span': {
       borderRadius: '16px 16px 16px 0px',
     },
   },
   participantMessageWithTweet: {
+
     '& span': {
       borderRadius: '0px 0px 16px 0px',
     },
@@ -326,8 +336,10 @@ export const useMessagesStyles = makeStyles((theme) => ({
   participantMessage: {
     display: 'flex',
     alignItems: 'flex-start',
+
     '& span': {
-      backgroundColor: 'rgb(239, 243, 244)',
+      backgroundColor: theme.palette.background.default,
+
       padding: '11px 16px',
       maxWidth: 384,
     },

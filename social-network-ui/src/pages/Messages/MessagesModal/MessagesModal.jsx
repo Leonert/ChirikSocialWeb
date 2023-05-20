@@ -8,13 +8,13 @@ import {
   List,
   ListItem,
 } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 
 import { SearchIcon } from '../../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
 import { useMessagesModalStyles } from './MessagesModalStyles';
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
+import CloseIcon from "@mui/icons-material/Close";
 
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
@@ -44,7 +44,7 @@ const MessagesModal = ({ visible, onClose }) => {
 
 
   return (
-    <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
+    <Dialog  open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title" className={classes.header}>
         <IconButton onClick={onClose} color="secondary" aria-label="close">
           <CloseIcon color="secondary" />
