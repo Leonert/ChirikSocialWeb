@@ -21,8 +21,8 @@ import {
   selectText, selectVisibleModalWindow, sendMessage, setSelectedChatId, setText, toggleModalWindow
 } from "../../features/slices/massagesSlise";
 import {useDispatch, useSelector} from "react-redux";
-import {formatChatMessageDate} from "../../util/formatDate";
-import classNames from "classnames";
+import MessagesModalUser from "./MessagesModal/MessagesModalUser/MessagesModalUser";
+
 
 
 const Messages = () => {
@@ -32,12 +32,10 @@ const Messages = () => {
 
   const chats = useSelector(selectChats);
   const messages = useSelector(selectMessages);
-  console.log(chats,1)
   const selectedChatId = useSelector(selectSelectedChatId);
   const text = useSelector(selectText);
   const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
-  const [messageText, setMessageText] = useState('');
 
   const handleSearchChange = async (event) => {
     event.preventDefault(); // Остановка стандартного поведения формы
@@ -65,19 +63,19 @@ const Messages = () => {
   const onCloseModalWindow = () => {
     dispatch(toggleModalWindow());
   };
-  const handleListItemClick = async (chatId, message) => {
+
+  const handleListItemClick = async (chatId) => {
     dispatch(setSelectedChatId(chatId));
     try {
       await dispatch(fetchChatMessages(chatId));
       const chatMessages = await ChatApi.getChatMessages(chatId);
       const lastMessage = chatMessages.message;
+
       scrollToBottom();
     } catch (e) {
       console.error(e);
     }
   };
-  console.log(messages)
-
 
   const onSendMessage = async () => {
     if (text !== '') {
@@ -122,6 +120,10 @@ const Messages = () => {
     return date instanceof Date && !isNaN(date);
   }
 
+  const handleInputChange = (event) => {
+    dispatch(setText(event.target.value));
+  };
+
   return (
       <>
         <Grid className={classes.grid} md={4} item>
@@ -129,7 +131,7 @@ const Messages = () => {
             <Paper variant="outlined">
               <Paper className={classes.header}>
                 <div>
-                  <Typography  variant="h6">Messages</Typography>
+                  <Typography variant="h6">Messages</Typography>
                 </div>
               </Paper>
               {chats.length === 0 ? (
@@ -164,7 +166,7 @@ const Messages = () => {
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
                       {chats.map((chat) => (
                           <ListItem
-                              key={chat && chat.id}
+                              key={chat.id}
                               button
                               className={classes.listItem}
                               id={participant && participant.id === chat.id ? 'selected' : ''}
@@ -235,49 +237,33 @@ const Messages = () => {
                     </div>
                   </Paper>
                   <Paper className={classes.chat}>
-                    {messages.map((message) =>  (
-                        <React.Fragment key={message}>
+                    {messages.map((message) => (
+                        <React.Fragment key={message.id}>
                           {message.author ? (
                               <div className={classes.tweetContainer}>
-                                <div className={classes.tweetWrapper}>
-                                  <div className={classes.tweetUserInfoWrapper}>
-                                    <Avatar
-                                        className={classes.tweetAvatar}
-                                        src={message.author.avatar?.src || DEFAULT_PROFILE_IMG}
-                                    />
-                                    <span className={classes.tweetUserFullName}>{message.author.fullName}</span>
-                                    <span className={classes.tweetUsername}>@{message.author.username}</span>
-                                    <span className={classes.tweetTimestamp}>
-
-                                      {isValidDate(message.timestamp)
-                                          ? format(new Date(message.timestamp), 'dd/MM/yyyy HH:mm:ss')
-                                          : ''}
-                                    </span>
-                                  </div>
-                                  {message.text && (
-                                      <div className={classNames(
-                                          classes.myMessage,
-                                          message.tweet ? classes.myMessageWithTweet : classes.myMessageCommon
-                                      )}>
-                                        <span>{message.text}</span>
-                                      </div>
-                                  )}
+                                <div className={classes.tweetContent}>
+                                  <Typography>{message.text}</Typography>
+                                </div>
+                                <div className={classes.tweetInfo}>
+                                  <Typography className={classes.tweetDate}>
+                                    {isValidDate(new Date(message.date)) ? format(new Date(message.date), 'hh:mm a') : ''}
+                                  </Typography>
                                 </div>
                               </div>
                           ) : (
-                              <div className={classes.messageContainer}>
-                                <div className={classes.message}>
-                                  <div className={classes.messageText}>{message.message}</div>
-                                  <div className={classes.messageTimestamp}>
-                                    {isValidDate(message.timestamp)
-                                        ? formatChatMessageDate(new Date(message.timestamp))
-                                        : ''}
-                                  </div>
+                              <div className={classes.tweetContainer}>
+                                <div className={classes.tweetContent}>
+                                  <Typography>{message.message}</Typography>
+                                </div>
+                                <div className={classes.tweetInfo}>
+                                  <Typography className={classes.tweetDate}>
+                                    {isValidDate(new Date(message.date)) ? format(new Date(message.date), 'hh:mm a') : ''}
+                                  </Typography>
                                 </div>
                               </div>
                           )}
                         </React.Fragment>
-                        ))}
+                    ))}
                     <div ref={chatEndRef} />
                   </Paper>
 
@@ -289,8 +275,9 @@ const Messages = () => {
                     </div>
                     <MessageInput
                         multiline
-                        value={text}
-                        onChange={(event) => setText(event.target.value)}
+                        text={text}
+                        onChange={handleInputChange}
+                        onSendMessage={onSendMessage}
                         variant="outlined"
                         placeholder="Start a new message"
                     />
@@ -304,16 +291,13 @@ const Messages = () => {
               </div>
           )}
         </Grid>
-        <MessageInput
-            multiline
-            value={messageText}
-            onChange={(event) => setMessageText(event.target.value)}
-            variant="outlined"
-            placeholder="Start a new message"
-        />
+        {visibleModalWindow && (
+            <MessagesModalUser
+                onClose={onCloseModalWindow}
+            />
+        )}
       </>
   );
-
 };
 
 export default Messages;

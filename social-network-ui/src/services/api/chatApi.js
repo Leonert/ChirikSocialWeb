@@ -1,4 +1,5 @@
 import axiosIns from "../../axiosInstance";
+import error from "eslint-plugin-react/lib/util/error";
 
 
 export const ChatApi = {
@@ -15,6 +16,8 @@ export const ChatApi = {
             const createdMessage = response.data;
             console.log('Message sent successfully');
             console.log('Created Message:', createdMessage);
+            console.error('Error sending message:', error?.response?.status);
+
 
             return createdMessage;
         } catch (error) {

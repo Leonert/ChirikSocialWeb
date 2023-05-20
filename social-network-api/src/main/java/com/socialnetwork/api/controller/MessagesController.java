@@ -56,8 +56,6 @@ public class MessagesController {
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
     MessageDto createdMessageDto = messageService.createMessage(messageDto);
-    createdMessageDto.setRecipientId(messageDto.getRecipientId());
-    createdMessageDto.setSenderId(messageDto.getSenderId());
     return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
   }
 
