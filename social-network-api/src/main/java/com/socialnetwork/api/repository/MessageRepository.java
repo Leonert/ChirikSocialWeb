@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
+
   List<Message> findByRecipient(User recipient);
 
   List<Message> findBySender(User sender);
@@ -22,6 +23,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
   @Transactional
   @Modifying
   @Query("DELETE FROM Message m WHERE m.id = :id")
-
   void deleteMessage(@Param("id") int id);
 }
