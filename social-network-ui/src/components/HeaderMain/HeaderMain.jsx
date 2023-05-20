@@ -15,7 +15,7 @@ export default function HeaderMain() {
 
   return (
     <div className={classes.wrapper}>
-      <Grid className={classes.container} container>
+      <Grid className={classes.container} container rowSpacing={2}>
         <Grid item xs={12} sm={12} md={12}>
           <h2 style={{ paddingLeft: '20px', margin: '0 0 20px 0 ' }}>Home</h2>
         </Grid>
