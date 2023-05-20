@@ -60,6 +60,9 @@ const homeSlice = createSlice({
     replayMessage: (state, actions) => {
       state.message = actions.payload;
     },
+    clearPosts: (state) => {
+      state.post = [];
+    },
   },
 });
 
@@ -72,4 +75,5 @@ export const {
   openReplayModal,
   clothReplayModal,
   replayMessage,
+  clearPosts,
 } = homeSlice.actions;

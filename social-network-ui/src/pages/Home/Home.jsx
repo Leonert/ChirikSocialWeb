@@ -9,7 +9,7 @@ import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
-import { GetPosts, getPost } from '../../features/slices/homeSlice';
+import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
@@ -25,7 +25,10 @@ function Home() {
         dispatch(getPost(result.payload));
       }
     });
-  }, [dispatch]);
+    return () => {
+      dispatch(clearPosts());
+    };
+  }, []);
 
   return (
     <Grid container spacing={2}>
