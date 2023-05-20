@@ -214,7 +214,6 @@ export const Login = () => {
               <Typography
                 component="span"
                 onClick={() => {
-                  dispatch(handleModal(false));
                   openRegistrationModal();
                 }}
                 sx={{
