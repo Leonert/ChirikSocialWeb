@@ -3,7 +3,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import {
-  Avatar,
   Badge,
   Card,
   CardActions,
@@ -16,6 +15,8 @@ import {
 } from '@mui/material';
 import React from 'react';
 
+import AvatarLink from '../UI/AvatarLink';
+import NameLink from '../UI/NameLink';
 import { usePostStyle } from './PostStyle';
 
 export default function Post(props) {
@@ -25,10 +26,10 @@ export default function Post(props) {
     <Card className={props.classes}>
       {props.replay}
 
-      { props.content != null && (
+      {props.content != null && (
         <CardHeader
           className={classes.pageItem}
-          avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
+          avatar={<AvatarLink alt={props.name} src={props.avatar} to={props.username} />}
           action={
             <Tooltip title="More">
               <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
@@ -36,7 +37,7 @@ export default function Post(props) {
               </IconButton>
             </Tooltip>
           }
-          title={props.name}
+          title={<NameLink name={props.name} to={props.username} />}
           subheader={
             <Typography variant="body2" color="#fff">
               {props.data}
