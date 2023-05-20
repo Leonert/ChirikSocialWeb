@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { handleCustomModal } from '../../features/slices/customModalSlice';
 import { handleOpenLikeModal } from '../../features/slices/postDatas/likesSlice';

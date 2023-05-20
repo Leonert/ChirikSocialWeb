@@ -1,5 +1,5 @@
 import { Avatar, Box, ListItem, Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { followUser } from '../../../features/slices/userDatas/followingSlice';
@@ -7,16 +7,7 @@ import { CustomButton } from '../../Login/CustomButton';
 
 export const FollowingUser = ({ user }) => {
   const dispatch = useDispatch();
-  const { profileImage, id, name, username, bio, currUserFollower } = user;
-
-  const [onActive, setOnActive] = useState(false);
-
-  const handleMouseenter = useCallback(() => {
-    setOnActive(true);
-  }, []);
-  const handleMouseleave = useCallback(() => {
-    setOnActive(false);
-  }, []);
+  const { profileImage, id, name, username, currUserFollower } = user;
 
   const handleFollow = useCallback(() => {
     dispatch(followUser({ user }));
@@ -49,8 +40,6 @@ export const FollowingUser = ({ user }) => {
       </Box>
       <Box>
         <CustomButton
-          handleEnter={handleMouseenter}
-          handleLeave={handleMouseleave}
           handleClick={handleFollow}
           styles={{
             backgroundColor: 'none',

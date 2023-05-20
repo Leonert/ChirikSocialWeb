@@ -4,7 +4,9 @@ import com.socialnetwork.api.models.additional.keys.ViewPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -15,7 +17,8 @@ import javax.persistence.Table;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "views")
 @NoArgsConstructor
 public class View {

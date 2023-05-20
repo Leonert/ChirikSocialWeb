@@ -5,6 +5,7 @@ export const useStylesItemNotification = makeStyles((theme) =>
     item: {
       padding: '20px 20px 20px 40px',
       border: '1px solid #eceff1',
+
       borderCollapse: 'collapse',
       '&:hover': {
         backgroundColor: '#eceff1',

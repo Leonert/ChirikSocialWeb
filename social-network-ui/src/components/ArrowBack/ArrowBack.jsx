@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { BiArrowBack } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 

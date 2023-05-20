@@ -1,6 +1,7 @@
 package com.socialnetwork.api.dto.authorized;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.socialnetwork.api.dto.PostDtoInterface;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -27,10 +28,9 @@ public enum PostDto {
 
     @Data
     public static class Created {
-      UserDto.Request.Default user;
       String text;
       String image;
-      Integer originalPostId;
+      Integer originalPost;
     }
   }
 
@@ -55,7 +55,7 @@ public enum PostDto {
     }
 
     @Data
-    public static class WithoutAuthor {
+    public static class WithoutAuthor implements PostDtoInterface {
       int id;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;

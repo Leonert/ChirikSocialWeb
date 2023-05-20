@@ -1,15 +1,11 @@
 import { Grid } from '@material-ui/core';
-import { Box, List, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { Box, Typography } from '@mui/material';
 import { IoIosSettings } from 'react-icons/io';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { ListNotifications } from '../../components/NotificationItems/ListNotifications/ListNotifications';
-import Spinner from '../../components/Spinner/Spinner';
 import { useStyles } from './NotificationsStyles';
 
 export const Notifications = () => {
-  const dispatch = useDispatch();
   const classes = useStyles();
 
   return (

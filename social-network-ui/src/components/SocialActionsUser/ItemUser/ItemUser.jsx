@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { changeStatusUserLike, handleOpenLikeModal } from '../../../features/slices/postDatas/likesSlice';
-import { changeStatusUserRetweet, handleOpenRetweetModal } from '../../../features/slices/postDatas/retweetsSlice';
+import { handleOpenLikeModal } from '../../../features/slices/postDatas/likesSlice';
+import { handleOpenRetweetModal } from '../../../features/slices/postDatas/retweetsSlice';
 import { followUser } from '../../../features/slices/userDatas/followingSlice';
 import { CustomButton } from '../../Login/CustomButton';
 import { useStylesItemUser } from './ItemUserStyles';
@@ -16,9 +16,6 @@ export const ItemUser = ({ user }) => {
 
   const handleFollow = useCallback(() => {
     dispatch(followUser({ user }));
-
-    // dispatch(changeStatusUserLike(user));
-    // dispatch(changeStatusUserRetweet(user));
   }, [user, dispatch]);
 
   const navigateToUser = useCallback(() => {

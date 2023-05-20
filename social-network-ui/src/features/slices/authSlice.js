@@ -35,6 +35,15 @@ export const loginUser = createAsyncThunk(
         },
       });
 
+      localStorage.setItem(
+        'authData',
+        JSON.stringify({
+          email,
+          password,
+          rememberMe,
+        })
+      );
+
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.message);

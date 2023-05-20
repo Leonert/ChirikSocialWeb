@@ -9,11 +9,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { cloneElement, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { handleOpenLikeModal } from '../../features/slices/postDatas/likesSlice';
 import { handleOpenRetweetModal } from '../../features/slices/postDatas/retweetsSlice';
-import { ListUsersLike } from '../SocialActionsUser/Like/ListUsersLike/ListUsersLike';
 
 export const CustomModalWindow = ({
   children,
