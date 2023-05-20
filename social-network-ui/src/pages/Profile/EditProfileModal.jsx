@@ -43,14 +43,14 @@ const AvatarImage = styled('img')(({ theme }) => ({
 }));
 
 const EditProfileModal = () => {
-  const profile = useLoaderData();
+  const { data } = useLoaderData();
   const formik = useFormik({
     initialValues: {
-      name: `${profile.firstName} ${profile.lastName} `,
-      BIO: `${profile.BIO}`,
-      location: `${profile.location}`,
-      website: `${profile.website}`,
-      // birthDate: `${profile.birthDate}`,
+      name: `${data.name}`,
+      BIO: `${data.bio}`,
+      location: `${data.location}`,
+      website: `${data.website}`,
+      // birthDate: `${data.birthDate}`,
     },
     //   validationSchema: validationSchema,
     onSubmit: (values) => {
