@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
