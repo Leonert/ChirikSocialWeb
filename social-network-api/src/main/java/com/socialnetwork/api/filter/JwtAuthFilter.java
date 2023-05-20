@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
+import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 
 @Component
@@ -34,6 +35,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
           throws ServletException, IOException {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
     if (authHeader != null) {
+      if (authHeader.startsWith(BEARER)) {
+        authHeader = authHeader.substring(BEARER.length());
+      }
       try {
         request.setAttribute(USERNAME_ATTRIBUTE, jwtTokenUtil.checkTokenValidAndReturnUsername(authHeader
                 .substring(BEARER.length())));
