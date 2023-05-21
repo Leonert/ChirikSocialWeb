@@ -30,6 +30,7 @@ function Home() {
         dispatch(getPost(result.payload));
       }
     });
+
     return () => {
       dispatch(clearPosts());
     };
