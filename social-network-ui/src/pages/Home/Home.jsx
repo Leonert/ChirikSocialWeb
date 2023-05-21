@@ -18,6 +18,7 @@ function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
+  // const [portion, setPortion] = useState(0);
 
   const { isOpenLikeModal } = useSelector((state) => state.likes);
   const { isOpenRetweetModal } = useSelector((state) => state.retweets);

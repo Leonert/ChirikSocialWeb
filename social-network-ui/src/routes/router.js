@@ -8,6 +8,7 @@ import { FollowingPage } from '../pages/FollowingPage/FollowingPage';
 import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
 import { Notifications } from '../pages/Notifications/Notifications';
+import PostPage from '../pages/PostPage/PostPage';
 import Profile from '../pages/Profile/Profile';
 import profileLoader from '../pages/Profile/profileLoader';
 
@@ -43,6 +44,7 @@ export const router = createBrowserRouter([
         path: '/lists',
         element: <div></div>,
       },
+      { path: ':id', element: <PostPage /> },
       {
         path: '/profile',
         element: <Profile />,

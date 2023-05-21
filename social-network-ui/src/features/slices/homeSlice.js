@@ -6,7 +6,7 @@ export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { reje
   try {
     const { data } = await axiosIns({
       method: 'GET',
-      url: `api/posts?p=${portion}&n=25`,
+      url: `api/posts?p=${portion}&n=15`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -92,5 +92,5 @@ export const {
   clearPosts,
   bookmarksPost,
   bookmarksPostNum,
-  likesPost
+  likesPost,
 } = homeSlice.actions;
