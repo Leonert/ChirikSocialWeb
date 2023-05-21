@@ -10,12 +10,9 @@ import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
-
-import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
-
 import { UsersLikeModal } from '../../components/SocialActionsUser/Like/ListUsersLike/UsersLikeModal';
 import { UsersRetweetModal } from '../../components/SocialActionsUser/Retweet/ListUsersRetweet/UsersRetweetModal';
-
+import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
