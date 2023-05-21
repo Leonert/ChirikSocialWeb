@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +34,18 @@ public class PostService {
     return postRepository.getReferenceById(id);
   }
 
-  public int save(Post post) {
+  public Post save(Post post) {
     post.setCreatedDate(LocalDateTime.now());
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
-    return post.getId();
+    return post;
   }
 
-  public void edit(Post editedPost, Post originalPost) {
+  public Post edit(Post editedPost, Post originalPost) {
     modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
     modelMapper.map(editedPost, originalPost);
     postRepository.save(originalPost);
+    return originalPost;
   }
 
   public void delete(Post post) {
@@ -57,28 +57,31 @@ public class PostService {
   }
 
   public List<Post> getUnviewedPosts(int page, int postsNumber, String currentUserUsername)
-      throws NoUserWithSuchCredentialsException {
+        throws NoUserWithSuchCredentialsException {
     return postRepository.findAllPostsUnViewedByUser(userService.findByUsername(currentUserUsername).getId(),
-        PageRequest.of(page, postsNumber, Sort.by("createdDate"))
+          PageRequest.of(page, postsNumber, Sort.by("createdDate"))
     );
   }
 
   public List<Post> getReplies(int postId, int page, int usersForPage)
-      throws NoPostWithSuchIdException {
+        throws NoPostWithSuchIdException {
     Post post = getReferenceById(postId);
     return postRepository.findAllByOriginalPostAndTextIsNotNull(
-        post,
-        PageRequest.of(page, usersForPage, Sort.by("createdDate")));
+          post,
+          PageRequest.of(page, usersForPage, Sort.by("createdDate")));
   }
 
   public List<User> getRetweets(int id, String currentUserUsername, int page, int usersForPage)
-      throws NoUserWithSuchCredentialsException {
+        throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+    if (!postRepository.existsById(id)) {
+      throw new NoPostWithSuchIdException();
+    }
     User currentUser = userService.findByUsername(currentUserUsername);
     return postRepository.findUsersByRetweetedPost(id)
-        .stream()
-        .skip(page * usersForPage).limit(usersForPage)
-        .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
-        .toList();
+          .stream()
+          .skip(page * usersForPage).limit(usersForPage)
+          .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
+          .toList();
   }
 
   public boolean existsById(Integer postId) {

@@ -25,11 +25,11 @@ public class JwtTokenUtil {
     Date now = new Date();
 
     return Jwts.builder()
-        .setSubject(username)
-        .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + (isToRemember ? expirationRemember : expirationDefault)))
-        .signWith(SignatureAlgorithm.HS512, jwtSecret)
-        .compact();
+          .setSubject(username)
+          .setIssuedAt(now)
+          .setExpiration(new Date(now.getTime() + (isToRemember ? expirationRemember : expirationDefault)))
+          .signWith(SignatureAlgorithm.HS512, jwtSecret)
+          .compact();
   }
 
   public String checkTokenValidAndReturnUsername(String authHeader) {

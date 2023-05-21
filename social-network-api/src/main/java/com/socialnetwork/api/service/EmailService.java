@@ -34,7 +34,7 @@ public class EmailService {
         message.addTo(user.getEmailAddress());
         message.setSubject("Complete Registration");
         message.setText("To confirm your account, please click here: "
-            + confirmAccountUrl + token.getConfirmationToken());
+              + confirmAccountUrl + token.getConfirmationToken());
       } catch (Exception e) {
         throw new EmailVerificationException("Unexpected error");
       }
