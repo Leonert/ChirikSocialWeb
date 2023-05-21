@@ -54,14 +54,14 @@ const EditProfileModal = () => {
       // birthDate: `${data.birthDate}`,
     },
     //   validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        axiosIns.patch(
+        await axiosIns.patch(
           '/api/users/p',
           {
             name: values.name,
-            profileImage: avatarBlob,
-            profileBackgroundImage: backgroundBlob,
+            profileImage: null,
+            profileBackgroundImage: null,
             bio: values.BIO,
             location: values.location,
             website: values.website,
@@ -77,8 +77,8 @@ const EditProfileModal = () => {
     },
   });
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [loadedBackgroundPicture, setLoadedBackgroundPicture] = useState();
-  const [loadedAvatarPicture, setLoadedAvatarPicture] = useState();
+  const [loadedBackgroundPicture, setLoadedBackgroundPicture] = useState(null);
+  const [loadedAvatarPicture, setLoadedAvatarPicture] = useState(null);
   const backgroundBlob = new Blob([loadedBackgroundPicture], { type: 'image/png' });
   const avatarBlob = new Blob([loadedAvatarPicture], { type: 'image/png' });
   // відсилать loadedBackgroundPicture
@@ -285,7 +285,7 @@ const EditProfileModal = () => {
             helperText={formik.touched.website && formik.errors.website}
             onBlur={formik.handleBlur}
           />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               value={formik.values.birthDate}
               // onChange={(newValue) => {
@@ -303,7 +303,7 @@ const EditProfileModal = () => {
               name="birthDate"
               label="Birthdate"
             />
-          </LocalizationProvider>
+          </LocalizationProvider> */}
         </form>
       </Modal>
     </>
