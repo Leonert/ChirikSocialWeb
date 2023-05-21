@@ -62,7 +62,13 @@ const followingSlice = createSlice({
     error: null,
     loading: false,
   },
-  reducers: {},
+  reducers: {
+    addFollowingUser(state, action) {
+      if (action.payload.currUserFollower) {
+        state.followingUsers.push(action.payload);
+      }
+    },
+  },
   extraReducers: {
     [loadFollowing.pending]: (state, action) => {
       state.loading = true;
@@ -91,7 +97,7 @@ const followingSlice = createSlice({
       if (action.payload.type === 'unsubscribed') {
         state.followingUsers = state.followingUsers.filter((user) => user.username !== action.payload.username);
       } else {
-        const newFol = { ...action.payload.user, currUserFollower: !action.payload.user.currUserFollower };
+        const newFol = { ...action.payload.user, currUserFollower: true };
 
         state.followingUsers.push(newFol);
       }
@@ -102,5 +108,5 @@ const followingSlice = createSlice({
     },
   },
 });
-
+export const { addFollowingUser } = followingSlice.actions;
 export const followingReducer = followingSlice.reducer;
