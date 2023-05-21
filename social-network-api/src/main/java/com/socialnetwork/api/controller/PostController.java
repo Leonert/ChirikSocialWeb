@@ -144,10 +144,10 @@ public class PostController {
 
   @PostMapping()
   public ResponseEntity<Integer> addPost(@RequestBody PostDto.Request.Created postDto,
-                                         @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
+                                         @RequestAttribute(USERNAME_ATTRIBUTE) String username)
       throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
-    User user = userService.findByUsername(username.get());
-    return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(postMapper.convertToPost(postDto, user)));
+    return ResponseEntity.status(HttpStatus.CREATED).body(postService.save(
+        postMapper.convertToPost(postDto, userService.findByUsername(username))));
   }
 
   @PatchMapping()

@@ -98,7 +98,6 @@ public class PostService {
   }
 
   public boolean isRetweetedByUser(int userId, int postId) {
-    Optional<Post> post = postRepository.findByAuthorAndOriginalPost(new User(userId), new Post(postId));
-    return post.isPresent() && post.get().getImage() == null && post.get().getText() == null;
+    return postRepository.existsByAuthorAndOriginalPostAndTextIsNullAndImageIsNull(new User(userId), new Post(postId));
   }
 }

@@ -21,17 +21,19 @@ insert into users (bio, birth_date, created_date, email_address, is_enabled, loc
 insert into users (bio, birth_date, created_date, email_address, is_enabled, location, name, password, profile_background_image, profile_image, username, website) values ('Vladlena bio', '2007-12-03 10:15:30', current_date, 'vladlena@gmail.com', true, 'location', 'Vladlena V.', '$2a$10$FgDVYsJxJNu6CCwpprnnKOkT8by0Uf9aX6q5MNdh/LA6qc80spZ86', 'image', 'image',  'vladlena', 'website');
 
 
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date,  'image', 'Original post for user 1', 1, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, 'image', 'Another original post for user 1', 1, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Original post for user 1', 1, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Another original post for user 1', 1, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Reply to post1 from user2', 2, 1);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Reply to post1 from user4', 4, 1);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, null, 3, 1);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, null, 2, 2);
-insert into posts (created_date, image, text, user_id, original_post_id) values (current_date,  'image', 'Original post from user2', 2, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Original post from user2', 2, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Original post from user3', 3, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Another original post from user3', 3, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Another original post from user2', 2, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, 'Retweet post 2 with comment for post 2 from user4', 4, 2);
+insert into posts (created_date, image, text, user_id, original_post_id) values (current_date, null, null, 1, 7);
+
 
 insert into follows values (1, 2);
 insert into follows values (1, 3);
