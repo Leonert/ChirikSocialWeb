@@ -50,9 +50,7 @@ export default function PostList() {
           })
         );
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
   const handleBookmark = (props) => {
     const token = localStorage.getItem('token');
@@ -76,9 +74,7 @@ export default function PostList() {
           })
         );
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   return (
