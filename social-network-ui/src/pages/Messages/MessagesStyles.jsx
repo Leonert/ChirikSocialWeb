@@ -338,7 +338,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     alignItems: 'flex-start',
 
     '& span': {
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.background.lithe,
 
       padding: '11px 16px',
       maxWidth: 384,

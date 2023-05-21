@@ -166,6 +166,7 @@ export const defaultTheme = createTheme(
         background: {
           default: 'rgb(21, 32, 43)',
           paper: 'rgb(21, 32, 43)',
+          lithe: 'rgb(133,123,123)',
           lightBlue: 'rgb(63, 81, 181)',
           lightDefault: 'rgb(19, 36, 51)',
         },

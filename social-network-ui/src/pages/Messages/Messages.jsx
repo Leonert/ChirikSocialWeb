@@ -7,7 +7,6 @@ import { DEFAULT_PROFILE_IMG} from '../../util/url';
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
-import {format} from "date-fns";
 import {ChatApi} from "../../services/api/chatApi";
 import {MessageInput} from "./MessageInput/MessageInput";
 import MessagesModal from "./MessagesModal/MessagesModal";
@@ -21,10 +20,8 @@ import {
   selectText, selectVisibleModalWindow, sendMessage, setSelectedChatId, setText, toggleModalWindow
 } from "../../features/slices/massagesSlise";
 import {useDispatch, useSelector} from "react-redux";
-import MessagesModalUser from "./MessagesModal/MessagesModalUser/MessagesModalUser";
 import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
-import moment from "moment";
 
 
 
@@ -86,9 +83,12 @@ const Messages = () => {
       if (selectedChat) {
         const newMessage = {
           id: selectedChat.id,
-          date: new Date().toISOString(),
-          text: text,
-          isRead: false,
+          message: text,
+          read: false,
+          recipientId: selectedChat.recipientId,
+          senderId: selectedChat.senderId,
+          timestamp: new Date().toISOString(),
+          username: selectedChat.username,
         };
 
         try {
@@ -105,6 +105,7 @@ const Messages = () => {
       }
     }
   };
+
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
@@ -248,9 +249,9 @@ const Messages = () => {
                                   <Typography>{message.text}</Typography>
                                 </div>
                                 <div className={classes.tweetInfo}>
-                                  <div className={classes.participantMessageDate}>
-                                    {isValidDate(new Date(message.date)) ? moment(new Date(message.date)).format("MMM D, h:mm A") : ""}
-                                  </div>
+                                    <div className={classes.participantMessageDate}>
+                                      {formatChatMessageDate(new Date(message.date))}
+                                    </div>
                                 </div>
                               </div>
                           ) : (
@@ -263,7 +264,7 @@ const Messages = () => {
                                     </div>
                                 )}
                                 <div className={classes.participantMessageDate}>
-                                  {isValidDate(message.date) ? `${message.date.toLocaleString("en-US", { month: "short", day: "numeric" })}, ${message.date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}` : ""}
+                                  {formatChatMessageDate(new Date(message.date))}
                                 </div>
                               </div>
                           )}

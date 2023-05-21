@@ -8,16 +8,18 @@ export const ChatApi = {
 
         try {
             const response = await axiosIns.post(`api/messages/addMessage`, {
-                message: message.text,
+                id: message.id,
+                message: message.message,
+                read: message.read,
                 recipientId: message.recipientId,
                 senderId: message.senderId,
+                timestamp: message.timestamp,
+                username: message.username,
             });
 
             const createdMessage = response.data;
             console.log('Message sent successfully');
             console.log('Created Message:', createdMessage);
-            console.error('Error sending message:', error?.response?.status);
-
 
             return createdMessage;
         } catch (error) {
@@ -29,6 +31,7 @@ export const ChatApi = {
     getUserChats: async () => {
         try {
             const response = await axiosIns.get(`api/messages`);
+
 
             return response.data;
         } catch (error) {
@@ -67,6 +70,7 @@ export const ChatApi = {
             const response = await axiosIns.get(`api/messages/${chatId}`);
             console.log('Message sent successfully');
             console.log('Created Message:', chatId);
+            console.log(response)
 
             return response.data;
         } catch (error) {
