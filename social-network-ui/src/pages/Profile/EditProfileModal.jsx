@@ -7,8 +7,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { json, useLoaderData } from 'react-router-dom';
 
+import axiosIns from '../../axiosInstance';
 // import * as yup from 'yup';
 import Modal from '../../components/UI/Modal';
 
@@ -54,8 +55,25 @@ const EditProfileModal = () => {
     },
     //   validationSchema: validationSchema,
     onSubmit: (values) => {
+      try {
+        axiosIns.patch(
+          '/api/users/p',
+          {
+            name: values.name,
+            profileImage: avatarBlob,
+            profileBackgroundImage: backgroundBlob,
+            bio: values.BIO,
+            location: values.location,
+            website: values.website,
+          },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          }
+        );
+      } catch (e) {
+        return json({ error: e });
+      }
       setOpenEditModal(false);
-      // console.log(values);
     },
   });
   const [openEditModal, setOpenEditModal] = useState(false);
