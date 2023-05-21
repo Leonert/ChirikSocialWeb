@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
+import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 
 @Component
@@ -25,14 +26,17 @@ import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 public class JwtAuthFilter extends OncePerRequestFilter {
   private final JwtTokenUtil jwtTokenUtil;
   private final List<String> globalPaths =
-      new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users",
-          "/api/search"));
+          new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users",
+                  "/api/search"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
     if (authHeader != null) {
+      if (authHeader.startsWith(BEARER)) {
+        authHeader = authHeader.substring(BEARER.length());
+      }
       try {
         request.setAttribute(USERNAME_ATTRIBUTE, jwtTokenUtil.checkTokenValidAndReturnUsername(authHeader));
       } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException

@@ -3,6 +3,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Avatar, Box, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
 import { format } from 'date-fns';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation, useParams } from 'react-router-dom';
 
 import EditProfileModal from './EditProfileModal';
@@ -46,8 +47,8 @@ const Profile = (props) => {
   const { username } = useParams();
   const routeMatch = useRouteMatch([`${username}`, `${username}/replies`, `${username}/media`, `${username}/likes`]);
   const currentTab = routeMatch?.pattern?.path;
-  const { data } = useLoaderData();
-
+  const { user } = useSelector((state) => state.auth);
+  const data = useLoaderData();
   const formattedDate = format(new Date(data.createdDate), 'MMMM yyyy');
 
   return (
@@ -152,7 +153,7 @@ const Profile = (props) => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to="/profile/following"
+                  to={`/${user?.username}/following`}
                 >
                   {data.followedCounter} Followings
                 </NavLink>
@@ -165,7 +166,7 @@ const Profile = (props) => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to="/profile/followers"
+                  to={`/${user?.username}/followers`}
                 >
                   {/* паменять */}
                   {data.followersCounter} Follower
