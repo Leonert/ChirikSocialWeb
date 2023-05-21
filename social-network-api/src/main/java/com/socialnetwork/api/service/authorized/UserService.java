@@ -71,7 +71,7 @@ public class UserService {
 
   public void verifyAccount(String confirmationToken) throws EmailVerificationException {
     Optional<ConfirmationToken> optionalToken =
-        confirmationTokenService.findByConfirmationToken(confirmationToken);
+          confirmationTokenService.findByConfirmationToken(confirmationToken);
 
     if (optionalToken.isEmpty()) {
       throw new EmailVerificationException("Error: Couldn't verify email");
@@ -92,44 +92,46 @@ public class UserService {
                                  int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
-        .getFollowers().stream().map(Follow::getFollowerUser)
-        .skip(page * usersForPage).limit(usersForPage)
-        .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
-        .toList();
+          .getFollowers().stream().map(Follow::getFollowerUser)
+          .skip(page * usersForPage).limit(usersForPage)
+          .peek(f -> f.setCurrUserFollower(isFollowed(currentUser, f)))
+          .toList();
   }
 
   public List<User> getFollowersUnauth(String queryUsername, int page, int usersForPage)
-      throws NoUserWithSuchCredentialsException {
+        throws NoUserWithSuchCredentialsException {
     return findByUsername(queryUsername).getFollowers().stream().map(Follow::getFollowerUser)
-        .skip(page * usersForPage).limit(usersForPage).toList();
+          .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public List<User> getFollowed(String queryUsername, String currentUserUsername,
                                 int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return findByUsername(queryUsername)
-        .getFollowed().stream().map(Follow::getFollowedUser)
-        .skip(page * usersForPage).limit(usersForPage)
-        .peek(f -> f.setCurrUserFollower(queryUsername.equals(currentUserUsername) || isFollowed(currentUser, f))).toList();
+          .getFollowed().stream().map(Follow::getFollowedUser)
+          .skip(page * usersForPage).limit(usersForPage)
+          .peek(f -> f.setCurrUserFollower(queryUsername.equals(currentUserUsername)
+              || isFollowed(currentUser, f))).toList();
   }
 
   public List<User> getListForConnectPage(String currentUserUsername, int page,
                                           int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
     return userRepository.findAll(PageRequest.of(page, usersForPage))
-        .stream().filter(u -> !isFollowed(currentUser, u)).toList();
+          .stream().filter(u -> !isFollowed(currentUser, u)).toList();
   }
 
   public boolean isFollowed(User currentUser, User user) {
     return followsRepository.existsById(new FollowPk(currentUser.getId(), user.getId()));
   }
 
-  public void editProfile(UserDto.Request.ProfileEditing editedUser, String username)
-      throws NoUserWithSuchCredentialsException {
+  public User editProfile(UserDto.Request.ProfileEditing editedUser, String username)
+        throws NoUserWithSuchCredentialsException {
     User userToUpdate = findByUsername(username);
     modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
     modelMapper.map(editedUser, userToUpdate);
     userRepository.save(userToUpdate);
+    return userToUpdate;
   }
 
   public boolean followUnfollow(String username, String currentUserUsername) throws NoUserWithSuchCredentialsException {

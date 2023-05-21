@@ -21,6 +21,9 @@ export const usePostStyle = makeStyles((theme) => ({
   iconColor: {
     color: '#fff !important',
   },
+  iconActions: {
+    color: '#ec2121 !important',
+  },
   iconImg: {
     maxWidth: '90%',
     margin: 'auto',
@@ -30,6 +33,22 @@ export const usePostStyle = makeStyles((theme) => ({
     padding: '15px',
     display: 'flex',
     columnGap: '15px',
+  },
+  date: {
+    padding: '15px 0 10px 16px',
+    color: '#8a9da8',
+  },
+  actionTypo: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    fontSize: '14px !important',
+    color: theme.palette.grey[300],
+  },
+  actionNumber: {
+    fontWeight: '700 !important',
+    fontSize: '15px !important',
+    color: theme.palette.primary.main,
+    marginRight: '5px !important',
   },
   reply: {
     display: 'flex',

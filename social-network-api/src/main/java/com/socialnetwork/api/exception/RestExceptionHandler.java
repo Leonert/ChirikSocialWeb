@@ -4,7 +4,6 @@ import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.exception.custom.EmailVerificationException;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,19 +28,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleMissingServletRequestParameter(
-      MissingServletRequestParameterException ex,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+        MissingServletRequestParameterException ex,
+        HttpHeaders headers,
+        HttpStatus status,
+        WebRequest request) {
     return buildResponseEntity(new ApiError(BAD_REQUEST, ex.getParameterName() + MISSING_REQUEST_PARAMETER));
   }
 
   @Override
   protected ResponseEntity<Object> handleMissingPathVariable(
-      MissingPathVariableException ex,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+        MissingPathVariableException ex,
+        HttpHeaders headers,
+        HttpStatus status,
+        WebRequest request) {
     return buildResponseEntity(new ApiError(BAD_REQUEST, ex.getVariableName() + MISSING_PATH_VARIABLE));
   }
 

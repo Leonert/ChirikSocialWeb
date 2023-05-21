@@ -4,7 +4,6 @@ import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
