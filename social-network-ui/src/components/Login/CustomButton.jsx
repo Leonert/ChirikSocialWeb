@@ -4,6 +4,9 @@ export const CustomButton = ({
   children,
   styles = '',
   onSubmit = false,
+
+  disabled = false,
+
   handleClick = Function.prototype,
   handleEnter = Function.prototype,
   handleLeave = Function.prototype,
@@ -20,6 +23,7 @@ export const CustomButton = ({
 
   return (
     <Button
+      disabled={disabled}
       type={onSubmit ? 'submit' : ''}
       onClick={handleClick}
       onMouseEnter={handleEnter}

@@ -2,49 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../axiosInstance';
 
-export const loadFollowers = createAsyncThunk('auth/loadFollowers', async (_, { rejectWithValue }) => {
+export const loginUserWithJwt = createAsyncThunk('auth/loginUserWithJwt', async (_, { rejectWithValue }) => {
   try {
     const { data } = await axiosIns({
-      method: 'get',
-      url: `/api/user/followers`,
-    });
-
-    return data;
-  } catch (error) {
-    return rejectWithValue(error.response.data.message);
-  }
-});
-
-export const loadFollowing = createAsyncThunk('auth/loadFollowing', async ({ currentPage }, { rejectWithValue }) => {
-  try {
-    const { data } = await axiosIns({
-      method: 'get',
-      url: `/api/user/following${currentPage}`,
-    });
-
-    return data;
-  } catch (error) {
-    return rejectWithValue(error.response.data.message);
-  }
-});
-
-export const unfollowUser = createAsyncThunk('auth/unfollowUser', async ({ id }, { rejectWithValue }) => {
-  try {
-    const { data } = await axiosIns({
-      method: 'delete',
-      url: `/api/user/following/user${id}`,
-    });
-
-    return data;
-  } catch (error) {
-    return rejectWithValue(error.response.data.message);
-  }
-});
-export const followUser = createAsyncThunk('auth/unfollowUser', async ({ id }, { rejectWithValue }) => {
-  try {
-    const { data } = await axiosIns({
-      method: 'put',
-      url: `/api/user/following/users`,
+      method: 'GET',
+      url: `/api/login/jwt`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     return data;
@@ -105,62 +70,24 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      localStorage.setItem('token', action.payload.jwt);
+      localStorage.setItem('jwt', action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
-
-    [loadFollowers.pending]: (state, action) => {
+    [loginUserWithJwt.pending]: (state, action) => {
       state.loading = true;
       state.error = null;
     },
-    [loadFollowers.fulfilled]: (state, action) => {
+    [loginUserWithJwt.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      state.user.followers.push(action.payload);
+      state.user = action.payload.user;
+      state.token = action.payload.jwt;
+      localStorage.setItem('jwt', action.payload.jwt);
     },
-    [loadFollowers.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [loadFollowing.pending]: (state, action) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [loadFollowing.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.user.following.push(action.payload);
-    },
-    [loadFollowing.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [unfollowUser.pending]: (state, action) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [unfollowUser.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.user.following.users.filter((user) => user._id !== action.payload);
-    },
-    [unfollowUser.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [followUser.pending]: (state, action) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [followUser.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.user.following.users.filter((user) => user._id !== action.payload);
-    },
-    [followUser.rejected]: (state, action) => {
+    [loginUserWithJwt.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

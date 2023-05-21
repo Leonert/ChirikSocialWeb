@@ -21,6 +21,9 @@ export const usePostStyle = makeStyles((theme) => ({
   iconColor: {
     color: '#fff !important',
   },
+  iconActions: {
+    color: '#ec2121 !important',
+  },
   iconImg: {
     maxWidth: '90%',
     margin: 'auto',

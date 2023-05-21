@@ -1,5 +1,6 @@
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import {
@@ -16,6 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { usePostStyle } from './PostStyle';
 
@@ -30,8 +32,6 @@ const options = {
 
 export default function Post(props) {
   const classes = usePostStyle();
-
-  console.log(props.originalPost);
 
   return (
     <Card className={props.classes}>
@@ -57,13 +57,24 @@ export default function Post(props) {
         />
       )}
 
-      {props.content && (
+      {props.content && !props.postPage && (
+        <Link to={`/${props.id}`}>
+          <CardContent className={classes.pageItem}>
+            <Typography variant="body2" className={classes.iconColor}>
+              {props.content}
+            </Typography>
+          </CardContent>
+        </Link>
+      )}
+
+      {props.content && props.postPage && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>
             {props.content}
           </Typography>
         </CardContent>
       )}
+
       {props.children}
       {props.image && <CardMedia component="img" image={props.image} alt="Post image" className={classes.iconImg} />}
       {props.postPage && (
@@ -90,7 +101,9 @@ export default function Post(props) {
           <Typography mr={2} className={classes.actionTypo}>
             <Typography className={classes.actionNumber}>{props.like}</Typography> Likes
           </Typography>
-          {/* <Typography>{props.retweet} bookmarks</Typography> */}
+          <Typography mr={2} className={classes.actionTypo}>
+            <Typography className={classes.actionNumber}>{props.bookmark}</Typography> Bookmarks
+          </Typography>
         </Box>
       )}
       {!props.originalPost && (
@@ -104,60 +117,51 @@ export default function Post(props) {
           }}
         >
           <Tooltip title="Reply">
-            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
+            <IconButton
+              aria-label="ChatBubbleOutline"
+              className={props.replayed ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickReplay}
+            >
               <Badge badgeContent={props.reply} color="primary">
                 <ChatBubbleOutlineIcon />
               </Badge>
             </IconButton>
           </Tooltip>
           <Tooltip title="Retweet">
-            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickRetweet}>
+            <IconButton
+              aria-label="ChatBubbleOutline"
+              className={props.retweeted ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickRetweet}
+            >
               <Badge badgeContent={props.retweet} color="primary">
                 <RepeatIcon />
               </Badge>
             </IconButton>
           </Tooltip>
           <Tooltip title="Like">
-            <IconButton aria-label="add to favorites" className={classes.iconColor} onClick={props.handleClickLike}>
+            <IconButton
+              aria-label="add to favorites"
+              className={props.liked ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickLike}
+            >
               <Badge badgeContent={props.like} color="primary">
-                <FavoriteIcon />
+                <FavoriteBorderIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Bookmarks">
+            <IconButton
+              aria-label="add to favorites"
+              className={props.bookmarked ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickBookmark}
+            >
+              <Badge badgeContent={props.bookmark} color="primary">
+                <BookmarkBorderIcon />
               </Badge>
             </IconButton>
           </Tooltip>
         </CardActions>
       )}
-      {/* {props.postPage && (
-        <CardActions
-          disableSpacing
-          className={classes.pageItem}
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-around',
-          }}
-        >
-          <Tooltip title="Retweet">
-            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickRetweet}>
-              <Badge badgeContent={props.retweet} color="primary">
-                <RepeatIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Reply">
-            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
-              <Badge badgeContent={props.reply} color="primary">
-                <ChatBubbleOutlineIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Like">
-            <IconButton aria-label="add to favorites" className={classes.iconColor} onClick={props.handleClickLike}>
-              <Badge badgeContent={props.like} color="primary">
-                <FavoriteIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-        </CardActions>
-      )} */}
     </Card>
   );
 }

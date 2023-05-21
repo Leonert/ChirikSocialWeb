@@ -6,7 +6,7 @@ export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { reje
   try {
     const { data } = await axiosIns({
       method: 'GET',
-      url: `api/posts?p=${portion}&n=25`,
+      url: `api/posts?p=${portion}&n=15`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -60,6 +60,23 @@ const homeSlice = createSlice({
     replayMessage: (state, actions) => {
       state.message = actions.payload;
     },
+    clearPosts: (state) => {
+      state.post = [];
+    },
+    bookmarksPost: (state, action) => {
+      const { postId, bookmarksNumber } = action.payload;
+
+      state.post = state.post.map((post) =>
+        +post.id === +postId ? { ...post, bookmarked: !post.bookmarked, bookmarksNumber } : post
+      );
+    },
+    likesPost: (state, action) => {
+      const { postId, likesNumber } = action.payload;
+
+      state.post = state.post.map((post) =>
+        +post.id === +postId ? { ...post, liked: !post.liked, likesNumber } : post
+      );
+    },
   },
 });
 
@@ -72,4 +89,8 @@ export const {
   openReplayModal,
   clothReplayModal,
   replayMessage,
+  clearPosts,
+  bookmarksPost,
+  bookmarksPostNum,
+  likesPost,
 } = homeSlice.actions;

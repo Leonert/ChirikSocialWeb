@@ -64,8 +64,6 @@ export const Login = () => {
       formData.append('password', values.password);
       formData.append('rememberMe', values.rememberMe);
 
-      // console.log(values.email, values.password, values.rememberMe);
-
       dispatch(handleSnackbar(true));
       dispatch(handleModal(false));
       dispatch(loginUser(values));
@@ -135,14 +133,14 @@ export const Login = () => {
 
             <Typography textTransform="none">
               <Typography
-                variant="span"
+                component="span"
                 textTransform="none"
                 sx={{ color: 'gray', fontSize: '14px', marginRight: '6px' }}
               >
                 Don&apos;t have an account?
               </Typography>
               <Typography
-                variant="span"
+                component="span"
                 onClick={() => {
                   dispatch(handleModal(false));
                   openRegistrationModal();
@@ -207,15 +205,17 @@ export const Login = () => {
             </CustomButton>
             <Typography textTransform="none">
               <Typography
-                variant="span"
+                component="span"
                 textTransform="none"
                 sx={{ color: 'gray', fontSize: '14px', marginRight: '6px' }}
               >
                 Don&apos;t have an account?
               </Typography>
               <Typography
-                variant="span"
-                onClick={openRegistrationModal}
+                component="span"
+                onClick={() => {
+                  openRegistrationModal();
+                }}
                 sx={{
                   cursor: 'pointer',
                   color: 'rgb(63, 81, 181)',
