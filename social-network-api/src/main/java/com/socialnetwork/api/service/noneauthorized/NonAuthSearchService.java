@@ -19,11 +19,11 @@ public class NonAuthSearchService {
 
   public List<Post> searchPosts(String query, int page, int postsPerPage) {
     return postRepository.findPostsByTextContainingIgnoreCase(
-        query, PageRequest.of(page, postsPerPage));
+          query, PageRequest.of(page, postsPerPage));
   }
 
   public List<User> searchUsers(String query, int page, int usersPerPage) {
     return userRepository
-        .findByUsernameContainingIgnoreCaseOrNameContaining(query, query, PageRequest.of(page, usersPerPage)).toList();
+          .findByUsernameContainingIgnoreCaseOrNameContaining(query, query, PageRequest.of(page, usersPerPage)).toList();
   }
 }

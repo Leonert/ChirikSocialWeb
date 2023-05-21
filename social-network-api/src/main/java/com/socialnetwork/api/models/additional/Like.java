@@ -3,7 +3,6 @@ package com.socialnetwork.api.models.additional;
 import com.socialnetwork.api.models.additional.keys.LikePk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

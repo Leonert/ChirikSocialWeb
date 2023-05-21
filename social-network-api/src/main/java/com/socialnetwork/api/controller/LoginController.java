@@ -52,12 +52,12 @@ public class LoginController {
     notificationService.saveLogin(user);
 
     return ResponseEntity.ok(userMapper.convertToAccountData(user,
-        jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
+          jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
   }
 
   @GetMapping("jwt")
   public ResponseEntity<?> loginByToken(@RequestAttribute(USERNAME_ATTRIBUTE) String username, HttpServletRequest request)
-      throws NoUserWithSuchCredentialsException {
+        throws NoUserWithSuchCredentialsException {
     String auth = request.getHeader(AUTHORIZATION_HEADER);
     User user = userService.findByUsername(username);
     return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));

@@ -28,7 +28,7 @@ public enum UserDto {
 
     @Data
     public static class ProfileEditing {
-      String username;
+      String name;
       String profileImage;
       String profileBackgroundImage;
       String bio;

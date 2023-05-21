@@ -18,10 +18,10 @@ public class NotificationService {
   public void saveReplyRetweet(Post post) {
     if (post.getOriginalPost() != null && post.getText() != null && post.getImage() == null) {
       notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
-          post.getAuthor(), post, NotificationType.REPLY));
+            post.getAuthor(), post, NotificationType.REPLY));
     } else if (post.getOriginalPost() != null) {
       notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
-          post.getAuthor(), post, NotificationType.RETWEET));
+            post.getAuthor(), post, NotificationType.RETWEET));
     }
   }
 

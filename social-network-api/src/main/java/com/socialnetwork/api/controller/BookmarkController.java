@@ -1,10 +1,8 @@
 package com.socialnetwork.api.controller;
 
-import com.socialnetwork.api.dto.NotificationDto;
 import com.socialnetwork.api.dto.PostDtoInterface;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.base.Post;
@@ -30,10 +28,10 @@ public class BookmarkController {
 
   @GetMapping()
   public ResponseEntity<List<PostDtoInterface>> getUserNotifications(@RequestAttribute(USERNAME_ATTRIBUTE) String username)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+        throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     List<PostDtoInterface> outcome = new ArrayList<>();
-    for (Post post: userService.findByUsername(username).getBookmarkedPosts()
-        .stream().map(Bookmark::getBookmarkedPost).toList()) {
+    for (Post post : userService.findByUsername(username).getBookmarkedPosts()
+          .stream().map(Bookmark::getBookmarkedPost).toList()) {
       outcome.add(postMapper.convertToPostDtoDefault(post, username));
     }
     return ResponseEntity.ok().body(outcome);
