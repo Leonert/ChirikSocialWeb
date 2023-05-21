@@ -1,5 +1,6 @@
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import {
@@ -25,7 +26,7 @@ export default function Post(props) {
     <Card className={props.classes}>
       {props.replay}
 
-      { props.content != null && (
+      {props.content != null && (
         <CardHeader
           className={classes.pageItem}
           avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
@@ -64,23 +65,46 @@ export default function Post(props) {
           }}
         >
           <Tooltip title="Reply">
-            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickReplay}>
+            <IconButton
+              aria-label="ChatBubbleOutline"
+              className={props.replayed ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickReplay}
+            >
               <Badge badgeContent={props.reply} color="primary">
                 <ChatBubbleOutlineIcon />
               </Badge>
             </IconButton>
           </Tooltip>
           <Tooltip title="Retweet">
-            <IconButton aria-label="ChatBubbleOutline" className={classes.iconColor} onClick={props.handleClickRetweet}>
+            <IconButton
+              aria-label="ChatBubbleOutline"
+              className={props.retweeted ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickRetweet}
+            >
               <Badge badgeContent={props.retweet} color="primary">
                 <RepeatIcon />
               </Badge>
             </IconButton>
           </Tooltip>
           <Tooltip title="Like">
-            <IconButton aria-label="add to favorites" className={classes.iconColor} onClick={props.handleClickLike}>
+            <IconButton
+              aria-label="add to favorites"
+              className={props.liked ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickLike}
+            >
               <Badge badgeContent={props.like} color="primary">
-                <FavoriteIcon />
+                <FavoriteBorderIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Bookmarks">
+            <IconButton
+              aria-label="add to favorites"
+              className={props.bookmarked ? classes.iconActions : classes.iconColor}
+              onClick={props.handleClickBookmark}
+            >
+              <Badge badgeContent={props.bookmark} color="primary">
+                <BookmarkBorderIcon />
               </Badge>
             </IconButton>
           </Tooltip>

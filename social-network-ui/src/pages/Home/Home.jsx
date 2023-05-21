@@ -12,13 +12,12 @@ import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
 import { UsersLikeModal } from '../../components/SocialActionsUser/Like/ListUsersLike/UsersLikeModal';
 import { UsersRetweetModal } from '../../components/SocialActionsUser/Retweet/ListUsersRetweet/UsersRetweetModal';
-import { GetPosts, getPost } from '../../features/slices/homeSlice';
+import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
-  // const [portion, setPortion] = useState(0);
 
   const { isOpenLikeModal } = useSelector((state) => state.likes);
   const { isOpenRetweetModal } = useSelector((state) => state.retweets);
@@ -31,7 +30,11 @@ function Home() {
         dispatch(getPost(result.payload));
       }
     });
-  }, [dispatch]);
+
+    return () => {
+      dispatch(clearPosts());
+    };
+  }, []);
 
   return (
     <Grid container spacing={2}>

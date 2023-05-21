@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
+import { GetPosts, getPost , clearPosts} from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
@@ -71,6 +72,12 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
     setVisiblePoll(false);
     setSelectedScheduleDate(null);
     onCloseModal();
+    dispatch(GetPosts(0)).then((result) => {
+      if (GetPosts.fulfilled.match(result)) {
+        dispatch(clearPosts())
+        dispatch(getPost(result.payload));
+      }
+    });
   };
 
   const handleClickQuoteTweet = async () => {

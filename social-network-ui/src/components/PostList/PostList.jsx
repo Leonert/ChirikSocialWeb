@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
+import { bookmarksPost, getPostId, likesPost, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
@@ -29,8 +29,50 @@ export default function PostList() {
   };
 
   const handelLike = (props) => {
-    dispatch(openReplayModal(props));
-    alert(`past ${props}  add to like`);
+    const token = localStorage.getItem('token');
+
+    axiosIns
+      .post(
+        `/api/posts/${props}/likes`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        const LikeNumber = response.data;
+        dispatch(
+          likesPost({
+            postId: props,
+            likesNumber: LikeNumber,
+          })
+        );
+      });
+  };
+  const handleBookmark = (props) => {
+    const token = localStorage.getItem('token');
+
+    axiosIns
+      .post(
+        `/api/posts/${props}/bookmarks`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        const bookmarksNum = response.data;
+        dispatch(
+          bookmarksPost({
+            postId: props,
+            bookmarksNumber: bookmarksNum,
+          })
+        );
+      });
   };
 
   return (
@@ -59,10 +101,15 @@ export default function PostList() {
             data={post.createdDate}
             image={post.image}
             originalPost={post.originalPost}
+            liked={post.liked}
+            bookmarked={post.bookmarked}
+            retweeted={post.retweeted}
+            bookmark={post.bookmarksNumber}
             handleClick={() => dispatch(getPostId(`${post.id}`))}
             handleClickLike={() => handelLike(`${post.id}`)}
             handleClickReplay={() => handleReplay(`${post.id}`)}
             handleClickRetweet={() => handleRetweet(`${post.id}`)}
+            handleClickBookmark={() => handleBookmark(`${post.id}`)}
           >
             {post.originalPost && (
               <Post
@@ -77,10 +124,15 @@ export default function PostList() {
                 content={post.originalPost.text}
                 data={post.originalPost.createdDate}
                 image={post.originalPost.image}
+                liked={post.liked}
+                bookmarked={post.originalPost.bookmarked}
+                retweeted={post.originalPost.retweeted}
+                bookmark={post.originalPost.bookmarksNumber}
                 handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
                 handleClickLike={() => handelLike(`${post.originalPost.id}`)}
                 handleClickReplay={() => handleReplay(`${post.originalPost.id}`)}
                 handleClickRetweet={() => handleRetweet(`${post.originalPost.id}`)}
+                handleClickBookmark={() => handleBookmark(`${post.originalPost.id}`)}
               />
             )}
           </Post>
