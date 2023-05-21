@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation, useParams } from 'react-router-dom';
 
 import EditProfileModal from './EditProfileModal';
+import FollowButton from './FollowButton';
 
 const ProfileTabs = styled((props) => (
   <Tabs {...props} TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }} />
@@ -48,12 +49,13 @@ const Profile = (props) => {
   const routeMatch = useRouteMatch([`${username}`, `${username}/replies`, `${username}/media`, `${username}/likes`]);
   const currentTab = routeMatch?.pattern?.path;
   const { user } = useSelector((state) => state.auth);
-  const data = useLoaderData();
+  const { data } = useLoaderData();
+  const isCurrentUserProfile = user?.username === username;
   const formattedDate = format(new Date(data.createdDate), 'MMMM yyyy');
 
   return (
     <>
-      <Box sx={{ maxWidth: '598px', width: '100%', height: '2000px' }}>
+      <Box sx={{ maxWidth: '598px', width: '100%' }}>
         <Box
           position="sticky"
           sx={{
@@ -79,17 +81,13 @@ const Profile = (props) => {
               <Typography component="h2" fontSize="18px">
                 {data.name}
               </Typography>
-              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>
-                {/* {Object.keys(data.userTweets).length} Tweets */}
-                {data.userPosts.length} Tweets
-              </Typography>
+              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>{data.userPosts.length} Tweets</Typography>
             </Stack>
           </Stack>
         </Box>
         <Box
           sx={{
             height: '193px',
-            // задній фон треба тру або фолс
             background: (theme) =>
               data.profileBackgroundImage
                 ? `url(${data.profileBackgroundImage})`
@@ -116,7 +114,7 @@ const Profile = (props) => {
             }}
           />
 
-          <EditProfileModal data={data} />
+          {(isCurrentUserProfile && <EditProfileModal data={data} />) || <FollowButton user={data} />}
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
           <Box>
@@ -153,7 +151,7 @@ const Profile = (props) => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to={`/${user?.username}/following`}
+                  to={`/${username}/following`}
                 >
                   {data.followedCounter} Followings
                 </NavLink>
@@ -166,7 +164,7 @@ const Profile = (props) => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to={`/${user?.username}/followers`}
+                  to={`/${username}/followers`}
                 >
                   {/* паменять */}
                   {data.followersCounter} Follower
