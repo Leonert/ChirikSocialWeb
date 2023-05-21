@@ -2,6 +2,7 @@ import { CalendarToday as CalendarIcon, Link as LinkIcon, LocationOn as Location
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Avatar, Box, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation } from 'react-router-dom';
 
 import EditProfileModal from './EditProfileModal';
@@ -44,7 +45,7 @@ function useRouteMatch(patterns) {
 const Profile = () => {
   const routeMatch = useRouteMatch(['profile', 'profile/replies', 'profile/media', 'profile/likes']);
   const currentTab = routeMatch?.pattern?.path;
-
+  const { user } = useSelector((state) => state.auth);
   const profile = useLoaderData();
 
   return (
@@ -144,7 +145,7 @@ const Profile = () => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to="/profile/following"
+                  to={`/${user?.username}/following`}
                 >
                   {profile.followNumber} Followings
                 </NavLink>
@@ -156,7 +157,7 @@ const Profile = () => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to="/profile/followers"
+                  to={`/${user?.username}/followers`}
                 >
                   {profile.subscriberNumber} Follower
                 </NavLink>
