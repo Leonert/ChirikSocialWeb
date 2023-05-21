@@ -72,6 +72,8 @@ const Messages = () => {
       const lastMessage = chatMessages.message;
 
       scrollToBottom();
+      const selectedChat = chats.find((chat) => chat.id === chatId);
+      dispatch(participant(selectedChat)); // Оновити значення participant з обраним чатом
     } catch (e) {
       console.error(e);
     }
@@ -81,8 +83,9 @@ const Messages = () => {
     if (text !== '') {
       let selectedChat = chats.find((chat) => chat.id === selectedChatId);
       if (selectedChat) {
+        const existingChat = chats.find((chat) => chat.recipientId === selectedChat.recipientId);
         const newMessage = {
-          id: selectedChat.id,
+          id: existingChat ? existingChat.id : selectedChat.id, // Використовуємо ID існуючого чату, якщо він вже існує
           message: text,
           read: false,
           recipientId: selectedChat.recipientId,

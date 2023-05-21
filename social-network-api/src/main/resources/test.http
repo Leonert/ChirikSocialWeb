@@ -34,6 +34,7 @@ POST http://localhost:8080/api/messages/create
 Content-Type: application/json
 
 {
+  "chatId": 1,
   "senderId": 2,
   "recipientId": 1,
   "username": "Taras",

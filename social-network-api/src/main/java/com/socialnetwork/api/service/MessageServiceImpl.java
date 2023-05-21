@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,23 +48,37 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public MessageDto addMessage(MessageDto messageDto) {
-    User recipient = userRepository.findById(messageDto.getRecipientId())
-            .orElseThrow(() -> new EntityNotFoundException("Recipient not found with id: " + messageDto.getRecipientId()));
+    User user = userRepository.findById(messageDto.getSenderId())
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + messageDto.getSenderId()));
 
-    User sender = userRepository.findById(messageDto.getSenderId())
-            .orElseThrow(() -> new EntityNotFoundException("Sender not found with id: " + messageDto.getSenderId()));
+    Optional<Message> existingMessageOptional = messageRepository.findById(messageDto.getId());
+    if (existingMessageOptional.isPresent()) {
+      Message existingMessage = existingMessageOptional.get();
+      existingMessage.setMessage(messageDto.getMessage());
+      existingMessage.setTimestamp(LocalDateTime.now());
+      existingMessage.setRead(false);
+      existingMessage.setRecipient(user);
+      existingMessage.setSender(user);
+      existingMessage.setChatId(messageDto.getChatId());
+
+      existingMessage = messageRepository.save(existingMessage);
+
+      return convertToDto(existingMessage);
+    }
 
     Message message = new Message();
-    message.setRecipient(recipient);
-    message.setSender(sender);
+    message.setRecipient(user);
+    message.setSender(user);
     message.setMessage(messageDto.getMessage());
     message.setTimestamp(LocalDateTime.now());
     message.setRead(false);
+    message.setChatId(messageDto.getChatId());
 
     message = messageRepository.save(message);
 
     return convertToDto(message);
   }
+
 
   private MessageDto convertToDto(Message message) {
     return modelMapper.map(message, MessageDto.class);

@@ -26,6 +26,9 @@ public class Message {
   @Column(name = "id")
   private int id;
 
+  @Column(name = "chat_id")
+  private int chatId;
+
   @Column(name = "username")
   private String username;
 

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 import static com.socialnetwork.api.util.Constants.Response.DATE_FORMAT;
 
-
 @Data
 public class MessageDto {
   private int id;
@@ -19,6 +18,7 @@ public class MessageDto {
   private String username;
   private int recipientId;
   private int senderId;
+  private int chatId;
 
   public static class Request {
     @Data
@@ -27,6 +27,7 @@ public class MessageDto {
       private String message;
       private int recipientId;
       private int senderId;
+      private int chatId;
     }
   }
 
@@ -40,6 +41,7 @@ public class MessageDto {
       private String username;
       private int recipientId;
       private int senderId;
+      private int chatId;
     }
   }
 }
