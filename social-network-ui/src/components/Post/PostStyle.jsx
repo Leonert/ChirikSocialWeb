@@ -31,6 +31,22 @@ export const usePostStyle = makeStyles((theme) => ({
     display: 'flex',
     columnGap: '15px',
   },
+  date: {
+    padding: '15px 0 10px 16px',
+    color: '#8a9da8',
+  },
+  actionTypo: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    fontSize: '14px !important',
+    color: theme.palette.grey[300],
+  },
+  actionNumber: {
+    fontWeight: '700 !important',
+    fontSize: '15px !important',
+    color: theme.palette.primary.main,
+    marginRight: '5px !important',
+  },
   reply: {
     display: 'flex',
     justifyContent: 'flex-end',

@@ -49,6 +49,7 @@ export default function PostList() {
             }
             classes={classes.Page}
             key={post.id}
+            username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
             retweet={post.retweetsNumber}
@@ -68,6 +69,7 @@ export default function PostList() {
               <Post
                 classes={classes.PageSmall}
                 key={post.id}
+                username={post.originalPost.author.username}
                 avatar={post.originalPost.author.profileImage}
                 name={post.originalPost.author.name}
                 retweet={post.originalPost.retweetsNumber}

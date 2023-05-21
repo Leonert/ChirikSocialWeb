@@ -5,6 +5,7 @@ import { Layout } from '../layout/Layout';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
+import PostPage from '../pages/PostPage/PostPage';
 import Profile from '../pages/Profile/Profile';
 import profileLoader from '../pages/Profile/profileLoader';
 
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
         path: '/lists',
         element: <div></div>,
       },
+      { path: ':id', element: <PostPage /> },
       {
         path: '/profile',
         element: <Profile />,
