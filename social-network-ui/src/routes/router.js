@@ -9,6 +9,7 @@ import Home from '../pages/Home/Home';
 import Messages from '../pages/Messages/Messages';
 import { Notifications } from '../pages/Notifications/Notifications';
 import Profile from '../pages/Profile/Profile';
+import ProfilePosts from '../pages/Profile/ProfilePosts';
 import profileLoader from '../pages/Profile/profileLoader';
 
 export const router = createBrowserRouter([
@@ -46,11 +47,12 @@ export const router = createBrowserRouter([
       {
         path: '/:username',
         element: <Profile />,
+        id: 'profile',
         loader: profileLoader,
         children: [
           {
             index: true,
-            element: <div>posts</div>,
+            element: <ProfilePosts />,
           },
           {
             path: 'replies',
