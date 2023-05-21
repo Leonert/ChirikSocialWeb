@@ -49,8 +49,7 @@ export default function PostList() {
             likesNumber: LikeNumber,
           })
         );
-      })
-      .catch((error) => {});
+      });
   };
   const handleBookmark = (props) => {
     const token = localStorage.getItem('token');
@@ -73,8 +72,7 @@ export default function PostList() {
             bookmarksNumber: bookmarksNum,
           })
         );
-      })
-      .catch((error) => {});
+      });
   };
 
   return (
