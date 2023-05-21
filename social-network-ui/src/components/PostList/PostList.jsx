@@ -10,7 +10,7 @@ import ReplyHeader from '../Post/ReplyHeader';
 
 export default function PostList() {
   const posts = useSelector((state) => state.home.post);
-  console.log(posts);
+
   const classes = usePostStyle();
   const dispatch = useDispatch();
 
@@ -51,7 +51,7 @@ export default function PostList() {
         );
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   };
   const handleBookmark = (props) => {
@@ -68,16 +68,16 @@ export default function PostList() {
         }
       )
       .then((response) => {
-        const bookmarksNumber = response.data;
+        const bookmarksNum = response.data;
         dispatch(
           bookmarksPost({
             postId: props,
-            bookmarksNumber: bookmarksNumber,
+            bookmarksNumber: bookmarksNum,
           })
         );
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   };
 
