@@ -28,16 +28,6 @@ export default function PostList() {
     dispatch(openReplayModal(props));
   };
 
-  // const handelLike = (props) => {
-  //   axiosIns.post(
-  //     `/api/posts/${props}/likes`,
-
-  //     {
-  //       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-  //     }
-  //   );
-  //   console.log(props, 2);
-  // };
   const handelLike = (props) => {
     const token = localStorage.getItem('token');
 
