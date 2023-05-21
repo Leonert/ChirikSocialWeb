@@ -29,7 +29,7 @@ export default function Post(props) {
       {props.content != null && (
         <CardHeader
           className={classes.pageItem}
-          avatar={<AvatarLink alt={props.name} src={props.avatar} to={props.username} />}
+          avatar={<AvatarLink alt={props.name} src={props.avatar} to={`/${props.username}`} />}
           action={
             <Tooltip title="More">
               <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
@@ -37,7 +37,7 @@ export default function Post(props) {
               </IconButton>
             </Tooltip>
           }
-          title={<NameLink name={props.name} to={props.username} />}
+          title={<NameLink name={props.name} to={`/${props.username}`} />}
           subheader={
             <Typography variant="body2" color="#fff">
               {props.data}
