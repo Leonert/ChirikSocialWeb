@@ -1,13 +1,7 @@
 import { Container, Grid } from '@material-ui/core';
-<<<<<<< HEAD
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Outlet, ScrollRestoration } from 'react-router-dom';
-=======
 import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
->>>>>>> main
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 import { BottomLine } from '../components/BottomLine/BottomLine';
 // import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
