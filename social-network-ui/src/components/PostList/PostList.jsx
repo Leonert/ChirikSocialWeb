@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
+import { bookmarksPost, getPostId, likesPost, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
@@ -28,25 +28,67 @@ export default function PostList() {
     dispatch(openReplayModal(props));
   };
 
-  const handelLike = (props) => {
-    axiosIns.post(
-      `/api/posts/${props}/likes`,
+  // const handelLike = (props) => {
+  //   axiosIns.post(
+  //     `/api/posts/${props}/likes`,
 
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
-    console.log(props, 2);
+  //     {
+  //       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  //     }
+  //   );
+  //   console.log(props, 2);
+  // };
+  const handelLike = (props) => {
+    const token = localStorage.getItem('token');
+
+    axiosIns
+      .post(
+        `/api/posts/${props}/likes`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        const LikeNumber = response.data;
+        dispatch(
+          likesPost({
+            postId: props,
+            likesNumber: LikeNumber,
+          })
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   const handleBookmark = (props) => {
-    axiosIns.post(
-      `/api/posts/${props}/bookmarks`,
+    const token = localStorage.getItem('token');
 
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
-    console.log(props, 1);
+    axiosIns
+      .post(
+        `/api/posts/${props}/bookmarks`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        const bookmarksNumber = response.data;
+        dispatch(
+          bookmarksPost({
+            postId: props,
+            bookmarksNumber: bookmarksNumber,
+          })
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

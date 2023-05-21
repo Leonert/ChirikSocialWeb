@@ -63,6 +63,20 @@ const homeSlice = createSlice({
     clearPosts: (state) => {
       state.post = [];
     },
+    bookmarksPost: (state, action) => {
+      const { postId, bookmarksNumber } = action.payload;
+
+      state.post = state.post.map((post) =>
+        +post.id === +postId ? { ...post, bookmarked: !post.bookmarked, bookmarksNumber } : post
+      );
+    },
+    likesPost: (state, action) => {
+      const { postId, likesNumber } = action.payload;
+
+      state.post = state.post.map((post) =>
+        +post.id === +postId ? { ...post, liked: !post.liked, likesNumber } : post
+      );
+    },
   },
 });
 
@@ -76,4 +90,7 @@ export const {
   clothReplayModal,
   replayMessage,
   clearPosts,
+  bookmarksPost,
+  bookmarksPostNum,
+  likesPost
 } = homeSlice.actions;
