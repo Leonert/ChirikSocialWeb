@@ -4,8 +4,7 @@ import InputBase from '@mui/material/InputBase';
 import Toolbar from '@mui/material/Toolbar';
 import { alpha, styled } from '@mui/material/styles';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { addResult } from '../../features/slices/searchSlice';

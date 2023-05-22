@@ -80,9 +80,11 @@ const homeSlice = createSlice({
             originalPost: { ...post.originalPost, bookmarksNumber },
           };
         }
+
         return post;
       });
     },
+
     likesPost: (state, action) => {
       const { postId, likesNumber } = action.payload;
 
@@ -96,6 +98,7 @@ const homeSlice = createSlice({
             originalPost: { ...post.originalPost, likesNumber },
           };
         }
+
         return post;
       });
     },
