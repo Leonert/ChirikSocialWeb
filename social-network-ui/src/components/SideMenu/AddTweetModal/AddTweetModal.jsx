@@ -15,7 +15,7 @@ function AddTweetModal({ title, visible, onClose }) {
         {title}
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        <AddTweetForm minRows={6} title={"What's happening?"} buttonName={'Tweet'} />
+        <AddTweetForm minRows={6} title={"What's happening?"} buttonName={'Tweet'} onCloseModal={onClose} />
       </DialogContent>
     </Dialog>
   );

@@ -21,16 +21,19 @@ public class NonAuthPostService {
   }
 
   public List<Post> getReplies(int id, int page, int usersForPage)
-          throws NoPostWithSuchIdException {
+        throws NoPostWithSuchIdException {
     Post post = getReferenceById(id);
     return postRepository.findAllByOriginalPostAndTextIsNotNull(
-            post,
-            PageRequest.of(page, usersForPage, Sort.by("createdDate")));
+          post,
+          PageRequest.of(page, usersForPage, Sort.by("createdDate")));
   }
 
-  public List<User> getRetweets(int id, int page, int usersForPage) {
+  public List<User> getRetweets(int id, int page, int usersForPage) throws NoPostWithSuchIdException {
+    if (!postRepository.existsById(id)) {
+      throw new NoPostWithSuchIdException();
+    }
     return postRepository.findUsersByRetweetedPost(id).stream()
-            .skip(page * usersForPage).limit(usersForPage).toList();
+          .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
   public Post getReferenceById(int id) throws NoPostWithSuchIdException {

@@ -2,9 +2,7 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
-import com.socialnetwork.api.exception.custom.InvalidTokenUsernameException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.exception.custom.TokenExpiredException;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
@@ -17,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.CONFIRMATION_REQUIRED;
+import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 
 @RestController
@@ -52,14 +52,14 @@ public class LoginController {
     notificationService.saveLogin(user);
 
     return ResponseEntity.ok(userMapper.convertToAccountData(user,
-            jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
+          jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));
   }
 
   @GetMapping("jwt")
-  public ResponseEntity<?> loginByToken(HttpServletRequest request)
-          throws TokenExpiredException, InvalidTokenUsernameException, NoUserWithSuchCredentialsException {
+  public ResponseEntity<?> loginByToken(@RequestAttribute(USERNAME_ATTRIBUTE) String username, HttpServletRequest request)
+        throws NoUserWithSuchCredentialsException {
     String auth = request.getHeader(AUTHORIZATION_HEADER);
-    User user = userService.findByUsername(jwtTokenUtil.getUsernameFromTokenAndCheckIt(auth));
+    User user = userService.findByUsername(username);
     return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));
   }
 }

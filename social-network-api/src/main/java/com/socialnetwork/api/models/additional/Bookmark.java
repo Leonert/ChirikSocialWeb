@@ -3,7 +3,8 @@ package com.socialnetwork.api.models.additional;
 import com.socialnetwork.api.models.additional.keys.BookmarkPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,7 +17,8 @@ import javax.persistence.MapsId;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "bookmarks")
 public class Bookmark {
   @EmbeddedId

@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import axiosIns from '../../axiosInstance';
 import { clothReplayModal } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
@@ -35,8 +36,9 @@ function FormModal({ buttonName }) {
 
   const targetPost = post.find((item) => +item.id === +id);
 
-  const sendRequest = (follower) => {
-    alert(`${follower} replay ${text} on tweet ${targetPost.id} to user ${targetPost.author.name}`);
+  const sendRequest = async () => {
+    await axiosIns.post('/api/posts', { text, originalPost: targetPost.id });
+
     dispatch(clothReplayModal());
     setText('');
   };

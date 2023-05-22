@@ -3,8 +3,9 @@ package com.socialnetwork.api.models.additional;
 import com.socialnetwork.api.models.additional.keys.ViewPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -15,7 +16,8 @@ import javax.persistence.EmbeddedId;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "views")
 @NoArgsConstructor
 public class View {

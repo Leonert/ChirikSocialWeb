@@ -3,7 +3,8 @@ package com.socialnetwork.api.models.base;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +21,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "posts")
-@Data
+@Getter
+@Setter
 public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +36,7 @@ public class Post {
   @Column(name = "text")
   private String text;
 
-  @Column(name = "image", length = 1250000)
+  @Column(name = "image", length = 15000000)
   private String image;
 
   @Column(name = "created_date")

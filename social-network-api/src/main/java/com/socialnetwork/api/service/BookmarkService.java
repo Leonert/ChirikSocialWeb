@@ -32,9 +32,9 @@ public class BookmarkService {
 
   public List<Integer> getUsersBookmarksIds(Post post) {
     return bookmarkRepository.findAllByBookmarkedPost(post)
-            .stream()
-            .map(bookmark -> bookmark.getBookmarkedBy().getId())
-            .toList();
+          .stream()
+          .map(bookmark -> bookmark.getBookmarkedBy().getId())
+          .toList();
   }
 
   public int countPostBookmarks(Post post) {
@@ -53,12 +53,12 @@ public class BookmarkService {
   }
 
   public List<User> getBookmarks(int id, String username, int page, int usersForPage)
-          throws NoUserWithSuchCredentialsException {
+        throws NoUserWithSuchCredentialsException {
     User currentUser = userService.findByUsername(username);
     return bookmarkRepository.findUsersByBookmarkedPost(id)
-            .stream()
-            .skip(page * usersForPage).limit(usersForPage)
-            .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
-            .toList();
+          .stream()
+          .skip(page * usersForPage).limit(usersForPage)
+          .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
+          .toList();
   }
 }

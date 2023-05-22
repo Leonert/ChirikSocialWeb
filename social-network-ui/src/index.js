@@ -6,6 +6,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { store } from './app/store';
 import './index.css';
+import './reset.css';
 import { router } from './routes/router';
 import { defaultTheme } from './theme';
 

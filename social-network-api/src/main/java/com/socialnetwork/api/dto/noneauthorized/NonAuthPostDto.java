@@ -1,6 +1,7 @@
 package com.socialnetwork.api.dto.noneauthorized;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.socialnetwork.api.dto.PostDtoInterface;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import lombok.Data;
 
@@ -57,7 +58,7 @@ public enum NonAuthPostDto {
     }
 
     @Data
-    public static class WithoutAuthor {
+    public static class WithoutAuthor implements PostDtoInterface {
       int id;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
       LocalDateTime createdDate;

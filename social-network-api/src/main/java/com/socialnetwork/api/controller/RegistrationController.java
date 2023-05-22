@@ -34,15 +34,15 @@ public class RegistrationController {
   @GetMapping("email")
   public ResponseEntity<?> checkIfEmailExists(@RequestParam(QUERY) String email) {
     return userService.existsByEmailAddress(email)
-            ? ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(EMAIL_TAKEN)) :
-            ResponseEntity.ok(new Response("Ok"));
+          ? ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(EMAIL_TAKEN)) :
+          ResponseEntity.ok(new Response("Ok"));
   }
 
   @GetMapping("username")
   public ResponseEntity<?> checkIfUsernameExists(@RequestParam(QUERY) String username) {
     return userService.existsByUsername(username)
-            ? ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN)) :
-            ResponseEntity.ok(new Response("Ok"));
+          ? ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(USERNAME_TAKEN)) :
+          ResponseEntity.ok(new Response("Ok"));
   }
 
   @PostMapping()
@@ -55,7 +55,7 @@ public class RegistrationController {
 
   @PatchMapping()
   public ResponseEntity<?> activateAccount(@RequestParam("token") String confirmationToken)
-          throws EmailVerificationException {
+        throws EmailVerificationException {
     userService.verifyAccount(confirmationToken);
     return ResponseEntity.ok(new Response("Ok"));
   }
