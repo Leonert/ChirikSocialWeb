@@ -14,10 +14,6 @@ public class ChatDto {
     this.chatId = chatId;
     this.messages = new ArrayList<>();
   }
-  public ChatDto() {
-    this.messages = new ArrayList<>();
-  }
-
 
   public void addMessage(MessageDto message) {
     messages.add(message);

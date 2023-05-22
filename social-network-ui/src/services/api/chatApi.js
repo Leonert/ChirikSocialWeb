@@ -39,9 +39,12 @@ export const ChatApi = {
         }
     },
 
-    createChat: async (userId) => {
+    createChat: async (messageDto, chatDto) => {
         try {
-            const response = await axiosIns.get(`/api/messages/create/${userId}`);
+            const response = await axiosIns.post(`/api/messages/chats/create`, {
+                messageDto: messageDto,
+                chatDto: chatDto
+            });
 
             return response.data;
         } catch (error) {
@@ -50,7 +53,6 @@ export const ChatApi = {
             return null;
         }
     },
-
     getAllMessages: async () => {
         try {
             const response = await axiosIns.get(`/api/messages`);
@@ -65,9 +67,9 @@ export const ChatApi = {
 
     getChatMessages: async (chatId) => {
         try {
-            const response = await axiosIns.get(`/api/messages/${chatId}`);
-            console.log('Message sent successfully');
-            console.log('Created Message:', chatId);
+            const response = await axiosIns.get(`/api/messages/chats/${chatId}`);
+            console.log('Chat messages fetched successfully');
+            console.log('Chat ID:', chatId);
             console.log(response);
 
             return response.data;
@@ -77,6 +79,8 @@ export const ChatApi = {
             return [];
         }
     },
+
+
 
     readChatMessages: async (chatId) => {
         try {
@@ -95,6 +99,31 @@ export const ChatApi = {
             console.error('Error fetching user list:', error);
 
             return [];
+        }
+    },
+
+
+
+    addMessageToChat: async (chatId, message) => {
+        try {
+            const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, {
+                message: message.message,
+                read: message.read,
+                recipientId: message.recipientId,
+                senderId: message.senderId,
+                timestamp: message.timestamp,
+                username: message.username,
+                chatId: message.chatId,
+            });
+
+            const createdMessage = response.data;
+            console.log('Message sent successfully');
+            console.log('Created Message:', createdMessage);
+
+            return createdMessage;
+        } catch (error) {
+            console.error('Error sending message:', error);
+            throw error;
         }
     },
 };

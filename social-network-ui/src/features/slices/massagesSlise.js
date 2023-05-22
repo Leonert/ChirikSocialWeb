@@ -10,6 +10,7 @@ export const sendMessage = createAsyncThunk('api/messages/sendMessage', async (m
     }
 });
 
+
 export const fetchChat = createAsyncThunk('api/messages/fetchChat', async () => {
     try {
         return await ChatApi.getUserChats();
@@ -54,15 +55,13 @@ const messagesSlice = createSlice({
             const { chatId, message } = action.payload;
 
             if (state.messages[chatId]) {
-                if (Array.isArray(state.messages[chatId])) {
-                    state.messages[chatId] = [...state.messages[chatId], message];
-                } else {
-                    state.messages[chatId] = [state.messages[chatId], message];
-                }
+                state.messages[chatId] = Array.isArray(state.messages[chatId])
+                    ? [...state.messages[chatId], message]
+                    : [state.messages[chatId], message];
             } else {
                 state.messages[chatId] = [message];
             }
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -70,11 +69,9 @@ const messagesSlice = createSlice({
                 const { chatId, message } = action.payload;
 
                 if (state.messages[chatId]) {
-                    if (Array.isArray(state.messages[chatId])) {
-                        state.messages[chatId] = [...state.messages[chatId], message];
-                    } else {
-                        state.messages[chatId] = [state.messages[chatId], message];
-                    }
+                    state.messages[chatId] = Array.isArray(state.messages[chatId])
+                        ? [...state.messages[chatId], message]
+                        : [state.messages[chatId], message];
                 } else {
                     state.messages[chatId] = [message];
                 }
@@ -103,7 +100,6 @@ export const {
 
 export const selectChats = (state) => state.messages.chats;
 export const selectMessages = (state) => state.messages.messages;
-
 export const selectSelectedChatId = (state) => state.messages.selectedChatId;
 export const selectParticipant = (state) => state.messages.participant;
 export const selectText = (state) => state.messages.text;

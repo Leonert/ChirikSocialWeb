@@ -54,8 +54,12 @@ public class MessageServiceImpl implements MessageService {
   public ChatDto getChatById(int chatId) {
     Chat chat = chatRepository.findById(chatId)
             .orElseThrow(() -> new EntityNotFoundException("Chat not found with id: " + chatId));
-    return convertToChatDto(chat);
+    ChatDto chatDto = convertToChatDto(chat);
+    List<MessageDto> messages = getMessagesByChatId(chatId);
+    chatDto.setMessages(messages);
+    return chatDto;
   }
+
 
   private ChatDto convertToChatDto(Chat chat) {
     return modelMapper.map(chat, ChatDto.class);
@@ -140,17 +144,17 @@ public class MessageServiceImpl implements MessageService {
 
     Chat chat = new Chat();
     chat.setUsers(Arrays.asList(recipient, sender));
-    chatRepository.save(chat);
+    chat = chatRepository.save(chat); // Save the chat and obtain the persisted instance
 
     message.setChat(chat);
     message.setRecipient(recipient);
     message.setSender(sender);
-    message.setId(chatDto.getChatId());
 
     message = messageRepository.save(message);
 
     return convertToMessageDto(message);
   }
+
 
   @Override
   public List<MessageDto> getMessagesByChatId(int chatId) {
@@ -159,6 +163,8 @@ public class MessageServiceImpl implements MessageService {
             .map(this::convertToMessageDto)
             .collect(Collectors.toList());
   }
+
+
 
   private MessageDto convertToMessageDto(Message message) {
     return modelMapper.map(message, MessageDto.class);

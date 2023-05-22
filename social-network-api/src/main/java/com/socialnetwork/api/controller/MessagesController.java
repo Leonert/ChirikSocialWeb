@@ -2,7 +2,9 @@ package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.chat.ChatDto;
 import com.socialnetwork.api.dto.chat.MessageDto;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.models.base.chat.Chat;
+import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -10,15 +12,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
 public class MessagesController {
   private final MessageService messageService;
   private final ModelMapper modelMapper;
+  private final UserRepository userRepository;
 
   @GetMapping
   public ResponseEntity<List<MessageDto>> getAllMessages() {
@@ -66,11 +69,9 @@ public class MessagesController {
     messageService.markAsRead(id);
     return ResponseEntity.noContent().build();
   }
-  @PostMapping("/chats/create")
-  public ResponseEntity<ChatDto> createChat() {
-    MessageDto messageDto = new MessageDto();
-    ChatDto chatDto = new ChatDto();
 
+  @PostMapping("/chats/create")
+  public ResponseEntity<ChatDto> createChat(@RequestBody MessageDto messageDto, @RequestBody ChatDto chatDto) {
     MessageDto createdMessageDto = messageService.createChat(messageDto, chatDto);
 
     chatDto.setChatId(createdMessageDto.getChatId());
@@ -78,8 +79,6 @@ public class MessagesController {
 
     return ResponseEntity.created(URI.create("/api/messages/chats/" + createdMessageDto.getChatId())).body(chatDto);
   }
-
-
 
   @PostMapping("/chats/{chatId}/add-message")
   public ResponseEntity<MessageDto> addMessageToChat(@PathVariable("chatId") int chatId, @RequestBody MessageDto.CreateMessageRequestDto requestDto) {
@@ -95,5 +94,4 @@ public class MessagesController {
     MessageDto createdMessageDto = messageService.addMessage(messageDto, chatDto);
     return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getMessageId())).body(createdMessageDto);
   }
-
 }

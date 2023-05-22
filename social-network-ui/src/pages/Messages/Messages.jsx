@@ -64,20 +64,27 @@ const Messages = () => {
     dispatch(toggleModalWindow());
   };
 
-  const handleListItemClick = async (chatId) => {
+  const handleListItemClick = async (chat) => {
+    const chatId = chat.chatId;
+    console.log(chatId);
+
     dispatch(setSelectedChatId(chatId));
 
     try {
       await dispatch(fetchChatMessages(chatId));
       const chatMessages = await ChatApi.getChatMessages(chatId);
-      const lastMessage = chatMessages.message;
+      const lastMessage = chatMessages[chatMessages.length - 1];
 
       scrollToBottom();
-      dispatch(participant());
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error('Error fetching chat messages:', error);
     }
   };
+
+
+
+
+
 
   const onSendMessage = async () => {
     if (text !== '') {
@@ -186,7 +193,7 @@ const Messages = () => {
                               className={classes.listItem}
                               id={participant && participant.id === chat.id ? 'selected' : ''}
                               selected={participant && participant.id === chat.id}
-                              onClick={() => handleListItemClick(chat.id)}
+                              onClick={() => handleListItemClick(chat.id)} // Make sure chat.id is not undefined
                           >
                             <div className={classes.userWrapper}>
                               <Avatar

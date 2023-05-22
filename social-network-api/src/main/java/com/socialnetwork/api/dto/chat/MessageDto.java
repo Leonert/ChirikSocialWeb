@@ -29,8 +29,6 @@ public class MessageDto {
   public static class CreateMessageRequestDto {
     private boolean isRead;
     private String message;
-    private int recipientId;
-    private int senderId;
     private int messageId;
     private int chatId;
     private String keyword;

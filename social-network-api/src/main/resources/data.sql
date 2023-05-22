@@ -33,6 +33,17 @@ insert into posts (created_date, image, text, user_id, original_post_id) values 
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 20:15:30', null, 'Retweet post 2 with comment for post 2 from user4', 4, 2);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 21:15:30', null, null, 1, 7);
 
+--  message_id chat_id   is_read sender_id recipient_id
+
+INSERT INTO CHATS (chat_id) VALUES (1);
+INSERT INTO CHATS (chat_id) VALUES (2);
+
+INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, USERNAME, RECIPIENT_ID, SENDER_ID)
+VALUES
+    (1, 2, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP, 'username_here', 2, 3),
+    (2, 2, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP, 'username_here', 2, 3),
+    (3, 2, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 'username_here', 2, 3);
+
 
 
 insert into follows values (1, 2);
