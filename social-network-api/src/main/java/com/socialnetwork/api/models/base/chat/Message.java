@@ -1,33 +1,26 @@
-package com.socialnetwork.api.models.base;
+package com.socialnetwork.api.models.base.chat;
 
-
+import com.socialnetwork.api.models.base.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-
+import javax.persistence.*;
 import java.time.LocalDateTime;
-
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "messages")
 public class Message {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "messages_seq")
-  @SequenceGenerator(name = "messages_seq", sequenceName = "messages_seq", initialValue = 100, allocationSize = 1)
-  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "message_id")
   private int id;
 
-  @Column(name = "chat_id")
-  private int chatId;
+  @ManyToOne
+  @JoinColumn(name = "chat_id")
+  private Chat chat;
+
 
   @Column(name = "username")
   private String username;

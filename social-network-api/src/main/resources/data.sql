@@ -20,7 +20,6 @@ insert into users (bio, birth_date, created_date, email_address, is_enabled, loc
 insert into users (bio, birth_date, created_date, email_address, is_enabled, location, name, password, profile_background_image, profile_image, username, website) values ('Varvara bio', '2007-12-03 10:15:30', current_date, 'varvara@gmail.com', true, 'location', 'Varvara V.', '$2a$10$FgDVYsJxJNu6CCwpprnnKOkT8by0Uf9aX6q5MNdh/LA6qc80spZ86', null, null,  'varvara', 'website');
 insert into users (bio, birth_date, created_date, email_address, is_enabled, location, name, password, profile_background_image, profile_image, username, website) values ('Vladlena bio', '2007-12-03 10:15:30', current_date, 'vladlena@gmail.com', true, 'location', 'Vladlena V.', '$2a$10$FgDVYsJxJNu6CCwpprnnKOkT8by0Uf9aX6q5MNdh/LA6qc80spZ86', null, null,  'vladlena', 'website');
 
-
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 10:15:30', null, 'Original post for user 1', 1, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 11:15:30', null, 'Another original post for user 1', 1, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 12:15:30', null, 'Reply to post1 from user2', 2, 1);

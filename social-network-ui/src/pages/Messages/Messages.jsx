@@ -17,7 +17,7 @@ import {
   selectMessages,
   selectParticipant,
   selectSelectedChatId,
-  selectText, selectVisibleModalWindow, sendMessage, setSelectedChatId, setText, toggleModalWindow
+  selectText, selectVisibleModalWindow, sendMessage, setMessage, setSelectedChatId, setText, toggleModalWindow
 } from "../../features/slices/massagesSlise";
 import {useDispatch, useSelector} from "react-redux";
 import classNames from "classnames";
@@ -27,9 +27,7 @@ import {formatChatMessageDate} from "../../util/formatDate";
 
 const Messages = () => {
   const classes = useMessagesStyles();
-  const chatEndRef = useRef(null);
   const dispatch = useDispatch();
-
   const chats = useSelector(selectChats);
   const messages = useSelector(selectMessages);
   const selectedChatId = useSelector(selectSelectedChatId);
@@ -37,8 +35,16 @@ const Messages = () => {
   const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
 
+  const chatEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const handleSearchChange = async (event) => {
-    event.preventDefault(); // Остановка стандартного поведения формы
+    event.preventDefault();
     const keyword = event.target.value;
     dispatch(setText(keyword));
 
@@ -47,12 +53,6 @@ const Messages = () => {
       dispatch(fetchChat(userList));
     } catch (error) {
       console.error('Error searching users:', error);
-    }
-  };
-
-  const scrollToBottom = () => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -66,14 +66,14 @@ const Messages = () => {
 
   const handleListItemClick = async (chatId) => {
     dispatch(setSelectedChatId(chatId));
+
     try {
       await dispatch(fetchChatMessages(chatId));
       const chatMessages = await ChatApi.getChatMessages(chatId);
       const lastMessage = chatMessages.message;
 
       scrollToBottom();
-      const selectedChat = chats.find((chat) => chat.id === chatId);
-      dispatch(participant(selectedChat)); // Оновити значення participant з обраним чатом
+      dispatch(participant());
     } catch (e) {
       console.error(e);
     }
@@ -81,11 +81,11 @@ const Messages = () => {
 
   const onSendMessage = async () => {
     if (text !== '') {
-      let selectedChat = chats.find((chat) => chat.id === selectedChatId);
+      const selectedChat = chats.find((chat) => chat.id === selectedChatId);
       if (selectedChat) {
         const existingChat = chats.find((chat) => chat.recipientId === selectedChat.recipientId);
         const newMessage = {
-          id: existingChat ? existingChat.id : selectedChat.id, // Використовуємо ID існуючого чату, якщо він вже існує
+          id: existingChat ? existingChat.id : selectedChat.id,
           message: text,
           read: false,
           recipientId: selectedChat.recipientId,
@@ -97,8 +97,15 @@ const Messages = () => {
         try {
           const createdMessage = await ChatApi.sendMessage(newMessage);
           dispatch(sendMessage(createdMessage));
+
+          const updatedMessages = {
+            ...messages,
+            [selectedChat.id]: [...(messages[selectedChat.id] || []), createdMessage],
+          };
+          dispatch(setMessage(updatedMessages));
+
           dispatch(setText(''));
-          dispatch(setSelectedChatId(selectedChatId));
+          dispatch(setSelectedChatId(selectedChat.id));
           scrollToBottom();
         } catch (error) {
           console.error('Error sending message:', error);
@@ -108,6 +115,8 @@ const Messages = () => {
       }
     }
   };
+
+
 
 
   useEffect(() => {
@@ -123,13 +132,12 @@ const Messages = () => {
     scrollToBottom();
   }, [messages]);
 
-  function isValidDate(date) {
-    return date instanceof Date && !isNaN(date);
-  }
-
   const handleInputChange = (event) => {
     dispatch(setText(event.target.value));
   };
+  function isValidDate(date) {
+    return date instanceof Date && !isNaN(date);
+  }
 
   return (
       <>
@@ -244,7 +252,7 @@ const Messages = () => {
                     </div>
                   </Paper>
                   <Paper className={classes.chat}>
-                    {messages.map((message) => (
+                    {Object.values(messages).map((message) => (
                         <React.Fragment key={message.id}>
                           {message.author ? (
                               <div className={classes.tweetContainer}>
@@ -306,3 +314,4 @@ const Messages = () => {
 };
 
 export default Messages;
+

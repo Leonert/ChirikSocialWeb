@@ -4,23 +4,18 @@ import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.models.base.chat.Chat;
+import com.socialnetwork.api.models.base.chat.Message;
 import lombok.Getter;
 import lombok.Setter;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.GenerationType;
-import javax.persistence.Transient;
-
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-
 @Getter
 @Setter
 @Entity
@@ -92,13 +87,15 @@ public class User {
   @OneToMany(mappedBy = "recipient")
   private List<Notification> notifications;
 
+  @Column(name = "is_enabled")
   private boolean isEnabled;
 
   @Transient
   private boolean isCurrUserFollower;
 
+  @ManyToMany(mappedBy = "users")
+  private List<Chat> chats;
   public User() {
-
   }
 
   public User(int id) {
@@ -108,4 +105,14 @@ public class User {
   private void setId(int id) {
     this.id = id;
   }
+  public List<Chat> getChats() {
+    List<Chat> chats = new ArrayList<>();
+
+    if (chats != null) {
+      chats.addAll(this.chats);
+    }
+
+    return chats;
+  }
+
 }

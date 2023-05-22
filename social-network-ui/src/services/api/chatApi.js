@@ -1,5 +1,4 @@
 import axiosIns from "../../axiosInstance";
-import error from "eslint-plugin-react/lib/util/error";
 
 
 export const ChatApi = {
@@ -7,14 +6,14 @@ export const ChatApi = {
         console.log('Message to be sent:', message);
 
         try {
-            const response = await axiosIns.post(`api/messages/addMessage`, {
-                id: message.id,
+            const response = await axiosIns.post(`/api/messages/addMessage`, {
                 message: message.message,
                 read: message.read,
                 recipientId: message.recipientId,
                 senderId: message.senderId,
                 timestamp: message.timestamp,
                 username: message.username,
+                chatId: message.chatId,
             });
 
             const createdMessage = response.data;
@@ -30,8 +29,7 @@ export const ChatApi = {
 
     getUserChats: async () => {
         try {
-            const response = await axiosIns.get(`api/messages`);
-
+            const response = await axiosIns.get(`/api/messages`);
 
             return response.data;
         } catch (error) {
@@ -43,7 +41,7 @@ export const ChatApi = {
 
     createChat: async (userId) => {
         try {
-            const response = await axiosIns.get(`api/messages/create/${userId}`);
+            const response = await axiosIns.get(`/api/messages/create/${userId}`);
 
             return response.data;
         } catch (error) {
@@ -55,7 +53,7 @@ export const ChatApi = {
 
     getAllMessages: async () => {
         try {
-            const response = await axiosIns.get(`api/messages`);
+            const response = await axiosIns.get(`/api/messages`);
 
             return response.data;
         } catch (error) {
@@ -67,10 +65,10 @@ export const ChatApi = {
 
     getChatMessages: async (chatId) => {
         try {
-            const response = await axiosIns.get(`api/messages/${chatId}`);
+            const response = await axiosIns.get(`/api/messages/${chatId}`);
             console.log('Message sent successfully');
             console.log('Created Message:', chatId);
-            console.log(response)
+            console.log(response);
 
             return response.data;
         } catch (error) {
@@ -82,7 +80,7 @@ export const ChatApi = {
 
     readChatMessages: async (chatId) => {
         try {
-            await axiosIns.put(`api/messages/${chatId}/read`);
+            await axiosIns.put(`/api/messages/${chatId}/read`);
         } catch (error) {
             console.error('Error marking chat messages as read:', error);
         }
@@ -90,7 +88,7 @@ export const ChatApi = {
 
     getUserList: async (keyword) => {
         try {
-            const response = await axiosIns.get(`api/messages/users/search?keyword=${keyword}`);
+            const response = await axiosIns.get(`/api/messages/users/search?keyword=${keyword}`);
 
             return response.data;
         } catch (error) {

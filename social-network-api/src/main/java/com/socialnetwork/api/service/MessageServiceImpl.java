@@ -1,9 +1,12 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.dto.chat.ChatDto;
+import com.socialnetwork.api.dto.chat.MessageDto;
 import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.models.base.Message;
 import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.models.base.chat.Chat;
+import com.socialnetwork.api.models.base.chat.Message;
+import com.socialnetwork.api.repository.ChatRepository;
 import com.socialnetwork.api.repository.MessageRepository;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +15,17 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
   private final MessageRepository messageRepository;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
+  private final ChatRepository chatRepository;
 
   @Override
   public List<MessageDto> getAllMessages() {
@@ -30,6 +34,7 @@ public class MessageServiceImpl implements MessageService {
             .map(this::convertToMessageDto)
             .collect(Collectors.toList());
   }
+
 
   @Override
   public List<UserDto.Response.Listing> searchUsers(String keyword) {
@@ -45,44 +50,53 @@ public class MessageServiceImpl implements MessageService {
             .orElseThrow(() -> new EntityNotFoundException("Message not found with id: " + id));
     return convertToMessageDto(message);
   }
+  @Override
+  public ChatDto getChatById(int chatId) {
+    Chat chat = chatRepository.findById(chatId)
+            .orElseThrow(() -> new EntityNotFoundException("Chat not found with id: " + chatId));
+    return convertToChatDto(chat);
+  }
+
+  private ChatDto convertToChatDto(Chat chat) {
+    return modelMapper.map(chat, ChatDto.class);
+  }
+
 
   @Override
-  public MessageDto addMessage(MessageDto messageDto) {
-    User user = userRepository.findById(messageDto.getSenderId())
+  public MessageDto addMessage(MessageDto messageDto, ChatDto chatDto) {
+    User sender = userRepository.findById(messageDto.getSenderId())
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + messageDto.getSenderId()));
 
-    Optional<Message> existingMessageOptional = messageRepository.findById(messageDto.getId());
+    User recipient = userRepository.findById(messageDto.getRecipientId())
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + messageDto.getRecipientId()));
+
+    Optional<Message> existingMessageOptional = messageRepository.findFirstByidOrderByTimestampDesc(chatDto.getChatId());
     if (existingMessageOptional.isPresent()) {
       Message existingMessage = existingMessageOptional.get();
       existingMessage.setMessage(messageDto.getMessage());
       existingMessage.setTimestamp(LocalDateTime.now());
       existingMessage.setRead(false);
-      existingMessage.setRecipient(user);
-      existingMessage.setSender(user);
-      existingMessage.setChatId(messageDto.getChatId());
+      existingMessage.setRecipient(recipient);
+      existingMessage.setSender(sender);
 
       existingMessage = messageRepository.save(existingMessage);
 
-      return convertToDto(existingMessage);
+      return convertToMessageDto(existingMessage);
     }
 
     Message message = new Message();
-    message.setRecipient(user);
-    message.setSender(user);
+    message.setRecipient(recipient);
+    message.setSender(sender);
     message.setMessage(messageDto.getMessage());
     message.setTimestamp(LocalDateTime.now());
     message.setRead(false);
-    message.setChatId(messageDto.getChatId());
+    message.setId(chatDto.getChatId());
 
     message = messageRepository.save(message);
 
-    return convertToDto(message);
+    return convertToMessageDto(message);
   }
 
-
-  private MessageDto convertToDto(Message message) {
-    return modelMapper.map(message, MessageDto.class);
-  }
 
   @Override
   public MessageDto updateMessage(MessageDto messageDto) {
@@ -113,7 +127,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public MessageDto createMessage(MessageDto messageDto) {
+  public MessageDto createChat(MessageDto messageDto, ChatDto chatDto) {
     Message message = new Message();
     message.setRead(false);
     message.setMessage(messageDto.getMessage());
@@ -124,21 +138,34 @@ public class MessageServiceImpl implements MessageService {
     User sender = userRepository.findById(messageDto.getSenderId())
             .orElseThrow(() -> new EntityNotFoundException("Sender not found with id: " + messageDto.getSenderId()));
 
+    Chat chat = new Chat();
+    chat.setUsers(Arrays.asList(recipient, sender));
+    chatRepository.save(chat);
+
+    message.setChat(chat);
     message.setRecipient(recipient);
     message.setSender(sender);
+    message.setId(chatDto.getChatId());
 
     message = messageRepository.save(message);
 
-    messageDto.setTimestamp(message.getTimestamp());
-
-    return messageDto;
+    return convertToMessageDto(message);
   }
 
-  public MessageDto convertToMessageDto(Message message) {
+  @Override
+  public List<MessageDto> getMessagesByChatId(int chatId) {
+    List<Message> messages = messageRepository.findByChat_ChatIdOrderByTimestampDesc(chatId);
+    return messages.stream()
+            .map(this::convertToMessageDto)
+            .collect(Collectors.toList());
+  }
+
+  private MessageDto convertToMessageDto(Message message) {
     return modelMapper.map(message, MessageDto.class);
   }
 
-  public Message convertToMessage(MessageDto messageDto) {
+  private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
   }
 }
+

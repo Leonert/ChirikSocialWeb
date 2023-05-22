@@ -13,6 +13,8 @@ import { subscriptionsReducer } from '../features/slices/subscriptionsSlice';
 import { followersReducer } from '../features/slices/userDatas/followersSlice';
 import { followingReducer } from '../features/slices/userDatas/followingSlice';
 import { notificationsReducer } from '../features/slices/userDatas/notificationsSlice';
+import messagesSlice from '../features/slices/massagesSlise';
+
 
 export const store = configureStore({
   reducer: {
@@ -29,5 +31,6 @@ export const store = configureStore({
     customModal: customModalReducer,
     setting: settingSlice,
     search: searchSlice,
+    messages: messagesSlice
   },
 });

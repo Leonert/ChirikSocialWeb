@@ -1,73 +1,56 @@
 package com.socialnetwork.api.controller;
 
-import com.socialnetwork.api.dto.MessageDto;
-import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.models.base.User;
-import com.socialnetwork.api.repository.UserRepository;
+import com.socialnetwork.api.dto.chat.ChatDto;
+import com.socialnetwork.api.dto.chat.MessageDto;
+import com.socialnetwork.api.models.base.chat.Chat;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.reflect.Type;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/messages")
+@RequiredArgsConstructor
 public class MessagesController {
   private final MessageService messageService;
   private final ModelMapper modelMapper;
-  private final UserRepository userRepository;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<MessageDto> getMessageById(@PathVariable int id) {
-    MessageDto messageDto = messageService.getMessageById(id);
-    return ResponseEntity.ok(messageDto);
+  @GetMapping
+  public ResponseEntity<List<MessageDto>> getAllMessages() {
+    List<MessageDto> messages = messageService.getAllMessages();
+    return ResponseEntity.ok(messages);
   }
 
-  @GetMapping()
-  public ResponseEntity<List<MessageDto>> getAllMessages() {
-    List<MessageDto> messageDtos = messageService.getAllMessages();
-
-    messageDtos.forEach(messageDto -> {
-      System.out.println("ID: " + messageDto.getId());
-      System.out.println("Message: " + messageDto.getMessage());
-    });
-
-    return ResponseEntity.ok(messageDtos);
+  @GetMapping("/{id}")
+  public ResponseEntity<MessageDto> getMessageById(@PathVariable("id") int id) {
+    MessageDto message = messageService.getMessageById(id);
+    return ResponseEntity.ok(message);
   }
 
   @PostMapping("/create")
-  public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto) {
-    MessageDto createdMessageDto = messageService.createMessage(messageDto);
-    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
+  public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto.CreateMessageRequestDto requestDto) {
+    MessageDto messageDto = modelMapper.map(requestDto, MessageDto.class);
+    ChatDto chatDto = new ChatDto(requestDto.getChatId());
+
+    MessageDto createdMessageDto = messageService.createChat(messageDto, chatDto);
+    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getMessageId())).body(createdMessageDto);
   }
 
+
   @PutMapping("/{id}")
-  public ResponseEntity<MessageDto> updateMessage(@PathVariable int id, @RequestBody MessageDto messageDto) {
-    messageDto.setId(id);
+  public ResponseEntity<MessageDto> updateMessage(@PathVariable("id") int id, @RequestBody MessageDto messageDto) {
+    messageDto.setMessageId(id);
     MessageDto updatedMessageDto = messageService.updateMessage(messageDto);
     return ResponseEntity.ok(updatedMessageDto);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteMessage(@PathVariable int id) {
+  public ResponseEntity<Void> deleteMessage(@PathVariable("id") int id) {
     messageService.deleteMessage(id);
     return ResponseEntity.noContent().build();
   }
@@ -78,40 +61,39 @@ public class MessagesController {
     return ResponseEntity.ok(messages);
   }
 
-  @PutMapping("/{id}/read")
-  public ResponseEntity<Void> markMessageAsRead(@PathVariable int id) {
+  @PutMapping("/{id}/mark-as-read")
+  public ResponseEntity<Void> markAsRead(@PathVariable("id") int id) {
     messageService.markAsRead(id);
     return ResponseEntity.noContent().build();
   }
+  @PostMapping("/chats/create")
+  public ResponseEntity<ChatDto> createChat() {
+    MessageDto messageDto = new MessageDto();
+    ChatDto chatDto = new ChatDto();
 
-  @GetMapping("/users")
-  public ResponseEntity<List<UserDto.Response.Listing>> getAllUsers() {
-    List<User> users = userRepository.findAll();
-    List<UserDto.Response.Listing> userDtos = users.stream()
-            .map(user -> modelMapper.map(user, UserDto.Response.Listing.class))
-            .collect(Collectors.toList());
+    MessageDto createdMessageDto = messageService.createChat(messageDto, chatDto);
 
-    return ResponseEntity.ok(userDtos);
+    chatDto.setChatId(createdMessageDto.getChatId());
+    chatDto.addMessage(createdMessageDto);
+
+    return ResponseEntity.created(URI.create("/api/messages/chats/" + createdMessageDto.getChatId())).body(chatDto);
   }
 
-  @PostMapping("/addMessage")
-  public ResponseEntity<MessageDto> addMessage(@RequestBody MessageDto messageDto) {
-    MessageDto createdMessageDto = messageService.addMessage(messageDto);
-    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getId())).body(createdMessageDto);
+
+
+  @PostMapping("/chats/{chatId}/add-message")
+  public ResponseEntity<MessageDto> addMessageToChat(@PathVariable("chatId") int chatId, @RequestBody MessageDto.CreateMessageRequestDto requestDto) {
+    ChatDto chatDto = new ChatDto(chatId);
+    List<MessageDto> chatMessages = messageService.getMessagesByChatId(chatId);
+    if (chatMessages.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    MessageDto messageDto = modelMapper.map(requestDto, MessageDto.class);
+    messageDto.setChatId(chatId);
+
+    MessageDto createdMessageDto = messageService.addMessage(messageDto, chatDto);
+    return ResponseEntity.created(URI.create("/api/messages/" + createdMessageDto.getMessageId())).body(createdMessageDto);
   }
 
-  @GetMapping("/users/search")
-  public ResponseEntity<Page<UserDto.Response.Listing>> searchUsers(
-          @RequestParam("keyword") String keyword,
-          Pageable pageable
-  ) {
-    Page<User> usersPage = userRepository.findByUsernameContainingIgnoreCaseOrNameContaining(keyword, keyword, pageable);
-    List<UserDto.Response.Listing> userDtos = usersPage.getContent().stream()
-            .map(user -> modelMapper.map(user, UserDto.Response.Listing.class))
-            .collect(Collectors.toList());
-
-    Page<UserDto.Response.Listing> userDtosPage = new PageImpl<>(userDtos, pageable, usersPage.getTotalElements());
-
-    return ResponseEntity.ok(userDtosPage);
-  }
 }

@@ -1,17 +1,21 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.dto.MessageDto;
+import com.socialnetwork.api.dto.chat.ChatDto;
+import com.socialnetwork.api.dto.chat.MessageDto;
 import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.models.base.Message;
-
+import com.socialnetwork.api.models.base.chat.Message;
 import java.util.List;
 
 public interface MessageService {
-  MessageDto getMessageById(int id);
-
   List<MessageDto> getAllMessages();
 
-  MessageDto createMessage(MessageDto messageDto);
+  List<UserDto.Response.Listing> searchUsers(String keyword);
+
+  MessageDto getMessageById(int id);
+
+  ChatDto getChatById(int chatId);
+
+  MessageDto addMessage(MessageDto messageDto, ChatDto chatDto);
 
   MessageDto updateMessage(MessageDto messageDto);
 
@@ -21,11 +25,7 @@ public interface MessageService {
 
   void markAsRead(int id);
 
-  MessageDto convertToMessageDto(Message message);
+  MessageDto createChat(MessageDto messageDto, ChatDto chatDto);
 
-  Message convertToMessage(MessageDto messageDto);
-
-  List<UserDto.Response.Listing> searchUsers(String keyword);
-  MessageDto addMessage(MessageDto messageDto);
-
+  List<MessageDto> getMessagesByChatId(int chatId);
 }
