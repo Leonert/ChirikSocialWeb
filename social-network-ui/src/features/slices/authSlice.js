@@ -70,7 +70,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      localStorage.setItem('jwt', action.payload.jwt);
+      localStorage.setItem('token', action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
       state.loading = false;
@@ -85,7 +85,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      localStorage.setItem('jwt', action.payload.jwt);
+      localStorage.setItem('token', action.payload.jwt);
     },
     [loginUserWithJwt.rejected]: (state, action) => {
       state.loading = false;
