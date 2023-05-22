@@ -23,7 +23,7 @@ axiosIns.interceptors.request.use(
 //   (response) => response,
 //   (error) => {
 //     if (error.response.status === 401) {
-//       localStorage.removeItem('token');
+//       localStorage.removeItem(TOKEN);
 //     }
 
 //     return Promise.reject(error);
