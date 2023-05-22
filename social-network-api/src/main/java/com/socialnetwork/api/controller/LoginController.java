@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
+import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.CONFIRMATION_REQUIRED;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
@@ -58,8 +59,11 @@ public class LoginController {
   @GetMapping("jwt")
   public ResponseEntity<?> loginByToken(@RequestAttribute(USERNAME_ATTRIBUTE) String username, HttpServletRequest request)
         throws NoUserWithSuchCredentialsException {
-    String auth = request.getHeader(AUTHORIZATION_HEADER);
+    String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+    if (authHeader.startsWith(BEARER)) {
+      authHeader = authHeader.substring(BEARER.length());
+    }
     User user = userService.findByUsername(username);
-    return ResponseEntity.ok(userMapper.convertToAccountData(user, auth));
+    return ResponseEntity.ok(userMapper.convertToAccountData(user, authHeader));
   }
 }
