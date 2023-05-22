@@ -26,7 +26,7 @@ import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 public class JwtAuthFilter extends OncePerRequestFilter {
   private final JwtTokenUtil jwtTokenUtil;
   private final List<String> globalPaths =
-        new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "api/users",
+        new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "/api/users",
               "/api/search"));
 
   @Override

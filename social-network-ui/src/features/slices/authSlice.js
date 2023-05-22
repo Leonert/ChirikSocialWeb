@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../axiosInstance';
+import { TOKEN } from '../../util/constants';
 
 export const loginUserWithJwt = createAsyncThunk('auth/loginUserWithJwt', async (_, { rejectWithValue }) => {
   try {
@@ -70,7 +71,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      localStorage.setItem('jwt', action.payload.jwt);
+      localStorage.setItem(TOKEN, action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
       state.loading = false;
@@ -85,7 +86,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      localStorage.setItem('jwt', action.payload.jwt);
+      localStorage.setItem(TOKEN, action.payload.jwt);
     },
     [loginUserWithJwt.rejected]: (state, action) => {
       state.loading = false;

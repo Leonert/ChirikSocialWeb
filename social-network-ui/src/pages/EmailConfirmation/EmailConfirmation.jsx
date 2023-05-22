@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
+import { TOKEN } from '../../util/constants';
 import useEmailConfirmationStyles from './EmailConfirmationStyles';
 
 const EmailConfirmation = () => {
@@ -36,7 +37,7 @@ const EmailConfirmation = () => {
       setIsLoading(false);
     };
 
-    const token = searchParams.get('token');
+    const token = searchParams.get(TOKEN);
 
     if (!token) {
       setIsLoading(false);
