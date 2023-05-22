@@ -6,7 +6,7 @@ export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { reje
   try {
     const { data } = await axiosIns({
       method: 'GET',
-      url: `api/posts?p=${portion}&n=15`,
+      url: `api/posts?p=${portion}&n=20`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -45,6 +45,9 @@ const homeSlice = createSlice({
         state.post.push(action.payload);
       }
     },
+    addOnePost: (state, action) => {
+      state.post.unshift(action.payload);
+    },
     getPostId: (state, actions) => {
       state.postId = actions.payload;
       state.modalUser = true;
@@ -63,19 +66,38 @@ const homeSlice = createSlice({
     clearPosts: (state) => {
       state.post = [];
     },
+
     bookmarksPost: (state, action) => {
       const { postId, bookmarksNumber } = action.payload;
 
-      state.post = state.post.map((post) =>
-        +post.id === +postId ? { ...post, bookmarked: !post.bookmarked, bookmarksNumber } : post
-      );
+      state.post = state.post.map((post) => {
+        if (+post.id === +postId) {
+          return { ...post, bookmarked: !post.bookmarked, bookmarksNumber };
+        }
+        if (post.originalPost && +post.originalPost.id === +postId) {
+          return {
+            ...post,
+            originalPost: { ...post.originalPost, bookmarksNumber },
+          };
+        }
+        return post;
+      });
     },
     likesPost: (state, action) => {
       const { postId, likesNumber } = action.payload;
 
-      state.post = state.post.map((post) =>
-        +post.id === +postId ? { ...post, liked: !post.liked, likesNumber } : post
-      );
+      state.post = state.post.map((post) => {
+        if (+post.id === +postId) {
+          return { ...post, liked: !post.liked, likesNumber };
+        }
+        if (post.originalPost && +post.originalPost.id === +postId) {
+          return {
+            ...post,
+            originalPost: { ...post.originalPost, likesNumber },
+          };
+        }
+        return post;
+      });
     },
   },
 });
@@ -93,4 +115,5 @@ export const {
   bookmarksPost,
   bookmarksPostNum,
   likesPost,
+  addOnePost,
 } = homeSlice.actions;

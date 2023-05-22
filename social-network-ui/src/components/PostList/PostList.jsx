@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { bookmarksPost, getPostId, likesPost, openReplayModal } from '../../features/slices/homeSlice';
+import { addOnePost, bookmarksPost, getPostId, likesPost, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
@@ -14,8 +14,10 @@ export default function PostList() {
   const classes = usePostStyle();
   const dispatch = useDispatch();
 
-  const handleRetweet = (id) => {
-    axiosIns.post('/api/posts', { originalPost: id });
+  const handleRetweet = (props) => {
+    axiosIns.post('/api/posts', { originalPost: props }).then((response) => {
+      dispatch(addOnePost(response.data));
+    });
   };
 
   const handleReplay = (props) => {
@@ -99,7 +101,7 @@ export default function PostList() {
                 content={post.originalPost.text}
                 data={post.originalPost.createdDate}
                 image={post.originalPost.image}
-                liked={post.liked}
+                liked={post.originalPost.liked}
                 bookmarked={post.originalPost.bookmarked}
                 retweeted={post.originalPost.retweeted}
                 bookmark={post.originalPost.bookmarksNumber}

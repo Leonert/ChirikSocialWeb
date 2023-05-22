@@ -42,7 +42,7 @@ function Home() {
       <Grid item xs={7}>
         <HeaderMain />
         <ButtonShowMore />
-        <AATestPostComponent />
+        {/* <AATestPostComponent /> */}
         {recommendation && <PostList />}
         {following && <Following />}
         {modalUserState && <ModalUser />}

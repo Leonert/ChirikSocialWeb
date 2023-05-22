@@ -6,6 +6,7 @@ import { alpha, styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import axiosIns from '../../axiosInstance';
 import SearchWrapper from './SearchWrapper';
 
 const Search = styled('div')(({ theme }) => ({
@@ -40,12 +41,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchField() {
   const searchResult = useSelector((state) => state.search.searchResult);
- 
+
   const [searchText, setSearchText] = useState('');
   const handleInputChange = (event) => {
+    axiosIns.get(`/api/search/user/${event.target.value}`, {}).then((response) => {
+      const LikeNumber = response.data;
+      console.log(LikeNumber);
+      // dispatch(
+      //   likesPost({
+      //     postId: props,
+      //     likesNumber: LikeNumber,
+      //   })
+      // );
+    });
     setSearchText(event.target.value);
   };
-  
+
   return (
     <Box>
       <Toolbar>

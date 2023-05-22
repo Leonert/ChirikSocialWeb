@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
-import { GetPosts, clearPosts, getPost } from '../../../../features/slices/homeSlice';
+import { addOnePost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
@@ -60,19 +60,14 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
 
   const handleClickAddTweet = async () => {
     const base64Image = fileInputRef.current.files[0] ? await getBase64Image() : null;
-    await axiosIns.post('/api/posts', { text, image: base64Image });
+    await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
+      dispatch(addOnePost(response.data));
+    });
 
     setText('');
     setVisiblePoll(false);
     setSelectedScheduleDate(null);
     onCloseModal();
-
-    dispatch(GetPosts(0)).then((result) => {
-      if (GetPosts.fulfilled.match(result)) {
-        dispatch(clearPosts());
-        dispatch(getPost(result.payload));
-      }
-    });
   };
 
   const handleClickQuoteTweet = async () => {
