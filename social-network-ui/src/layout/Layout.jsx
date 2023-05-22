@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 import { BottomLine } from '../components/BottomLine/BottomLine';
-// import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
 import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
 import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { loginUserWithJwt } from '../features/slices/authSlice';
+import { TOKEN } from '../util/constants';
 import { useLayoutStyles } from './LayoutStyles';
 
 export const Layout = () => {
@@ -17,7 +17,7 @@ export const Layout = () => {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(TOKEN);
 
     if (token) {
       dispatch(loginUserWithJwt());
