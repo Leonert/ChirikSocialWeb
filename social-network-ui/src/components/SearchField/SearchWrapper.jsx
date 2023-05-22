@@ -25,7 +25,7 @@ const SearchWrapper = () => {
             key={res.id}
             id={res.id}
             name={res.name}
-            nickname={res.nickname}
+            nickname={res.username}
             handelClick={(e) => dispatch(removeResultItem(res.id))}
           />
         ))}

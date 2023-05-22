@@ -5,8 +5,10 @@ import Toolbar from '@mui/material/Toolbar';
 import { alpha, styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
+import { addResult } from '../../features/slices/searchSlice';
 import SearchWrapper from './SearchWrapper';
 
 const Search = styled('div')(({ theme }) => ({
@@ -41,13 +43,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchField() {
   const searchResult = useSelector((state) => state.search.searchResult);
-
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const handleInputChange = (event) => {
-    axiosIns.get(`/api/search/user/${event.target.value}`, {}).then((response) => {
-      const LikeNumber = response.data;
-      console.log(LikeNumber);
-   
+    axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
+      dispatch(addResult(response.data));
+      console.log(response.data);
     });
     setSearchText(event.target.value);
   };
