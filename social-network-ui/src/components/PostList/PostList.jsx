@@ -66,7 +66,6 @@ export default function PostList() {
             username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
-            username={post.author.username}
             retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
@@ -93,7 +92,6 @@ export default function PostList() {
                 username={post.originalPost.author.username}
                 avatar={post.originalPost.author.profileImage}
                 name={post.originalPost.author.name}
-                username={post.originalPost.author.username}
                 retweet={post.originalPost.retweetsNumber}
                 like={post.originalPost.likesNumber}
                 view={post.originalPost.view}
