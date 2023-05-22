@@ -47,12 +47,7 @@ export default function SearchField() {
     axiosIns.get(`/api/search/user/${event.target.value}`, {}).then((response) => {
       const LikeNumber = response.data;
       console.log(LikeNumber);
-      // dispatch(
-      //   likesPost({
-      //     postId: props,
-      //     likesNumber: LikeNumber,
-      //   })
-      // );
+   
     });
     setSearchText(event.target.value);
   };
