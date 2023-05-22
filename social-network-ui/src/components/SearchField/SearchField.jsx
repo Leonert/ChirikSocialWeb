@@ -47,7 +47,7 @@ export default function SearchField() {
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
       dispatch(addResult(response.data));
-      console.log(response.data);
+    
     });
     setSearchText(event.target.value);
   };
