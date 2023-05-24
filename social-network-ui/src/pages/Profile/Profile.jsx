@@ -114,7 +114,7 @@ const Profile = (props) => {
             }}
           />
 
-          {(isCurrentUserProfile && <EditProfileModal data={data} />) || <FollowButton user={data} />}
+          {(isCurrentUserProfile && <EditProfileModal data={data} />) || (user && <FollowButton user={data} />)}
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
           <Box>
