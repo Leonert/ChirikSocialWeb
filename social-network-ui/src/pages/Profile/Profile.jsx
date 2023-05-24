@@ -60,7 +60,8 @@ const Profile = (props) => {
   const { user } = useSelector((state) => state.auth);
   const { data } = useLoaderData();
   const isCurrentUserProfile = user?.username === username;
-  const formattedDate = format(new Date(data.createdDate), 'MMMM yyyy');
+  const createdDate = new Date(data.createdDate) ?? new Date();
+  const formattedDate = format(createdDate, 'MMMM yyyy');
 
   return (
     <>
