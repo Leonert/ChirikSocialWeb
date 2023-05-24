@@ -1,6 +1,6 @@
 import { CalendarToday as CalendarIcon, Link as LinkIcon, LocationOn as LocationIcon } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Avatar, Box, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
+import { Avatar, Box, Container, Link as LinkMui, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
 import { format } from 'date-fns';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -43,6 +43,15 @@ function useRouteMatch(patterns) {
 
   return null;
 }
+
+const formatWebsiteLink = (link) => {
+  const withHttp = link.includes('http://') || link.includes('https://');
+  if (!withHttp) {
+    return `http://${link}`;
+  }
+
+  return link;
+};
 
 const Profile = (props) => {
   const { username } = useParams();
@@ -97,10 +106,9 @@ const Profile = (props) => {
           }}
         ></Box>
         <Stack p="20px 20px 0" direction="row" alignItems="end" justifyContent="space-between">
-          {/* todo avatar  */}
           <Avatar
             alt="Profile Picture"
-            src=""
+            src={data.profileImage}
             sx={{
               width: { sm: 80, md: 133 },
               height: { sm: 80, md: 133 },
@@ -113,7 +121,6 @@ const Profile = (props) => {
               border: (theme) => `4px solid ${theme.palette.background.paper}`,
             }}
           />
-
           {(isCurrentUserProfile && <EditProfileModal data={data} />) || (user && <FollowButton user={data} />)}
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
@@ -122,19 +129,31 @@ const Profile = (props) => {
             <Typography sx={{ mb: '10px' }} variant="body1">
               @{data.username}
             </Typography>
-            <Typography mb="12px" variant="body1">
+            <Typography mb="12px" variant="body1" sx={{ wordWrap: 'break-word' }}>
               {data.bio}
             </Typography>
-            <Stack direction="row">
+            <Stack direction="row" flexWrap="wrap">
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LocationIcon sx={{ marginRight: 1 }} />
                 <Typography variant="body1">{data.location}</Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LinkIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1" component="a">
+                <LinkMui
+                  href={formatWebsiteLink(data.website)}
+                  target="_blank"
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '234px',
+                    color: (theme) => theme.palette.background.lightBlue,
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}
+                >
                   {data.website}
-                </Typography>
+                </LinkMui>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarIcon sx={{ marginRight: 1 }} />
@@ -155,7 +174,6 @@ const Profile = (props) => {
                 >
                   {data.followedCounter} Followings
                 </NavLink>
-                {/* паменять */}
                 <NavLink
                   style={{
                     textDecoration: 'none',
@@ -166,7 +184,6 @@ const Profile = (props) => {
                   }}
                   to={`/${username}/followers`}
                 >
-                  {/* паменять */}
                   {data.followersCounter} Follower
                 </NavLink>
               </Stack>
