@@ -1,5 +1,6 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../services/api/chatApi";
+
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
     async (message) => {
@@ -23,12 +24,11 @@ export const fetchChat = createAsyncThunk('api/messages/fetchChat', async () => 
 
 export const fetchChatMessages = createAsyncThunk(
     'api/messages/fetchChatMessages',
-    async (chatId, { getState }) => {
+    async (chatId) => {
         try {
             const chatMessages = await ChatApi.getChatMessages(chatId);
-            const { message } = getState().messages;
 
-            return { chatId, messages: chatMessages, message };
+            return { chatId, messages: chatMessages };
         } catch (error) {
             throw new Error('Error fetching chat messages:', error);
         }
@@ -65,7 +65,6 @@ const messagesSlice = createSlice({
                 state.messages[chatId] = [message];
             }
         },
-
     },
     extraReducers: (builder) => {
         builder
@@ -84,15 +83,11 @@ const messagesSlice = createSlice({
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
 
-                if (state.messages[chatId]) {
-                    state.messages[chatId] = [...state.messages[chatId], ...messages];
-                } else {
-                    state.messages[chatId] = messages;
-                }
+                state.messages[chatId] = messages;
             });
-    }
-
+    },
 });
+
 
 export const {
     setSelectedChatId,

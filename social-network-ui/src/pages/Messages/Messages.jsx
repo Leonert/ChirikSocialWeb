@@ -26,11 +26,14 @@ import {formatChatMessageDate} from "../../util/formatDate";
 const Messages = () => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
+
   const chats = useSelector(selectChats);
   console.log(chats);
+
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
   console.log(messages);
+
   const text = useSelector(selectText);
   const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
@@ -63,17 +66,15 @@ const Messages = () => {
   const onCloseModalWindow = () => {
     dispatch(toggleModalWindow());
   };
-
-  const handleListItemClick = async (chat) => {
-    const chatId = chat.chatId;
-    console.log(chatId);
+  const handleListItemClick = async (group) => {
+    const chatId = group.chats[0].chatId;
 
     dispatch(setSelectedChatId(chatId));
-    console.log(chat);
+
     try {
       await dispatch(fetchChatMessages(chatId));
-      const chatMessages = await ChatApi.getChatMessages(chatId);
-      const lastMessage = chatMessages[chatMessages.length - 1];
+      const chatMessages = useSelector(selectMessages);
+      const lastMessage = chatMessages[chatId][chatMessages[chatId].length - 1];
       console.log(lastMessage);
 
       scrollToBottom();
@@ -132,6 +133,7 @@ const Messages = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Обробник зміни вмісту введення
   const handleInputChange = (event) => {
     dispatch(setText(event.target.value));
   };
@@ -140,6 +142,7 @@ const Messages = () => {
     return date instanceof Date && !isNaN(date);
   }
 
+  // Групування чатів по chatId
   const groupedChats = Object.values(chats).reduce((result, chat) => {
     const existingGroup = result.find((group) => group.chatId === chat.chatId);
     if (existingGroup) {
@@ -153,23 +156,6 @@ const Messages = () => {
 
     return result;
   }, []);
-  const handleOpenChat = () => {
-    const ownChat = chats.find((chat) => chat.recipientId === participant.id);
-    if (ownChat) {
-      handleListItemClick(ownChat);
-    } else {
-      // Створіть новий чат для вас, якщо він не існує
-      const newChat = {
-        chatId: participant.id,
-        recipientId: participant.id,
-        senderId: '',
-        username: '2',
-        fullName: '',
-        avatar: '',
-      };
-      handleListItemClick(newChat);
-    }
-  };
 
 
   return (
@@ -218,9 +204,9 @@ const Messages = () => {
                                   key={group.chatId}
                                   button
                                   className={classes.listItem}
-                                  id={participant && participant.id === group.chatId ? 'selected' : ''}
-                                  selected={participant && participant.id === group.chatId}
-                                  onClick={() => handleListItemClick(group.chats[0])}
+                                  id={participant && participant.id === group.chats[0].chatId ? 'selected' : ''}
+                                  selected={participant && participant.id === group.chats[0].chatId}
+                                  onClick={() => handleListItemClick(group)}
                               >
                                 <div className={classes.userWrapper}>
                                   <Avatar
@@ -239,11 +225,13 @@ const Messages = () => {
                               </ListItem>
                           ) : null
                       )}
-                    </List>                  </>
+                    </List>
+                  </>
               )}
             </Paper>
           </div>
         </Grid>
+
         <Grid className={classes.grid} md={6} item>
           {participant?.id === undefined ? (
               <div className={classes.chatContainer}>
@@ -277,61 +265,68 @@ const Messages = () => {
                       </Typography>
                     </div>
                   </Paper>
-                  <Paper className={classes.chat}>
-                    {messages[selectedChatId]?.map((message) => (
-                        <React.Fragment key={message.messageId}>
-                          {message.senderId ? (
-                              <div className={classes.tweetContainer}>
-                                <div className={classes.tweetContent}>
-                                  <Typography>{message.message}</Typography>
-                                </div>
-                                <div className={classes.tweetInfo}>
-                                  <div className={classes.participantMessageDate}>
-                                    {isValidDate(new Date(message.timestamp))
-                                        ? formatChatMessageDate(new Date(message.timestamp))
-                                        : ''}
-                                  </div>
-                                </div>
-                              </div>
-                          ) : (
-                              <div className={classes.tweetContainer}>
-                                {message.message && (
-                                    <div className={classNames(classes.participantMessage)}>
-                                      <span>{message.message}</span>
+                  <div className={classes.chatMessages}>
+                    {messages[selectedChatId] &&
+                        messages[selectedChatId].map((message, index) => {
+                          const previousMessage = messages[selectedChatId][index - 1];
+                          const currentMessageDate = new Date(message.timestamp);
+                          const previousMessageDate = previousMessage ? new Date(previousMessage.timestamp) : null;
+                          const showDateSeparator =
+                              previousMessageDate && !isValidDate(previousMessageDate) && isValidDate(currentMessageDate);
+
+                          return (
+                              <React.Fragment key={message.messageId}>
+                                {showDateSeparator && (
+                                    <div className={classes.dateSeparator}>
+                                      {formatChatMessageDate(currentMessageDate)}
                                     </div>
                                 )}
-                                <div className={classes.participantMessageDate}>
-                                  {isValidDate(new Date(message.timestamp))
-                                      ? formatChatMessageDate(new Date(message.timestamp))
-                                      : ''}
+                                <div
+                                    className={classNames(classes.messageContainer, {
+                                      [classes.ownMessage]: message.senderId === participant.id,
+                                    })}
+                                >
+                                  {message.senderId !== participant.id && (
+                                      <Avatar
+                                          className={classes.messageAvatar}
+                                          src={participant?.avatar?.src ? participant?.avatar.src : DEFAULT_PROFILE_IMG}
+                                      />
+                                  )}
+                                  <div
+                                      className={classNames(classes.messageContent, {
+                                        [classes.ownMessageContent]: message.senderId === participant.id,
+                                      })}
+                                  >
+                                    <Typography className={classes.messageText}>{message.message}</Typography>
+                                    <Typography className={classes.messageTimestamp}>
+                                      {formatChatMessageDate(currentMessageDate)}
+                                    </Typography>
+                                  </div>
                                 </div>
-                              </div>
-                          )}
-                        </React.Fragment>
-                    ))}
+                              </React.Fragment>
+                          );
+                        })}
                     <div ref={chatEndRef} />
-                  </Paper>
-
-                  <Paper className={classes.chatFooter}>
-                    <div className={classes.chatIcon}>
-                      <IconButton color="primary">
-                        <span>{MediaIcon}</span>
-                      </IconButton>
-                    </div>
+                  </div>
+                  <div className={classes.messageInputWrapper}>
+                    {/* Компонент введення повідомлення */}
                     <MessageInput
-                        multiline
-                        text={text}
-                        onChange={handleInputChange}
-                        onSendMessage={onSendMessage}
-                        variant="outlined"
                         placeholder="Start a new message"
+                        variant="outlined"
+                        value={text}
+                        onChange={handleInputChange}
+                        InputProps={{
+                          endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={onSendMessage}>
+                                  {text ?<span>{SandMessageIcon}</span>
+                                      : <MediaIcon color="primary" />}
+                                </IconButton>
+                              </InputAdornment>
+                          ),
+                        }}
                     />
-                    <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
-                      <IconButton onClick={onSendMessage} color="primary">
-                        <span>{SandMessageIcon}</span>
-                      </IconButton>
-                    </div>
-                  </Paper>
+                  </div>
                 </Paper>
               </div>
           )}
