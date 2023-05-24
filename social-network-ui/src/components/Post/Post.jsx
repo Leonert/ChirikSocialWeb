@@ -59,7 +59,7 @@ export default function Post(props) {
       )}
 
       {props.content && !props.postPage && (
-        <Link to={`/${props.id}`}>
+        <Link to={`/${props.username}/${props.id}`}>
           <CardContent className={classes.pageItem}>
             <Typography variant="body2" className={classes.iconColor}>
               {props.content}

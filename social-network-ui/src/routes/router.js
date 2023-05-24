@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
         path: '/lists',
         element: <div></div>,
       },
-      { path: ':id', element: <PostPage /> },
+
       {
         path: '/:username',
         element: <Profile />,
@@ -70,6 +70,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      { path: '/:username/:id', element: <PostPage /> },
       {
         path: '/:username/following',
         element: <FollowingPage />,
