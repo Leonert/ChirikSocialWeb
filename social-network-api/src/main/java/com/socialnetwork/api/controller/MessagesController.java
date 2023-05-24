@@ -1,6 +1,7 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.chat.ChatDto;
+import com.socialnetwork.api.dto.chat.CreateChatRequestDto;
 import com.socialnetwork.api.dto.chat.MessageDto;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.models.base.chat.Chat;
@@ -58,6 +59,17 @@ public class MessagesController {
     return ResponseEntity.noContent().build();
   }
 
+  @GetMapping("/chats/{chatId}")
+  public ResponseEntity<?> getChatById(@PathVariable("chatId") int chatId) {
+    ChatDto chatDto = messageService.getChatById(chatId);
+
+    if (chatDto.getMessages().isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.ok(chatDto);
+  }
+
   @GetMapping("/search")
   public ResponseEntity<List<MessageDto>> searchMessages(@RequestParam("keyword") String keyword) {
     List<MessageDto> messages = messageService.searchMessages(keyword);
@@ -71,7 +83,10 @@ public class MessagesController {
   }
 
   @PostMapping("/chats/create")
-  public ResponseEntity<ChatDto> createChat(@RequestBody MessageDto messageDto, @RequestBody ChatDto chatDto) {
+  public ResponseEntity<ChatDto> createChat(@RequestBody CreateChatRequestDto requestDto) {
+    MessageDto messageDto = requestDto.getMessageDto();
+    ChatDto chatDto = requestDto.getChatDto();
+
     MessageDto createdMessageDto = messageService.createChat(messageDto, chatDto);
 
     chatDto.setChatId(createdMessageDto.getChatId());
@@ -79,7 +94,6 @@ public class MessagesController {
 
     return ResponseEntity.created(URI.create("/api/messages/chats/" + createdMessageDto.getChatId())).body(chatDto);
   }
-
   @PostMapping("/chats/{chatId}/add-message")
   public ResponseEntity<MessageDto> addMessageToChat(@PathVariable("chatId") int chatId, @RequestBody MessageDto.CreateMessageRequestDto requestDto) {
     ChatDto chatDto = new ChatDto(chatId);

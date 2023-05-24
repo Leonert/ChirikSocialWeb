@@ -1,15 +1,17 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../services/api/chatApi";
-export const sendMessage = createAsyncThunk('api/messages/sendMessage', async (message) => {
-    try {
-        const createdMessage = await ChatApi.sendMessage(message);
+export const sendMessage = createAsyncThunk(
+    'api/messages/sendMessage',
+    async (message) => {
+        try {
+            const createdMessage = await ChatApi.sendMessage(message);
 
-        return { chatId: message.chatId, message: createdMessage };
-    } catch (error) {
-        throw new Error('Error sending message:', error);
+            return { chatId: message.chatId, message: createdMessage };
+        } catch (error) {
+            throw new Error('Error sending message:', error);
+        }
     }
-});
-
+);
 
 export const fetchChat = createAsyncThunk('api/messages/fetchChat', async () => {
     try {
@@ -19,16 +21,19 @@ export const fetchChat = createAsyncThunk('api/messages/fetchChat', async () => 
     }
 });
 
-export const fetchChatMessages = createAsyncThunk('api/messages/fetchChatMessages', async (chatId, { getState }) => {
-    try {
-        const chatMessages = await ChatApi.getChatMessages(chatId);
-        const { message } = getState().messages;
+export const fetchChatMessages = createAsyncThunk(
+    'api/messages/fetchChatMessages',
+    async (chatId, { getState }) => {
+        try {
+            const chatMessages = await ChatApi.getChatMessages(chatId);
+            const { message } = getState().messages;
 
-        return { chatId, messages: chatMessages, message };
-    } catch (error) {
-        throw new Error('Error fetching chat messages:', error);
+            return { chatId, messages: chatMessages, message };
+        } catch (error) {
+            throw new Error('Error fetching chat messages:', error);
+        }
     }
-});
+);
 
 const messagesSlice = createSlice({
     name: 'messages',
@@ -55,13 +60,12 @@ const messagesSlice = createSlice({
             const { chatId, message } = action.payload;
 
             if (state.messages[chatId]) {
-                state.messages[chatId] = Array.isArray(state.messages[chatId])
-                    ? [...state.messages[chatId], message]
-                    : [state.messages[chatId], message];
+                state.messages[chatId] = [...state.messages[chatId], message];
             } else {
                 state.messages[chatId] = [message];
             }
         },
+
     },
     extraReducers: (builder) => {
         builder
@@ -69,9 +73,7 @@ const messagesSlice = createSlice({
                 const { chatId, message } = action.payload;
 
                 if (state.messages[chatId]) {
-                    state.messages[chatId] = Array.isArray(state.messages[chatId])
-                        ? [...state.messages[chatId], message]
-                        : [state.messages[chatId], message];
+                    state.messages[chatId] = [...state.messages[chatId], message];
                 } else {
                     state.messages[chatId] = [message];
                 }
@@ -82,13 +84,14 @@ const messagesSlice = createSlice({
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
 
-                if (Array.isArray(state.messages[chatId])) {
+                if (state.messages[chatId]) {
                     state.messages[chatId] = [...state.messages[chatId], ...messages];
                 } else {
                     state.messages[chatId] = messages;
                 }
             });
-    },
+    }
+
 });
 
 export const {
@@ -99,10 +102,13 @@ export const {
 } = messagesSlice.actions;
 
 export const selectChats = (state) => state.messages.chats;
-export const selectMessages = (state) => state.messages.messages;
+
+
+export const selectMessages = (state) => state.messages.messages[state.messages.selectedChatId];
 export const selectSelectedChatId = (state) => state.messages.selectedChatId;
 export const selectParticipant = (state) => state.messages.participant;
 export const selectText = (state) => state.messages.text;
-export const selectVisibleModalWindow = (state) => state.messages.visibleModalWindow;
+export const selectVisibleModalWindow = (state) =>
+    state.messages.visibleModalWindow;
 
 export default messagesSlice.reducer;

@@ -23,14 +23,14 @@ import {useDispatch, useSelector} from "react-redux";
 import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 
-
-
 const Messages = () => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
   const chats = useSelector(selectChats);
-  const messages = useSelector(selectMessages);
+  console.log(chats);
   const selectedChatId = useSelector(selectSelectedChatId);
+  const messages = useSelector(selectMessages);
+  console.log(messages);
   const text = useSelector(selectText);
   const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
@@ -69,11 +69,12 @@ const Messages = () => {
     console.log(chatId);
 
     dispatch(setSelectedChatId(chatId));
-
+    console.log(chat);
     try {
       await dispatch(fetchChatMessages(chatId));
       const chatMessages = await ChatApi.getChatMessages(chatId);
       const lastMessage = chatMessages[chatMessages.length - 1];
+      console.log(lastMessage);
 
       scrollToBottom();
     } catch (error) {
@@ -81,18 +82,13 @@ const Messages = () => {
     }
   };
 
-
-
-
-
-
   const onSendMessage = async () => {
     if (text !== '') {
       const selectedChat = chats.find((chat) => chat.id === selectedChatId);
       if (selectedChat) {
         const existingChat = chats.find((chat) => chat.recipientId === selectedChat.recipientId);
         const newMessage = {
-          id: existingChat ? existingChat.id : selectedChat.id,
+          messageId: existingChat ? existingChat.id : selectedChat.id,
           message: text,
           read: false,
           recipientId: selectedChat.recipientId,
@@ -103,13 +99,13 @@ const Messages = () => {
 
         try {
           const createdMessage = await ChatApi.sendMessage(newMessage);
-          dispatch(sendMessage(createdMessage));
+          dispatch(sendMessage({ chatId: selectedChat.id, message: createdMessage }));
 
           const updatedMessages = {
             ...messages,
             [selectedChat.id]: [...(messages[selectedChat.id] || []), createdMessage],
           };
-          dispatch(setMessage(updatedMessages));
+          dispatch(setMessage({ chatId: selectedChat.id, message: updatedMessages }));
 
           dispatch(setText(''));
           dispatch(setSelectedChatId(selectedChat.id));
@@ -122,9 +118,6 @@ const Messages = () => {
       }
     }
   };
-
-
-
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
@@ -142,9 +135,42 @@ const Messages = () => {
   const handleInputChange = (event) => {
     dispatch(setText(event.target.value));
   };
+
   function isValidDate(date) {
     return date instanceof Date && !isNaN(date);
   }
+
+  const groupedChats = Object.values(chats).reduce((result, chat) => {
+    const existingGroup = result.find((group) => group.chatId === chat.chatId);
+    if (existingGroup) {
+      existingGroup.chats.push(chat);
+    } else {
+      result.push({
+        chatId: chat.chatId,
+        chats: [chat],
+      });
+    }
+
+    return result;
+  }, []);
+  const handleOpenChat = () => {
+    const ownChat = chats.find((chat) => chat.recipientId === participant.id);
+    if (ownChat) {
+      handleListItemClick(ownChat);
+    } else {
+      // Створіть новий чат для вас, якщо він не існує
+      const newChat = {
+        chatId: participant.id,
+        recipientId: participant.id,
+        senderId: '',
+        username: '2',
+        fullName: '',
+        avatar: '',
+      };
+      handleListItemClick(newChat);
+    }
+  };
+
 
   return (
       <>
@@ -156,7 +182,7 @@ const Messages = () => {
                   <Typography variant="h6">Messages</Typography>
                 </div>
               </Paper>
-              {chats.length === 0 ? (
+              {Object.values(chats).length === 0 ? (
                   <>
                     <div className={classes.messagesTitle}>Send a message, get a message</div>
                     <div className={classes.messagesText}>
@@ -186,41 +212,34 @@ const Messages = () => {
                       />
                     </div>
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
-                      {chats.map((chat) => (
-                          <ListItem
-                              key={chat && chat.id}
-                              button
-                              className={classes.listItem}
-                              id={participant && participant.id === chat.id ? 'selected' : ''}
-                              selected={participant && participant.id === chat.id}
-                              onClick={() => handleListItemClick(chat.id)} // Make sure chat.id is not undefined
-                          >
-                            <div className={classes.userWrapper}>
-                              <Avatar
-                                  className={classes.userAvatar}
-                                  src={
-                                    chat.avatar?.src
-                                        ? chat.avatar.src
-                                        : DEFAULT_PROFILE_IMG
-                                  }
-                              />
-                              <div style={{ flex: 1 }}>
-                                <div className={classes.userHeader}>
-                                  <div>
-                                    <Typography className={classes.userFullName}>
-                                      {chat.fullName}
-                                    </Typography>
-                                    <Typography className={classes.username}>
-                                      @{chat.username}
-                                    </Typography>
+                      {groupedChats.map((group) =>
+                          group && group.chats && group.chats.length > 0 ? (
+                              <ListItem
+                                  key={group.chatId}
+                                  button
+                                  className={classes.listItem}
+                                  id={participant && participant.id === group.chatId ? 'selected' : ''}
+                                  selected={participant && participant.id === group.chatId}
+                                  onClick={() => handleListItemClick(group.chats[0])}
+                              >
+                                <div className={classes.userWrapper}>
+                                  <Avatar
+                                      className={classes.userAvatar}
+                                      src={group.chats[0].avatar?.src ? group.chats[0].avatar.src : DEFAULT_PROFILE_IMG}
+                                  />
+                                  <div style={{ flex: 1 }}>
+                                    <div className={classes.userHeader}>
+                                      <div>
+                                        <Typography className={classes.userFullName}>{group.chats[0].fullName}</Typography>
+                                        <Typography className={classes.username}>@{group.chats[0].username}</Typography>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          </ListItem>
-                      ))}
-                    </List>
-                  </>
+                              </ListItem>
+                          ) : null
+                      )}
+                    </List>                  </>
               )}
             </Paper>
           </div>
@@ -259,30 +278,32 @@ const Messages = () => {
                     </div>
                   </Paper>
                   <Paper className={classes.chat}>
-                    {Object.values(messages).map((message) => (
-                        <React.Fragment key={message.id}>
-                          {message.author ? (
+                    {messages[selectedChatId]?.map((message) => (
+                        <React.Fragment key={message.messageId}>
+                          {message.senderId ? (
                               <div className={classes.tweetContainer}>
                                 <div className={classes.tweetContent}>
-                                  <Typography>{message.text}</Typography>
+                                  <Typography>{message.message}</Typography>
                                 </div>
                                 <div className={classes.tweetInfo}>
-                                    <div className={classes.participantMessageDate}>
-                                      {formatChatMessageDate(new Date(message.date))}
-                                    </div>
+                                  <div className={classes.participantMessageDate}>
+                                    {isValidDate(new Date(message.timestamp))
+                                        ? formatChatMessageDate(new Date(message.timestamp))
+                                        : ''}
+                                  </div>
                                 </div>
                               </div>
                           ) : (
                               <div className={classes.tweetContainer}>
                                 {message.message && (
-                                    <div className={classNames(
-                                        classes.participantMessage,
-                                    )}>
+                                    <div className={classNames(classes.participantMessage)}>
                                       <span>{message.message}</span>
                                     </div>
                                 )}
                                 <div className={classes.participantMessageDate}>
-                                  {formatChatMessageDate(new Date(message.date))}
+                                  {isValidDate(new Date(message.timestamp))
+                                      ? formatChatMessageDate(new Date(message.timestamp))
+                                      : ''}
                                 </div>
                               </div>
                           )}
@@ -315,10 +336,9 @@ const Messages = () => {
               </div>
           )}
         </Grid>
-        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow}/>
+        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
       </>
   );
 };
 
 export default Messages;
-
