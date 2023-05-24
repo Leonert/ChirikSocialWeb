@@ -1,29 +1,17 @@
 import { Edit as EditIcon } from '@mui/icons-material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, IconButton, Stack, TextField, Typography, styled } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography, styled } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { json, useLoaderData } from 'react-router-dom';
+import { json, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
-// import * as yup from 'yup';
 import Modal from '../../components/UI/Modal';
-
-// const validationSchema = yup.object({
-// name: yup.string().max(50, 'Max'),
-// BIO: yup.max(160),
-// location: yup.max(30),
-// website: yup.max(100),
-// birthDate: yup
-//   .date('Invalid date')
-//   .required('Birthdate is required')
-//   .max(maxValidDate, 'Invalid date')
-//   .typeError('Invalid date'),
-// });
+import { MAX_BIO_LENGTH, MAX_LOCATION_LENGTH, MAX_NAME_LENGTH, MAX_WEBSITE_LENGTH } from '../../util/constants';
 
 const BackgroundImage = styled('img')(({ theme }) => ({
   '&': {
@@ -42,49 +30,79 @@ const AvatarImage = styled('img')(({ theme }) => ({
     height: '120px',
   },
 }));
-
 const EditProfileModal = () => {
   const { data } = useLoaderData();
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [loadedBackgroundPicture, setLoadedBackgroundPicture] = useState(data.profileBackgroundImage ?? '');
+  const [loadedAvatarPicture, setLoadedAvatarPicture] = useState(data.profileImage ?? '');
+
+  const revalidator = useRevalidator();
+  const newBirthDate = new Date(data.birthDate);
+
+  const handleLoadBackgroundPicture = async (e) => {
+    const backgroundFile = e.target.files[0];
+    const backgroundBlob = new Blob([backgroundFile], { type: 'image/png' });
+    const backgroundImage = await convertImageToBase64(backgroundBlob);
+    setLoadedBackgroundPicture(backgroundImage);
+  };
+
+  const handleLoadAvatarPicture = async (e) => {
+    const avatarFile = e.target.files[0];
+    const avatarBlob = new Blob([avatarFile], { type: 'image/png' });
+    const avatarImage = await convertImageToBase64(avatarBlob);
+    setLoadedAvatarPicture(avatarImage);
+  };
+
+  const convertImageToBase64 = (blob) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    });
+
   const formik = useFormik({
     initialValues: {
       name: `${data.name}`,
       BIO: `${data.bio}`,
       location: `${data.location}`,
       website: `${data.website}`,
-      // birthDate: `${data.birthDate}`,
+      birthDate: `${newBirthDate}`,
     },
-    //   validationSchema: validationSchema,
     onSubmit: async (values) => {
+      const formattedDate = new Date(values.birthDate).toISOString();
       try {
-        await axiosIns.patch(
-          '/api/users/p',
-          {
-            name: values.name,
-            profileImage: null,
-            profileBackgroundImage: null,
-            bio: values.BIO,
-            location: values.location,
-            website: values.website,
-          },
-          {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-          }
-        );
+        const response = await axiosIns.post('/api/users/p', {
+          name: values.name,
+          profileImage: loadedAvatarPicture,
+          profileBackgroundImage: loadedBackgroundPicture,
+          bio: values.BIO,
+          location: values.location,
+          website: values.website,
+          birthDate: formattedDate,
+        });
+        setOpenEditModal(false);
+        revalidator.revalidate();
+
+        return response;
       } catch (e) {
         return json({ error: e });
       }
-      setOpenEditModal(false);
     },
   });
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [loadedBackgroundPicture, setLoadedBackgroundPicture] = useState(null);
-  const [loadedAvatarPicture, setLoadedAvatarPicture] = useState(null);
-  const backgroundBlob = new Blob([loadedBackgroundPicture], { type: 'image/png' });
-  const avatarBlob = new Blob([loadedAvatarPicture], { type: 'image/png' });
-  // відсилать loadedBackgroundPicture
-  // відсилать на бек formData
+
   const handleOpenEditModal = () => {
     setOpenEditModal(true);
+  };
+
+  const handleInputLength = (maxLength) => {
+    return function (e) {
+      if (e.target.value.length <= maxLength) {
+        formik.handleChange(e);
+      }
+    };
   };
 
   const handleCloseEditModal = () => {
@@ -142,7 +160,7 @@ const EditProfileModal = () => {
               },
             }}
           >
-            {!!loadedBackgroundPicture && <BackgroundImage src={URL.createObjectURL(backgroundBlob)} />}
+            {!!loadedBackgroundPicture && <BackgroundImage src={loadedBackgroundPicture} />}
             <Stack direction="row" position="absolute" gap={1}>
               <IconButton
                 component="label"
@@ -158,19 +176,12 @@ const EditProfileModal = () => {
                 }}
               >
                 <AddAPhotoIcon fontSize="small" />
-                <input
-                  value=""
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    setLoadedBackgroundPicture(e.target.files[0]);
-                  }}
-                />
+                <input value="" type="file" hidden onChange={handleLoadBackgroundPicture} />
               </IconButton>
               {!!loadedBackgroundPicture && (
                 <IconButton
                   onClick={(e) => {
-                    setLoadedBackgroundPicture(null);
+                    setLoadedBackgroundPicture('');
                   }}
                   component="label"
                   sx={{
@@ -189,7 +200,6 @@ const EditProfileModal = () => {
               )}
             </Stack>
           </Box>
-          {/* avatar */}
           <Box
             position="relative"
             display="flex"
@@ -210,7 +220,7 @@ const EditProfileModal = () => {
               },
             }}
           >
-            {!!loadedAvatarPicture && <AvatarImage src={URL.createObjectURL(avatarBlob)} />}
+            {!!loadedAvatarPicture && <AvatarImage src={loadedAvatarPicture} />}
             <Stack direction="row" position="absolute">
               <IconButton
                 component="label"
@@ -226,14 +236,7 @@ const EditProfileModal = () => {
                 }}
               >
                 <AddAPhotoIcon fontSize="small" />
-                <input
-                  value=""
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    setLoadedAvatarPicture(e.target.files[0]);
-                  }}
-                />
+                <input value="" type="file" hidden onChange={handleLoadAvatarPicture} />
               </IconButton>
             </Stack>
           </Box>
@@ -244,19 +247,37 @@ const EditProfileModal = () => {
             name="name"
             label="Name"
             value={formik.values.name}
-            onChange={formik.handleChange}
+            onChange={handleInputLength(MAX_NAME_LENGTH)}
             error={formik.touched.name && Boolean(formik.errors.name)}
             helperText={formik.touched.name && formik.errors.name}
             onBlur={formik.handleBlur}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{ '.MuiTypography-root': { fontSize: '12px', marginTop: '20px' } }}
+                >{`${formik.values.name.length}/${MAX_NAME_LENGTH}`}</InputAdornment>
+              ),
+            }}
           />
           <TextField
             sx={{ mb: '20px' }}
+            rows={4}
+            multiline
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{ '.MuiTypography-root': { fontSize: '12px', marginTop: '80px' } }}
+                >{`${formik.values.BIO.length}/${MAX_BIO_LENGTH}`}</InputAdornment>
+              ),
+            }}
             fullWidth
             id="BIO"
             name="BIO"
             label="Bio"
             value={formik.values.BIO}
-            onChange={formik.handleChange}
+            onChange={handleInputLength(MAX_BIO_LENGTH)}
             error={formik.touched.BIO && Boolean(formik.errors.BIO)}
             helperText={formik.touched.BIO && formik.errors.BIO}
             onBlur={formik.handleBlur}
@@ -268,10 +289,18 @@ const EditProfileModal = () => {
             name="location"
             label="Location"
             value={formik.values.location}
-            onChange={formik.handleChange}
+            onChange={handleInputLength(MAX_LOCATION_LENGTH)}
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
             onBlur={formik.handleBlur}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{ '.MuiTypography-root': { fontSize: '12px', marginTop: '20px' } }}
+                >{`${formik.values.location.length}/${MAX_LOCATION_LENGTH}`}</InputAdornment>
+              ),
+            }}
           />
           <TextField
             sx={{ mb: '20px' }}
@@ -280,17 +309,25 @@ const EditProfileModal = () => {
             name="website"
             label="Website"
             value={formik.values.website}
-            onChange={formik.handleChange}
+            onChange={handleInputLength(MAX_WEBSITE_LENGTH)}
             error={formik.touched.website && Boolean(formik.errors.website)}
             helperText={formik.touched.website && formik.errors.website}
             onBlur={formik.handleBlur}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{ '.MuiTypography-root': { fontSize: '12px', marginTop: '20px' } }}
+                >{`${formik.values.website.length}/${MAX_WEBSITE_LENGTH}`}</InputAdornment>
+              ),
+            }}
           />
-          {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              value={formik.values.birthDate}
-              // onChange={(newValue) => {
-              //   formik.setFieldValue('birthDate', newValue);
-              // }}
+              value={newBirthDate}
+              onChange={(newValue) => {
+                formik.setFieldValue('birthDate', newValue);
+              }}
               disableFuture
               slotProps={{
                 textField: {
@@ -303,7 +340,7 @@ const EditProfileModal = () => {
               name="birthDate"
               label="Birthdate"
             />
-          </LocalizationProvider> */}
+          </LocalizationProvider>
         </form>
       </Modal>
     </>
