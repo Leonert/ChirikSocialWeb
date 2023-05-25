@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -102,6 +103,7 @@ public class User {
 
   @ManyToMany(mappedBy = "users")
   private List<Chat> chats;
+
   public User() {
   }
 

@@ -38,7 +38,6 @@ public class Chat {
           joinColumns = @JoinColumn(name = "chat_id"),
           inverseJoinColumns = @JoinColumn(name = "user_id")
   )
-
   private List<User> users;
 
   public Chat() {
