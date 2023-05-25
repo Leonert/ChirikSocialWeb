@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -50,6 +51,7 @@ public class MessageServiceImpl implements MessageService {
             .orElseThrow(() -> new EntityNotFoundException("Message not found with id: " + id));
     return convertToMessageDto(message);
   }
+
   @Override
   public ChatDto getChatById(int chatId) {
     Chat chat = chatRepository.findById(chatId)
@@ -159,7 +161,6 @@ public class MessageServiceImpl implements MessageService {
     return convertToMessageDto(message);
   }
 
-
   @Override
   public List<MessageDto> getMessagesByChatId(int chatId) {
     List<Message> messages = messageRepository.findByChat_ChatIdOrderByTimestampDesc(chatId);
@@ -168,14 +169,13 @@ public class MessageServiceImpl implements MessageService {
             .collect(Collectors.toList());
   }
 
-
-
   private MessageDto convertToMessageDto(Message message) {
     MessageDto messageDto = modelMapper.map(message, MessageDto.class);
     messageDto.setSenderUsername(message.getSender().getUsername());
     messageDto.setRecipientUsername(message.getRecipient().getUsername());
     return messageDto;
   }
+
   private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
   }

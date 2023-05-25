@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
@@ -104,6 +105,7 @@ public class MessagesController {
     return ResponseEntity.created(URI.create("/api/messages/chats/"
             + createdMessageDto.getChatId())).body(chatDto);
   }
+
   @PostMapping("/chats/{chatId}/add-message")
   public ResponseEntity<MessageDto> addMessageToChat(
           @PathVariable("chatId") int chatId,

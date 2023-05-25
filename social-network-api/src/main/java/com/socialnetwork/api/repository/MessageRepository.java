@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Integer> {
+
   List<Message> findByRecipient(User recipient);
+
   List<Message> findBySender(User sender);
+
   List<Message> findByMessageContainingIgnoreCase(String keyword);
 
   Optional<Message> findFirstByidOrderByTimestampDesc(int id);
@@ -22,6 +25,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
   @Modifying
   @Query("DELETE FROM Message m WHERE m.chat.chatId = :id")
   void deleteMessagesByChatId(@Param("id") int chatId);
+
   List<Message> findByChat_ChatIdOrderByTimestampDesc(int chatId);
 
 }
