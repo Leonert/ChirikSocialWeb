@@ -37,7 +37,7 @@ public class Chat {
           name = "user_chat",
           joinColumns = @JoinColumn(name = "chat_id"),
           inverseJoinColumns = @JoinColumn(name = "user_id")
-   )
+      )
   private List<User> users;
 
   public Chat() {
