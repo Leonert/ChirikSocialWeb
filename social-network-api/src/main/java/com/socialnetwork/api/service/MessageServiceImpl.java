@@ -138,13 +138,17 @@ public class MessageServiceImpl implements MessageService {
     message.setTimestamp(LocalDateTime.now());
 
     User recipient = userRepository.findById(messageDto.getRecipientId())
-            .orElseThrow(() -> new EntityNotFoundException("Recipient not found with id: " + messageDto.getRecipientId()));
+            .orElseThrow(() ->
+                    new EntityNotFoundException("Recipient not found with id: "
+                            + messageDto.getRecipientId()));
     User sender = userRepository.findById(messageDto.getSenderId())
-            .orElseThrow(() -> new EntityNotFoundException("Sender not found with id: " + messageDto.getSenderId()));
+            .orElseThrow(() ->
+                    new EntityNotFoundException("Sender not found with id: "
+                            + messageDto.getSenderId()));
 
     Chat chat = new Chat();
     chat.setUsers(Arrays.asList(recipient, sender));
-    chat = chatRepository.save(chat); // Save the chat and obtain the persisted instance
+    chat = chatRepository.save(chat);
 
     message.setChat(chat);
     message.setRecipient(recipient);

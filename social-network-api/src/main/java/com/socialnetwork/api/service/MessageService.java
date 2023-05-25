@@ -3,7 +3,6 @@ package com.socialnetwork.api.service;
 import com.socialnetwork.api.dto.chat.ChatDto;
 import com.socialnetwork.api.dto.chat.MessageDto;
 import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.models.base.chat.Message;
 import java.util.List;
 
 public interface MessageService {
