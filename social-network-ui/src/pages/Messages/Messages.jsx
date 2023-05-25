@@ -1,7 +1,7 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 
-import { MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
+import {EmojiIcon, GifIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG} from '../../util/url';
 
 import { useMessagesStyles } from './MessagesStyles';
@@ -26,18 +26,12 @@ import {formatChatMessageDate} from "../../util/formatDate";
 const Messages = () => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
-
   const chats = useSelector(selectChats);
-  console.log(chats);
-
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
-  console.log(messages);
-
   const text = useSelector(selectText);
   const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
-
   const chatEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -66,22 +60,20 @@ const Messages = () => {
   const onCloseModalWindow = () => {
     dispatch(toggleModalWindow());
   };
+
   const handleListItemClick = async (group) => {
-    const chatId = group.chats[0].chatId;
+    const chatId = group.chatId;
 
     dispatch(setSelectedChatId(chatId));
 
     try {
       await dispatch(fetchChatMessages(chatId));
-      const chatMessages = useSelector(selectMessages);
-      const lastMessage = chatMessages[chatId][chatMessages[chatId].length - 1];
-      console.log(lastMessage);
-
       scrollToBottom();
     } catch (error) {
       console.error('Error fetching chat messages:', error);
     }
   };
+
 
   const onSendMessage = async () => {
     if (text !== '') {
@@ -106,7 +98,7 @@ const Messages = () => {
             ...messages,
             [selectedChat.id]: [...(messages[selectedChat.id] || []), createdMessage],
           };
-          dispatch(setMessage({ chatId: selectedChat.id, message: updatedMessages }));
+          dispatch(setMessage(updatedMessages));
 
           dispatch(setText(''));
           dispatch(setSelectedChatId(selectedChat.id));
@@ -119,6 +111,7 @@ const Messages = () => {
       }
     }
   };
+
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
@@ -142,7 +135,6 @@ const Messages = () => {
     return date instanceof Date && !isNaN(date);
   }
 
-  // Групування чатів по chatId
   const groupedChats = Object.values(chats).reduce((result, chat) => {
     const existingGroup = result.find((group) => group.chatId === chat.chatId);
     if (existingGroup) {
@@ -156,7 +148,6 @@ const Messages = () => {
 
     return result;
   }, []);
-
 
   return (
       <>
@@ -308,24 +299,36 @@ const Messages = () => {
                         })}
                     <div ref={chatEndRef} />
                   </div>
-                  <div className={classes.messageInputWrapper}>
-                    {/* Компонент введення повідомлення */}
-                    <MessageInput
-                        placeholder="Start a new message"
-                        variant="outlined"
-                        value={text}
-                        onChange={handleInputChange}
-                        InputProps={{
-                          endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton onClick={onSendMessage}>
-                                  {text ?<span>{SandMessageIcon}</span>
-                                      : <MediaIcon color="primary" />}
-                                </IconButton>
-                              </InputAdornment>
-                          ),
-                        }}
-                    />
+                  <div className={classes.chatFooter}>
+                    <div className={classes.chatIcon}>
+                      <IconButton color="primary">
+                        <span>{MediaIcon}</span>
+                      </IconButton>
+                    </div>
+                    <div className={classes.chatIcon}>
+                      <IconButton color="primary">
+                        <span>{GifIcon}</span>
+                      </IconButton>
+                    </div>
+                    <div className={classes.messageInputWrapper}>
+                      <MessageInput
+                          multiline
+                          value={text}
+                          onChange={handleInputChange}
+                          variant="outlined"
+                          placeholder="Start a new message"
+                      />
+                      <div className={classes.emojiIcon}>
+                        <IconButton color="primary">
+                          <span>{EmojiIcon}</span>
+                        </IconButton>
+                      </div>
+                      <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
+                        <IconButton onClick={onSendMessage} color="primary">
+                          <span>{SandMessageIcon}</span>
+                        </IconButton>
+                      </div>
+                    </div>
                   </div>
                 </Paper>
               </div>

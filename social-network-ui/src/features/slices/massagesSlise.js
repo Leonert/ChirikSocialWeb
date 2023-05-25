@@ -16,7 +16,10 @@ export const sendMessage = createAsyncThunk(
 
 export const fetchChat = createAsyncThunk('api/messages/fetchChat', async () => {
     try {
-        return await ChatApi.getUserChats();
+        const chats = await ChatApi.getUserChats();
+        console.log(chats); // Проверка полученных данных о чатах
+
+        return chats;
     } catch (error) {
         throw new Error('Error fetching user chats:', error);
     }
@@ -39,17 +42,23 @@ const messagesSlice = createSlice({
     name: 'messages',
     initialState: {
         chats: [],
-        messages: {},
+        messages: [],
         selectedChatId: null,
         participant: null,
         text: '',
         visibleModalWindow: false,
     },
+
     reducers: {
         setSelectedChatId: (state, action) => {
             state.selectedChatId = action.payload;
-            state.participant = state.chats.find((chat) => chat.id === action.payload);
+            const selectedChat = state.chats.find((chat) => chat.id === action.payload);
+            state.participant = selectedChat?.participant;
+            console.log('Selected chatId:', action.payload); // Проверка значения chatId
+            console.log('Chats:', state.chats); // Проверка списка chats
+
         },
+
         setText: (state, action) => {
             state.text = action.payload;
         },
@@ -59,11 +68,8 @@ const messagesSlice = createSlice({
         setMessage: (state, action) => {
             const { chatId, message } = action.payload;
 
-            if (state.messages[chatId]) {
-                state.messages[chatId] = [...state.messages[chatId], message];
-            } else {
-                state.messages[chatId] = [message];
-            }
+            state.messages[chatId] = [...(state.messages[chatId] || []), message];
+            console.log(state.messages)
         },
     },
     extraReducers: (builder) => {
@@ -82,9 +88,16 @@ const messagesSlice = createSlice({
             })
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
+                console.log(messages); // Проверка полученных данных
 
-                state.messages[chatId] = messages;
+                state.messages = {
+                    ...state.messages,
+                    [chatId]: messages,
+                };
             });
+
+
+
     },
 });
 
