@@ -1,11 +1,13 @@
 import { CalendarToday as CalendarIcon, Link as LinkIcon, LocationOn as LocationIcon } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Avatar, Box, Container, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
+import { Avatar, Box, Container, Link as LinkMui, Stack, Tab, Tabs, Typography, styled } from '@mui/material';
+import { format } from 'date-fns';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, matchPath, useLoaderData, useLocation, useParams } from 'react-router-dom';
 
 import EditProfileModal from './EditProfileModal';
+import FollowButton from './FollowButton';
 
 const ProfileTabs = styled((props) => (
   <Tabs {...props} TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }} />
@@ -42,15 +44,28 @@ function useRouteMatch(patterns) {
   return null;
 }
 
-const Profile = () => {
-  const routeMatch = useRouteMatch(['profile', 'profile/replies', 'profile/media', 'profile/likes']);
+const formatWebsiteLink = (link) => {
+  const withHttp = link.includes('http://') || link.includes('https://');
+  if (!withHttp) {
+    return `http://${link}`;
+  }
+
+  return link;
+};
+
+const Profile = (props) => {
+  const { username } = useParams();
+  const routeMatch = useRouteMatch([`${username}`, `${username}/replies`, `${username}/media`, `${username}/likes`]);
   const currentTab = routeMatch?.pattern?.path;
   const { user } = useSelector((state) => state.auth);
-  const profile = useLoaderData();
+  const { data } = useLoaderData();
+  const isCurrentUserProfile = user?.username === username;
+  const createdDate = new Date(data.createdDate) ?? new Date();
+  const formattedDate = format(createdDate, 'MMMM yyyy');
 
   return (
     <>
-      <Box sx={{ maxWidth: '598px', width: '100%', height: '2000px' }}>
+      <Box sx={{ maxWidth: '598px', width: '100%' }}>
         <Box
           position="sticky"
           sx={{
@@ -74,11 +89,9 @@ const Profile = () => {
             </NavLink>
             <Stack>
               <Typography component="h2" fontSize="18px">
-                {profile.firstName + ' ' + profile.lastName}
+                {data.name}
               </Typography>
-              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>
-                {Object.keys(profile.userTweets).length} Tweets
-              </Typography>
+              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>{data.userPosts.length} Tweets</Typography>
             </Stack>
           </Stack>
         </Box>
@@ -86,7 +99,9 @@ const Profile = () => {
           sx={{
             height: '193px',
             background: (theme) =>
-              profile.profileBackground ? `url(${profile.profileBackground})` : theme.palette.background.lightDefault,
+              data.profileBackgroundImage
+                ? `url(${data.profileBackgroundImage})`
+                : theme.palette.background.lightDefault,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -94,7 +109,7 @@ const Profile = () => {
         <Stack p="20px 20px 0" direction="row" alignItems="end" justifyContent="space-between">
           <Avatar
             alt="Profile Picture"
-            src=""
+            src={data.profileImage}
             sx={{
               width: { sm: 80, md: 133 },
               height: { sm: 80, md: 133 },
@@ -107,32 +122,43 @@ const Profile = () => {
               border: (theme) => `4px solid ${theme.palette.background.paper}`,
             }}
           />
-
-          <EditProfileModal />
+          {(isCurrentUserProfile && <EditProfileModal data={data} />) || (user && <FollowButton user={data} />)}
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
           <Box>
-            <Typography variant="h6">{profile.firstName + ' ' + profile.lastName}</Typography>
+            <Typography variant="h6">{data.name}</Typography>
             <Typography sx={{ mb: '10px' }} variant="body1">
-              @{profile.username}
+              @{data.username}
             </Typography>
-            <Typography mb="12px" variant="body1">
-              {profile.BIO}
+            <Typography mb="12px" variant="body1" sx={{ wordWrap: 'break-word' }}>
+              {data.bio}
             </Typography>
-            <Stack direction="row">
+            <Stack direction="row" flexWrap="wrap">
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LocationIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">{profile.location}</Typography>
+                <Typography variant="body1">{data.location}</Typography>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                 <LinkIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1" component="a">
-                  {profile.website}
-                </Typography>
+                <LinkMui
+                  href={formatWebsiteLink(data.website)}
+                  target="_blank"
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '234px',
+                    color: (theme) => theme.palette.background.lightBlue,
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {data.website}
+                </LinkMui>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">{profile.accCreateDate}</Typography>
+                <Typography variant="body1">Joined {formattedDate}</Typography>
               </div>
             </Stack>
             <Stack direction="row">
@@ -145,9 +171,9 @@ const Profile = () => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to={`/${user?.username}/following`}
+                  to={`/${username}/following`}
                 >
-                  {profile.followNumber} Followings
+                  {data.followedCounter} Followings
                 </NavLink>
                 <NavLink
                   style={{
@@ -157,18 +183,18 @@ const Profile = () => {
                     fontSize: '14px',
                     marginRight: '14px',
                   }}
-                  to={`/${user?.username}/followers`}
+                  to={`/${username}/followers`}
                 >
-                  {profile.subscriberNumber} Follower
+                  {data.followersCounter} Follower
                 </NavLink>
               </Stack>
             </Stack>
           </Box>
           <ProfileTabs value={currentTab}>
-            <ProfileTab label="Posts" value="profile" to="/profile" component={Link} />
-            <ProfileTab label="Replies" value="profile/replies" to="replies" component={Link} />
-            <ProfileTab label="Media" value="profile/media" to="media" component={Link} />
-            <ProfileTab label="Likes" value="profile/likes" to="likes" component={Link} />
+            <ProfileTab label="Posts" value={username} to={`/${username}`} component={Link} />
+            <ProfileTab label="Replies" value={`${username}/replies`} to="replies" component={Link} />
+            <ProfileTab label="Media" value={`${username}/media`} to="media" component={Link} />
+            <ProfileTab label="Likes" value={`${username}/likes`} to="likes" component={Link} />
           </ProfileTabs>
           <Box>
             <Outlet />

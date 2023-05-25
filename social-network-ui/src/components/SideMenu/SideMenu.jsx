@@ -2,6 +2,7 @@ import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import { Hidden, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import {
@@ -14,7 +15,7 @@ import {
   ProfileIcon,
   TweetIcon,
 } from '../../icon';
-import { BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH } from '../../util/path-constants';
+import { BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, SEARCH } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
 import { useSideMenuStyles } from './SideMenuStyles';
@@ -22,6 +23,9 @@ import { useSideMenuStyles } from './SideMenuStyles';
 const SideMenu = () => {
   const classes = useSideMenuStyles();
   const [visibleAddTweet, setVisibleAddTweet] = useState(false);
+
+  const { user } = useSelector((state) => state.auth);
+
   const handleClickOpenAddTweet = () => {
     setVisibleAddTweet(true);
   };
@@ -115,7 +119,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={PROFILE} activeClassName={'selected'}>
+          <NavLink to={user?.username} activeClassName={'selected'}>
             <div>
               <Hidden smDown>
                 <>

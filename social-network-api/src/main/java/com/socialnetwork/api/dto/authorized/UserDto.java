@@ -34,6 +34,7 @@ public enum UserDto {
       String bio;
       String location;
       String website;
+      LocalDateTime birthDate;
     }
 
     @Data
