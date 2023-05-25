@@ -3,19 +3,21 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { bookmarksPost, getPostId, likesPost, openReplayModal } from '../../features/slices/homeSlice';
+import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 
-export default function PostList() {
+export default function PostList({ isBookmarkPage }) {
   const posts = useSelector((state) => state.home.post);
 
   const classes = usePostStyle();
   const dispatch = useDispatch();
 
-  const handleRetweet = (id) => {
-    axiosIns.post('/api/posts', { originalPost: id });
+  const handleRetweet = async (id) => {
+    const response = await axiosIns.post(`/api/posts`, { originalPost: id });
+    const retweetsNumber = response.status === 200 ? response.data : response.data.originalPost.retweetsNumber;
+    dispatch(makeRetweet({ postId: id, retweetsNumber }));
   };
 
   const handleReplay = (props) => {
@@ -47,7 +49,7 @@ export default function PostList() {
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: '40px' }}>
       {posts &&
         posts.map((post) => (
           <Post
@@ -66,6 +68,7 @@ export default function PostList() {
             username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
+            isBookmarkPage={isBookmarkPage}
             retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
@@ -89,6 +92,7 @@ export default function PostList() {
                 id={post.originalPost.id}
                 classes={classes.PageSmall}
                 key={post.originalPost.id}
+                isBookmarkPage={isBookmarkPage}
                 username={post.originalPost.author.username}
                 avatar={post.originalPost.author.profileImage}
                 name={post.originalPost.author.name}

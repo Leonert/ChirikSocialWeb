@@ -2,6 +2,7 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from '../layout/Layout';
+import Bookmarks from '../pages/Bookmarks/Bookmarks';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import { FollowersPage } from '../pages/FollowersPage/FollowersPage';
 import { FollowingPage } from '../pages/FollowingPage/FollowingPage';
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/bookmarks',
-        element: <div></div>,
+        element: <Bookmarks />,
       },
       {
         path: '/lists',

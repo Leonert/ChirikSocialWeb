@@ -149,17 +149,19 @@ export default function Post(props) {
               </Badge>
             </IconButton>
           </Tooltip>
-          <Tooltip title="Bookmarks">
-            <IconButton
-              aria-label="add to favorites"
-              className={props.bookmarked ? classes.iconActions : classes.iconColor}
-              onClick={props.handleClickBookmark}
-            >
-              <Badge badgeContent={props.bookmark} color="primary">
-                <BookmarkBorderIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
+          {!props.isBookmarkPage && (
+            <Tooltip title="Bookmarks">
+              <IconButton
+                aria-label="add to favorites"
+                className={props.bookmarked ? classes.iconActions : classes.iconColor}
+                onClick={props.handleClickBookmark}
+              >
+                <Badge badgeContent={props.bookmark} color="primary">
+                  <BookmarkBorderIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+          )}
         </CardActions>
       )}
     </Card>

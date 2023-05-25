@@ -25,7 +25,7 @@ const EmailConfirmation = () => {
   useEffect(() => {
     const checkTokenValidity = async (token) => {
       try {
-        const response = axiosIns.patch(`/api/registration?token=${token}`);
+        const response = await axiosIns.patch(`/api/registration?token=${token}`);
 
         if (response.status === 200) {
           setIsConfirmed(true);
