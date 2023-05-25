@@ -8,10 +8,12 @@ public class MessageDto {
   private boolean isRead;
   private String message;
   private LocalDateTime timestamp;
-  private String username;
   private int recipientId;
   private int senderId;
   private int chatId;
+  private String senderUsername;
+  private String recipientUsername;
+
 
   @Data
   public static class DefaultMessageResponseDto {
@@ -19,7 +21,6 @@ public class MessageDto {
     private boolean isRead;
     private String message;
     private LocalDateTime timestamp;
-    private String username;
     private int recipientId;
     private int senderId;
     private int messageId;

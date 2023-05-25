@@ -1,14 +1,14 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import {EmojiIcon, GifIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
-import { DEFAULT_PROFILE_IMG} from '../../util/url';
+import { EmojiIcon, GifIcon, MediaIcon, SandMessageIcon, SearchIcon } from '../../icon';
+import { DEFAULT_PROFILE_IMG } from '../../util/url';
 
 import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
-import {ChatApi} from "../../services/api/chatApi";
-import {MessageInput} from "./MessageInput/MessageInput";
+import { ChatApi } from "../../services/api/chatApi";
+import { MessageInput } from "./MessageInput/MessageInput";
 import MessagesModal from "./MessagesModal/MessagesModal";
 import {
   fetchChat,
@@ -17,11 +17,17 @@ import {
   selectMessages,
   selectParticipant,
   selectSelectedChatId,
-  selectText, selectVisibleModalWindow, sendMessage, setMessage, setSelectedChatId, setText, toggleModalWindow
+  selectText,
+  selectVisibleModalWindow,
+  sendMessage,
+  setMessage,
+  setSelectedChatId,
+  setText,
+  toggleModalWindow
 } from "../../features/slices/massagesSlise";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
-import {formatChatMessageDate} from "../../util/formatDate";
+import { formatChatMessageDate } from "../../util/formatDate";
 
 const Messages = () => {
   const classes = useMessagesStyles();
@@ -74,7 +80,6 @@ const Messages = () => {
     }
   };
 
-
   const onSendMessage = async () => {
     if (text !== '') {
       const selectedChat = chats.find((chat) => chat.id === selectedChatId);
@@ -112,7 +117,6 @@ const Messages = () => {
     }
   };
 
-
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
       await dispatch(fetchChat());
@@ -126,7 +130,6 @@ const Messages = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Обробник зміни вмісту введення
   const handleInputChange = (event) => {
     dispatch(setText(event.target.value));
   };
@@ -334,7 +337,8 @@ const Messages = () => {
               </div>
           )}
         </Grid>
-        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
+
+        {visibleModalWindow && <MessagesModal onClose={onCloseModalWindow} />}
       </>
   );
 };

@@ -167,9 +167,11 @@ public class MessageServiceImpl implements MessageService {
 
 
   private MessageDto convertToMessageDto(Message message) {
-    return modelMapper.map(message, MessageDto.class);
+    MessageDto messageDto = modelMapper.map(message, MessageDto.class);
+    messageDto.setSenderUsername(message.getSender().getUsername());
+    messageDto.setRecipientUsername(message.getRecipient().getUsername());
+    return messageDto;
   }
-
   private Message convertToMessage(MessageDto messageDto) {
     return modelMapper.map(messageDto, Message.class);
   }

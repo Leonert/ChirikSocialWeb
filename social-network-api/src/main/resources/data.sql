@@ -37,12 +37,34 @@ insert into posts (created_date, image, text, user_id, original_post_id) values 
 
 INSERT INTO CHATS (chat_id) VALUES (1);
 INSERT INTO CHATS (chat_id) VALUES (2);
+INSERT INTO CHATS (chat_id) VALUES (3);
+INSERT INTO CHATS (chat_id) VALUES (4);
 
-INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, USERNAME, RECIPIENT_ID, SENDER_ID)
+
+INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
 VALUES
-    (1, 2, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP, 'username_here', 2, 3),
-    (2, 2, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP, 'username_here', 2, 3),
-    (3, 2, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 'username_here', 2, 3);
+    (1, 2, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  2, 3),
+    (2, 2, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  2, 3),
+    (3, 2, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 2, 3);
+INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
+VALUES
+    (4, 1, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  2, 4),
+    (5, 1, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  2, 4),
+    (6, 1, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 2, 4);
+INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
+VALUES
+    (7, 3, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  2, 5),
+    (8, 3, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  2, 5),
+    (9, 3, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 2, 5);
+
+INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
+VALUES
+    (10, 4, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  2, 6),
+    (11, 4, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  2, 6),
+    (12, 4, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 2, 6);
+
+
+
 
 
 

@@ -21,10 +21,6 @@ public class Message {
   @JoinColumn(name = "chat_id")
   private Chat chat;
 
-
-  @Column(name = "username")
-  private String username;
-
   @ManyToOne
   @JoinColumn(name = "sender_id", referencedColumnName = "id")
   private User sender;
