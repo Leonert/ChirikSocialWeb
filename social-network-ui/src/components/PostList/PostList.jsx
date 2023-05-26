@@ -63,6 +63,7 @@ export default function PostList() {
                 )
               ) : null
             }
+            IdentifierReply={post.originalPost && post.text === null && post.image === null ? true : false}
             id={post.id}
             classes={classes.Page}
             username={post.author.username}
@@ -88,6 +89,7 @@ export default function PostList() {
           >
             {post.originalPost && (
               <Post
+                IdentifierOriginal={post.originalPost && post.text === null && post.image === null ? true : false}
                 id={post.originalPost.id}
                 classes={classes.PageSmall}
                 key={post.originalPost.id}

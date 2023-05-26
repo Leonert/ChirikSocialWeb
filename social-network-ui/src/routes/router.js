@@ -11,6 +11,7 @@ import { Notifications } from '../pages/Notifications/Notifications';
 import PostPage from '../pages/PostPage/PostPage';
 import Profile from '../pages/Profile/Profile';
 import profileLoader from '../pages/Profile/profileLoader';
+import SettingsPage from '../pages/SettingsPage/SettingsPage';
 
 export const router = createBrowserRouter([
   {
@@ -41,8 +42,8 @@ export const router = createBrowserRouter([
         element: <div></div>,
       },
       {
-        path: '/lists',
-        element: <div></div>,
+        path: '/setting',
+        element: <SettingsPage />,
       },
       { path: ':id', element: <PostPage /> },
       {

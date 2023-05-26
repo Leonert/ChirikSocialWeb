@@ -105,7 +105,7 @@ export default function PasswordChange() {
           error={formik.touched.ConfirmPassword && Boolean(formik.errors.ConfirmPassword)}
           helperText={formik.touched.ConfirmPassword && formik.errors.ConfirmPassword}
         />
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" sx={{ borderRadius: 20 }}>
           Save
         </Button>
       </form>

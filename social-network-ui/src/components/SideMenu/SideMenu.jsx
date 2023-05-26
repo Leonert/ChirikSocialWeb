@@ -1,27 +1,39 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import { Hidden, IconButton, Typography } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Avatar, Hidden, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
+import { handleLogOutModal } from '../../features/slices/authModalSlice';
 import {
   BookmarksIcon,
   ExploreIcon,
   HomeIcon,
-  ListsIcon,
   MessagesIcon,
   NotificationsIcon,
   ProfileIcon,
+  SettingsIcon,
   TweetIcon,
 } from '../../icon';
-import { BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH } from '../../util/path-constants';
+import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
+import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
+import LogOutButton from './LogOutButton';
 import { useSideMenuStyles } from './SideMenuStyles';
 
 const SideMenu = () => {
   const classes = useSideMenuStyles();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+
   const [visibleAddTweet, setVisibleAddTweet] = useState(false);
+  const OpenLogOutModal = () => {
+    dispatch(handleLogOutModal(true));
+  };
   const handleClickOpenAddTweet = () => {
     setVisibleAddTweet(true);
   };
@@ -103,24 +115,24 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={LISTS} activeClassName={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{ListsIcon}</span>
-                  <Typography variant={'h5'}>Lists</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
           <NavLink to={PROFILE} activeClassName={'selected'}>
             <div>
               <Hidden smDown>
                 <>
                   <span>{ProfileIcon}</span>
                   <Typography variant={'h5'}>Profile</Typography>
+                </>
+              </Hidden>
+            </div>
+          </NavLink>
+        </li>
+        <li className={classes.itemWrapper}>
+          <NavLink to={SETTING} activeClassName={'selected'}>
+            <div>
+              <Hidden smDown>
+                <>
+                  <span>{SettingsIcon}</span>
+                  <Typography variant={'h5'}>Setting</Typography>
                 </>
               </Hidden>
             </div>
@@ -141,6 +153,18 @@ const SideMenu = () => {
           </Button>
           <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
         </li>
+        {user && (
+          <li className={classes.itemWrapperLogOut}>
+            <SearchResulting
+             
+              action={<LogOutButton handelClick={OpenLogOutModal} />}
+              id={user.username}
+              name={user.name}
+              nickname={user.username}
+            />
+          </li>
+        )}
+
         <li>
           <LogOutModal />
         </li>

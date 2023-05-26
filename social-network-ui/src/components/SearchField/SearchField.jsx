@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { addResult } from '../../features/slices/searchSlice';
+import { addResult, removeResult } from '../../features/slices/searchSlice';
 import SearchWrapper from './SearchWrapper';
 
 const Search = styled('div')(({ theme }) => ({
@@ -46,8 +46,7 @@ export default function SearchField() {
   const [searchText, setSearchText] = useState('');
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
-      dispatch(addResult(response.data));
-    
+      event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
     });
     setSearchText(event.target.value);
   };
