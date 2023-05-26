@@ -35,6 +35,7 @@ const Messages = () => {
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
   console.log(messages)
+
   const text = useSelector(selectText);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
@@ -54,7 +55,7 @@ const Messages = () => {
       const userList = await ChatApi.getUserList(keyword);
       dispatch(fetchChat(userList));
     } catch (error) {
-      console.error('Помилка при пошуку користувачів:', error);
+      console.error('Error searching users:', error);
     }
   };
 
@@ -75,16 +76,22 @@ const Messages = () => {
       await dispatch(fetchChatMessages(chatId));
       scrollToBottom();
     } catch (error) {
-      console.error('Помилка при отриманні повідомлень чату:', error);
+      console.error('Error fetching chat messages:', error);
     }
   };
 
   const onSendMessage = async () => {
     if (text !== '') {
+      if (selectedChatId === null) {
+        console.error('Selected chat is undefined');
+
+        return;
+      }
+
       const selectedChat = chats.find((chat) => chat.id === selectedChatId);
       if (selectedChat) {
         const newMessage = {
-          messageId: selectedChat.id,
+          chatId: selectedChatId,
           message: text,
           read: false,
           recipientId: selectedChat.recipientId,
@@ -95,26 +102,27 @@ const Messages = () => {
         };
 
         try {
-          const createdMessage = await ChatApi.sendMessage(newMessage);
-          dispatch(sendMessage({ chatId: selectedChat.id, message: createdMessage }));
+          const createdMessage = await ChatApi.sendMessage(selectedChatId, newMessage);
+          dispatch(sendMessage({ chatId: selectedChatId, message: createdMessage }));
 
           const updatedMessages = {
             ...messages,
-            [selectedChat.id]: [...(messages[selectedChat.id] || []), createdMessage],
+            [selectedChatId]: [...(messages[selectedChatId] || []), createdMessage],
           };
-          dispatch(setMessage(updatedMessages));
+          dispatch(setMessage({ chatId: selectedChatId, message: createdMessage }));
 
           dispatch(setText(''));
-          dispatch(setSelectedChatId(selectedChat.id));
+          dispatch(setSelectedChatId(selectedChatId));
           scrollToBottom();
         } catch (error) {
-          console.error('Помилка при надсиланні повідомлення:', error);
+          console.error('Error sending message:', error);
         }
       } else {
-        console.error('Вибраний чат невизначений');
+        console.error('Selected chat not found');
       }
     }
   };
+
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
@@ -151,6 +159,13 @@ const Messages = () => {
     return result;
   }, []);
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      onSendMessage();
+    }
+  };
+
   return (
       <>
         <Grid className={classes.grid} md={4} item>
@@ -165,15 +180,9 @@ const Messages = () => {
                   <>
                     <div className={classes.messagesTitle}>Send a message, get a message</div>
                     <div className={classes.messagesText}>
-                      Direct Messages are private conversations between you and other people on Twitter. Share Tweets,
-                      media, and more!
+                      Direct Messages are private conversations between you and other people on Twitter. Share Tweets, media, and more!
                     </div>
-                    <Button
-                        onClick={onOpenModalWindow}
-                        className={classes.messagesButton}
-                        variant="contained"
-                        color="primary"
-                    >
+                    <Button onClick={onOpenModalWindow} className={classes.messagesButton} variant="contained" color="primary">
                       Start a conversation
                     </Button>
                   </>
@@ -209,7 +218,6 @@ const Messages = () => {
                                       <div>
                                         <Typography className={classes.userFullName}>{group.chats[0]?.fullName || ''}</Typography>
                                         <Typography className={classes.username}>@{group.chats[0]?.senderUsername || ''}</Typography>
-
                                       </div>
                                     </div>
                                   </div>
@@ -231,12 +239,7 @@ const Messages = () => {
                   <div className={classes.chatInfoWrapper}>
                     <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
                     <div className={classes.chatInfoText}>Choose one from your existing messages, or start a new one.</div>
-                    <Button
-                        onClick={onOpenModalWindow}
-                        className={classes.chatInfoButton}
-                        variant="contained"
-                        color="primary"
-                    >
+                    <Button onClick={onOpenModalWindow} className={classes.chatInfoButton} variant="contained" color="primary">
                       New message
                     </Button>
                   </div>
@@ -246,49 +249,44 @@ const Messages = () => {
               <div className={classes.chatContainer}>
                 <Paper variant="outlined">
                   <Paper className={classes.chatHeader}>
-                    <Avatar
-                        className={classes.chatAvatar}
-                        src={DEFAULT_PROFILE_IMG}
-                    />
+                    <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                     <div style={{ flex: 1 }}>
                       <Typography variant="h6">{messages.senderUsername}</Typography>
                       <Typography variant="caption" display="block" gutterBottom>
-                        @{messages?.senderUsername}
+                        @{messages[selectedChatId]?.senderUsername}
                       </Typography>
                     </div>
                   </Paper>
                   <div className={classes.chatMessages}>
-                    {Array.isArray(messages[selectedChatId]) && messages[selectedChatId].map((message, index) => {
-                      const previousMessage = messages[selectedChatId][index - 1];
+                    {Array.isArray(messages?.messages) &&
+                        messages.messages.map((message, index) => {
+                          const previousMessage = messages[selectedChatId]?.messages[index - 1];
                           const currentMessageDate = new Date(message.timestamp);
                           const previousMessageDate = previousMessage ? new Date(previousMessage.timestamp) : null;
                           const showDateSeparator =
-                              previousMessageDate && !isValidDate(previousMessageDate) && isValidDate(currentMessageDate);
+                              previousMessageDate &&
+                              !isValidDate(previousMessageDate) &&
+                              isValidDate(currentMessageDate);
 
                           return (
                               <React.Fragment key={message.messageId}>
                                 {showDateSeparator && (
-                                    <div className={classes.dateSeparator}>
-                                      {formatChatMessageDate(currentMessageDate)}
-                                    </div>
+                                    <div className={classes.dateSeparator}>{formatChatMessageDate(currentMessageDate)}</div>
                                 )}
                                 <div
                                     className={classNames(classes.messageContainer, {
                                       [classes.ownMessage]: message.senderId,
                                     })}
                                 >
-                                  {messages.senderId (
-                                      <Avatar
-                                          className={classes.messageAvatar}
-                                          src={DEFAULT_PROFILE_IMG}
-                                      />
-                                  )}
+                                  {message.senderId ? (
+                                      <Avatar className={classes.messageAvatar} src={DEFAULT_PROFILE_IMG} />
+                                  ) : null}
                                   <div
                                       className={classNames(classes.messageContent, {
                                         [classes.ownMessageContent]: message.senderId,
                                       })}
                                   >
-                                    <Typography className={classes.myMessage}>{message.text}</Typography>
+                                    <Typography className={classes.myMessage}>{message.message}</Typography>
                                     <Typography className={classes.messageTimestamp}>
                                       {formatChatMessageDate(currentMessageDate)}
                                     </Typography>
@@ -317,6 +315,7 @@ const Messages = () => {
                           onChange={handleInputChange}
                           variant="outlined"
                           placeholder="Start a new message"
+                          onKeyDown={handleKeyDown} // Доданий обробник події натискання клавіші
                       />
                       <div className={classes.emojiIcon}>
                         <IconButton color="primary">
@@ -337,6 +336,7 @@ const Messages = () => {
 
         {visibleModalWindow && <MessagesModal onClose={onCloseModalWindow} />}
       </>
+
   );
 };
 

@@ -2,30 +2,7 @@ import axiosIns from "../../axiosInstance";
 
 
 export const ChatApi = {
-    sendMessage: async (message) => {
-        console.log('Message to be sent:', message);
 
-        try {
-            const response = await axiosIns.post(`/api/messages/addMessage`, {
-                message: message.message,
-                read: message.read,
-                recipientId: message.recipientId,
-                senderId: message.senderId,
-                timestamp: message.timestamp,
-                username: message.username,
-                chatId: message.chatId,
-            });
-
-            const createdMessage = response.data;
-            console.log('Message sent successfully');
-            console.log('Created Message:', createdMessage);
-
-            return createdMessage;
-        } catch (error) {
-            console.error('Error sending message:', error);
-            throw error;
-        }
-    },
 
     getUserChats: async () => {
         try {
@@ -99,7 +76,7 @@ export const ChatApi = {
         }
     },
 
-    addMessageToChat: async (chatId, message) => {
+    sendMessage: async (chatId, message) => {
         try {
             const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, {
                 message: message.message,
@@ -107,7 +84,6 @@ export const ChatApi = {
                 recipientId: message.recipientId,
                 senderId: message.senderId,
                 timestamp: message.timestamp,
-                username: message.username,
                 chatId: message.chatId,
             });
 
