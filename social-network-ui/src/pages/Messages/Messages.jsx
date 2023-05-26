@@ -1,11 +1,10 @@
 import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-import { EmojiIcon, GifIcon, MediaIcon, SandMessageIcon, SearchIcon } from '../../icon';
+import {  SandMessageIcon } from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
 
 import { useMessagesStyles } from './MessagesStyles';
-import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
 import { ChatApi } from "../../services/api/chatApi";
 import MessagesModal from "./MessagesModal/MessagesModal";
@@ -13,12 +12,11 @@ import {
   fetchChat,
   fetchChatMessages,
   selectChats,
-  selectMessages,
-  selectSelectedChatId,
+  selectMessages, selectRecipientId,
+  selectSelectedChatId, selectSenderId,
   selectText,
   selectVisibleModalWindow,
   sendMessage,
-  setMessage,
   setSelectedChatId,
   setText,
   toggleModalWindow
@@ -28,13 +26,14 @@ import classNames from "classnames";
 import { formatChatMessageDate } from "../../util/formatDate";
 import {MessageInput} from "./MessageInput/MessageInput";
 
-const Messages = () => {
+
+const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
   const chats = useSelector(selectChats);
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
-  console.log(messages)
+  const [message, setMessage] = useState('');
 
   const text = useSelector(selectText);
 
@@ -45,6 +44,11 @@ const Messages = () => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleSendMessage = () => {
+    dispatch(sendMessage({ chatId, message }));
+    setMessage('');
   };
 
   const handleSearchChange = async (event) => {
@@ -70,9 +74,7 @@ const Messages = () => {
 
   const handleListItemClick = async (group) => {
     const chatId = group.chatId;
-
     dispatch(setSelectedChatId(chatId));
-
     try {
       await dispatch(fetchChatMessages(chatId));
       scrollToBottom();
@@ -81,48 +83,36 @@ const Messages = () => {
     }
   };
 
-  const onSendMessage = async () => {
-    if (text !== '') {
-      if (selectedChatId === null) {
-        console.error('Selected chat is undefined');
+  // const onSendMessage = (chatId, text) => {
+  //   const recipientId = selectRecipientId();
+  //   const senderId = selectSenderId();
+  //   if (text !== '') {
+  //     const messageDto = {
+  //       chatId: chatId,
+  //       message: text,
+  //       senderId: senderId,
+  //       recipientId: recipientId,
+  //     };
+  //
+  //     dispatch(sendMessage(messageDto))
+  //         .then((response) => {
+  //           if (response && response.payload) {
+  //             const { chatId, message } = response.payload;
+  //             console.log(messageDto);
+  //             dispatch(setText(''));
+  //           } else {
+  //             console.error('Invalid response:', response);
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.error('Error sending message:', error);
+  //         });
+  //     console.log(messageDto);
+  //   }
+  // };
 
-        return;
-      }
 
-      const selectedChat = chats.find((chat) => chat.id === selectedChatId);
-      if (selectedChat) {
-        const newMessage = {
-          chatId: selectedChatId,
-          message: text,
-          read: false,
-          recipientId: selectedChat.recipientId,
-          senderId: selectedChat.senderId,
-          timestamp: new Date().toISOString(),
-          senderUsername: selectedChat.senderUsername,
-          recipientUsername: selectedChat.recipientUsername,
-        };
 
-        try {
-          const createdMessage = await ChatApi.sendMessage(selectedChatId, newMessage);
-          dispatch(sendMessage.fulfilled({ chatId: selectedChatId, message: createdMessage }));
-
-          const updatedMessages = {
-            ...messages,
-            [selectedChatId]: [...(messages[selectedChatId] || []), createdMessage],
-          };
-          dispatch(setMessage({ chatId: selectedChatId, message: createdMessage }));
-
-          dispatch(setText(''));
-          dispatch(setSelectedChatId(selectedChatId));
-          scrollToBottom();
-        } catch (error) {
-          console.error('Error sending message:', error);
-        }
-      } else {
-        console.error('Selected chat not found');
-      }
-    }
-  };
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
@@ -159,16 +149,16 @@ const Messages = () => {
     return result;
   }, []);
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      onSendMessage();
-    }
-  };
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter' && !event.shiftKey) {
+  //     event.preventDefault();
+  //     onSendMessage(selectedChatId, text, userId);
+  //   }
+  // };
+
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
     dispatch(setText(''));
-    // Скидання стану або перенаправлення на іншу сторінку
   };
 
   return (
@@ -194,15 +184,7 @@ const Messages = () => {
               ) : (
                   <>
                     <div className={classes.searchWrapper}>
-                      <PeopleSearchInput
-                          placeholder="Explore for people and groups"
-                          variant="outlined"
-                          onChange={handleSearchChange}
-                          value={text}
-                          InputProps={{
-                            startAdornment: <InputAdornment position="start">{SearchIcon}</InputAdornment>,
-                          }}
-                      />
+
                     </div>
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
                       {groupedChats.map((group) =>
@@ -308,34 +290,21 @@ const Messages = () => {
                     <div ref={chatEndRef} />
                   </div>
                   <div className={classes.chatFooter}>
-                    <div className={classes.chatIcon}>
-                      <IconButton color="primary">
-                        <span>{MediaIcon}</span>
-                      </IconButton>
-                    </div>
-                    <div className={classes.chatIcon}>
-                      <IconButton color="primary">
-                        <span>{GifIcon}</span>
-                      </IconButton>
-                    </div>
                     <div className={classes.messageInputWrapper}>
                       <MessageInput
                           multiline
                           value={text}
-                          onChange={handleInputChange}
+                          onChange={(e) => setMessage(e.target.value)}
                           variant="outlined"
                           placeholder="Start a new message"
-                          onKeyDown={handleKeyDown} // Доданий обробник події натискання клавіші
+                          // onKeyDown={handleKeyDown}
                       />
-                      <div className={classes.emojiIcon}>
-                        <IconButton color="primary">
-                          <span>{EmojiIcon}</span>
-                        </IconButton>
-                      </div>
-                      <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
-                        <IconButton onClick={onSendMessage} color="primary">
+                      <div style={{marginLeft: 8}} className={classes.chatIcon}>
+                        <IconButton onClick={handleSendMessage} color="primary">
                           <span>{SandMessageIcon}</span>
                         </IconButton>
+
+
                       </div>
                     </div>
                   </div>
@@ -350,4 +319,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default Messages

@@ -63,6 +63,13 @@ VALUES
     (11, 4, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  2, 6),
     (12, 4, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 2, 6);
 
+INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
+VALUES
+    (13, 4, 'ydhadnn', false, CURRENT_TIMESTAMP,  6, 2),
+    (14, 4, 'Pice', false, CURRENT_TIMESTAMP,  6, 2),
+    (15, 4, 'uudd', false, CURRENT_TIMESTAMP, 2, 6);
+
+
 
 
 

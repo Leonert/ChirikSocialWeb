@@ -76,17 +76,17 @@ export const ChatApi = {
         }
     },
 
-    sendMessage: async (chatId, message) => {
+    sendMessage: async (messages, chatId) => {
         try {
             const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, {
-                message: message.message,
-                read: message.read,
-                recipientId: message.recipientId,
-                senderId: message.senderId,
-                timestamp: message.timestamp,
-                chatId: message.chatId,
+                senderId: messages.senderId,
+                recipientId: messages.recipientId,
+                message: messages.message
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
-
             const createdMessage = response.data;
             console.log('Message sent successfully');
             console.log('Created Message:', createdMessage);
@@ -97,4 +97,10 @@ export const ChatApi = {
             throw error;
         }
     },
+
+
+
+
+
+
 };

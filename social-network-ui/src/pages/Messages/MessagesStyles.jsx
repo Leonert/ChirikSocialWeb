@@ -247,8 +247,14 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   myMessage: {
-    display: "block",
-    flexDirection: "row-reverse",
+    top: 100,
+    border: '1px solid rgb(29, 161, 242)',
+    borderRadius: '16px 16px 0px 16px',
+    padding: 12,
+    width: 184,
+    backgroundColor: theme.palette.background.primary,
+    color: theme.palette.text.secondary,
+
     "& span": {
       backgroundColor: "rgb(29, 161, 242)",
       color: "#fff",

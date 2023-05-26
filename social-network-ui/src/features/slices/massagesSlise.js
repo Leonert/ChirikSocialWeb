@@ -1,47 +1,56 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../services/api/chatApi";
-
-
+import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
     async ({ chatId, message }, { getState }) => {
-        try {
-            const createdMessage = await ChatApi.sendMessage(chatId, message);
+        const state = getState();
+        const selectedChat = selectSelectedChatId(state);
 
-            return { chatId, message: createdMessage };
-        } catch (error) {
-            throw new Error('Error sending message:', error);
+        if (!selectedChat) {
+            throw new Error(`Chat with id ${chatId} not found`);
         }
+
+        const recipientId = selectedChat.recipientId;
+        const senderId = selectedChat.senderId;
+
+        const messageDto = {
+            chatId: chatId,
+            message: message,
+            senderId: senderId,
+            recipientId: recipientId,
+        };
+
+        const response = await axiosIns.post(
+            `/api/messages/chats/${chatId}/add-message`,
+            messageDto
+        );
+
+        const createdMessage = response.data;
+
+        return { chatId: chatId, message: createdMessage, senderId, recipientId };
     }
 );
+
 
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
     async () => {
-        try {
-            const chats = await ChatApi.getUserChats();
+        const chats = await ChatApi.getUserChats();
 
-            return chats;
-        } catch (error) {
-            throw new Error('Error fetching user chats:', error);
-        }
+        return chats;
     }
 );
 
 export const fetchChatMessages = createAsyncThunk(
     'api/messages/fetchChatMessages',
     async (chatId) => {
-        try {
-            const chatMessages = await ChatApi.getChatMessages(chatId);
+        const chatMessages = await ChatApi.getChatMessages(chatId);
 
-            return { chatId, messages: chatMessages };
-        } catch (error) {
-            throw new Error('Error fetching chat messages:', error);
-        }
+        return { chatId, messages: chatMessages };
     }
 );
-
 
 const messagesSlice = createSlice({
     name: 'messages',
@@ -54,8 +63,7 @@ const messagesSlice = createSlice({
     },
     reducers: {
         setSelectedChatId: (state, action) => {
-            const selectedChatId = action.payload;
-            state.selectedChatId = selectedChatId;
+            state.selectedChatId = action.payload;
         },
         setText: (state, action) => {
             state.text = action.payload;
@@ -63,7 +71,6 @@ const messagesSlice = createSlice({
         toggleModalWindow: (state) => {
             state.visibleModalWindow = !state.visibleModalWindow;
         },
-
         setMessage: (state, action) => {
             const { chatId, message } = action.payload;
             state.messages[chatId] = [...(state.messages[chatId] || []), message];
@@ -77,7 +84,7 @@ const messagesSlice = createSlice({
                 if (state.messages[chatId]) {
                     state.messages[chatId] = [...state.messages[chatId], message];
                 } else {
-                    state.messages[chatId] = [message];
+                    state.messages[chatId] = { messages: [message] };
                 }
             })
             .addCase(fetchChat.fulfilled, (state, action) => {
@@ -94,7 +101,6 @@ export const {
     setSelectedChatId,
     setText,
     toggleModalWindow,
-    setMessage,
 } = messagesSlice.actions;
 
 export const selectChats = (state) => state.messages.chats;
