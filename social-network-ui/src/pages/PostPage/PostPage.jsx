@@ -8,12 +8,10 @@ import NotFound from '../../components/NotFound/NotFound';
 import Post from '../../components/Post/Post';
 import { usePostStyle } from '../../components/Post/PostStyle';
 import ReplyHeader from '../../components/Post/ReplyHeader';
-import { bookmarksPost, getPostId, likesPost, openReplayModal } from '../../features/slices/homeSlice';
-import usePostPageStyles from './PostPageStyles';
+import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
 
 const PostPage = () => {
   const postClasses = usePostStyle();
-  const postPageClasses = usePostPageStyles();
   const posts = useSelector((state) => state.home.post);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -33,8 +31,10 @@ const PostPage = () => {
     fetchPost().catch(() => setIsLoading(false));
   }, [posts, id]);
 
-  const handleRetweet = (id) => {
-    axiosIns.post('/api/posts', { originalPost: id });
+  const handleRetweet = async (id) => {
+    const response = await axiosIns.post(`/api/posts`, { originalPost: id });
+    const retweetsNumber = response.status === 200 ? response.data : response.data.originalPost.retweetsNumber;
+    dispatch(makeRetweet({ postId: id, retweetsNumber }));
   };
 
   const handleReplay = (props) => {
@@ -66,7 +66,10 @@ const PostPage = () => {
   };
 
   return (
-    <Container maxWidth="sm" className={postPageClasses.container}>
+    <Container
+      maxWidth="sm"
+      sx={isLoading ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : { padding: '50px 0' }}
+    >
       {isLoading && <CircularProgress />}
       {!isLoading && post && (
         <Post
@@ -100,7 +103,7 @@ const PostPage = () => {
           handleClick={() => dispatch(getPostId(post.id))}
           handleClickLike={() => handleLike(post.id)}
           handleClickReplay={() => handleReplay(post.id)}
-          handleClickRetweet={() => handleRetweet(post.id)}
+          handleClickRetweet={() => handleRetweet(post.id, post.retweeted)}
           handleClickBookmark={() => handleBookmark(post.id)}
         >
           {post.originalPost && (

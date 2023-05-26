@@ -1,7 +1,7 @@
 import { Container, Grid } from '@material-ui/core';
 import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 import { BottomLine } from '../components/BottomLine/BottomLine';
 import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
@@ -31,6 +31,11 @@ export const Layout = () => {
           <SideMenu />
         </Grid>
         <Grid container>
+          <ScrollRestoration
+            getKey={(location) => {
+              return location.pathname === '/' ? location.pathname : location.key;
+            }}
+          />
           <Outlet />
           <CustomModalWindow />
         </Grid>

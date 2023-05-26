@@ -4,7 +4,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import {
-  Avatar,
   Badge,
   Box,
   Card,
@@ -19,6 +18,8 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import AvatarLink from '../UI/AvatarLink';
+import NameLink from '../UI/NameLink';
 import { usePostStyle } from './PostStyle';
 
 const options = {
@@ -39,7 +40,7 @@ export default function Post(props) {
       {props.content != null && (
         <CardHeader
           className={classes.pageItem}
-          avatar={<Avatar aria-label="recipe" alt={props.name} src={props.avatar}></Avatar>}
+          avatar={<AvatarLink alt={props.name} src={props.avatar} to={`/${props.username}`} />}
           action={
             <Tooltip title="More">
               <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
@@ -47,7 +48,7 @@ export default function Post(props) {
               </IconButton>
             </Tooltip>
           }
-          title={props.name}
+          title={<NameLink name={props.name} to={`/${props.username}`} />}
           subheader={
             <Typography variant="subtitle2" color="#B9CAD3">
               @{props.username}
@@ -56,7 +57,7 @@ export default function Post(props) {
         />
       )}
       {props.content && !props.postPage && (
-        <Link to={`/${props.id}`}>
+        <Link to={`/${props.username}/${props.id}`}>
           <CardContent className={classes.pageItem}>
             <Typography variant="body2" className={classes.iconColor}>
               {props.content}
@@ -202,17 +203,19 @@ export default function Post(props) {
               </Badge>
             </IconButton>
           </Tooltip>
-          <Tooltip title="Bookmarks">
-            <IconButton
-              aria-label="add to favorites"
-              className={props.bookmarked ? classes.iconActions : classes.iconColor}
-              onClick={props.handleClickBookmark}
-            >
-              <Badge badgeContent={props.bookmark} color="primary">
-                <BookmarkBorderIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
+          {!props.isBookmarkPage && (
+            <Tooltip title="Bookmarks">
+              <IconButton
+                aria-label="add to favorites"
+                className={props.bookmarked ? classes.iconActions : classes.iconColor}
+                onClick={props.handleClickBookmark}
+              >
+                <Badge badgeContent={props.bookmark} color="primary">
+                  <BookmarkBorderIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+          )}
         </CardActions>
       )}
     </Card>
