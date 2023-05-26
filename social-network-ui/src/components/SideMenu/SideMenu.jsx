@@ -4,9 +4,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Hidden, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { useDispatch } from 'react-redux';
-
 import { NavLink } from 'react-router-dom';
 
 import { handleLogOutModal } from '../../features/slices/authModalSlice';
@@ -20,10 +18,7 @@ import {
   SettingsIcon,
   TweetIcon,
 } from '../../icon';
-
 import { BOOKMARKS, HOME, LISTS, MESSAGES, NOTIFICATIONS, PROFILE, SEARCH, SETTING } from '../../util/path-constants';
-=======
-
 import LogOutModal from '../LogOutModal/LogOutModal';
 import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
@@ -33,7 +28,6 @@ import { useSideMenuStyles } from './SideMenuStyles';
 const SideMenu = () => {
   const classes = useSideMenuStyles();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
 
   const [visibleAddTweet, setVisibleAddTweet] = useState(false);
 
@@ -41,9 +35,7 @@ const SideMenu = () => {
     dispatch(handleLogOutModal(true));
   };
 
-
   const { user } = useSelector((state) => state.auth);
-
 
   const handleClickOpenAddTweet = () => {
     setVisibleAddTweet(true);
@@ -126,7 +118,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={PROFILE} activeClassName={'selected'}>
+          <NavLink to={user?.username} activeClassName={'selected'}>
             <div>
               <Hidden smDown>
                 <>
@@ -138,11 +130,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-
           <NavLink to={SETTING} activeClassName={'selected'}>
-
-          <NavLink to={user?.username} activeClassName={'selected'}>
-
             <div>
               <Hidden smDown>
                 <>
@@ -171,7 +159,6 @@ const SideMenu = () => {
         {user && (
           <li className={classes.itemWrapperLogOut}>
             <SearchResulting
-             
               action={<LogOutButton handelClick={OpenLogOutModal} />}
               id={user.username}
               name={user.name}
