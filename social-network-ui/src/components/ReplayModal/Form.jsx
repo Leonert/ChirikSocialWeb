@@ -4,8 +4,7 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { addOnePost, clothReplayModal } from '../../features/slices/homeSlice';
-import { replayMessage } from '../../features/slices/homeSlice';
+import { addOnePost, clothReplayModal, replayMessage } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
