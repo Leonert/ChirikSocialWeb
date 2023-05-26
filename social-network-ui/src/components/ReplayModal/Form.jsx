@@ -1,4 +1,4 @@
-import { Avatar, Button, CircularProgress, TextareaAutosize } from '@material-ui/core';
+import { Avatar, Button } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ function FormModal({ buttonName }) {
   const text = useSelector((state) => state.home.message);
   const id = useSelector((state) => state.home.postId);
   const post = useSelector((state) => state.home.post);
+  const user = useSelector((state) => state.auth.user);
+
   const classes = useAddTweetFormStyles();
   const fileInputRef = useRef(null);
   const visiblePoll = false;
@@ -39,7 +41,7 @@ function FormModal({ buttonName }) {
       dispatch(replayMessage(''));
     });
   };
-  const userName = 'like This Name';
+
 
   return (
     <div>
@@ -52,7 +54,7 @@ function FormModal({ buttonName }) {
           <Typography className={classes.item}>Send replay @{targetPost.author.name}</Typography>
           <div className={classes.content}>
             <Avatar />
-            <Typography className={classes.itemNick}>@{userName}</Typography>
+            <Typography className={classes.itemNick}>@{user.name}</Typography>
           </div>
 
           <TextInput handleTextChange={handleTextChange} />
