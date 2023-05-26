@@ -60,12 +60,12 @@ public class PostController extends Controller {
   @GetMapping("/{id}")
   public PostDtoInterface getPostById(@PathVariable(ID_QUERY) Integer id,
                                       @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
-        throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+          throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
     if (username.isEmpty()) {
       return nonAuthPostMapper.convertToPostDtoDefault(nonAuthPostService.getReferenceById(id));
     }
     return postMapper.convertToPostDtoDefault(postService.getReferenceById(id),
-          username.get());
+            username.get());
   }
 
   @GetMapping("")
@@ -74,17 +74,17 @@ public class PostController extends Controller {
           @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
           @RequestParam("viewed") Optional<Boolean> showViewedPosts,
           @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
-        throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
     if (username.isEmpty()) {
       return getListResponseEntity(nonAuthPostMapper.mapForListing(
-            nonAuthPostService.getPosts(pageD, resultsD)));
+              nonAuthPostService.getPosts(pageD, resultsD)));
     }
     String usernameD = username.get();
     List<PostDto.Response.WithAuthor> outcome = new ArrayList<>();
     List<Post> posts = showViewedPosts.orElse(false) ? postService.getPosts(pageD, resultsD)
-          : postService.getUnviewedPosts(pageD, resultsD, usernameD);
+            : postService.getUnviewedPosts(pageD, resultsD, usernameD);
     for (Post post : posts) {
       outcome.add(postMapper.convertToPostDtoDefault(post, usernameD));
     }
@@ -93,76 +93,82 @@ public class PostController extends Controller {
 
   @GetMapping("/{id}/replies")
   public ResponseEntity<List<? extends DtoInterface>> getReplies(
-        @PathVariable("id") int id, @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-        @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-        @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username) throws NoPostWithSuchIdException {
+          @PathVariable("id") int id, @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+          @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
+          @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username) throws NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (username.isEmpty()) {
       return getListResponseEntity(nonAuthPostMapper.mapForListing(nonAuthPostService.getReplies(id, pageD, resultsD)));
     }
     return getListResponseEntity(postMapper.mapForListing(
-          postService.getReplies(id, pageD, resultsD), username.get()));
+            postService.getReplies(id, pageD, resultsD), username.get()));
   }
 
   @GetMapping("/{id}/retweets")
   public ResponseEntity<List<? extends DtoInterface>> getRetweets(
-        @PathVariable("id") int id,
-        @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-        @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-        @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
-        throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+          @PathVariable("id") int id,
+          @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+          @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
+          @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (username.isEmpty()) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthPostService.getRetweets(id,
-            pageD, resultsD)));
+              pageD, resultsD)));
     }
     String currentUserUsername = username.get();
     return getListResponseEntity(userMapper.mapForListing(postService.getRetweets(id,
-          currentUserUsername, pageD, resultsD), currentUserUsername));
+            currentUserUsername, pageD, resultsD), currentUserUsername));
   }
 
   @GetMapping("/{id}/likes")
   public ResponseEntity<List<? extends DtoInterface>> getLikes(
-        @PathVariable("id") int id,
-        @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-        @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
-        @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
-      throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+          @PathVariable("id") int id,
+          @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+          @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersForPage,
+          @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (username.isEmpty()) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthLikeService.getLikes(id,
-            pageD, resultsD)));
+              pageD, resultsD)));
     }
     String currentUserUsername = username.get();
     return getListResponseEntity(userMapper.mapForListing(likeService.getLikes(id,
-          currentUserUsername, pageD, resultsD), currentUserUsername));
+            currentUserUsername, pageD, resultsD), currentUserUsername));
   }
 
   @PostMapping()
-  public ResponseEntity<PostDtoInterface> addPost(@RequestBody PostDto.Request.Created postDto,
-                                                  @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+  public ResponseEntity<?> addPost(@RequestBody PostDto.Request.Created postDto,
+                                   @RequestAttribute(USERNAME_ATTRIBUTE) String username)
+          throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+    Integer id = postDto.getOriginalPost();
+    if (id != null && postDto.getText() == null && postDto.getImage() == null
+            && postService.isRetweetedByUser(userService.findByUsername(username).getId(), id)) {
+      postService.deleteUserRetweet(userService.findByUsername(username).getId(), id);
+      return ResponseEntity.status(HttpStatus.OK).body(postService.countPostRetweets(new Post(id)));
+    }
     return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.convertToPostDtoDefault(postService.save(
-          postMapper.convertToPost(postDto, userService.findByUsername(username))), username));
+            postMapper.convertToPost(postDto, userService.findByUsername(username))), username));
   }
 
   @PostMapping("/edit")
   public ResponseEntity<? extends PostDtoInterface> editPost(@RequestBody PostDto.Request.Editable postDto,
                                                              @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoPostWithSuchIdException, AccessDeniedException, NoUserWithSuchCredentialsException {
+          throws NoPostWithSuchIdException, AccessDeniedException, NoUserWithSuchCredentialsException {
     Post post = postService.getReferenceById(postDto.getId());
     checkAuthenticationForPost(post, username);
     return ResponseEntity.status(202).body(postMapper.convertToPostDtoDefault(
-          postService.edit(postMapper.convertToPost(postDto), post), username));
+            postService.edit(postMapper.convertToPost(postDto), post), username));
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity<?> deletePostById(@PathVariable(ID_QUERY) int id,
                                           @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoPostWithSuchIdException, AccessDeniedException {
+          throws NoPostWithSuchIdException, AccessDeniedException {
     Post post = postService.getReferenceById(id);
     checkAuthenticationForPost(post, username);
     postService.delete(post);
@@ -172,26 +178,26 @@ public class PostController extends Controller {
   @PostMapping("/{id}/bookmarks")
   public ResponseEntity<Integer> bookmarkUnbookmark(@PathVariable(ID_QUERY) int postId,
                                                     @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return ResponseEntity
-          .status(bookmarkService.bookmarkUnBookmark(postId, username) ? HttpStatus.OK : HttpStatus.CREATED)
-          .body(bookmarkService.countPostBookmarks(new Post(postId)));
+            .status(bookmarkService.bookmarkUnBookmark(postId, username) ? HttpStatus.OK : HttpStatus.CREATED)
+            .body(bookmarkService.countPostBookmarks(new Post(postId)));
   }
 
   @PostMapping("/{id}/likes")
   public ResponseEntity<Integer> saveLike(@PathVariable(ID_QUERY) int postId,
                                           @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return ResponseEntity
-          .status(likeService.likeUnlike(userService.findByUsername(username).getId(),
-                postId) ? HttpStatus.CREATED : HttpStatus.OK)
-          .body(likeService.countPostLikes(new Post(postId)));
+            .status(likeService.likeUnlike(userService.findByUsername(username).getId(),
+                    postId) ? HttpStatus.CREATED : HttpStatus.OK)
+            .body(likeService.countPostLikes(new Post(postId)));
   }
 
   @PostMapping("/{id}/views")
   public void saveView(@PathVariable(ID_QUERY) int postId,
                        @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     postService.saveView(userService.findByUsername(username), postId);
   }
 
