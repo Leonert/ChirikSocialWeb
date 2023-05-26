@@ -3,10 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-
-import { addOnePost, bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
-
-
+import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
@@ -17,12 +14,10 @@ export default function PostList({ isBookmarkPage }) {
   const classes = usePostStyle();
   const dispatch = useDispatch();
 
-
   const handleRetweet = async (id) => {
     const response = await axiosIns.post(`/api/posts`, { originalPost: id });
     const retweetsNumber = response.status === 200 ? response.data : response.data.originalPost.retweetsNumber;
     dispatch(makeRetweet({ postId: id, retweetsNumber }));
-
   };
 
   const handleReplay = (props) => {
