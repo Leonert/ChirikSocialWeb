@@ -68,9 +68,6 @@ export const ChatApi = {
     getChatMessages: async (chatId) => {
         try {
             const response = await axiosIns.get(`/api/messages/chats/${chatId}`);
-            console.log('Chat messages fetched successfully');
-            console.log('Chat ID:', chatId);
-            console.log(response);
 
             return response.data;
         } catch (error) {
@@ -101,8 +98,6 @@ export const ChatApi = {
             return [];
         }
     },
-
-
 
     addMessageToChat: async (chatId, message) => {
         try {

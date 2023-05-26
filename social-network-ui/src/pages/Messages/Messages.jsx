@@ -8,14 +8,12 @@ import { useMessagesStyles } from './MessagesStyles';
 import { PeopleSearchInput } from './PeopleSearchInput/PeopleSearchInput';
 
 import { ChatApi } from "../../services/api/chatApi";
-import { MessageInput } from "./MessageInput/MessageInput";
 import MessagesModal from "./MessagesModal/MessagesModal";
 import {
   fetchChat,
   fetchChatMessages,
   selectChats,
   selectMessages,
-  selectParticipant,
   selectSelectedChatId,
   selectText,
   selectVisibleModalWindow,
@@ -28,6 +26,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import { formatChatMessageDate } from "../../util/formatDate";
+import {MessageInput} from "./MessageInput/MessageInput";
 
 const Messages = () => {
   const classes = useMessagesStyles();
@@ -35,8 +34,8 @@ const Messages = () => {
   const chats = useSelector(selectChats);
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
+  console.log(messages)
   const text = useSelector(selectText);
-  const participant = useSelector(selectParticipant);
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
 
@@ -55,7 +54,7 @@ const Messages = () => {
       const userList = await ChatApi.getUserList(keyword);
       dispatch(fetchChat(userList));
     } catch (error) {
-      console.error('Error searching users:', error);
+      console.error('Помилка при пошуку користувачів:', error);
     }
   };
 
@@ -76,7 +75,7 @@ const Messages = () => {
       await dispatch(fetchChatMessages(chatId));
       scrollToBottom();
     } catch (error) {
-      console.error('Error fetching chat messages:', error);
+      console.error('Помилка при отриманні повідомлень чату:', error);
     }
   };
 
@@ -84,15 +83,15 @@ const Messages = () => {
     if (text !== '') {
       const selectedChat = chats.find((chat) => chat.id === selectedChatId);
       if (selectedChat) {
-        const existingChat = chats.find((chat) => chat.recipientId === selectedChat.recipientId);
         const newMessage = {
-          messageId: existingChat ? existingChat.id : selectedChat.id,
+          messageId: selectedChat.id,
           message: text,
           read: false,
           recipientId: selectedChat.recipientId,
           senderId: selectedChat.senderId,
           timestamp: new Date().toISOString(),
-          username: selectedChat.username,
+          senderUsername: selectedChat.senderUsername,
+          recipientUsername: selectedChat.recipientUsername,
         };
 
         try {
@@ -109,10 +108,10 @@ const Messages = () => {
           dispatch(setSelectedChatId(selectedChat.id));
           scrollToBottom();
         } catch (error) {
-          console.error('Error sending message:', error);
+          console.error('Помилка при надсиланні повідомлення:', error);
         }
       } else {
-        console.error('Selected chat is undefined');
+        console.error('Вибраний чат невизначений');
       }
     }
   };
@@ -198,20 +197,19 @@ const Messages = () => {
                                   key={group.chatId}
                                   button
                                   className={classes.listItem}
-                                  id={participant && participant.id === group.chats[0].chatId ? 'selected' : ''}
-                                  selected={participant && participant.id === group.chats[0].chatId}
                                   onClick={() => handleListItemClick(group)}
                               >
                                 <div className={classes.userWrapper}>
                                   <Avatar
                                       className={classes.userAvatar}
-                                      src={group.chats[0].avatar?.src ? group.chats[0].avatar.src : DEFAULT_PROFILE_IMG}
+                                      src={(group.chats[0]?.avatar?.src || '') ? group.chats[0].avatar.src : DEFAULT_PROFILE_IMG}
                                   />
                                   <div style={{ flex: 1 }}>
                                     <div className={classes.userHeader}>
                                       <div>
-                                        <Typography className={classes.userFullName}>{group.chats[0].fullName}</Typography>
-                                        <Typography className={classes.username}>@{group.chats[0].username}</Typography>
+                                        <Typography className={classes.userFullName}>{group.chats[0]?.fullName || ''}</Typography>
+                                        <Typography className={classes.username}>@{group.chats[0]?.senderUsername || ''}</Typography>
+
                                       </div>
                                     </div>
                                   </div>
@@ -227,7 +225,7 @@ const Messages = () => {
         </Grid>
 
         <Grid className={classes.grid} md={6} item>
-          {participant?.id === undefined ? (
+          {selectedChatId === undefined ? (
               <div className={classes.chatContainer}>
                 <Paper variant="outlined">
                   <div className={classes.chatInfoWrapper}>
@@ -250,19 +248,18 @@ const Messages = () => {
                   <Paper className={classes.chatHeader}>
                     <Avatar
                         className={classes.chatAvatar}
-                        src={participant?.avatar?.src ? participant?.avatar.src : DEFAULT_PROFILE_IMG}
+                        src={DEFAULT_PROFILE_IMG}
                     />
                     <div style={{ flex: 1 }}>
-                      <Typography variant="h6">{participant?.fullName}</Typography>
+                      <Typography variant="h6">{messages.senderUsername}</Typography>
                       <Typography variant="caption" display="block" gutterBottom>
-                        @{participant?.username}
+                        @{messages?.senderUsername}
                       </Typography>
                     </div>
                   </Paper>
                   <div className={classes.chatMessages}>
-                    {messages[selectedChatId] &&
-                        messages[selectedChatId].map((message, index) => {
-                          const previousMessage = messages[selectedChatId][index - 1];
+                    {Array.isArray(messages[selectedChatId]) && messages[selectedChatId].map((message, index) => {
+                      const previousMessage = messages[selectedChatId][index - 1];
                           const currentMessageDate = new Date(message.timestamp);
                           const previousMessageDate = previousMessage ? new Date(previousMessage.timestamp) : null;
                           const showDateSeparator =
@@ -277,21 +274,21 @@ const Messages = () => {
                                 )}
                                 <div
                                     className={classNames(classes.messageContainer, {
-                                      [classes.ownMessage]: message.senderId === participant.id,
+                                      [classes.ownMessage]: message.senderId,
                                     })}
                                 >
-                                  {message.senderId !== participant.id && (
+                                  {messages.senderId (
                                       <Avatar
                                           className={classes.messageAvatar}
-                                          src={participant?.avatar?.src ? participant?.avatar.src : DEFAULT_PROFILE_IMG}
+                                          src={DEFAULT_PROFILE_IMG}
                                       />
                                   )}
                                   <div
                                       className={classNames(classes.messageContent, {
-                                        [classes.ownMessageContent]: message.senderId === participant.id,
+                                        [classes.ownMessageContent]: message.senderId,
                                       })}
                                   >
-                                    <Typography className={classes.messageText}>{message.message}</Typography>
+                                    <Typography className={classes.myMessage}>{message.text}</Typography>
                                     <Typography className={classes.messageTimestamp}>
                                       {formatChatMessageDate(currentMessageDate)}
                                     </Typography>
