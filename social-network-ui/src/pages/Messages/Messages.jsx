@@ -37,6 +37,7 @@ const Messages = () => {
   console.log(messages)
 
   const text = useSelector(selectText);
+
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
 
@@ -53,7 +54,7 @@ const Messages = () => {
 
     try {
       const userList = await ChatApi.getUserList(keyword);
-      dispatch(fetchChat(userList));
+      dispatch(fetchChat.fulfilled(userList));
     } catch (error) {
       console.error('Error searching users:', error);
     }
@@ -103,7 +104,7 @@ const Messages = () => {
 
         try {
           const createdMessage = await ChatApi.sendMessage(selectedChatId, newMessage);
-          dispatch(sendMessage({ chatId: selectedChatId, message: createdMessage }));
+          dispatch(sendMessage.fulfilled({ chatId: selectedChatId, message: createdMessage }));
 
           const updatedMessages = {
             ...messages,
@@ -122,7 +123,6 @@ const Messages = () => {
       }
     }
   };
-
 
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
@@ -164,6 +164,11 @@ const Messages = () => {
       event.preventDefault();
       onSendMessage();
     }
+  };
+  const handleExitClick = () => {
+    dispatch(setSelectedChatId(undefined));
+    dispatch(setText(''));
+    // Скидання стану або перенаправлення на іншу сторінку
   };
 
   return (
@@ -243,19 +248,24 @@ const Messages = () => {
                       New message
                     </Button>
                   </div>
+
                 </Paper>
               </div>
           ) : (
               <div className={classes.chatContainer}>
+
                 <Paper variant="outlined">
                   <Paper className={classes.chatHeader}>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                     <div style={{ flex: 1 }}>
-                      <Typography variant="h6">{messages.senderUsername}</Typography>
-                      <Typography variant="caption" display="block" gutterBottom>
-                        @{messages[selectedChatId]?.senderUsername}
-                      </Typography>
+                      <Typography className={classes.username}>@{messages?.senderUsername || ''}</Typography>
+
+                      <IconButton  onClick={handleExitClick} color="primary">
+                        <span>back</span>
+
+                      </IconButton>
                     </div>
+
                   </Paper>
                   <div className={classes.chatMessages}>
                     {Array.isArray(messages?.messages) &&
