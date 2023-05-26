@@ -1,10 +1,8 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Avatar, Hidden, IconButton, Typography } from '@mui/material';
+import { Hidden, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { handleLogOutModal } from '../../features/slices/authModalSlice';
