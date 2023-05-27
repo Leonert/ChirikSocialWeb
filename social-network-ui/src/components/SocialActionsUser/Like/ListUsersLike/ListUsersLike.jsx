@@ -1,5 +1,7 @@
+import { Typography } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import { getUsersLike } from '../../../../features/slices/postDatas/likesSlice';
 import Spinner from '../../../Spinner/Spinner';
@@ -7,25 +9,24 @@ import { ItemUser } from '../../ItemUser/ItemUser';
 
 export const ListUsersLike = forwardRef(function ListUsersLike(props, ref) {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.likes);
-  const { listUsers } = useSelector((state) => state.likes);
+  const { loading, listUsers, isTotalUsers } = useSelector((state) => state.likes);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const totalUsers = 10;
+  const { id } = useParams();
 
   const handleScroll = useCallback(
     (e) => {
       if (e.target.scrollTop + e.target.offsetHeight >= e.target.scrollHeight) {
-        if (listUsers.length < totalUsers) {
+        if (!isTotalUsers) {
           if (loading) return;
           setCurrentPage((prevState) => prevState + 1);
-          dispatch(getUsersLike({ id: 1, currentPage: currentPage + 1 }));
+          dispatch(getUsersLike({ id, currentPage: currentPage + 1 }));
 
           e.target.removeEventListener('scroll', handleScroll);
         }
       }
     },
-    [dispatch, loading, totalUsers, currentPage]
+    [dispatch, loading, isTotalUsers, currentPage]
   );
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export const ListUsersLike = forwardRef(function ListUsersLike(props, ref) {
 
   useEffect(() => {
     if (listUsers.length === 0) {
-      dispatch(getUsersLike({ id: 1, currentPage }));
+      dispatch(getUsersLike({ id, currentPage }));
     }
   }, []);
 
@@ -51,10 +52,15 @@ export const ListUsersLike = forwardRef(function ListUsersLike(props, ref) {
   return (
     <ul>
       {loading && <Spinner />}
-      {listUsers &&
+      {listUsers.length === 0 && !loading ? (
+        <Typography sx={{ textAlign: 'center' }} variant="h5">
+          The likes are not there.
+        </Typography>
+      ) : (
         listUsers.map((user) => {
           return <ItemUser key={user.id} user={user} />;
-        })}
+        })
+      )}
     </ul>
   );
 });

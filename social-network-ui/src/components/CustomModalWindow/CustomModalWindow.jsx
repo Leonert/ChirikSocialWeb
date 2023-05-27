@@ -11,8 +11,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { cloneElement, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { handleOpenLikeModal } from '../../features/slices/postDatas/likesSlice';
-import { handleOpenRetweetModal } from '../../features/slices/postDatas/retweetsSlice';
+import { handleOpenLikeModal, removeListUsersLike } from '../../features/slices/postDatas/likesSlice';
+import { handleOpenRetweetModal, removeListUsersRetweet } from '../../features/slices/postDatas/retweetsSlice';
 
 export const CustomModalWindow = ({
   children,
@@ -34,6 +34,8 @@ export const CustomModalWindow = ({
     dispatch(handleCustomModal(false));
     dispatch(handleOpenLikeModal(false));
     dispatch(handleOpenRetweetModal(false));
+    dispatch(removeListUsersLike());
+    dispatch(removeListUsersRetweet());
   };
 
   return (
@@ -56,12 +58,14 @@ export const CustomModalWindow = ({
             <IconButton sx={{ p: 0 }} onClick={handleClose}>
               <CloseIcon sx={{ color: 'white' }} />
             </IconButton>
-            {titleShow && <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>}
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              {titleShow && <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>}
+            </Box>
           </Box>
 
           <DialogContent>
             {contentText && <DialogContentText>{contentText}</DialogContentText>}
-            {children && cloneElement(children, { ref })} {/* Pass the ref to the children */}
+            {children && cloneElement(children, { ref })}
           </DialogContent>
 
           {footerBtn && (
