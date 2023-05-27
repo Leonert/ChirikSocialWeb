@@ -7,9 +7,9 @@ import { changeStatusUserFollower } from './followersSlice';
 
 export const loadFollowing = createAsyncThunk(
   'followingSlice/loadFollowing',
-  async ({ username, currentPage = 0, quantity = 10 }, { rejectWithValue }) => {
+  async ({ username, currentPage = 0, quantity = 10 }, { dispatch, rejectWithValue }) => {
     try {
-      const { data } = await axiosIns({
+      const { data, status } = await axiosIns({
         method: 'GET',
         url: `/api/users/${username}/followed`,
         params: {
@@ -20,6 +20,10 @@ export const loadFollowing = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       });
+
+      if (status === 204) {
+        dispatch(followingSlice.actions.setTotalUsers());
+      }
 
       return data;
     } catch (error) {
@@ -47,7 +51,7 @@ export const followUser = createAsyncThunk('following/followUser', async ({ user
     } else {
       return {
         type: 'subscribed',
-        user,
+        username: user.username,
       };
     }
   } catch (error) {
@@ -61,12 +65,19 @@ const followingSlice = createSlice({
     followingUsers: [],
     error: null,
     loading: false,
+    isTotalUsers: false,
   },
   reducers: {
     addFollowingUser(state, action) {
       if (action.payload.currUserFollower) {
         state.followingUsers.push(action.payload);
       }
+    },
+    setTotalUsers: (state, action) => {
+      state.isTotalUsers = true;
+    },
+    removeFollowingUsers: (state, action) => {
+      state.followingUsers = [];
     },
   },
   extraReducers: {
@@ -94,13 +105,10 @@ const followingSlice = createSlice({
     [followUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      if (action.payload.type === 'unsubscribed') {
-        state.followingUsers = state.followingUsers.filter((user) => user.username !== action.payload.username);
-      } else {
-        const newFol = { ...action.payload.user, currUserFollower: true };
 
-        state.followingUsers.push(newFol);
-      }
+      const userIndex = state.followingUsers.findIndex((item) => item.username === action.payload.username);
+
+      state.followingUsers[userIndex].currUserFollower = !state.followingUsers[userIndex].currUserFollower;
     },
     [followUser.rejected]: (state, action) => {
       state.loading = false;
@@ -108,5 +116,5 @@ const followingSlice = createSlice({
     },
   },
 });
-export const { addFollowingUser } = followingSlice.actions;
+export const { addFollowingUser, removeFollowingUsers } = followingSlice.actions;
 export const followingReducer = followingSlice.reducer;

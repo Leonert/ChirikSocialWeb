@@ -23,7 +23,6 @@ const PostPage = () => {
       const response = await axiosIns.get(`/api/posts/${id}`);
       setIsLoading(false);
       setPost(response.data);
-      dispatch(openReplayModal(id));
 
       return response;
     };

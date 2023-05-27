@@ -1,6 +1,6 @@
 import { Avatar, Box, ListItem, Typography } from '@mui/material';
-import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { followUser } from '../../../features/slices/userDatas/followingSlice';
 import { CustomButton } from '../../Login/CustomButton';
@@ -8,10 +8,13 @@ import { CustomButton } from '../../Login/CustomButton';
 export const FollowingUser = ({ user }) => {
   const dispatch = useDispatch();
   const { profileImage, name, username, currUserFollower } = user;
+  const currentUser = useSelector((state) => state.auth.user.username);
 
   const handleFollow = useCallback(() => {
     dispatch(followUser({ user }));
   }, [user]);
+
+  useEffect(() => {}, [currUserFollower]);
 
   return (
     <ListItem
@@ -40,6 +43,7 @@ export const FollowingUser = ({ user }) => {
       </Box>
       <Box>
         <CustomButton
+          disabled={currentUser === username}
           handleClick={handleFollow}
           styles={{
             backgroundColor: 'none',

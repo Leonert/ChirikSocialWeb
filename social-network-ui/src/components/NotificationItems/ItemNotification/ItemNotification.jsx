@@ -11,22 +11,21 @@ export const ItemNotification = ({ notification }) => {
   const classes = useStylesItemNotification();
   const [notificationElem, setNotificationsElem] = useState(null);
   const { loading } = useSelector((state) => state.notifications);
-  const [textPost, setTextPost] = useState('');
-  const { user } = useSelector((state) => state.auth);
+  const [post, setPost] = useState(null);
 
   useEffect(() => {
     setNotificationsElem(createNotifications(notification));
   }, [loading]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (notification.post !== null) {
-        const post = await getPost(notification.post.id);
-        setTextPost(post);
-      }
-    };
+    if (notification.post !== null) {
+      const fetchData = async (id) => {
+        const post = await getPost(id);
+        setPost(post);
+      };
 
-    fetchData();
+      fetchData(notification.post.id);
+    }
   }, [notificationElem]);
 
   return (
@@ -43,9 +42,9 @@ export const ItemNotification = ({ notification }) => {
               {notificationElem.username && <Box className={classes.username}>@{notificationElem.username}</Box>}
             </Link>
             <Box className={classes.content}>
-              {textPost ? (
-                <Link to={`/${user.username}/${notification?.post.id}`}>
-                  {notificationElem.message} <span className={classes.post}>{textPost.slice(0, 50)}</span>
+              {post !== null ? (
+                <Link to={`/${post?.author.username}/${post?.author.id}`}>
+                  {notificationElem.message} <span className={classes.post}>{post.text.slice(0, 50)}</span>
                 </Link>
               ) : (
                 `${notificationElem.message}`

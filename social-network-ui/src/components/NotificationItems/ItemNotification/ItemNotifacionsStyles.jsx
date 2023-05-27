@@ -23,6 +23,7 @@ export const useStylesItemNotification = makeStyles((theme) =>
       marginBottom: '4px',
     },
     username: {
+      display: 'inline-block',
       fontSize: '16px',
       color: 'black',
       marginBottom: '14px',
