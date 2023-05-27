@@ -20,7 +20,7 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     zIndex: '2',
   },
-  
+
   itemNick: {
     paddingTop: '8px',
     marginLeft: '15px !important',
@@ -57,6 +57,11 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
   footerAddForm: {
     display: 'flex',
     alignItems: 'center',
+  },
+  footerAddFormProgress: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   footerAddFormCircleProgress: {
     position: 'relative',

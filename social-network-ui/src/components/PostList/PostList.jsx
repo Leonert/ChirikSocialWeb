@@ -63,6 +63,7 @@ export default function PostList({ isBookmarkPage }) {
                 )
               ) : null
             }
+            IdentifierReply={post.text === null && post.image === null}
             id={post.id}
             classes={classes.Page}
             username={post.author.username}
@@ -89,6 +90,7 @@ export default function PostList({ isBookmarkPage }) {
           >
             {post.originalPost && (
               <Post
+                IdentifierOriginal={post.text != null && post.image === null}
                 id={post.originalPost.id}
                 classes={classes.PageSmall}
                 key={post.originalPost.id}
@@ -103,7 +105,7 @@ export default function PostList({ isBookmarkPage }) {
                 content={post.originalPost.text}
                 data={post.originalPost.createdDate}
                 image={post.originalPost.image}
-                liked={post.liked}
+                liked={post.originalPost.liked}
                 bookmarked={post.originalPost.bookmarked}
                 retweeted={post.originalPost.retweeted}
                 bookmark={post.originalPost.bookmarksNumber}
