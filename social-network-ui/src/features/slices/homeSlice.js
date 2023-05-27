@@ -2,6 +2,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../axiosInstance';
 
+export const getBookmarks = createAsyncThunk('posts/getBookmarks', async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosIns.get('/api/bookmarks');
+
+    return data.reverse();
+  } catch (error) {
+    return rejectWithValue(error.response.data.message);
+  }
+});
+
 export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { rejectWithValue }) => {
   try {
     const { data } = await axiosIns({
@@ -77,6 +87,18 @@ const homeSlice = createSlice({
         +post.id === +postId ? { ...post, liked: !post.liked, likesNumber } : post
       );
     },
+    makeRetweet: (state, action) => {
+      const { postId, retweetsNumber } = action.payload;
+
+      state.post = state.post.map((post) =>
+        +post.id === +postId ? { ...post, retweeted: !post.retweeted, retweetsNumber } : post
+      );
+    },
+  },
+  extraReducers: {
+    [getBookmarks.fulfilled]: (state, action) => {
+      state.post = [...action.payload];
+    },
   },
 });
 
@@ -92,5 +114,6 @@ export const {
   clearPosts,
   bookmarksPost,
   bookmarksPostNum,
+  makeRetweet,
   likesPost,
 } = homeSlice.actions;
