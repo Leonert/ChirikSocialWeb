@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { getPost } from '../../../api/getPostById';
 import { createNotifications } from '../../../util/notificationsMessage/notificationsMessage';
@@ -11,6 +12,7 @@ export const ItemNotification = ({ notification }) => {
   const [notificationElem, setNotificationsElem] = useState(null);
   const { loading } = useSelector((state) => state.notifications);
   const [textPost, setTextPost] = useState('');
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     setNotificationsElem(createNotifications(notification));
@@ -32,17 +34,19 @@ export const ItemNotification = ({ notification }) => {
       {notificationElem && (
         <li className={classes.item}>
           <Box>
-            {notificationElem.profileImage && (
-              <Box className={classes.avatar}>
-                <img src={notificationElem.profileImage} alt={notificationElem.username} />
-              </Box>
-            )}
-            {notificationElem.username && <Box className={classes.username}>@{notificationElem.username}</Box>}
+            <Link to={`/${notification?.initiator?.username}`}>
+              {notificationElem.profileImage && (
+                <Box className={classes.avatar}>
+                  <img src={notificationElem.profileImage} alt={notificationElem.username} />
+                </Box>
+              )}
+              {notificationElem.username && <Box className={classes.username}>@{notificationElem.username}</Box>}
+            </Link>
             <Box className={classes.content}>
               {textPost ? (
-                <p>
+                <Link to={`/${user.username}/${notification?.post.id}`}>
                   {notificationElem.message} <span className={classes.post}>{textPost.slice(0, 50)}</span>
-                </p>
+                </Link>
               ) : (
                 `${notificationElem.message}`
               )}
