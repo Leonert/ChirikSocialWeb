@@ -42,7 +42,7 @@ public class MessagesController {
     return ResponseEntity.ok(message);
   }
 
-  @PostMapping("/create")
+  @PostMapping("/create/messages")
   public ResponseEntity<MessageDto> createMessage(
           @RequestBody MessageDto.CreateMessageRequestDto requestDto) {
     MessageDto messageDto = modelMapper.map(requestDto, MessageDto.class);
@@ -96,6 +96,7 @@ public class MessagesController {
   public ResponseEntity<ChatDto> createChat(@RequestBody CreateChatRequestDto requestDto) {
     MessageDto messageDto = requestDto.getMessageDto();
     ChatDto chatDto = requestDto.getChatDto();
+    messageDto.setChatId(chatDto.getChatId());
 
     MessageDto createdMessageDto = messageService.createChat(messageDto, chatDto);
 

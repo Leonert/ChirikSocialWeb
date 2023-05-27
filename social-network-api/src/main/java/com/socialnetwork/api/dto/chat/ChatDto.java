@@ -19,7 +19,10 @@ public class ChatDto {
   }
 
   public void addMessage(MessageDto message) {
-    messages.add(message);
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(message);
   }
 }
 

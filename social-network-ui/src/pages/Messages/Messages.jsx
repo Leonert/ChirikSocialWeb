@@ -26,7 +26,7 @@ import {MessageInput} from "./MessageInput/MessageInput";
 import {ChatApi} from "../../services/api/chatApi";
 
 
-const Messages = ({ chatId }) => {
+const Messages = ({ chatId ,senderId, recipientId}) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
   const chats = useSelector(selectChats);
@@ -34,6 +34,7 @@ const Messages = ({ chatId }) => {
   const messages = useSelector(selectMessages);
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
+
   const chatEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -43,20 +44,23 @@ const Messages = ({ chatId }) => {
   };
 
   const handleSendMessage = () => {
-    const senderId = 2; // Replace with the actual sender ID
-    const recipientId  =5 ; // Replace with the actual recipient ID
-    if (message.trim() !== '') {
+    const trimmedMessage = message.trim();
+
+    if (trimmedMessage !== '') {
       const messageToSend = {
-        chatId: selectedChatId,
-        message: message.trim(),
-        senderId,
-        recipientId,
+        chatId: selectedChatId || chatId,
+        message: trimmedMessage,
+        senderId: senderId,
+        recipientId: recipientId,
       };
 
       dispatch(sendMessage(messageToSend));
       setMessage('');
     }
   };
+
+
+
 
   const handleInputChange = (event) => {
     const { value } = event.target;
@@ -180,7 +184,7 @@ const Messages = ({ chatId }) => {
                                     <div className={classes.userHeader}>
                                       <div>
                                         <Typography className={classes.userFullName}>{group.chats[0]?.fullName || ''}</Typography>
-                                        <Typography className={classes.username}>@{group.chats[0]?.senderUsername || ''}</Typography>
+                                        <Typography className={classes.username}>@{group.chats[0]?.recipientUsername || ''}</Typography>
                                       </div>
                                     </div>
                                   </div>
@@ -224,7 +228,7 @@ const Messages = ({ chatId }) => {
                     </div>
 
                   </Paper>
-                  <div className={classes.chatMessages}>
+                  <div className={classes.chat}>
                     {Array.isArray(messages?.messages) &&
                         messages.messages.map((message, index) => {
                           const previousMessage = messages[selectedChatId]?.messages[index - 1];
@@ -237,28 +241,27 @@ const Messages = ({ chatId }) => {
 
                           return (
                               <React.Fragment key={message.messageId}>
+                                <div className={classes.tweetContainer}>
                                 {showDateSeparator && (
                                     <div className={classes.dateSeparator}>{formatChatMessageDate(currentMessageDate)}</div>
                                 )}
-                                <div
-                                    className={classNames(classes.messageContainer, {
-                                      [classes.ownMessage]: message.senderId,
-                                    })}
-                                >
-                                  {message.senderId ? (
-                                      <Avatar className={classes.messageAvatar} src={DEFAULT_PROFILE_IMG} />
-                                  ) : null}
+                                <div className={classNames(classes.messageContainer, {[classes.ownMessage]: message.senderId,})}>
+                                  {message.senderId ? (<Avatar className={classes.messageAvatar} src={DEFAULT_PROFILE_IMG} /> ) : null}
                                   <div
                                       className={classNames(classes.messageContent, {
                                         [classes.ownMessageContent]: message.senderId,
                                       })}
                                   >
+
                                     <Typography className={classes.myMessage}>{message.message}</Typography>
-                                    <p>{message.senderUsername}</p>
+                                    <span className={classes.tweetUserFullName}>{message.senderUsername}</span>
                                     <Typography className={classes.messageTimestamp}>
                                       {formatChatMessageDate(currentMessageDate)}
                                     </Typography>
+                                    <span className={classes.senderName}>{message.message}</span>
+
                                   </div>
+                                </div>
                                 </div>
                               </React.Fragment>
                           );
@@ -266,7 +269,7 @@ const Messages = ({ chatId }) => {
                     <div ref={chatEndRef} />
                   </div>
                   <div className={classes.chatFooter}>
-                    <div className={classes.messageInputWrapper}>
+
                       <MessageInput
                           multiline
                           value={message}
@@ -279,10 +282,7 @@ const Messages = ({ chatId }) => {
                         <IconButton onClick={handleSendMessage} color="primary">
                           <span>{SandMessageIcon}</span>
                         </IconButton>
-
-
                       </div>
-                    </div>
                   </div>
                 </Paper>
               </div>

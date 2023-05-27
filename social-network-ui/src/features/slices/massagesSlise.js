@@ -4,20 +4,22 @@ import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
     async ({ chatId, message, senderId, recipientId }) => {
+        const trimmedMessage = message.trim();
+
         const messageDto = {
             chatId,
-            message,
+            message: trimmedMessage,
             senderId,
             recipientId,
+            isRead: true,
+            messageId: null,
+            keyword: '',
         };
 
         console.log('Sending message:', messageDto);
 
         try {
-            const response = await axiosIns.post(
-                `/api/messages/chats/${chatId}/add-message`,
-                messageDto
-            );
+            const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
             const createdMessage = response.data;
 
             return { chatId, message: createdMessage, senderId, recipientId };
@@ -27,6 +29,7 @@ export const sendMessage = createAsyncThunk(
         }
     }
 );
+
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',

@@ -26,41 +26,49 @@ const MessagesModal = ({ visible, onClose }) => {
   const [searchText, setSearchText] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
 
-  console.log(searchText);
 
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
       event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
+      console.log('Search result:', response.data);
+
     });
     setSearchText(event.target.value);
   };
 
   const handleListItemClick = (user) => {
     setSelectedUser(user);
+    console.log(user)
   };
 
   const handleCreateChat = () => {
     if (selectedUser) {
       const messageDto = {
+        messageId: 3,
+        isRead: false,
+        message: null,
+        timestamp: null,
+        recipientId: selectedUser.id,
+        senderId: 1,
         chatId: null,
-        message: 'Your message for the new chat', // Replace with your actual message
-        senderId: 1, // Replace with the actual sender ID
-        recipientId: selectedUser.id
-      };
-      const createChatRequestDto = {
-        messageDto,
-        chatDto: null
+        senderUsername: '',
+        recipientUsername: ''
       };
 
-      axios.post('/api/messages/chats/create', createChatRequestDto)
+      const chatDto = {
+        chatId: null, // Заповніть значенням ідентифікатора чату
+        messages: [messageDto]
+      };
+
+      console.log('Request data:', { messageDto, chatDto });
+
+      axiosIns.post('/api/messages/chats/create', { messageDto, chatDto })
           .then((response) => {
-            const chatDto = response.data;
-            // Perform necessary actions with chatDto
-            console.log(chatDto);
+            const createdChatDto = response.data;
+            console.log('Chat created:', createdChatDto);
           })
           .catch((error) => {
             console.error(error);
-            // Handle errors
           });
     }
   };
