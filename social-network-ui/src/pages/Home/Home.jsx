@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AATestPostComponent } from '../../components/AATestPostComponent/AATestPostComponent';
+// import { AATestPostComponent } from '../../components/AATestPostComponent/AATestPostComponent';
 import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
 import Following from '../../components/Following/Following';
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
@@ -42,7 +42,7 @@ function Home() {
       <Grid item xs={7}>
         <HeaderMain />
         <ButtonShowMore />
-        <AATestPostComponent />
+        {/* <AATestPostComponent /> */}
         {recommendation && <PostList />}
         {following && <Following />}
         {modalUserState && <ModalUser />}

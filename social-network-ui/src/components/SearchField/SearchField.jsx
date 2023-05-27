@@ -4,8 +4,10 @@ import InputBase from '@mui/material/InputBase';
 import Toolbar from '@mui/material/Toolbar';
 import { alpha, styled } from '@mui/material/styles';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import axiosIns from '../../axiosInstance';
+import { addResult, removeResult } from '../../features/slices/searchSlice';
 import SearchWrapper from './SearchWrapper';
 
 const Search = styled('div')(({ theme }) => ({
@@ -40,12 +42,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchField() {
   const searchResult = useSelector((state) => state.search.searchResult);
- 
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const handleInputChange = (event) => {
+    axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
+      event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
+    });
     setSearchText(event.target.value);
   };
-  
+
   return (
     <Box>
       <Toolbar>

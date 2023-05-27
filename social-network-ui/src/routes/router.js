@@ -13,6 +13,7 @@ import PostPage from '../pages/PostPage/PostPage';
 import Profile from '../pages/Profile/Profile';
 import ProfilePosts from '../pages/Profile/ProfilePosts';
 import profileLoader from '../pages/Profile/profileLoader';
+import SettingsPage from '../pages/SettingsPage/SettingsPage';
 
 export const router = createBrowserRouter([
   {
@@ -43,8 +44,8 @@ export const router = createBrowserRouter([
         element: <Bookmarks />,
       },
       {
-        path: '/lists',
-        element: <div></div>,
+        path: '/setting',
+        element: <SettingsPage />,
       },
 
       {
