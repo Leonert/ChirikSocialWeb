@@ -33,6 +33,8 @@ public class MessageDto {
     private String message;
     private int messageId;
     private int chatId;
+    private int senderId;
+    private int recipientId;
     private String keyword;
 
     public int getChatId() {

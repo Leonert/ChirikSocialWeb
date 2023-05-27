@@ -1,4 +1,5 @@
 import axiosIns from "../../axiosInstance";
+import axios from "axios";
 
 
 export const ChatApi = {
@@ -75,6 +76,18 @@ export const ChatApi = {
             return [];
         }
     },
+    searchUsers: async (keyword) => {
+        try {
+            const response = await axios.get(`/users?q=${keyword}`);
+
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching user list:', error);
+
+            return [];
+        }
+    },
+
 
     sendMessage: async (messages, chatId) => {
         try {

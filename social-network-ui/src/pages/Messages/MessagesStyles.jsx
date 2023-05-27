@@ -365,7 +365,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatFooter: {
     display: 'flex',
     position: 'fixed',
-    top: 1123,
+    top: 500,
     width: 598,
     padding: '4px',
     borderRight: 0,

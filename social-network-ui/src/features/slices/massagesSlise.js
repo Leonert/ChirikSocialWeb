@@ -3,36 +3,30 @@ import {ChatApi} from "../../services/api/chatApi";
 import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
-    async ({ chatId, message }, { getState }) => {
-        const state = getState();
-        const selectedChat = selectSelectedChatId(state);
-
-        if (!selectedChat) {
-            throw new Error(`Chat with id ${chatId} not found`);
-        }
-
-        const recipientId = selectedChat.recipientId;
-        const senderId = selectedChat.senderId;
-
+    async ({ chatId, message, senderId, recipientId }) => {
         const messageDto = {
-            chatId: chatId,
-            message: message,
-            senderId: senderId,
-            recipientId: recipientId,
+            chatId,
+            message,
+            senderId,
+            recipientId,
         };
 
-        const response = await axiosIns.post(
-            `/api/messages/chats/${chatId}/add-message`,
-            messageDto
-        );
+        console.log('Sending message:', messageDto);
 
-        const createdMessage = response.data;
+        try {
+            const response = await axiosIns.post(
+                `/api/messages/chats/${chatId}/add-message`,
+                messageDto
+            );
+            const createdMessage = response.data;
 
-        return { chatId: chatId, message: createdMessage, senderId, recipientId };
+            return { chatId, message: createdMessage, senderId, recipientId };
+        } catch (error) {
+            console.error('Error sending message:', error);
+            throw error;
+        }
     }
 );
-
-
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
@@ -71,7 +65,7 @@ const messagesSlice = createSlice({
         toggleModalWindow: (state) => {
             state.visibleModalWindow = !state.visibleModalWindow;
         },
-        setMessage: (state, action) => {
+        addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
             state.messages[chatId] = [...(state.messages[chatId] || []), message];
         },
@@ -84,7 +78,7 @@ const messagesSlice = createSlice({
                 if (state.messages[chatId]) {
                     state.messages[chatId] = [...state.messages[chatId], message];
                 } else {
-                    state.messages[chatId] = { messages: [message] };
+                    state.messages[chatId] = [message];
                 }
             })
             .addCase(fetchChat.fulfilled, (state, action) => {
@@ -101,6 +95,7 @@ export const {
     setSelectedChatId,
     setText,
     toggleModalWindow,
+    addChatMessage,
 } = messagesSlice.actions;
 
 export const selectChats = (state) => state.messages.chats;

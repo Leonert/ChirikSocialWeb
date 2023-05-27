@@ -1,4 +1,4 @@
-import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
+import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {  SandMessageIcon } from '../../icon';
@@ -6,15 +6,13 @@ import { DEFAULT_PROFILE_IMG } from '../../util/url';
 
 import { useMessagesStyles } from './MessagesStyles';
 
-import { ChatApi } from "../../services/api/chatApi";
 import MessagesModal from "./MessagesModal/MessagesModal";
 import {
   fetchChat,
   fetchChatMessages,
   selectChats,
-  selectMessages, selectRecipientId,
-  selectSelectedChatId, selectSenderId,
-  selectText,
+  selectMessages,
+  selectSelectedChatId,
   selectVisibleModalWindow,
   sendMessage,
   setSelectedChatId,
@@ -25,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import { formatChatMessageDate } from "../../util/formatDate";
 import {MessageInput} from "./MessageInput/MessageInput";
+import {ChatApi} from "../../services/api/chatApi";
 
 
 const Messages = ({ chatId }) => {
@@ -34,9 +33,6 @@ const Messages = ({ chatId }) => {
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
   const [message, setMessage] = useState('');
-
-  const text = useSelector(selectText);
-
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
 
@@ -47,8 +43,24 @@ const Messages = ({ chatId }) => {
   };
 
   const handleSendMessage = () => {
-    dispatch(sendMessage({ chatId, message }));
-    setMessage('');
+    const senderId = 2; // Replace with the actual sender ID
+    const recipientId  =5 ; // Replace with the actual recipient ID
+    if (message.trim() !== '') {
+      const messageToSend = {
+        chatId: selectedChatId,
+        message: message.trim(),
+        senderId,
+        recipientId,
+      };
+
+      dispatch(sendMessage(messageToSend));
+      setMessage('');
+    }
+  };
+
+  const handleInputChange = (event) => {
+    const { value } = event.target;
+    setMessage(value);
   };
 
   const handleSearchChange = async (event) => {
@@ -83,37 +95,6 @@ const Messages = ({ chatId }) => {
     }
   };
 
-  // const onSendMessage = (chatId, text) => {
-  //   const recipientId = selectRecipientId();
-  //   const senderId = selectSenderId();
-  //   if (text !== '') {
-  //     const messageDto = {
-  //       chatId: chatId,
-  //       message: text,
-  //       senderId: senderId,
-  //       recipientId: recipientId,
-  //     };
-  //
-  //     dispatch(sendMessage(messageDto))
-  //         .then((response) => {
-  //           if (response && response.payload) {
-  //             const { chatId, message } = response.payload;
-  //             console.log(messageDto);
-  //             dispatch(setText(''));
-  //           } else {
-  //             console.error('Invalid response:', response);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error sending message:', error);
-  //         });
-  //     console.log(messageDto);
-  //   }
-  // };
-
-
-
-
   useEffect(() => {
     const fetchChatsAndScroll = async () => {
       await dispatch(fetchChat());
@@ -126,10 +107,6 @@ const Messages = ({ chatId }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  const handleInputChange = (event) => {
-    dispatch(setText(event.target.value));
-  };
 
   function isValidDate(date) {
     return date instanceof Date && !isNaN(date);
@@ -149,16 +126,15 @@ const Messages = ({ chatId }) => {
     return result;
   }, []);
 
-  // const handleKeyDown = (event) => {
-  //   if (event.key === 'Enter' && !event.shiftKey) {
-  //     event.preventDefault();
-  //     onSendMessage(selectedChatId, text, userId);
-  //   }
-  // };
-
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
     dispatch(setText(''));
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSendMessage(selectedChatId);
+    }
   };
 
   return (
@@ -244,7 +220,6 @@ const Messages = ({ chatId }) => {
 
                       <IconButton  onClick={handleExitClick} color="primary">
                         <span>back</span>
-
                       </IconButton>
                     </div>
 
@@ -279,6 +254,7 @@ const Messages = ({ chatId }) => {
                                       })}
                                   >
                                     <Typography className={classes.myMessage}>{message.message}</Typography>
+                                    <p>{message.senderUsername}</p>
                                     <Typography className={classes.messageTimestamp}>
                                       {formatChatMessageDate(currentMessageDate)}
                                     </Typography>
@@ -293,11 +269,11 @@ const Messages = ({ chatId }) => {
                     <div className={classes.messageInputWrapper}>
                       <MessageInput
                           multiline
-                          value={text}
-                          onChange={(e) => setMessage(e.target.value)}
+                          value={message}
+                          onChange={handleInputChange}
                           variant="outlined"
                           placeholder="Start a new message"
-                          // onKeyDown={handleKeyDown}
+                          onKeyDown={handleKeyDown}
                       />
                       <div style={{marginLeft: 8}} className={classes.chatIcon}>
                         <IconButton onClick={handleSendMessage} color="primary">
@@ -313,7 +289,10 @@ const Messages = ({ chatId }) => {
           )}
         </Grid>
 
-        {visibleModalWindow && <MessagesModal onClose={onCloseModalWindow} />}
+        <MessagesModal
+            visible={visibleModalWindow}
+            onClose={onCloseModalWindow}
+        />
       </>
 
   );
