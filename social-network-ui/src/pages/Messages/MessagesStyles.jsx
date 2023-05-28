@@ -17,10 +17,16 @@ export const useMessagesStyles = makeStyles((theme) => ({
       minHeight: '100vh',
       borderTop: 0,
       borderBottom: 0,
+      alignItems: 'end',
+
       backgroundColor: theme.palette.background.lightDefault,
       color: theme.palette.text.primary,
 
 
+    },
+    buttumContainer: {
+      marginTop: 10,
+      display: 'flex',
     },
   },
   header: {

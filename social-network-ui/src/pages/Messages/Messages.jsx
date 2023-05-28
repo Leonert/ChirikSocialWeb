@@ -228,9 +228,9 @@ const Messages = ({ chatId, senderId }) => {
                   <Paper className={classes.chatHeader}>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                     <div style={{ flex: 1 }}>
-                      <Typography className={classes.username}>@{messages?.senderUsername || ''}</Typography>
+                      <Typography className={classes.username}>@{messages.senderUsername || ''}</Typography>
                       <IconButton onClick={handleExitClick} color="primary">
-                        <span>back</span>
+                        <span className={classes.buttumContainer}>back</span>
                       </IconButton>
                     </div>
                   </Paper>
@@ -256,9 +256,7 @@ const Messages = ({ chatId, senderId }) => {
                                         [classes.ownMessage]: message.senderId,
                                       })}
                                   >
-                                    {message.senderId ? (
-                                        <Avatar className={classes.messageAvatar} src={DEFAULT_PROFILE_IMG} />
-                                    ) : null}
+
                                     <div
                                         className={classNames(classes.messageContent, {
                                           [classes.ownMessageContent]: message.senderId,
