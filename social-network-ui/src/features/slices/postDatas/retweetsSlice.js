@@ -4,15 +4,19 @@ import axiosIns from '../../../axiosInstance';
 
 export const getUsersRetweet = createAsyncThunk(
   'retweets/getUsersRetweet',
-  async ({ id, currentPage = 0 }, { rejectWithValue }) => {
+  async ({ id, currentPage = 0 }, { dispatch, rejectWithValue }) => {
     try {
-      const { data } = await axiosIns({
+      const { data, status } = await axiosIns({
         method: 'GET',
-        url: `api/posts/1/retweets?p=${currentPage}&n=10`,
+        url: `api/posts/${id}/retweets?p=${currentPage}&n=10`,
         headers: {
           'Content-Type': 'application/json',
         },
       });
+
+      if (status === 204) {
+        dispatch(retweetsSlice.actions.setTotalUsers());
+      }
 
       return data;
     } catch (error) {
@@ -28,6 +32,7 @@ const retweetsSlice = createSlice({
     error: null,
     loading: false,
     isOpenRetweetModal: false,
+    isTotalUsers: false,
   },
   reducers: {
     handleOpenRetweetModal: (state, action) => {
@@ -38,6 +43,12 @@ const retweetsSlice = createSlice({
       if (state.listUsers.length !== 0 && elem !== -1) {
         state.listUsers[elem].currUserFollower = !state.listUsers[elem].currUserFollower;
       }
+    },
+    removeListUsersRetweet: (state) => {
+      state.listUsers = [];
+    },
+    setTotalUsers: (state, action) => {
+      state.isTotalUsers = true;
     },
   },
   extraReducers: {
@@ -62,4 +73,4 @@ const retweetsSlice = createSlice({
 });
 
 export const retweetsReducer = retweetsSlice.reducer;
-export const { handleOpenRetweetModal, changeStatusUserRetweet } = retweetsSlice.actions;
+export const { handleOpenRetweetModal, changeStatusUserRetweet, removeListUsersRetweet } = retweetsSlice.actions;
