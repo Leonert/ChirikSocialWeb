@@ -9,6 +9,7 @@ import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final JwtAuthFilter jwtAuthFilter;
@@ -46,10 +48,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and()
-          .csrf().disable()
-          .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-          .and()
-          .headers().frameOptions().disable();
+            .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
+            .headers().frameOptions().disable();
+    http.authorizeRequests()
+            .antMatchers("/auth/**", "/oauth2/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated();
+
+    http.oauth2Login()
+            .authorizationEndpoint()
+            .baseUri("/oauth2/authorize")
+            .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+            .and()
+            .redirectionEndpoint()
+            .baseUri("/oauth2/callback/*")
+            .and()
+            .userInfoEndpoint()
+            .userService(customOAuth2UserService)
+            .and()
+            .successHandler(oAuth2AuthenticationSuccessHandler)
+            .failureHandler(oAuth2AuthenticationFailureHandler);
 
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }
