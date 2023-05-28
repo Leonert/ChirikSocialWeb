@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Container, Typography } from '@material-ui/core';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { HOME, LOGIN } from '../../util/path-constants';
+import axiosIns from '../../axiosInstance';
+import { TOKEN } from '../../util/constants';
 import useEmailConfirmationStyles from './EmailConfirmationStyles';
 
 const EmailConfirmation = () => {
@@ -25,7 +25,7 @@ const EmailConfirmation = () => {
   useEffect(() => {
     const checkTokenValidity = async (token) => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/registration/activate?token=${token}`);
+        const response = await axiosIns.patch(`/api/registration?token=${token}`);
 
         if (response.status === 200) {
           setIsConfirmed(true);
@@ -37,7 +37,7 @@ const EmailConfirmation = () => {
       setIsLoading(false);
     };
 
-    const token = searchParams.get('token');
+    const token = searchParams.get(TOKEN);
 
     if (!token) {
       setIsLoading(false);
@@ -58,9 +58,9 @@ const EmailConfirmation = () => {
             <Box className={classes.boxInner}>
               <Typography variant="h4">{isConfirmed ? ACCOUNT_CONFIRMED : ACCOUNT_NOT_CONFIRMED}</Typography>
             </Box>
-            <NavLink className={classes.link} to={isConfirmed ? LOGIN : HOME}>
+            <NavLink className={classes.link} to={'/'}>
               <Typography className={classes.typography} variant="h4">
-                {isConfirmed ? 'Log In' : 'Home Page'}
+                Home Page
               </Typography>
             </NavLink>
           </Box>

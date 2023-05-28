@@ -1,12 +1,15 @@
 import axios from 'axios';
-axios.interceptors.request.use(config => {
-    if (localStorage.getItem('token')) {
-        config.headers.Authorization = localStorage.getItem('token');
 
-        return config;
-    } else {
-        return config;
-    }
+import { TOKEN } from '../util/constants';
+
+axios.interceptors.request.use((config) => {
+  if (localStorage.getItem(TOKEN)) {
+    config.headers.Authorization = localStorage.getItem(TOKEN);
+
+    return config;
+  } else {
+    return config;
+  }
 });
 
 module.exports = axios;

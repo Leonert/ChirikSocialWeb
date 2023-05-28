@@ -5,12 +5,15 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import axiosIns from '../../../../axiosInstance';
+import { addOnePost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
 import ProfileAvatar from './ProfileAvatar/ProfileAvatar';
 
 const MAX_LENGTH = 280;
+
 const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onCloseModal }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -26,12 +29,23 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleClickImage = () => {
     fileInputRef.current.click();
   };
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-    if (files.length > 0) {
-      const file = files[0];
-      console.log('Loading File:', file); // eslint-disable-line no-console
-    }
+
+  const getBase64Image = async () => {
+    const reader = new FileReader();
+
+    await new Promise((resolve, reject) => {
+      reader.onload = function (e) {
+        resolve(e.target.result);
+      };
+
+      reader.onerror = function (e) {
+        reject(e);
+      };
+
+      reader.readAsDataURL(fileInputRef.current.files[0]);
+    });
+
+    return reader.result;
   };
 
   const handleChangeTextarea = (event) => {
@@ -41,42 +55,19 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
       setText(event.target.value);
     }
   };
-  const uploadTweetImages = async () => {};
-  const handleClickAddTweet = async () => {
-    const result = await uploadTweetImages();
 
-    if (visiblePoll) {
-      dispatch({
-        type: 'ADD_TWEET',
-        payload: {
-          images: result,
-        },
-      });
-    } else if (selectedScheduleDate !== null && unsentTweet === undefined) {
-      dispatch({
-        type: 'ADD_TWEET',
-        payload: {
-          images: result,
-          scheduledDate: selectedScheduleDate,
-        },
-      });
-    } else if (unsentTweet) {
-      dispatch({
-        type: 'UPDATE_TWEET',
-        payload: {
-          id: unsentTweet.id,
-          images: result,
-        },
-      });
-      if (onCloseModal) onCloseModal();
-    }
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      payload: selectedScheduleDate ? 'Your Tweet will be sent on' : 'Your tweet was sent.',
+  const uploadTweetImages = async () => {};
+
+  const handleClickAddTweet = async () => {
+    const base64Image = fileInputRef.current.files[0] ? await getBase64Image() : null;
+    await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
+      dispatch(addOnePost(response.data));
     });
+
     setText('');
     setVisiblePoll(false);
     setSelectedScheduleDate(null);
+    onCloseModal();
   };
 
   const handleClickQuoteTweet = async () => {
@@ -131,13 +122,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
                 <InsertEmoticonIcon />
               </IconButton>
               <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
+              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} />
             </div>
           )}
         </div>

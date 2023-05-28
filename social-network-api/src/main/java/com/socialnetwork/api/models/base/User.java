@@ -4,8 +4,8 @@ import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
-import lombok.Data;
-import org.aspectj.weaver.ast.Not;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +18,8 @@ import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -54,10 +55,10 @@ public class User {
   @Column(name = "birth_date")
   private LocalDateTime birthDate;
 
-  @Column(name = "profile_background_image")
+  @Column(name = "profile_background_image", length = 15000000)
   private String profileBackgroundImage;
 
-  @Column(name = "profile_image")
+  @Column(name = "profile_image", length = 15000000)
   private String profileImage;
 
   //relations

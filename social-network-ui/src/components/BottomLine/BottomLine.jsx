@@ -40,6 +40,7 @@ export const BottomLine = () => {
             margin: '0 16px',
             p: '7px  34px',
             fontSize: '16px',
+            border: '1px ',
           }}
         >
           Log in

@@ -9,8 +9,6 @@ import com.socialnetwork.api.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -20,10 +18,10 @@ public class NotificationService {
   public void saveReplyRetweet(Post post) {
     if (post.getOriginalPost() != null && post.getText() != null && post.getImage() == null) {
       notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
-          post.getAuthor(), post, NotificationType.REPLY));
+            post.getAuthor(), post, NotificationType.REPLY));
     } else if (post.getOriginalPost() != null) {
       notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
-          post.getAuthor(), post, NotificationType.RETWEET));
+            post.getAuthor(), post, NotificationType.RETWEET));
     }
   }
 

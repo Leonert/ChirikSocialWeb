@@ -1,53 +1,67 @@
 package com.socialnetwork.api.controller;
 
-import com.socialnetwork.api.dto.PostDto;
-import com.socialnetwork.api.dto.UserDto;
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
-import com.socialnetwork.api.service.SearchService;
+import com.socialnetwork.api.dto.PostDtoInterface;
+import com.socialnetwork.api.dto.UserDtoInterface;
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.mapper.authorized.PostMapper;
+import com.socialnetwork.api.mapper.authorized.UserMapper;
+import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
+import com.socialnetwork.api.service.authorized.SearchService;
+import com.socialnetwork.api.service.noneauthorized.NonAuthSearchService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
-import static com.socialnetwork.api.util.Const.Response.PAGE_NUMBER_DEFAULT;
-import static com.socialnetwork.api.util.Const.Response.RESULTS_PER_PAGE_DEFAULT;
+import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
+import static com.socialnetwork.api.util.Constants.Auth.QUERY;
+import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
+import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
+import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
+import static com.socialnetwork.api.util.Constants.Response.POSTS_PER_PAGE_DEFAULT;
+import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
 
 @RestController
 @RequestMapping("/api/search")
 @AllArgsConstructor
 public class SearchController {
   private final SearchService searchService;
-  private final ModelMapper modelMapper;
+  private final UserMapper userMapper;
+  private final PostMapper postMapper;
+  private final NonAuthSearchService nonAuthSearchService;
+  private final NonAuthUserMapper nonAuthUserMapper;
 
   @GetMapping("/posts")
-  public List<PostDto.Response.Default> searchPosts(@RequestParam("q") String query,
-                                   @RequestParam("p") Optional<Integer> page,
-                                   @RequestParam("n") Optional<Integer> postsPerPage) {
-    return mapPostsForListing(searchService.searchPosts(query, page.orElse(PAGE_NUMBER_DEFAULT),
-        postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
+  public List<? extends PostDtoInterface> searchPosts(@RequestParam(QUERY) String query,
+                                                      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                                                      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
+                                                      @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username) {
+    int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
+    int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
+    if (username.isEmpty()) {
+      return nonAuthUserMapper.mapPostsForListing(nonAuthSearchService.searchPosts(query, pageD, resultsD));
+    }
+    return postMapper.mapForListing(searchService.searchPosts(query, pageD,
+          resultsD), username.get());
   }
 
   @GetMapping("/users")
-  public List<UserDto.Response.Listing> searchUsers(@RequestParam("q") String query,
-                                                    @RequestParam("p") Optional<Integer> page,
-                                                    @RequestParam("n") Optional<Integer> usersPerPage,
-                                                    HttpServletRequest request) { //TODO
-    return mapUsersForListing(searchService.searchUsers(query, page.orElse(PAGE_NUMBER_DEFAULT),
-        usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)));
-  }
-
-  private List<UserDto.Response.Listing> mapUsersForListing(List<User> users) {
-    return users.stream().map(u -> modelMapper.map(u, UserDto.Response.Listing.class)).toList();
-  }
-
-  private List<PostDto.Response.Default> mapPostsForListing(List<Post> posts) {
-    return posts.stream().map(p -> modelMapper.map(p, PostDto.Response.Default.class)).toList();
+  public List<? extends UserDtoInterface> searchUsers(@RequestParam(QUERY) String query,
+                                                      @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
+                                                      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
+                                                      @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> username)
+        throws NoUserWithSuchCredentialsException {
+    int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
+    int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+    if (username.isEmpty()) {
+      return nonAuthUserMapper.mapUsersForListing(nonAuthSearchService.searchUsers(query, pageD, resultsD));
+    }
+    return userMapper.mapForListing(searchService.searchUsers(query, pageD,
+          resultsD), username.get());
   }
 }

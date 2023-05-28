@@ -1,11 +1,12 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.exception.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.keys.BookmarkPk;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.BookmarkRepository;
+import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +32,9 @@ public class BookmarkService {
 
   public List<Integer> getUsersBookmarksIds(Post post) {
     return bookmarkRepository.findAllByBookmarkedPost(post)
-        .stream()
-        .map(bookmark -> bookmark.getBookmarkedBy().getId())
-        .toList();
+          .stream()
+          .map(bookmark -> bookmark.getBookmarkedBy().getId())
+          .toList();
   }
 
   public int countPostBookmarks(Post post) {
@@ -49,5 +50,15 @@ public class BookmarkService {
       delete(userId, postId);
       return false;
     }
+  }
+
+  public List<User> getBookmarks(int id, String username, int page, int usersForPage)
+        throws NoUserWithSuchCredentialsException {
+    User currentUser = userService.findByUsername(username);
+    return bookmarkRepository.findUsersByBookmarkedPost(id)
+          .stream()
+          .skip(page * usersForPage).limit(usersForPage)
+          .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
+          .toList();
   }
 }

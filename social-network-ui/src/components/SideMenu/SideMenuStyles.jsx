@@ -116,6 +116,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.divider,
     },
   },
+  itemWrapperLogOut: { marginTop: 40, display: 'flex', justifyContent: 'flex-end', padding: 0 },
   button: {
     height: '52px !important',
     padding: theme.spacing(3.2),
@@ -125,6 +126,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       fontSize: 19,
     },
   },
+
   followerRequestsCount: {
     display: 'inline-block',
     marginLeft: 4,

@@ -1,4 +1,32 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import axiosIns from '../../axiosInstance';
+
+export const getBookmarks = createAsyncThunk('posts/getBookmarks', async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosIns.get('/api/bookmarks');
+
+    return data.reverse();
+  } catch (error) {
+    return rejectWithValue(error.response.data.message);
+  }
+});
+
+export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosIns({
+      method: 'GET',
+      url: `api/posts?p=${portion}&n=20`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return data.reverse();
+  } catch (error) {
+    return rejectWithValue(error.response.data.message);
+  }
+});
 
 const homeSlice = createSlice({
   name: 'home',
@@ -20,8 +48,15 @@ const homeSlice = createSlice({
       state.recommendation = false;
       state.following = true;
     },
-    getPost: (state, actions) => {
-      state.post.push(...actions.payload);
+    getPost: (state, action) => {
+      if (Array.isArray(action.payload)) {
+        state.post.push(...action.payload);
+      } else {
+        state.post.push(action.payload);
+      }
+    },
+    addOnePost: (state, action) => {
+      state.post.unshift(action.payload);
     },
     getPostId: (state, actions) => {
       state.postId = actions.payload;
@@ -38,6 +73,57 @@ const homeSlice = createSlice({
     replayMessage: (state, actions) => {
       state.message = actions.payload;
     },
+    clearPosts: (state) => {
+      state.post = [];
+    },
+
+    bookmarksPost: (state, action) => {
+      const { postId, bookmarksNumber } = action.payload;
+
+      state.post = state.post.map((post) => {
+        if (+post.id === +postId) {
+          return { ...post, bookmarked: !post.bookmarked, bookmarksNumber };
+        }
+        if (post.originalPost && +post.originalPost.id === +postId) {
+          return {
+            ...post,
+            originalPost: { ...post.originalPost, bookmarksNumber },
+          };
+        }
+
+        return post;
+      });
+    },
+
+    likesPost: (state, action) => {
+      const { postId, likesNumber } = action.payload;
+
+      state.post = state.post.map((post) => {
+        if (+post.id === +postId) {
+          return { ...post, liked: !post.liked, likesNumber };
+        }
+        if (post.originalPost && +post.originalPost.id === +postId) {
+          return {
+            ...post,
+            originalPost: { ...post.originalPost, likesNumber },
+          };
+        }
+
+        return post;
+      });
+    },
+    makeRetweet: (state, action) => {
+      const { postId, retweetsNumber } = action.payload;
+
+      state.post = state.post.map((post) =>
+        +post.id === +postId ? { ...post, retweeted: !post.retweeted, retweetsNumber } : post
+      );
+    },
+  },
+  extraReducers: {
+    [getBookmarks.fulfilled]: (state, action) => {
+      state.post = [...action.payload];
+    },
   },
 });
 
@@ -50,4 +136,10 @@ export const {
   openReplayModal,
   clothReplayModal,
   replayMessage,
+  clearPosts,
+  bookmarksPost,
+  bookmarksPostNum,
+  makeRetweet,
+  likesPost,
+  addOnePost,
 } = homeSlice.actions;

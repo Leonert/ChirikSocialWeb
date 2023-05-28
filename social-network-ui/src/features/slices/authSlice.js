@@ -1,6 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import axiosIns from '../../axiosInstance';
+import { TOKEN } from '../../util/constants';
+
+export const loginUserWithJwt = createAsyncThunk('auth/loginUserWithJwt', async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosIns({
+      method: 'GET',
+      url: `/api/login/jwt`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.response.data.message);
+  }
+});
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -8,12 +25,12 @@ export const loginUser = createAsyncThunk(
     try {
       const { data } = await axiosIns({
         method: 'post',
-        url: `/api/login/authenticate`,
+        url: `/api/login`,
         headers: {
           'Content-Type': 'application/json',
         },
         data: {
-          username: email,
+          emailAddress: email,
           password,
           rememberMe,
         },
@@ -32,7 +49,7 @@ const authSlice = createSlice({
     user: null,
     token: null,
     error: null,
-    loading: null,
+    loading: false,
   },
   reducers: {},
   extraReducers: {
@@ -45,9 +62,24 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      localStorage.setItem('token', action.payload.jwt);
+      localStorage.setItem(TOKEN, action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [loginUserWithJwt.pending]: (state, action) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [loginUserWithJwt.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.user = action.payload.user;
+      state.token = action.payload.jwt;
+      localStorage.setItem(TOKEN, action.payload.jwt);
+    },
+    [loginUserWithJwt.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
