@@ -8,6 +8,7 @@ import { useMessagesStyles } from './MessagesStyles';
 
 import MessagesModal from "./MessagesModal/MessagesModal";
 import {
+  addChatMessage,
   fetchChat,
   fetchChatMessages,
   selectChats,
@@ -57,6 +58,7 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
       };
 
       dispatch(sendMessage(messageToSend));
+      dispatch(addChatMessage({ chatId: messageToSend.chatId, message: messageToSend }));
       setMessage('');
     }
   };
