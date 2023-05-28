@@ -9,6 +9,8 @@ export const MessageInput = withStyles((theme) => ({
             padding: "3px 14px",
             border: "1px solid rgb(207, 217, 222)",
             width: 490,
+            color: theme.palette.text.primary,
+
             '&.Mui-focused': {
                 '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
                 '& svg path': {
@@ -25,7 +27,7 @@ export const MessageInput = withStyles((theme) => ({
         },
         '& .MuiOutlinedInput-input': {
             "&::placeholder": {
-                color: "rgb(15, 20, 25)",
+                color: theme.palette.text.primary,
             },
         },
     },

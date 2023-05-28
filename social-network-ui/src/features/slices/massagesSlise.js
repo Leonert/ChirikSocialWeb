@@ -32,7 +32,6 @@ export const sendMessage = createAsyncThunk(
     }
 );
 
-
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
     async () => {
@@ -60,7 +59,6 @@ const messagesSlice = createSlice({
         selectedChatId: null,
         text: '',
         visibleModalWindow: false,
-
     },
     reducers: {
         setSelectedChatId: (state, action) => {

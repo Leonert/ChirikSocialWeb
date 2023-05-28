@@ -23,7 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "./MessageInput/MessageInput";
-import {ChatApi} from "../../services/api/chatApi";
+import {PeopleSearchInput} from "./PeopleSearchInput/PeopleSearchInput";
+import {InputAdornment} from "@mui/material";
 
 
 
@@ -162,7 +163,18 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
               ) : (
                   <>
                     <div className={classes.searchWrapper}>
-
+                      <PeopleSearchInput
+                          placeholder="Explore for people and groups"
+                          variant="outlined"
+                          onChange={(event) => setText(event.target.value)}
+                          InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                  {SearchIcon}
+                                </InputAdornment>
+                            ),
+                          }}
+                      />
                     </div>
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
                       {groupedChats.map((group) =>
@@ -217,63 +229,70 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                     <div style={{ flex: 1 }}>
                       <Typography className={classes.username}>@{messages?.senderUsername || ''}</Typography>
-
-                      <IconButton  onClick={handleExitClick} color="primary">
+                      <IconButton onClick={handleExitClick} color="primary">
                         <span>back</span>
                       </IconButton>
                     </div>
 
                   </Paper>
-                  <div className={classes.chat}>
-                    {Array.isArray(messages?.messages) &&
-                        messages.messages.map((message, index) => {
-                          const previousMessage = messages[selectedChatId]?.messages[index - 1];
-                          const currentMessageDate = new Date(message.timestamp);
-                          const previousMessageDate = previousMessage ? new Date(previousMessage.timestamp) : null;
-                          const showDateSeparator =
-                              previousMessageDate &&
-                              !isValidDate(previousMessageDate) &&
-                              isValidDate(currentMessageDate);
+                  <div className={classes.chatContent}>
+                    <div className={classes.chat}>
+                      {Array.isArray(messages?.messages) &&
+                          messages.messages.map((message, index) => {
+                            const previousMessage = messages[selectedChatId]?.messages[index - 1];
+                            const currentMessageDate = new Date(message.timestamp);
+                            const previousMessageDate = previousMessage ? new Date(previousMessage.timestamp) : null;
+                            const showDateSeparator =
+                                previousMessageDate &&
+                                !isValidDate(previousMessageDate) &&
+                                isValidDate(currentMessageDate);
 
-                          return (
-                              <React.Fragment key={message.messageId}>
-                                <div className={classes.tweetContainer}>
-                                {showDateSeparator && (
-                                    <div className={classes.dateSeparator}>{formatChatMessageDate(currentMessageDate)}</div>
-                                )}
-                                <div className={classNames(classes.messageContainer, {[classes.ownMessage]: message.senderId,})}>
-                                  {message.senderId ? (<Avatar className={classes.messageAvatar} src={DEFAULT_PROFILE_IMG} /> ) : null}
+                            return (
+                                <React.Fragment key={message.messageId}>
+                                  {showDateSeparator && (
+                                      <div className={classes.dateSeparator}>
+                                        {formatChatMessageDate(currentMessageDate)}
+                                      </div>
+                                  )}
                                   <div
-                                      className={classNames(classes.messageContent, {
-                                        [classes.ownMessageContent]: message.senderId,
+                                      className={classNames(classes.messageContainer, {
+                                        [classes.ownMessage]: message.senderId,
                                       })}
                                   >
-                                    <span className={classes.tweetUserFullName}>{message.senderUsername}</span>
-
-                                    <Typography className={classes.myMessage}>{message.message}</Typography>
-                                    <Typography className={classes.messageTimestamp}>
-                                      {formatChatMessageDate(currentMessageDate)}
-                                    </Typography>
-                                    <span className={classes.myMessage}>{message.message}</span>
-
+                                    {message.senderId ? (
+                                        <Avatar className={classes.messageAvatar} src={DEFAULT_PROFILE_IMG} />
+                                    ) : null}
+                                    <div
+                                        className={classNames(classes.messageContent, {
+                                          [classes.ownMessageContent]: message.senderId,
+                                        })}
+                                    >
+                                      <span className={classes.tweetUserFullName}>
+                                        {message.senderUsername}
+                                      </span>
+                                      <Typography className={classes.myMessage}>
+                                        {message.message}
+                                      </Typography>
+                                      <Typography className={classes.messageTimestamp}>
+                                        {formatChatMessageDate(currentMessageDate)}
+                                      </Typography>
+                                    </div>
                                   </div>
-                                </div>
-                                </div>
-                              </React.Fragment>
-                          );
-                        })}
-                    <div ref={chatEndRef} />
+                                </React.Fragment>
+                            );
+                          })}
+                      <div ref={chatEndRef} />
+                    </div>
                   </div>
                   <div className={classes.chatFooter}>
-
-                      <MessageInput
+                    <MessageInput
                           multiline
                           value={message}
                           onChange={handleInputChange}
                           variant="outlined"
                           placeholder="Start a new message"
                           onKeyDown={handleKeyDown}
-                      />
+                    />
                       <div style={{marginLeft: 8}} className={classes.chatIcon}>
                         <IconButton onClick={() => handleSendMessage(senderId, recipientId)} color="primary">
                           <span>{SandMessageIcon}</span>
