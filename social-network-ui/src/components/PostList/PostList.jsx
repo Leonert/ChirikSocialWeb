@@ -8,7 +8,7 @@ import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 
-export default function PostList({ isBookmarkPage }) {
+export default function PostList({ isBookmarkPage, isReply }) {
   const posts = useSelector((state) => state.home.post);
 
   const classes = usePostStyle();
@@ -65,11 +65,12 @@ export default function PostList({ isBookmarkPage }) {
             }
             IdentifierReply={post.text === null && post.image === null}
             id={post.id}
-            classes={classes.Page}
+            classes={isReply ? classes.replyItem : classes.Page}
             username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
             isBookmarkPage={isBookmarkPage}
+            isReply={isReply}
             retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
@@ -88,7 +89,7 @@ export default function PostList({ isBookmarkPage }) {
             handleClickRetweet={() => handleRetweet(`${post.id}`)}
             handleClickBookmark={() => handleBookmark(`${post.id}`)}
           >
-            {post.originalPost && (
+            {post.originalPost && !isReply && (
               <Post
                 IdentifierOriginal={post.text != null && post.image === null}
                 id={post.originalPost.id}
