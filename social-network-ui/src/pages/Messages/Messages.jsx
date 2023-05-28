@@ -1,7 +1,7 @@
 import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 
-import {  SandMessageIcon } from '../../icon';
+import {CheckIcon, GifIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
 
 import { useMessagesStyles } from './MessagesStyles';
@@ -21,9 +21,10 @@ import {
 } from "../../features/slices/massagesSlise";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
-import { formatChatMessageDate } from "../../util/formatDate";
+import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "./MessageInput/MessageInput";
 import {ChatApi} from "../../services/api/chatApi";
+
 
 
 const Messages = ({ chatId ,senderId, recipientId}) => {
@@ -43,7 +44,7 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (senderId, recipientId) => {
     const trimmedMessage = message.trim();
 
     if (trimmedMessage !== '') {
@@ -59,26 +60,23 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
     }
   };
 
-
-
-
   const handleInputChange = (event) => {
     const { value } = event.target;
     setMessage(value);
   };
 
-  const handleSearchChange = async (event) => {
-    event.preventDefault();
-    const keyword = event.target.value;
-    dispatch(setText(keyword));
-
-    try {
-      const userList = await ChatApi.getUserList(keyword);
-      dispatch(fetchChat.fulfilled(userList));
-    } catch (error) {
-      console.error('Error searching users:', error);
-    }
-  };
+  // const handleSearchChange = async (event) => {
+  //   event.preventDefault();
+  //   const keyword = event.target.value;
+  //   dispatch(setText(keyword));
+  //
+  //   try {
+  //     const userList = await ChatApi.getUserList(keyword);
+  //     dispatch(fetchChat.fulfilled(userList));
+  //   } catch (error) {
+  //     console.error('Error searching users:', error);
+  //   }
+  // };
 
   const onOpenModalWindow = () => {
     dispatch(toggleModalWindow());
@@ -210,12 +208,10 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                       New message
                     </Button>
                   </div>
-
                 </Paper>
               </div>
           ) : (
               <div className={classes.chatContainer}>
-
                 <Paper variant="outlined">
                   <Paper className={classes.chatHeader}>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
@@ -252,13 +248,13 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                                         [classes.ownMessageContent]: message.senderId,
                                       })}
                                   >
+                                    <span className={classes.tweetUserFullName}>{message.senderUsername}</span>
 
                                     <Typography className={classes.myMessage}>{message.message}</Typography>
-                                    <span className={classes.tweetUserFullName}>{message.senderUsername}</span>
                                     <Typography className={classes.messageTimestamp}>
                                       {formatChatMessageDate(currentMessageDate)}
                                     </Typography>
-                                    <span className={classes.senderName}>{message.message}</span>
+                                    <span className={classes.myMessage}>{message.message}</span>
 
                                   </div>
                                 </div>
@@ -279,7 +275,7 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                           onKeyDown={handleKeyDown}
                       />
                       <div style={{marginLeft: 8}} className={classes.chatIcon}>
-                        <IconButton onClick={handleSendMessage} color="primary">
+                        <IconButton onClick={() => handleSendMessage(senderId, recipientId)} color="primary">
                           <span>{SandMessageIcon}</span>
                         </IconButton>
                       </div>
@@ -288,14 +284,11 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
               </div>
           )}
         </Grid>
-
         <MessagesModal
             visible={visibleModalWindow}
-            onClose={onCloseModalWindow}
-        />
+            onClose={onCloseModalWindow}/>
       </>
-
   );
 };
 
-export default Messages
+export default Messages;

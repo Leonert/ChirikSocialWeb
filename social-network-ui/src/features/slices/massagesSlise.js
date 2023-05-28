@@ -13,13 +13,15 @@ export const sendMessage = createAsyncThunk(
             recipientId,
             isRead: true,
             messageId: null,
-            keyword: '',
         };
 
         console.log('Sending message:', messageDto);
 
         try {
-            const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
+            const response = await axiosIns.post(
+                `/api/messages/chats/${chatId}/add-message`,
+                messageDto
+            );
             const createdMessage = response.data;
 
             return { chatId, message: createdMessage, senderId, recipientId };
@@ -53,10 +55,12 @@ const messagesSlice = createSlice({
     name: 'messages',
     initialState: {
         chats: [],
+        users: [],
         messages: {},
         selectedChatId: null,
         text: '',
         visibleModalWindow: false,
+
     },
     reducers: {
         setSelectedChatId: (state, action) => {
@@ -70,18 +74,52 @@ const messagesSlice = createSlice({
         },
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
-            state.messages[chatId] = [...(state.messages[chatId] || []), message];
+
+            console.log('chatId:', chatId);
+            console.log('message:', message);
+
+            const chat = state.messages[chatId];
+
+            if (chat) {
+                const updatedMessage = {
+                    ...message,
+                    recipientId: message.recipientId || chat.messages[0]?.recipientId,
+                    senderId: message.senderId || chat.messages[0]?.senderId,
+                };
+
+                state.messages[chatId] = {
+                    ...chat,
+                    messages: [...chat.messages, updatedMessage],
+                };
+            }
+
+            // Оновлення даних про користувачів
+            const users = state.chats.map(chat => ({
+                chatId: chat.chatId,
+                senderId: chat.senderId,
+                recipientId: chat.recipientId,
+            }));
+            state.users = users;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(sendMessage.fulfilled, (state, action) => {
-                const { chatId, message } = action.payload;
+                const { chatId, message, senderId, recipientId } = action.payload;
 
-                if (state.messages[chatId]) {
-                    state.messages[chatId] = [...state.messages[chatId], message];
-                } else {
-                    state.messages[chatId] = [message];
+                const chat = state.messages[chatId];
+
+                if (chat) {
+                    const updatedMessage = {
+                        ...message,
+                        recipientId: recipientId || chat.recipientId,
+                        senderId: senderId || chat.senderId,
+                    };
+
+                    state.messages[chatId] = {
+                        ...chat,
+                        messages: [...chat.messages, updatedMessage],
+                    };
                 }
             })
             .addCase(fetchChat.fulfilled, (state, action) => {
@@ -102,6 +140,7 @@ export const {
 } = messagesSlice.actions;
 
 export const selectChats = (state) => state.messages.chats;
+export const selectUsers = (state) => state.messages.users;
 export const selectMessages = (state) => {
     const selectedChatId = state.messages.selectedChatId;
 

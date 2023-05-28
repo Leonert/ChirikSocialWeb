@@ -8,7 +8,7 @@ import {
   List,
   ListItem,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import { SearchIcon } from '../../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
@@ -18,35 +18,35 @@ import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../../axiosInstance";
 import {addResult, removeResult} from "../../../features/slices/searchSlice";
-import axios from "axios";
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
   const searchResult = useSelector((state) => state.search.searchResult);
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
+  const [existingChats, setExistingChats] = useState([]);
+  const senderId = 1; // Замініть значення на відповідне значення senderId
 
 
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
       event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
       console.log('Search result:', response.data);
-
     });
     setSearchText(event.target.value);
   };
 
   const handleListItemClick = (user) => {
     setSelectedUser(user);
-    console.log(user)
+    console.log(user);
   };
 
   const handleCreateChat = () => {
     if (selectedUser) {
       const messageDto = {
-        messageId: 3,
+        messageId: null,
         isRead: false,
-        message: null,
+        message: '',
         timestamp: null,
         recipientId: selectedUser.id,
         senderId: 1,
@@ -62,7 +62,8 @@ const MessagesModal = ({ visible, onClose }) => {
 
       console.log('Request data:', { messageDto, chatDto });
 
-      axiosIns.post('/api/messages/chats/create', { messageDto, chatDto })
+      axiosIns
+          .post('/api/messages/chats/create', { messageDto, chatDto })
           .then((response) => {
             const createdChatDto = response.data;
             console.log('Chat created:', createdChatDto);
@@ -72,7 +73,6 @@ const MessagesModal = ({ visible, onClose }) => {
           });
     }
   };
-
 
 
   return (
