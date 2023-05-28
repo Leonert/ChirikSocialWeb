@@ -49,7 +49,7 @@ const MessagesModal = ({ visible, onClose }) => {
         message: '',
         timestamp: null,
         recipientId: selectedUser.id,
-        senderId: 1,
+        senderId:1,
         chatId: null,
         senderUsername: '',
         recipientUsername: ''

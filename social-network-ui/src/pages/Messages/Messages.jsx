@@ -1,7 +1,7 @@
 import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 
-import {CheckIcon, GifIcon, MediaIcon, SandMessageIcon, SearchIcon} from '../../icon';
+import { SandMessageIcon, SearchIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
 
 import { useMessagesStyles } from './MessagesStyles';
@@ -29,7 +29,7 @@ import {InputAdornment} from "@mui/material";
 
 
 
-const Messages = ({ chatId ,senderId, recipientId}) => {
+const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
   const chats = useSelector(selectChats);
@@ -39,6 +39,7 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
 
   const chatEndRef = useRef(null);
+  const recipientId = useSelector((state) => state.auth.recipientId);
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
@@ -67,19 +68,6 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
     const { value } = event.target;
     setMessage(value);
   };
-
-  // const handleSearchChange = async (event) => {
-  //   event.preventDefault();
-  //   const keyword = event.target.value;
-  //   dispatch(setText(keyword));
-  //
-  //   try {
-  //     const userList = await ChatApi.getUserList(keyword);
-  //     dispatch(fetchChat.fulfilled(userList));
-  //   } catch (error) {
-  //     console.error('Error searching users:', error);
-  //   }
-  // };
 
   const onOpenModalWindow = () => {
     dispatch(toggleModalWindow());
@@ -138,7 +126,7 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSendMessage(selectedChatId);
+      handleSendMessage(selectedChatId, recipientId);
     }
   };
 
@@ -156,7 +144,8 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                   <>
                     <div className={classes.messagesTitle}>Send a message, get a message</div>
                     <div className={classes.messagesText}>
-                      Direct Messages are private conversations between you and other people on Twitter. Share Tweets, media, and more!
+                      Direct Messages are private conversations between you and other people on Twitter. Share Tweets, media,
+                      and more!
                     </div>
                     <Button onClick={onOpenModalWindow} className={classes.messagesButton} variant="contained" color="primary">
                       Start a conversation
@@ -171,9 +160,7 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                           onChange={(event) => setText(event.target.value)}
                           InputProps={{
                             startAdornment: (
-                                <InputAdornment position="start">
-                                  {SearchIcon}
-                                </InputAdornment>
+                                <InputAdornment position="start">{SearchIcon}</InputAdornment>
                             ),
                           }}
                       />
@@ -190,13 +177,19 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                                 <div className={classes.userWrapper}>
                                   <Avatar
                                       className={classes.userAvatar}
-                                      src={(group.chats[0]?.avatar?.src || '') ? group.chats[0].avatar.src : DEFAULT_PROFILE_IMG}
+                                      src={
+                                        (group.chats[0]?.avatar?.src || '') ? group.chats[0].avatar.src : DEFAULT_PROFILE_IMG
+                                      }
                                   />
                                   <div style={{ flex: 1 }}>
                                     <div className={classes.userHeader}>
                                       <div>
-                                        <Typography className={classes.userFullName}>{group.chats[0]?.fullName || ''}</Typography>
-                                        <Typography className={classes.username}>@{group.chats[0]?.recipientUsername || ''}</Typography>
+                                        <Typography className={classes.userFullName}>
+                                          {group.chats[0]?.recipientUsername || ''}
+                                        </Typography>
+                                        <Typography className={classes.username}>
+                                          @{group.chats[0]?.recipientUsername || ''}
+                                        </Typography>
                                       </div>
                                     </div>
                                   </div>
@@ -218,7 +211,12 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                   <div className={classes.chatInfoWrapper}>
                     <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
                     <div className={classes.chatInfoText}>Choose one from your existing messages, or start a new one.</div>
-                    <Button onClick={onOpenModalWindow} className={classes.chatInfoButton} variant="contained" color="primary">
+                    <Button
+                        onClick={onOpenModalWindow}
+                        className={classes.chatInfoButton}
+                        variant="contained"
+                        color="primary"
+                    >
                       New message
                     </Button>
                   </div>
@@ -235,25 +233,22 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                         <span>back</span>
                       </IconButton>
                     </div>
-
                   </Paper>
                   <div className={classes.chatContent}>
                     <div className={classes.chat}>
                       {Array.isArray(messages?.messages) &&
                           messages.messages.map((message, index) => {
                             const previousMessage = messages[selectedChatId]?.messages[index - 1];
-                            const currentMessageDate = new Date(message.timestamp);
-                            const previousMessageDate = previousMessage ? new Date(previousMessage.timestamp) : null;
                             const showDateSeparator =
-                                previousMessageDate &&
-                                !isValidDate(previousMessageDate) &&
-                                isValidDate(currentMessageDate);
+                                previousMessage &&
+                                !isValidDate(new Date(previousMessage.timestamp)) &&
+                                isValidDate(new Date(message.timestamp));
 
                             return (
                                 <React.Fragment key={message.messageId}>
                                   {showDateSeparator && (
                                       <div className={classes.dateSeparator}>
-                                        {formatChatMessageDate(currentMessageDate)}
+                                        {formatChatMessageDate(new Date(message.timestamp))}
                                       </div>
                                   )}
                                   <div
@@ -269,14 +264,10 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                                           [classes.ownMessageContent]: message.senderId,
                                         })}
                                     >
-                                      <span className={classes.tweetUserFullName}>
-                                        {message.senderUsername}
-                                      </span>
-                                      <Typography className={classes.myMessage}>
-                                        {message.message}
-                                      </Typography>
+                                      <span className={classes.tweetUserFullName}>{message.senderUsername}</span>
+                                      <Typography className={classes.myMessage}>{message.message}</Typography>
                                       <Typography className={classes.messageTimestamp}>
-                                        {formatChatMessageDate(currentMessageDate)}
+                                        {formatChatMessageDate(new Date(message.timestamp))}
                                       </Typography>
                                     </div>
                                   </div>
@@ -288,26 +279,24 @@ const Messages = ({ chatId ,senderId, recipientId}) => {
                   </div>
                   <div className={classes.chatFooter}>
                     <MessageInput
-                          multiline
-                          value={message}
-                          onChange={handleInputChange}
-                          variant="outlined"
-                          placeholder="Start a new message"
-                          onKeyDown={handleKeyDown}
+                        multiline
+                        value={message}
+                        onChange={handleInputChange}
+                        variant="outlined"
+                        placeholder="Start a new message"
+                        onKeyDown={handleKeyDown}
                     />
-                      <div style={{marginLeft: 8}} className={classes.chatIcon}>
-                        <IconButton onClick={() => handleSendMessage(senderId, recipientId)} color="primary">
-                          <span>{SandMessageIcon}</span>
-                        </IconButton>
-                      </div>
+                    <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
+                      <IconButton onClick={() => handleSendMessage(senderId, recipientId)} color="primary">
+                        <span>{SandMessageIcon}</span>
+                      </IconButton>
+                    </div>
                   </div>
                 </Paper>
               </div>
           )}
         </Grid>
-        <MessagesModal
-            visible={visibleModalWindow}
-            onClose={onCloseModalWindow}/>
+        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
       </>
   );
 };
