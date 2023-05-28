@@ -13,6 +13,7 @@ import TextInput from '../../components/ReplayModal/TextInput';
 import {
   addOnePost,
   bookmarksPost,
+  clearPosts,
   getPost,
   getPostId,
   likesPost,
@@ -46,7 +47,6 @@ const PostPage = () => {
   };
 
   useEffect(() => {
-    console.log('useEffect');
     const fetchPost = async () => {
       const response = await axiosIns.get(`/api/posts/${id}`);
       setPost(response.data);
@@ -54,6 +54,10 @@ const PostPage = () => {
       return response;
     };
 
+    fetchPost().catch(() => setIsLoading(false));
+  }, [id, post]);
+
+  useEffect(() => {
     const fetchReplies = async () => {
       const response = await axiosIns.get(`/api/posts/${id}/replies`);
 
@@ -66,9 +70,11 @@ const PostPage = () => {
       return response;
     };
 
-    fetchPost()
-      .then(() => fetchReplies())
-      .catch(() => setIsLoading(false));
+    fetchReplies();
+
+    return () => {
+      dispatch(clearPosts());
+    };
   }, [id]);
 
   const handleRetweet = async (id) => {
@@ -148,6 +154,7 @@ const PostPage = () => {
         >
           {post.originalPost && (
             <Post
+              IdentifierOriginal={post.text !== null && post.image === null}
               id={post.originalPost.id}
               classes={postClasses.PageSmall}
               key={post.id}

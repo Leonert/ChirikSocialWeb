@@ -1,23 +1,36 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
+import {
+  addOnePost,
+  bookmarksPost,
+  getPostId,
+  likesPost,
+  makeRetweet,
+  openReplayModal,
+  removeRetweet,
+} from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 
 export default function PostList({ isBookmarkPage, isReply }) {
   const posts = useSelector((state) => state.home.post);
-
+  const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const classes = usePostStyle();
   const dispatch = useDispatch();
 
   const handleRetweet = async (id) => {
     const response = await axiosIns.post(`/api/posts`, { originalPost: id });
-    const retweetsNumber = response.status === 200 ? response.data : response.data.originalPost.retweetsNumber;
-    dispatch(makeRetweet({ postId: id, retweetsNumber }));
+    if (response.status === 200) {
+      dispatch(removeRetweet({ id, username }));
+      dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
+    } else {
+      if (!isBookmarkPage && !isReply) dispatch(addOnePost(response.data));
+      dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
+    }
   };
 
   const handleReplay = (props) => {
@@ -89,9 +102,9 @@ export default function PostList({ isBookmarkPage, isReply }) {
             handleClickRetweet={() => handleRetweet(`${post.id}`)}
             handleClickBookmark={() => handleBookmark(`${post.id}`)}
           >
-            {post.originalPost && !isReply && (
+            {post.originalPost && (
               <Post
-                IdentifierOriginal={post.text != null && post.image === null}
+                IdentifierOriginal={post.text !== null && post.image === null}
                 id={post.originalPost.id}
                 classes={classes.PageSmall}
                 key={post.originalPost.id}
@@ -119,6 +132,19 @@ export default function PostList({ isBookmarkPage, isReply }) {
             )}
           </Post>
         ))}
+      {!posts.length && (
+        <Typography
+          sx={{
+            marginTop: '25px',
+            color: '#93989D',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '32px',
+          }}
+        >
+          So far, there are no replies. <br /> But you can fix it :)
+        </Typography>
+      )}
     </div>
   );
 }
