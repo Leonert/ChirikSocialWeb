@@ -44,6 +44,7 @@ export const usePostStyle = makeStyles((theme) => ({
     alignItems: 'flex-end',
     fontSize: '14px !important',
     color: theme.palette.grey[300],
+    cursor: 'pointer',
   },
   actionNumber: {
     fontWeight: '700 !important',

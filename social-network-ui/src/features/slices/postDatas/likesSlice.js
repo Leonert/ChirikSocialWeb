@@ -4,15 +4,19 @@ import axiosIns from '../../../axiosInstance';
 
 export const getUsersLike = createAsyncThunk(
   'likes/getUsersLike',
-  async ({ id, currentPage = 0 }, { rejectWithValue }) => {
+  async ({ id, currentPage = 0 }, { dispatch, rejectWithValue }) => {
     try {
-      const { data } = await axiosIns({
+      const { data, status } = await axiosIns({
         method: 'GET',
-        url: `/api/posts/1/likes?p=${currentPage}&n=10`,
+        url: `/api/posts/${id}/likes?p=${currentPage}&n=10`,
         headers: {
           'Content-Type': 'application/json',
         },
       });
+
+      if (status === 204) {
+        dispatch(likesSlice.actions.setTotalUsers());
+      }
 
       return data;
     } catch (error) {
@@ -28,6 +32,7 @@ const likesSlice = createSlice({
     error: null,
     loading: false,
     isOpenLikeModal: false,
+    isTotalUsers: false,
   },
   reducers: {
     handleOpenLikeModal: (state, action) => {
@@ -38,6 +43,12 @@ const likesSlice = createSlice({
       if (state.listUsers.length !== 0 && elem !== -1) {
         state.listUsers[elem].currUserFollower = !state.listUsers[elem].currUserFollower;
       }
+    },
+    removeListUsersLike: (state) => {
+      state.listUsers = [];
+    },
+    setTotalUsers: (state, action) => {
+      state.isTotalUsers = true;
     },
   },
   extraReducers: {
@@ -62,4 +73,4 @@ const likesSlice = createSlice({
 });
 
 export const likesReducer = likesSlice.reducer;
-export const { handleOpenLikeModal, changeStatusUserLike } = likesSlice.actions;
+export const { handleOpenLikeModal, changeStatusUserLike, removeListUsersLike, setTotalUsers } = likesSlice.actions;
