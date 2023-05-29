@@ -5,8 +5,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { clothReplayModal } from '../../features/slices/homeSlice';
-import CloseButton from '../SideMenu/AddTweetModal/AddTweetForm/CloseButton/CloseButton';
-import { useAddTweetModalStyles } from '../SideMenu/AddTweetModal/AddTweetModalStyles';
+import CloseButton from '../AddTweetModal/AddTweetForm/CloseButton/CloseButton';
+import { useAddTweetModalStyles } from '../AddTweetModal/AddTweetModalStyles';
 import FormModal from './Form';
 
 const ReplayModal = () => {

@@ -19,7 +19,7 @@ import {
 import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
 import SearchResulting from '../SearchField/SearchResulting';
-import AddTweetModal from './AddTweetModal/AddTweetModal';
+import AddTweetModal from '../AddTweetModal/AddTweetModal';
 import LogOutButton from './LogOutButton';
 import { useSideMenuStyles } from './SideMenuStyles';
 
@@ -46,7 +46,7 @@ const SideMenu = () => {
     <>
       <ul className={classes.container}>
         <li>
-          <NavLink to={HOME} activeClassName={'selected'}>
+          <NavLink to={HOME} activeclassname={'selected'}>
             <div className={classes.logoIcon}>
               <IconButton>
                 {TweetIcon}
@@ -56,7 +56,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={HOME} activeClassName={'selected'}>
+          <NavLink to={HOME} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <>
@@ -68,7 +68,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={SEARCH} activeClassName={'selected'}>
+          <NavLink to={SEARCH} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <>
@@ -80,7 +80,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={NOTIFICATIONS} activeClassName={'selected'}>
+          <NavLink to={NOTIFICATIONS} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <>
@@ -92,7 +92,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={MESSAGES} activeClassName={'selected'}>
+          <NavLink to={MESSAGES} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <span>{MessagesIcon}</span>
@@ -104,7 +104,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={BOOKMARKS} activeClassName={'selected'}>
+          <NavLink to={BOOKMARKS} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <>
@@ -116,7 +116,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={user?.username} activeClassName={'selected'}>
+          <NavLink to={user?.username} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <>
@@ -128,7 +128,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={SETTING} activeClassName={'selected'}>
+          <NavLink to={SETTING} activeclassname={'selected'}>
             <div>
               <Hidden smDown>
                 <>

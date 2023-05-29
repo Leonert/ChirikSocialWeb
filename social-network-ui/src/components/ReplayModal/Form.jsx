@@ -7,7 +7,7 @@ import axiosIns from '../../axiosInstance';
 import { addOnePost, clothReplayModal, replayMessage } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
-import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
+import { useAddTweetFormStyles } from '../AddTweetModal/AddTweetForm/AddTweetFormStyles';
 import TextInput from './TextInput';
 
 function FormModal({ buttonName }) {

@@ -1,4 +1,4 @@
-import axiosIns from "../../axiosInstance";
+import axiosIns from "../axiosInstance";
 
 export const ChatApi = {
     getUserChats: async () => {

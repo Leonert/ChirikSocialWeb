@@ -31,8 +31,6 @@ const Messages = ({ chatId, senderId }) => {
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
 
-
-  console.log(messages)
   const scrollToBottom = () => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -55,7 +53,7 @@ const Messages = ({ chatId, senderId }) => {
             setMessage('');
           })
           .catch((error) => {
-            console.error('Error sending message:', error);
+            error('Failed to send message. Please try again.');
           });
     }
   };
@@ -81,7 +79,7 @@ const Messages = ({ chatId, senderId }) => {
       await dispatch(fetchChatMessages(chatId));
       scrollToBottom();
     } catch (error) {
-      console.error('Error fetching chat messages:', error);
+      error('Error fetching chat messages:', error);
     }
   };
 

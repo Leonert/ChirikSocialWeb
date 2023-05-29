@@ -58,15 +58,14 @@ const MessagesModal = ({ visible, onClose }) => {
         messages: [messageDto]
       };
 
-
       axiosIns
           .post('/api/messages/chats/create', { messageDto, chatDto })
           .then((response) => {
             const createdChatDto = response.data;
-
+            onClose(createdChatDto);
           })
           .catch((error) => {
-            console.error(error);
+            console.error('Error creating chat:', error);
           });
     }
   };

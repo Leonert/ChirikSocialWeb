@@ -1,5 +1,5 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
-import {ChatApi} from "../../services/api/chatApi";
+import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',

@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
 import React from 'react';
 
-import { CloseIcon } from '../../../../../icon';
+import { CloseIcon } from '../../../../icon';
 import { useCloseButtonStyles } from './CloseButtonStyles';
 
 const CloseButton = ({ onClose }) => {

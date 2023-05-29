@@ -37,7 +37,6 @@ public class MessageServiceImpl implements MessageService {
             .collect(Collectors.toList());
   }
 
-
   @Override
   public List<UserDto.Response.Listing> searchUsers(String keyword) {
     List<User> users = userRepository.findByUsernameContainingIgnoreCase(keyword);
@@ -63,11 +62,9 @@ public class MessageServiceImpl implements MessageService {
     return chatDto;
   }
 
-
   private ChatDto convertToChatDto(Chat chat) {
     return modelMapper.map(chat, ChatDto.class);
   }
-
 
   @Override
   public MessageDto addMessage(MessageDto messageDto, ChatDto chatDto) {
@@ -93,8 +90,6 @@ public class MessageServiceImpl implements MessageService {
 
     return convertToMessageDto(message);
   }
-
-
 
   @Override
   public MessageDto updateMessage(MessageDto messageDto) {

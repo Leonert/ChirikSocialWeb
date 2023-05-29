@@ -5,10 +5,10 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import axiosIns from '../../../../axiosInstance';
-import { addOnePost } from '../../../../features/slices/homeSlice';
-import { EmojiIcon } from '../../../../icon';
-import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
+import axiosIns from '../../../axiosInstance';
+import { addOnePost } from '../../../features/slices/homeSlice';
+import { EmojiIcon } from '../../../icon';
+import ActionIconButton from '../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
 import ProfileAvatar from './ProfileAvatar/ProfileAvatar';
 

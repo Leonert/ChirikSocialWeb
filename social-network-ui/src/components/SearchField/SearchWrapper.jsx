@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { removeResult, removeResultItem } from '../../features/slices/searchSlice';
-import CloseButton from '../SideMenu/AddTweetModal/AddTweetForm/CloseButton/CloseButton';
+import CloseButton from '../AddTweetModal/AddTweetForm/CloseButton/CloseButton';
 import SearchResulting from './SearchResulting';
 
 const SearchWrapper = () => {
