@@ -10,17 +10,8 @@ import { usePostStyle } from '../../components/Post/PostStyle';
 import ReplyHeader from '../../components/Post/ReplyHeader';
 import PostList from '../../components/PostList/PostList';
 import TextInput from '../../components/ReplayModal/TextInput';
-import {
-  addOnePost,
-  bookmarksPost,
-  clearPosts,
-  getPost,
-  getPostId,
-  likesPost,
-  makeRetweet,
-  openReplayModal,
-  replayMessage,
-} from '../../features/slices/homeSlice';
+import { addOnePost, clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
+import { addReply, makeRetweet, setBookmark, setLike, setPost } from '../../features/slices/postSlice';
 import usePostPageStyles from './PostPageStyles';
 
 const PostPage = () => {
@@ -30,11 +21,12 @@ const PostPage = () => {
   const text = useSelector((state) => state.home.message);
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [post, setPost] = useState(null);
+  const post = useSelector((state) => state.post);
 
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
       dispatch(addOnePost(response.data));
+      dispatch(addReply());
       dispatch(replayMessage(''));
     });
   };
@@ -49,15 +41,11 @@ const PostPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       const response = await axiosIns.get(`/api/posts/${id}`);
-      setPost(response.data);
+      dispatch(setPost(response.data));
 
       return response;
     };
 
-    fetchPost().catch(() => setIsLoading(false));
-  }, [id, post]);
-
-  useEffect(() => {
     const fetchReplies = async () => {
       const response = await axiosIns.get(`/api/posts/${id}/replies`);
 
@@ -70,7 +58,9 @@ const PostPage = () => {
       return response;
     };
 
-    fetchReplies();
+    fetchPost()
+      .then(() => fetchReplies())
+      .catch(() => setIsLoading(false));
 
     return () => {
       dispatch(clearPosts());
@@ -80,34 +70,18 @@ const PostPage = () => {
   const handleRetweet = async (id) => {
     const response = await axiosIns.post(`/api/posts`, { originalPost: id });
     const retweetsNumber = response.status === 200 ? response.data : response.data.originalPost.retweetsNumber;
-    dispatch(makeRetweet({ postId: id, retweetsNumber }));
-  };
-
-  const handleReplay = (props) => {
-    dispatch(openReplayModal(props));
+    dispatch(makeRetweet(retweetsNumber));
   };
 
   const handleLike = async (props) => {
     await axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
-      const LikeNumber = response.data;
-      dispatch(
-        likesPost({
-          postId: props,
-          likesNumber: LikeNumber,
-        })
-      );
+      dispatch(setLike(response.data));
     });
   };
 
   const handleBookmark = (props) => {
     axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
-      const bookmarksNum = response.data;
-      dispatch(
-        bookmarksPost({
-          postId: props,
-          bookmarksNumber: bookmarksNum,
-        })
-      );
+      dispatch(setBookmark(response.data));
     });
   };
 
@@ -117,7 +91,7 @@ const PostPage = () => {
       sx={isLoading ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : { padding: '50px 0' }}
     >
       {isLoading && <CircularProgress />}
-      {!isLoading && post && (
+      {!isLoading && post.id !== null && (
         <Post
           replay={
             post.originalPost ? (
@@ -148,7 +122,6 @@ const PostPage = () => {
           originalPost={post.originalPost}
           handleClick={() => dispatch(getPostId(post.id))}
           handleClickLike={() => handleLike(post.id)}
-          handleClickReplay={() => handleReplay(post.id)}
           handleClickRetweet={() => handleRetweet(post.id, post.retweeted)}
           handleClickBookmark={() => handleBookmark(post.id)}
         >
@@ -174,7 +147,6 @@ const PostPage = () => {
               bookmark={post.originalPost.bookmarksNumber}
               handleClick={() => dispatch(getPostId(post.originalPost.id))}
               handleClickLike={() => handleLike(post.originalPost.id)}
-              handleClickReplay={() => handleReplay(post.originalPost.id)}
               handleClickRetweet={() => handleRetweet(post.originalPost.id)}
               handleClickBookmark={() => handleBookmark(post.originalPost.id)}
             />
@@ -193,7 +165,7 @@ const PostPage = () => {
         </Box>
       )}
 
-      {!isLoading && post && <PostList isReply={true} />}
+      {!isLoading && post && <PostList isReplyPage={true} />}
       {!isLoading && !post && <NotFound />}
     </Container>
   );

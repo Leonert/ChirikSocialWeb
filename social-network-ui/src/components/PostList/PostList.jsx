@@ -16,7 +16,7 @@ import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 
-export default function PostList({ isBookmarkPage, isReply }) {
+export default function PostList({ isBookmarkPage, isReplyPage }) {
   const posts = useSelector((state) => state.home.post);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const classes = usePostStyle();
@@ -28,7 +28,7 @@ export default function PostList({ isBookmarkPage, isReply }) {
       dispatch(removeRetweet({ id, username }));
       dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
     } else {
-      if (!isBookmarkPage && !isReply) dispatch(addOnePost(response.data));
+      if (!isBookmarkPage && !isReplyPage) dispatch(addOnePost(response.data));
       dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
     }
   };
@@ -78,12 +78,12 @@ export default function PostList({ isBookmarkPage, isReply }) {
             }
             IdentifierReply={post.text === null && post.image === null}
             id={post.id}
-            classes={isReply ? classes.replyItem : classes.Page}
+            classes={isReplyPage ? classes.replyItem : classes.Page}
             username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
             isBookmarkPage={isBookmarkPage}
-            isReply={isReply}
+            isReplyPage={isReplyPage}
             retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
@@ -132,7 +132,7 @@ export default function PostList({ isBookmarkPage, isReply }) {
             )}
           </Post>
         ))}
-      {!posts.length && (
+      {!posts.length && isReplyPage && (
         <Typography
           sx={{
             marginTop: '25px',
