@@ -76,7 +76,18 @@ const homeSlice = createSlice({
     clearPosts: (state) => {
       state.post = [];
     },
+    removeRetweet: (state, action) => {
+      const { id, username } = action.payload;
+      state.post = state.post.filter((p) => {
+        if (p.originalPost === null) {
+          return true;
+        } else if (p.originalPost.id === +id && p.author.username === username) {
+          return false;
+        }
 
+        return true;
+      });
+    },
     bookmarksPost: (state, action) => {
       const { postId, bookmarksNumber } = action.payload;
 
@@ -138,6 +149,7 @@ export const {
   replayMessage,
   clearPosts,
   bookmarksPost,
+  removeRetweet,
   bookmarksPostNum,
   makeRetweet,
   likesPost,

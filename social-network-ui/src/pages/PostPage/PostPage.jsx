@@ -1,4 +1,4 @@
-import { CircularProgress, Container, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -8,27 +8,74 @@ import NotFound from '../../components/NotFound/NotFound';
 import Post from '../../components/Post/Post';
 import { usePostStyle } from '../../components/Post/PostStyle';
 import ReplyHeader from '../../components/Post/ReplyHeader';
-import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
+import PostList from '../../components/PostList/PostList';
+import TextInput from '../../components/ReplayModal/TextInput';
+import {
+  addOnePost,
+  bookmarksPost,
+  clearPosts,
+  getPost,
+  getPostId,
+  likesPost,
+  makeRetweet,
+  openReplayModal,
+  replayMessage,
+} from '../../features/slices/homeSlice';
+import usePostPageStyles from './PostPageStyles';
 
 const PostPage = () => {
+  const pageClasses = usePostPageStyles();
   const postClasses = usePostStyle();
-  const posts = useSelector((state) => state.home.post);
   const dispatch = useDispatch();
+  const text = useSelector((state) => state.home.message);
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState(null);
 
+  const sendRequest = async () => {
+    await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
+      dispatch(addOnePost(response.data));
+      dispatch(replayMessage(''));
+    });
+  };
+
+  const handleTextChange = (event) => {
+    const newCount = 280 - event.target.value.length;
+    if (newCount >= 0) {
+      dispatch(replayMessage(event.target.value));
+    }
+  };
+
   useEffect(() => {
     const fetchPost = async () => {
       const response = await axiosIns.get(`/api/posts/${id}`);
-      setIsLoading(false);
       setPost(response.data);
 
       return response;
     };
 
     fetchPost().catch(() => setIsLoading(false));
-  }, [posts, id]);
+  }, [id, post]);
+
+  useEffect(() => {
+    const fetchReplies = async () => {
+      const response = await axiosIns.get(`/api/posts/${id}/replies`);
+
+      if (response.data !== '') {
+        dispatch(getPost(response.data));
+      }
+
+      setIsLoading(false);
+
+      return response;
+    };
+
+    fetchReplies();
+
+    return () => {
+      dispatch(clearPosts());
+    };
+  }, [id]);
 
   const handleRetweet = async (id) => {
     const response = await axiosIns.post(`/api/posts`, { originalPost: id });
@@ -107,6 +154,7 @@ const PostPage = () => {
         >
           {post.originalPost && (
             <Post
+              IdentifierOriginal={post.text !== null && post.image === null}
               id={post.originalPost.id}
               classes={postClasses.PageSmall}
               key={post.id}
@@ -133,6 +181,19 @@ const PostPage = () => {
           )}
         </Post>
       )}
+
+      {!isLoading && post && (
+        <Box className={pageClasses.replyWrapper}>
+          <TextInput handleTextChange={handleTextChange} />
+          <Box sx={{ marginTop: '15px', textAlign: 'right' }}>
+            <Button disabled={text.length === 0} onClick={sendRequest} color="primary" variant="contained">
+              Reply
+            </Button>
+          </Box>
+        </Box>
+      )}
+
+      {!isLoading && post && <PostList isReply={true} />}
       {!isLoading && !post && <NotFound />}
     </Container>
   );
