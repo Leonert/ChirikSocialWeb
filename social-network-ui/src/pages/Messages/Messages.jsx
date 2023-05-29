@@ -1,14 +1,10 @@
 import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
-
-import { SandMessageIcon, SearchIcon} from '../../icon';
+import { SandMessageIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
-
 import { useMessagesStyles } from './MessagesStyles';
-
-import MessagesModal from "./MessagesModal/MessagesModal";
+import MessagesModal from "../../components/MessagesModal/MessagesModal";
 import {
-  addChatMessage,
   fetchChat,
   fetchChatMessages,
   selectChats,
@@ -23,10 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
-import {MessageInput} from "./MessageInput/MessageInput";
-
-
-
+import {MessageInput} from "../../components/MessageInput/MessageInput";
 
 const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
@@ -36,9 +29,7 @@ const Messages = ({ chatId, senderId }) => {
   const messages = useSelector(selectMessages);
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
-
   const chatEndRef = useRef(null);
-
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {

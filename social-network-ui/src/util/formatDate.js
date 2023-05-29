@@ -25,17 +25,3 @@ export const formatChatMessageDate = (dateString) => {
     }
 };
 
-export const formatDate = (dateTimeString) => {
-    const dateTime = moment(dateTimeString, "YYYY-MM-DD HH:mm:ss.SS");
-    const diffInDays = moment().diff(dateTime, "days");
-    const diffInHours = moment().diff(dateTime, "hours");
-    const diffInMinutes = moment().diff(dateTime, "minutes");
-
-    if (diffInDays !== 0) {
-        return diffInDays + " days";
-    } else if (diffInHours !== 0) {
-        return diffInHours + " hours";
-    } else {
-        return diffInMinutes + " minutes";
-    }
-};

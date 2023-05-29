@@ -10,14 +10,14 @@ import {
 } from '@material-ui/core';
 import React, {useState} from 'react';
 
-import { SearchIcon } from '../../../icon';
+import { SearchIcon } from '../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
 import { useMessagesModalStyles } from './MessagesModalStyles';
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
 import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
-import axiosIns from "../../../axiosInstance";
-import {addResult, removeResult} from "../../../features/slices/searchSlice";
+import axiosIns from "../../axiosInstance";
+import {addResult, removeResult} from "../../features/slices/searchSlice";
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
   const searchResult = useSelector((state) => state.search.searchResult);
@@ -29,14 +29,12 @@ const MessagesModal = ({ visible, onClose }) => {
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
       event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
-      console.log('Search result:', response.data);
     });
     setSearchText(event.target.value);
   };
 
   const handleListItemClick = (user) => {
     setSelectedUser(user);
-    console.log(user);
   };
 
   const handleCreateChat = () => {
@@ -58,13 +56,12 @@ const MessagesModal = ({ visible, onClose }) => {
         messages: [messageDto]
       };
 
-      console.log('Request data:', { messageDto, chatDto });
 
       axiosIns
           .post('/api/messages/chats/create', { messageDto, chatDto })
           .then((response) => {
             const createdChatDto = response.data;
-            console.log('Chat created:', createdChatDto);
+
           })
           .catch((error) => {
             console.error(error);

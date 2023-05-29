@@ -18,15 +18,13 @@ export const sendMessage = createAsyncThunk(
                 isRead: true,
                 messageId: null,
             };
-
-            console.log('Sending message:', messageDto);
-
             try {
                 const response = await axiosIns.post(
                     `/api/messages/chats/${chatId}/add-message`,
                     messageDto
                 );
                 const createdMessage = response.data;
+                createdMessage.messageId = createdMessage.messageId || null;
 
                 dispatch(addChatMessage({ chatId, message: createdMessage }));
 
@@ -37,7 +35,6 @@ export const sendMessage = createAsyncThunk(
                     recipientId: chat.recipientId,
                 };
             } catch (error) {
-                console.error('Error sending message:', error);
                 throw error;
             }
         }
@@ -91,29 +88,19 @@ const messagesSlice = createSlice({
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
 
-            const chatIndex = state.chats.findIndex((chat) => chat.chatId === chatId);
+            const chat = state.chats.find((chat) => chat.chatId === chatId);
 
-            if (chatIndex !== -1) {
-                const chat = state.chats[chatIndex];
-
+            if (chat) {
                 const updatedMessage = {
                     ...message,
                     recipientId: message.recipientId || chat.messages?.[0]?.recipientId,
                     senderId: message.senderId || chat.messages?.[0]?.senderId,
                 };
 
-                const updatedChat = {
-                    ...chat,
-                    messages: chat.messages ? [...chat.messages, updatedMessage] : [updatedMessage],
-                };
-
-                state.chats[chatIndex] = updatedChat;
-
-
-                if (state.chats[chatIndex].messages) {
-                    state.chats[chatIndex].messages = [...state.chats[chatIndex].messages, updatedMessage];
+                if (chat.messages) {
+                    chat.messages = [...chat.messages, updatedMessage];
                 } else {
-                    state.chats[chatIndex].messages = [updatedMessage];
+                    chat.messages = [updatedMessage];
                 }
             }
 
@@ -128,6 +115,7 @@ const messagesSlice = createSlice({
                 state.selectedChatId = chatId;
             }
         }
+
 
 
     },
