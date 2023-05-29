@@ -132,6 +132,7 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
             )}
           </Post>
         ))}
+
       {!posts.length && isReplyPage && (
         <Typography
           sx={{

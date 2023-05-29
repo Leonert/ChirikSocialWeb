@@ -1,6 +1,5 @@
 import { Grid } from '@material-ui/core';
 import { Box, Typography } from '@mui/material';
-import { IoIosSettings } from 'react-icons/io';
 
 import { ListNotifications } from '../../components/NotificationItems/ListNotifications/ListNotifications';
 import { useStyles } from './NotificationsStyles';
@@ -17,9 +16,6 @@ export const Notifications = () => {
               <Typography variant="h4" className={classes.title}>
                 Notifications
               </Typography>
-              <Box className={classes.settings}>
-                <IoIosSettings size={30} />
-              </Box>
             </Box>
             <Box className={classes.section}>
               <Box className={classes.sectionItemWrap}>
