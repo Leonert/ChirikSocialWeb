@@ -8,7 +8,7 @@ import {
   List,
   ListItem,
 } from '@material-ui/core';
-import React, {useState} from 'react';
+
 
 import { SearchIcon } from '../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
@@ -18,6 +18,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../axiosInstance";
 import {addResult, removeResult} from "../../features/slices/searchSlice";
+import {useState} from "react";
+
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
   const searchResult = useSelector((state) => state.search.searchResult);

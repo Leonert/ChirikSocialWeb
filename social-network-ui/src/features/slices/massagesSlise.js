@@ -35,13 +35,12 @@ export const sendMessage = createAsyncThunk(
                     recipientId: chat.recipientId,
                 };
             } catch (error) {
+                console.error(error);
                 throw error;
             }
         }
     }
 );
-
-
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
@@ -98,7 +97,7 @@ const messagesSlice = createSlice({
                 };
 
                 if (chat.messages) {
-                    chat.messages = [...chat.messages, updatedMessage];
+                    chat.messages.push(updatedMessage);
                 } else {
                     chat.messages = [updatedMessage];
                 }
@@ -114,10 +113,7 @@ const messagesSlice = createSlice({
             if (state.selectedChatId !== chatId) {
                 state.selectedChatId = chatId;
             }
-        }
-
-
-
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -133,14 +129,10 @@ const messagesSlice = createSlice({
                         senderId: senderId || state.chats[chatIndex].senderId,
                     };
 
-                    // Перевірка, чи messages вже існує та є масивом
-                    if (state.chats[chatIndex].messages) {
-                        state.chats[chatIndex].messages.push(updatedMessage);
-                    } else {
-                        state.chats[chatIndex].messages = [updatedMessage]; // Якщо messages не існує, створюємо новий масив
-                    }
+                    state.chats[chatIndex].messages.push(updatedMessage);
                 }
             })
+
             .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;
             })
@@ -171,4 +163,3 @@ export const selectVisibleModalWindow = (state) =>
     state.messages.visibleModalWindow;
 
 export default messagesSlice.reducer;
-

@@ -31,6 +31,8 @@ const Messages = ({ chatId, senderId }) => {
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
 
+
+  console.log(messages)
   const scrollToBottom = () => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -265,10 +267,12 @@ const Messages = ({ chatId, senderId }) => {
                   <div className={classes.chatFooter}>
                     <MessageInput
                         multiline
-                        value={message}
+                        value={message.slice(0, 254)}
                         onChange={handleInputChange}
                         variant="outlined"
                         placeholder="Start a new message"
+                        maxLength={254}
+
                         // onKeyDown={handleKeyDown}
                     />
                     <div style={{ marginLeft: 8 }} className={classes.chatIcon}>

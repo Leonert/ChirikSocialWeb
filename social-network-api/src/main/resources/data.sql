@@ -34,42 +34,7 @@ insert into posts (created_date, image, text, user_id, original_post_id) values 
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 21:15:30', null, null, 1, 7);
 
 -- --  message_id chat_id   is_read sender_id recipient_id
--- --
--- INSERT INTO CHATS (chat_id) VALUES (1);
--- INSERT INTO CHATS (chat_id) VALUES (2);
--- INSERT INTO CHATS (chat_id) VALUES (3);
--- INSERT INTO CHATS (chat_id) VALUES (4);
---
--- --
--- INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
--- VALUES
---     (1, 1, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  1, 14),
---     (2, 1, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  14, 1),
---     (3, 1, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 1, 14);
--- INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
--- VALUES
---     (4, 1, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  1, 4),
---     (5, 1, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  4, 1),
---     (6, 1, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 1, 4);
--- INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
--- VALUES
---     (7, 3, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  1, 5),
---     (8, 3, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  5, 1),
---     (9, 3, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 1, 5);
---
--- INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
--- VALUES
---     (10, 4, 'Hello from Chat 2-1', false, CURRENT_TIMESTAMP,  1, 6),
---     (11, 4, 'Hello from Chat 2-2', false, CURRENT_TIMESTAMP,  6, 1),
---     (12, 4, 'Hello from Chat 2-3', false, CURRENT_TIMESTAMP, 1, 6);
---
--- INSERT INTO MESSAGES (MESSAGE_ID, CHAT_ID, MESSAGE, IS_READ, TIMESTAMP, RECIPIENT_ID, SENDER_ID)
--- VALUES
---     (13, 4, 'ydhadnn', false, CURRENT_TIMESTAMP,  7, 1),
---     (14, 4, 'Pice', false, CURRENT_TIMESTAMP,  7, 1),
---     (15, 4, 'uudd', false, CURRENT_TIMESTAMP, 1, 7);
---
---
+
 
 
 

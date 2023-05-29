@@ -77,32 +77,23 @@ public class MessageServiceImpl implements MessageService {
     User recipient = userRepository.findById(messageDto.getRecipientId())
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + messageDto.getRecipientId()));
 
-    Optional<Message> existingMessageOptional = messageRepository.findFirstByidOrderByTimestampDesc(chatDto.getChatId());
-    if (existingMessageOptional.isPresent()) {
-      Message existingMessage = existingMessageOptional.get();
-      existingMessage.setMessage(messageDto.getMessage());
-      existingMessage.setTimestamp(LocalDateTime.now());
-      existingMessage.setRead(false);
-      existingMessage.setRecipient(recipient);
-      existingMessage.setSender(sender);
-
-      existingMessage = messageRepository.save(existingMessage);
-
-      return convertToMessageDto(existingMessage);
-    }
-
     Message message = new Message();
     message.setRecipient(recipient);
     message.setSender(sender);
     message.setMessage(messageDto.getMessage());
     message.setTimestamp(LocalDateTime.now());
     message.setRead(false);
-    message.setId(chatDto.getChatId());
+
+    Chat chat = chatRepository.findById(chatDto.getChatId())
+            .orElseThrow(() -> new EntityNotFoundException("Chat not found with id: " + chatDto.getChatId()));
+
+    message.setChat(chat);
 
     message = messageRepository.save(message);
 
     return convertToMessageDto(message);
   }
+
 
 
   @Override
