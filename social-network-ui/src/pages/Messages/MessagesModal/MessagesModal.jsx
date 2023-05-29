@@ -24,8 +24,6 @@ const MessagesModal = ({ visible, onClose }) => {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
-  const [existingChats, setExistingChats] = useState([]);
-  const senderId = 1; // Замініть значення на відповідне значення senderId
 
 
   const handleInputChange = (event) => {
@@ -49,14 +47,14 @@ const MessagesModal = ({ visible, onClose }) => {
         message: '',
         timestamp: null,
         recipientId: selectedUser.id,
-        senderId:1,
+        senderId: 1,
         chatId: null,
         senderUsername: '',
         recipientUsername: ''
       };
 
       const chatDto = {
-        chatId: null, // Заповніть значенням ідентифікатора чату
+        chatId: null,
         messages: [messageDto]
       };
 

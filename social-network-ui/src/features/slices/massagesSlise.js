@@ -3,34 +3,39 @@ import {ChatApi} from "../../services/api/chatApi";
 import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
-    async ({ chatId, message, senderId, recipientId }) => {
+    async ({ chatId, message }, { getState }) => {
+        const state = getState();
         const trimmedMessage = message.trim();
+        const chat = state.messages.chats.find((chat) => chat.chatId === chatId);
 
-        const messageDto = {
-            chatId,
-            message: trimmedMessage,
-            senderId,
-            recipientId,
-            isRead: true,
-            messageId: null,
-        };
+        if (chat) {
+            const messageDto = {
+                chatId,
+                message: trimmedMessage,
+                senderId: chat.senderId,
+                recipientId: chat.recipientId,
+                isRead: true,
+                messageId: null,
+            };
 
-        console.log('Sending message:', messageDto);
+            console.log('Sending message:', messageDto);
 
-        try {
-            const response = await axiosIns.post(
-                `/api/messages/chats/${chatId}/add-message`,
-                messageDto
-            );
-            const createdMessage = response.data;
+            try {
+                const response = await axiosIns.post(
+                    `/api/messages/chats/${chatId}/add-message`,
+                    messageDto
+                );
+                const createdMessage = response.data;
 
-            return { chatId, message: createdMessage, senderId, recipientId };
-        } catch (error) {
-            console.error('Error sending message:', error);
-            throw error;
+                return { chatId, message: createdMessage, senderId: chat.senderId, recipientId: chat.recipientId };
+            } catch (error) {
+                console.error('Error sending message:', error);
+                throw error;
+            }
         }
     }
 );
+
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
@@ -73,9 +78,6 @@ const messagesSlice = createSlice({
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
 
-            console.log('chatId:', chatId);
-            console.log('message:', message);
-
             const chat = state.messages[chatId];
 
             if (chat) {
@@ -85,19 +87,19 @@ const messagesSlice = createSlice({
                     senderId: message.senderId || chat.messages[0]?.senderId,
                 };
 
-                state.messages[chatId] = {
-                    ...chat,
-                    messages: [...chat.messages, updatedMessage],
-                };
+                chat.messages.push(updatedMessage);
             }
 
-            // Оновлення даних про користувачів
-            const users = state.chats.map(chat => ({
+            const users = state.chats.map((chat) => ({
                 chatId: chat.chatId,
                 senderId: chat.senderId,
                 recipientId: chat.recipientId,
             }));
             state.users = users;
+
+            if (state.selectedChatId !== chatId) {
+                state.selectedChatId = chatId;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -105,19 +107,16 @@ const messagesSlice = createSlice({
             .addCase(sendMessage.fulfilled, (state, action) => {
                 const { chatId, message, senderId, recipientId } = action.payload;
 
-                const chat = state.messages[chatId];
+                const chatIndex = state.chats.findIndex((chat) => chat.chatId === chatId);
 
-                if (chat) {
+                if (chatIndex !== -1) {
                     const updatedMessage = {
                         ...message,
-                        recipientId: recipientId || chat.recipientId,
-                        senderId: senderId || chat.senderId,
+                        recipientId: recipientId || state.chats[chatIndex].recipientId,
+                        senderId: senderId || state.chats[chatIndex].senderId,
                     };
 
-                    state.messages[chatId] = {
-                        ...chat,
-                        messages: [...chat.messages, updatedMessage],
-                    };
+                    state.chats[chatIndex].messages.push(updatedMessage);
                 }
             })
             .addCase(fetchChat.fulfilled, (state, action) => {
@@ -150,3 +149,4 @@ export const selectVisibleModalWindow = (state) =>
     state.messages.visibleModalWindow;
 
 export default messagesSlice.reducer;
+

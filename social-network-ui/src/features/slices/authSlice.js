@@ -50,7 +50,6 @@ const authSlice = createSlice({
     token: null,
     error: null,
     loading: false,
-    recipientId: null,
   },
   reducers: {},
   extraReducers: {
@@ -63,7 +62,6 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      state.recipientId = action.payload.recipientId;
       localStorage.setItem(TOKEN, action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
@@ -79,7 +77,6 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
-      state.recipientId = action.payload.recipientId; // Додайте цей рядок
 
       localStorage.setItem(TOKEN, action.payload.jwt);
     },

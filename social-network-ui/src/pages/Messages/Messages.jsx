@@ -39,7 +39,7 @@ const Messages = ({ chatId, senderId }) => {
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
 
   const chatEndRef = useRef(null);
-  const recipientId = useSelector((state) => state.auth.recipientId);
+
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
@@ -54,15 +54,15 @@ const Messages = ({ chatId, senderId }) => {
       const messageToSend = {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
-        senderId: senderId,
-        recipientId: recipientId,
+        senderId,
+        recipientId,
       };
-
       dispatch(sendMessage(messageToSend));
       dispatch(addChatMessage({ chatId: messageToSend.chatId, message: messageToSend }));
       setMessage('');
     }
   };
+
 
   const handleInputChange = (event) => {
     const { value } = event.target;
@@ -126,9 +126,10 @@ const Messages = ({ chatId, senderId }) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSendMessage(selectedChatId, recipientId);
+      handleSendMessage(selectedChatId, senderId);
     }
   };
+
 
   return (
       <>
@@ -285,7 +286,7 @@ const Messages = ({ chatId, senderId }) => {
                         onKeyDown={handleKeyDown}
                     />
                     <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
-                      <IconButton onClick={() => handleSendMessage(senderId, recipientId)} color="primary">
+                      <IconButton onClick={() => handleSendMessage(senderId)} color="primary">
                         <span>{SandMessageIcon}</span>
                       </IconButton>
                     </div>
