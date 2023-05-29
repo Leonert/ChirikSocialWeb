@@ -3,12 +3,13 @@ import {ChatApi} from "../../services/api/chatApi";
 import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
-    async ({ chatId, message }, { getState }) => {
+    async ({ chatId, message }, { getState, dispatch }) => {
         const state = getState();
         const trimmedMessage = message.trim();
-        const chat = state.messages.chats.find((chat) => chat.chatId === chatId);
+        const chatIndex = state.messages.chats.findIndex((chat) => chat.chatId === chatId);
 
-        if (chat) {
+        if (chatIndex !== -1) {
+            const chat = state.messages.chats[chatIndex];
             const messageDto = {
                 chatId,
                 message: trimmedMessage,
@@ -27,7 +28,14 @@ export const sendMessage = createAsyncThunk(
                 );
                 const createdMessage = response.data;
 
-                return { chatId, message: createdMessage, senderId: chat.senderId, recipientId: chat.recipientId };
+                dispatch(addChatMessage({ chatId, message: createdMessage }));
+
+                return {
+                    chatId,
+                    message: createdMessage,
+                    senderId: chat.senderId,
+                    recipientId: chat.recipientId,
+                };
             } catch (error) {
                 console.error('Error sending message:', error);
                 throw error;
@@ -35,6 +43,7 @@ export const sendMessage = createAsyncThunk(
         }
     }
 );
+
 
 
 export const fetchChat = createAsyncThunk(
@@ -48,10 +57,14 @@ export const fetchChat = createAsyncThunk(
 
 export const fetchChatMessages = createAsyncThunk(
     'api/messages/fetchChatMessages',
-    async (chatId) => {
-        const chatMessages = await ChatApi.getChatMessages(chatId);
+    async (chatId, { rejectWithValue }) => {
+        try {
+            const chatMessages = await ChatApi.getChatMessages(chatId);
 
-        return { chatId, messages: chatMessages };
+            return { chatId, messages: chatMessages };
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
 );
 
@@ -78,16 +91,30 @@ const messagesSlice = createSlice({
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
 
-            const chat = state.messages[chatId];
+            const chatIndex = state.chats.findIndex((chat) => chat.chatId === chatId);
 
-            if (chat) {
+            if (chatIndex !== -1) {
+                const chat = state.chats[chatIndex];
+
                 const updatedMessage = {
                     ...message,
-                    recipientId: message.recipientId || chat.messages[0]?.recipientId,
-                    senderId: message.senderId || chat.messages[0]?.senderId,
+                    recipientId: message.recipientId || chat.messages?.[0]?.recipientId,
+                    senderId: message.senderId || chat.messages?.[0]?.senderId,
                 };
 
-                chat.messages.push(updatedMessage);
+                const updatedChat = {
+                    ...chat,
+                    messages: chat.messages ? [...chat.messages, updatedMessage] : [updatedMessage],
+                };
+
+                state.chats[chatIndex] = updatedChat;
+
+
+                if (state.chats[chatIndex].messages) {
+                    state.chats[chatIndex].messages = [...state.chats[chatIndex].messages, updatedMessage];
+                } else {
+                    state.chats[chatIndex].messages = [updatedMessage];
+                }
             }
 
             const users = state.chats.map((chat) => ({
@@ -100,7 +127,9 @@ const messagesSlice = createSlice({
             if (state.selectedChatId !== chatId) {
                 state.selectedChatId = chatId;
             }
-        },
+        }
+
+
     },
     extraReducers: (builder) => {
         builder
@@ -116,7 +145,12 @@ const messagesSlice = createSlice({
                         senderId: senderId || state.chats[chatIndex].senderId,
                     };
 
-                    state.chats[chatIndex].messages.push(updatedMessage);
+                    // Перевірка, чи messages вже існує та є масивом
+                    if (state.chats[chatIndex].messages) {
+                        state.chats[chatIndex].messages.push(updatedMessage);
+                    } else {
+                        state.chats[chatIndex].messages = [updatedMessage]; // Якщо messages не існує, створюємо новий масив
+                    }
                 }
             })
             .addCase(fetchChat.fulfilled, (state, action) => {

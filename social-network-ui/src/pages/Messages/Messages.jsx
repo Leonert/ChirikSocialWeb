@@ -24,8 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "./MessageInput/MessageInput";
-import {PeopleSearchInput} from "./PeopleSearchInput/PeopleSearchInput";
-import {InputAdornment} from "@mui/material";
+
 
 
 
@@ -57,9 +56,14 @@ const Messages = ({ chatId, senderId }) => {
         senderId,
         recipientId,
       };
-      dispatch(sendMessage(messageToSend));
-      dispatch(addChatMessage({ chatId: messageToSend.chatId, message: messageToSend }));
-      setMessage('');
+
+      dispatch(sendMessage(messageToSend))
+          .then(() => {
+            setMessage('');
+          })
+          .catch((error) => {
+            console.error('Error sending message:', error);
+          });
     }
   };
 
@@ -123,12 +127,12 @@ const Messages = ({ chatId, senderId }) => {
     dispatch(setSelectedChatId(undefined));
     dispatch(setText(''));
   };
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      handleSendMessage(selectedChatId, senderId);
-    }
-  };
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     handleSendMessage(selectedChatId, senderId);
+  //   }
+  // };
 
 
   return (
@@ -155,16 +159,7 @@ const Messages = ({ chatId, senderId }) => {
               ) : (
                   <>
                     <div className={classes.searchWrapper}>
-                      <PeopleSearchInput
-                          placeholder="Explore for people and groups"
-                          variant="outlined"
-                          onChange={(event) => setText(event.target.value)}
-                          InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">{SearchIcon}</InputAdornment>
-                            ),
-                          }}
-                      />
+
                     </div>
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
                       {groupedChats.map((group) =>
@@ -283,7 +278,7 @@ const Messages = ({ chatId, senderId }) => {
                         onChange={handleInputChange}
                         variant="outlined"
                         placeholder="Start a new message"
-                        onKeyDown={handleKeyDown}
+                        // onKeyDown={handleKeyDown}
                     />
                     <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
                       <IconButton onClick={() => handleSendMessage(senderId)} color="primary">
