@@ -21,6 +21,9 @@ const FollowButton = ({ user }) => {
 
   const handleFollow = (e) => {
     e.preventDefault();
+    if (currUserFollower === undefined) {
+      dispatch(addFollowingUser(user));
+    }
     dispatch(followUser({ user: { ...user, currUserFollower: isFollowed } }));
   };
 
