@@ -161,8 +161,7 @@ public class UserService {
     if (passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
       currentUser.setPassword(passwordEncoder.encode(newPassword));
       userRepository.save(currentUser);
-    }
-    else {
+    } else {
       throw new AccessDeniedException();
     }
   }

@@ -80,8 +80,7 @@ public class PostMapper {
       if (postDto.getText() != null || postDto.getImage() != null) {
         setPostDtoDetails(postDto, currentUser);
       }
-    }
-    else {
+    } else {
       setPostDtoDetails(postDto, currentUser);
     }
   }

@@ -54,8 +54,7 @@ public class NonAuthPostMapper {
       if (postDto.getText() != null || postDto.getImage() != null) {
         setPostDtoDetails(postDto);
       }
-    }
-    else {
+    } else {
       setPostDtoDetails(postDto);
     }
   }
