@@ -96,7 +96,8 @@ export default function Post(props) {
         </CardContent>
       )}
 
-      {!props.isReply && props.children}
+      {!props.isReplyPage && props.children}
+
       {props.image && <CardMedia component="img" image={props.image} alt="Post image" className={classes.iconImg} />}
       {props.postPage && (
         <Typography variant="body2" className={classes.date}>
