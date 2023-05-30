@@ -10,11 +10,9 @@ import {
   Stack,
   TextField,
   alpha,
-  debounce,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useLoaderData, useRevalidator, useSearchParams } from 'react-router-dom';
+import { Link, useLoaderData, useSearchParams } from 'react-router-dom';
 
 import FollowButton from '../Profile/FollowButton';
 
