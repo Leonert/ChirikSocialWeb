@@ -4,24 +4,38 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
-import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
+import {
+  addOnePost,
+  bookmarksPost,
+  getPostId,
+  likesPost,
+  makeRetweet,
+  openReplayModal,
+  removeRetweet,
+} from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 
-export default function PostList({ isBookmarkPage }) {
+export default function PostList({ isBookmarkPage, isReply }) {
   const posts = useSelector((state) => state.home.post);
+  const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const { user } = useSelector((state) => state.auth);
   const classes = usePostStyle();
   const dispatch = useDispatch();
   const handleRetweet = async (id) => {
-    const response = await axiosIns.post(`/api/posts`, { originalPost: id });
-    if (response.status === 200) {
-      dispatch(removeRetweet({ id, username }));
-      dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
+    if (user) {
+      const response = await axiosIns.post(`/api/posts`, { originalPost: id });
+
+      if (response.status === 200) {
+        dispatch(removeRetweet({ id, username }));
+        dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
+      } else {
+        if (!isBookmarkPage && !isReply) dispatch(addOnePost(response.data));
+        dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
+      }
     } else {
-      if (!isBookmarkPage && !isReply) dispatch(addOnePost(response.data));
-      dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
+      dispatch(handleRegistrationModal(true));
     }
   };
   const handleReplay = (props) => {
@@ -81,11 +95,12 @@ export default function PostList({ isBookmarkPage }) {
             }
             IdentifierReply={post.text === null && post.image === null}
             id={post.id}
-            classes={classes.Page}
+            classes={isReply ? classes.replyItem : classes.Page}
             username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
             isBookmarkPage={isBookmarkPage}
+            isReply={isReply}
             retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
@@ -134,6 +149,19 @@ export default function PostList({ isBookmarkPage }) {
             )}
           </Post>
         ))}
+      {!posts.length && (
+        <Typography
+          sx={{
+            marginTop: '25px',
+            color: '#93989D',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '32px',
+          }}
+        >
+          So far, there are no replies. <br /> But you can fix it :)
+        </Typography>
+      )}
     </div>
   );
 }

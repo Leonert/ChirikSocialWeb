@@ -8,6 +8,13 @@ export const usePostStyle = makeStyles((theme) => ({
     padding: '20px 0',
     marginTop: '20px',
   },
+  replyItem: {
+    backgroundColor: theme.palette.background.paper + ' !important',
+    color: theme.palette.text.primary,
+    border: `1px solid transparent`,
+    boxShadow: 'none !important',
+    padding: '20px 0',
+  },
   PageSmall: {
     margin: '0 30px',
     border: `1px solid ${theme.palette.divider}`,
@@ -44,6 +51,7 @@ export const usePostStyle = makeStyles((theme) => ({
     alignItems: 'flex-end',
     fontSize: '14px !important',
     color: theme.palette.grey[300],
+    cursor: 'pointer',
   },
   actionNumber: {
     fontWeight: '700 !important',

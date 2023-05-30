@@ -16,8 +16,14 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { UsersLikeModal } from '../../components/SocialActionsUser/Like/ListUsersLike/UsersLikeModal';
+import { UsersRetweetModal } from '../../components/SocialActionsUser/Retweet/ListUsersRetweet/UsersRetweetModal';
+import { handleCustomModal } from '../../features/slices/customModalSlice';
+import { handleOpenLikeModal } from '../../features/slices/postDatas/likesSlice';
+import { handleOpenRetweetModal } from '../../features/slices/postDatas/retweetsSlice';
 import AvatarLink from '../UI/AvatarLink';
 import NameLink from '../UI/NameLink';
 import { usePostStyle } from './PostStyle';
@@ -33,6 +39,20 @@ const options = {
 
 export default function Post(props) {
   const classes = usePostStyle();
+
+  const dispatch = useDispatch();
+
+  const { isOpenLikeModal } = useSelector((state) => state.likes);
+  const { isOpenRetweetModal } = useSelector((state) => state.retweets);
+
+  const handleClickOpenLikesModal = () => {
+    dispatch(handleCustomModal(true));
+    dispatch(handleOpenLikeModal(true));
+  };
+  const handleClickOpenRetweetModal = () => {
+    dispatch(handleCustomModal(true));
+    dispatch(handleOpenRetweetModal(true));
+  };
 
   return (
     <Card className={props.classes}>
@@ -72,7 +92,7 @@ export default function Post(props) {
           </Typography>
         </CardContent>
       )}
-      {props.children}
+      {!props.isReply && props.children}
       {props.image && <CardMedia component="img" image={props.image} alt="Post image" className={classes.iconImg} />}
       {props.postPage && (
         <Typography variant="body2" className={classes.date}>
@@ -89,20 +109,33 @@ export default function Post(props) {
             borderBottom: '1px solid #38444D',
           }}
         >
-          <Typography mr={2} className={classes.actionTypo}>
-            <Typography className={classes.actionNumber}>{props.retweet}</Typography> Retweets
+          <Typography onClick={handleClickOpenRetweetModal} mr={2} className={classes.actionTypo}>
+            <Typography variant="span" className={classes.actionNumber}>
+              {props.retweet}
+            </Typography>{' '}
+            Retweets
           </Typography>
           <Typography mr={2} className={classes.actionTypo}>
-            <Typography className={classes.actionNumber}>{props.reply}</Typography> Quotes
+            <Typography variant="span" className={classes.actionNumber}>
+              {props.reply}
+            </Typography>{' '}
+            Quotes
+          </Typography>
+          <Typography onClick={handleClickOpenLikesModal} mr={2} className={classes.actionTypo}>
+            <Typography variant="span" className={classes.actionNumber}>
+              {props.like}
+            </Typography>{' '}
+            Likes
           </Typography>
           <Typography mr={2} className={classes.actionTypo}>
-            <Typography className={classes.actionNumber}>{props.like}</Typography> Likes
-          </Typography>
-          <Typography mr={2} className={classes.actionTypo}>
-            <Typography className={classes.actionNumber}>{props.bookmark}</Typography> Bookmarks
+            <Typography variant="span" className={classes.actionNumber}>
+              {props.bookmark}
+            </Typography>{' '}
+            Bookmarks
           </Typography>
         </Box>
       )}
+
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
           <CardActions
@@ -218,6 +251,8 @@ export default function Post(props) {
           )}
         </CardActions>
       )}
+      {isOpenLikeModal && <UsersLikeModal />}
+      {isOpenRetweetModal && <UsersRetweetModal />}
     </Card>
   );
 }

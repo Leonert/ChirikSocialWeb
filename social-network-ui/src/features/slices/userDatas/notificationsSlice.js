@@ -25,7 +25,11 @@ const notificationsSlice = createSlice({
     error: null,
     loading: false,
   },
-  reducers: {},
+  reducers: {
+    removeNotifications: (state, actions) => {
+      state.list = [];
+    },
+  },
   extraReducers: {
     [getNotifications.pending]: (state, action) => {
       state.loading = true;
@@ -44,3 +48,4 @@ const notificationsSlice = createSlice({
 });
 
 export const notificationsReducer = notificationsSlice.reducer;
+export const { removeNotifications } = notificationsSlice.actions;
