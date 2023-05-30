@@ -9,6 +9,7 @@ import {
   ListItemText,
   Stack,
   TextField,
+  Typography,
   alpha,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -33,24 +34,19 @@ function useDebounce(value, delay) {
 const Search = () => {
   const { data } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tabValue, setTabValue] = useState('0');
+  // const [tabValue, setTabValue] = useState('0');
   const searchValue = searchParams.get('value');
   const [searchInputValue, setSearchInputValue] = useState(searchValue);
   const debouncedValue = useDebounce(searchInputValue, 300);
-  // const { user } = useSelector((state) => state.auth);
   useEffect(() => {
-    if (debouncedValue) {
+    if (debouncedValue !== '') {
       setSearchParams({ value: debouncedValue });
     }
   }, [debouncedValue]);
 
-  // const isCurrentUserProfile = data?.username === user.username;
-
   const handleSearchInputChange = (e) => {
     setSearchInputValue(e.target.value);
   };
-
-  console.log(data);
 
   return (
     <>
@@ -77,23 +73,26 @@ const Search = () => {
         />
 
         <List>
-          {data &&
+          {data.length > 0 ? (
             data.map((user) => (
-              <>
-                <Link key={user.id} to={`/${user.username}`}>
-                  <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
-                    <Avatar sx={{ mr: '20px' }} alt={user.name} src={user.profileImage} />
-                    <Stack direction="column">
+              <Link key={user.id} to={`/${user.username}`}>
+                <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
+                  <Avatar sx={{ mr: '20px' }} alt={user.name} src={user.profileImage} />
+                  <Stack justifyContent="space-between" alignItems="center" direction="row" width="100%">
+                    <Stack>
                       <ListItemText primary={user.name} />
                       <ListItemText primary={`@${user.username}`} />
                       <ListItemText primary={user.bio} />
                     </Stack>
                     <FollowButton user={user} />
-                    <Divider />
-                  </ListItem>
-                </Link>
-              </>
-            ))}
+                  </Stack>
+                  <Divider />
+                </ListItem>
+              </Link>
+            ))
+          ) : (
+            <Typography>No results found.</Typography>
+          )}
         </List>
       </Box>
     </>
