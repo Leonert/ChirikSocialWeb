@@ -1,8 +1,10 @@
 package com.socialnetwork.api.mapper.noneauthorized;
 
+import com.socialnetwork.api.dto.authorized.PostDto;
 import com.socialnetwork.api.dto.noneauthorized.NonAuthPostDto;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.models.base.Post;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.service.BookmarkService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthLikeService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthPostService;
@@ -26,13 +28,13 @@ public class NonAuthPostMapper {
 
   public NonAuthPostDto.Response.WithAuthor convertToPostDtoDefault(Post post) throws NoPostWithSuchIdException {
     NonAuthPostDto.Response.WithAuthor postDto = modelMapper.map(post, NonAuthPostDto.Response.WithAuthor.class);
-    fillMissingFields(postDto, post);
+    fillMissingFields(postDto);
     return postDto;
   }
 
   public NonAuthPostDto.Response.WithoutAuthor convertToPostDtoProfile(Post post) throws NoPostWithSuchIdException {
     NonAuthPostDto.Response.WithoutAuthor postDto = modelMapper.map(post, NonAuthPostDto.Response.WithoutAuthor.class);
-    fillMissingFields(postDto, post);
+    fillMissingFields(postDto);
     return postDto;
   }
 
@@ -46,19 +48,31 @@ public class NonAuthPostMapper {
     }).toList();
   }
 
-  private void fillMissingFields(NonAuthPostDto.Response.WithoutAuthor postDto, Post post) throws NoPostWithSuchIdException {
-    setPostDtoDetails(postDto, post);
-
+  private void fillMissingFields(NonAuthPostDto.Response.WithoutAuthor postDto) {
     if (postDto.getOriginalPost() != null) {
-      Post originalPost = nonAuthPostService.getReferenceById(postDto.getOriginalPost().getId());
-      setPostDtoDetails(postDto.getOriginalPost(), originalPost);
+      setPostDtoDetails(postDto.getOriginalPost());
+      if (postDto.getText() != null || postDto.getImage() != null) {
+        setPostDtoDetails(postDto);
+      }
+    }
+    else {
+      setPostDtoDetails(postDto);
     }
   }
 
-  private void setPostDtoDetails(NonAuthPostDto.Response.WithoutAuthor postDto, Post post) {
-    postDto.setLikesNumber(nonAuthLikeService.countPostLikes(post));
-    postDto.setBookmarksNumber(bookmarkService.countPostBookmarks(post));
-    postDto.setRetweetsNumber(nonAuthPostService.countPostRetweets(post));
-    postDto.setRepliesNumber(nonAuthPostService.countPostReplies(post));
+  private void setPostDtoDetails(NonAuthPostDto.Response.WithoutAuthor postDto) {
+    int id = postDto.getId();
+    postDto.setLikesNumber(nonAuthLikeService.countPostLikes(id));
+    postDto.setBookmarksNumber(bookmarkService.countPostBookmarks(id));
+    postDto.setRetweetsNumber(nonAuthPostService.countPostRetweets(id));
+    postDto.setRepliesNumber(nonAuthPostService.countPostReplies(id));
+  }
+
+  private void copyPostDtoDetails(NonAuthPostDto.Response.WithoutAuthor postToCopyFrom,
+                                  NonAuthPostDto.Response.WithoutAuthor targetPost) {
+    targetPost.setLikesNumber(postToCopyFrom.getLikesNumber());
+    targetPost.setBookmarksNumber(postToCopyFrom.getBookmarksNumber());
+    targetPost.setRepliesNumber(postToCopyFrom.getRepliesNumber());
+    targetPost.setRepliesNumber(postToCopyFrom.getRepliesNumber());
   }
 }

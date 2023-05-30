@@ -1,9 +1,10 @@
 package com.socialnetwork.api.exception;
 
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
-import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.EmailException;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.TokenInvalidException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,14 +60,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return buildResponseEntity(new ApiError(NOT_FOUND, ex));
   }
 
-  @ExceptionHandler(EmailVerificationException.class)
-  public ResponseEntity<Object> handleEmailVerification(EmailVerificationException ex) {
+  @ExceptionHandler(EmailException.class)
+  public ResponseEntity<Object> handleEmailVerification(EmailException ex) {
     return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, ex));
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<Object> handleNoEntityFoundException(EntityNotFoundException ex) {
     return buildResponseEntity(new ApiError(NOT_FOUND, ex));
+  }
+
+  @ExceptionHandler(TokenInvalidException.class)
+  public ResponseEntity<Object> handleTokenInvalidException(TokenInvalidException ex) {
+    return buildResponseEntity(new ApiError(BAD_REQUEST, ex));
   }
 
   private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {

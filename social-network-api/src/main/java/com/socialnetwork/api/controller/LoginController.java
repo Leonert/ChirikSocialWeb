@@ -3,6 +3,8 @@ package com.socialnetwork.api.controller;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.TokenExpiredException;
+import com.socialnetwork.api.exception.custom.TokenInvalidException;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.CONFIRMATION_REQUIRED;
+import static com.socialnetwork.api.util.Constants.Auth.TOKEN_PARAMETER;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 
@@ -40,8 +44,9 @@ public class LoginController {
 
 
   @PostMapping()
-  public ResponseEntity<?> logIn(@RequestBody UserDto.Request.Credentials userDto) throws AccessDeniedException {
-    User user = userService.findByEmailAddress(userDto.getEmailAddress()).orElseThrow(AccessDeniedException::new);
+  public ResponseEntity<?> logIn(@RequestBody UserDto.Request.Credentials userDto)
+      throws NoUserWithSuchCredentialsException {
+    User user = userService.findByEmailAddress(userDto.getEmailAddress());
 
     if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(WRONG_PASSWORD));
@@ -65,5 +70,27 @@ public class LoginController {
     }
     User user = userService.findByUsername(username);
     return ResponseEntity.ok(userMapper.convertToAccountData(user, authHeader));
+  }
+
+  @PostMapping("password-change")
+  public ResponseEntity<?> passwordChange(@RequestAttribute(USERNAME_ATTRIBUTE) String username,
+                                            @RequestBody UserDto.Request.PasswordEditing passwords)
+      throws NoUserWithSuchCredentialsException, AccessDeniedException {
+    userService.passwordChange(username, passwords.getOldPassword(), passwords. getNewPassword());
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("recovery")
+  public ResponseEntity<?> sendEmailForPasswordRecovery(@RequestParam("email") String email)
+      throws NoUserWithSuchCredentialsException {
+    userService.sendEmailForPasswordRecovery(email);
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("recovery")
+  public ResponseEntity<?> passwordRecovery(@RequestBody UserDto.Request.PasswordRecovery passwordRecovery)
+      throws TokenInvalidException {
+    userService.passwordRecovery(passwordRecovery.getToken(), passwordRecovery.getNewPassword());
+    return ResponseEntity.ok().build();
   }
 }

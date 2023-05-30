@@ -1,8 +1,11 @@
 package com.socialnetwork.api.service.authorized;
 
 import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.AccessDeniedException;
+import com.socialnetwork.api.exception.custom.EmailException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.TokenExpiredException;
+import com.socialnetwork.api.exception.custom.TokenInvalidException;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.keys.FollowPk;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,6 +37,7 @@ public class UserService {
   private final ModelMapper modelMapper;
 
   private final EmailService emailService;
+  private final PasswordEncoder passwordEncoder;
 
   public boolean existsByUsername(String username) {
     return userRepository.existsByUsername(username);
@@ -46,8 +51,8 @@ public class UserService {
     return userRepository.findByUsername(username).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
 
-  public Optional<User> findByEmailAddress(String emailAddress) {
-    return userRepository.findByEmailAddress(emailAddress);
+  public User findByEmailAddress(String emailAddress) throws NoUserWithSuchCredentialsException {
+    return userRepository.findByEmailAddress(emailAddress).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
 
   public boolean existsById(Integer id) {
@@ -65,20 +70,19 @@ public class UserService {
 
     ConfirmationToken confirmationToken = new ConfirmationToken(user);
     confirmationTokenService.save(confirmationToken);
-    //    emailService.sendEmail(user, confirmationToken);
-    System.out.println(confirmationToken.getConfirmationToken());
+    emailService.sendTokenForAccountActivation(user, confirmationToken);
   }
 
-  public void verifyAccount(String confirmationToken) throws EmailVerificationException {
+  public void verifyAccount(String confirmationToken) throws EmailException, NoUserWithSuchCredentialsException {
     Optional<ConfirmationToken> optionalToken =
           confirmationTokenService.findByConfirmationToken(confirmationToken);
 
     if (optionalToken.isEmpty()) {
-      throw new EmailVerificationException("Error: Couldn't verify email");
+      throw new EmailException("Error: Couldn't verify email");
     }
 
     ConfirmationToken token = optionalToken.get();
-    User user = findByEmailAddress(token.getUser().getEmailAddress()).get();
+    User user = findByEmailAddress(token.getUser().getEmailAddress());
     user.setEnabled(true);
     confirmationTokenService.deleteById(token.getTokenId());
     userRepository.save(user);
@@ -149,5 +153,33 @@ public class UserService {
 
   public User getReferenceById(int id) {
     return userRepository.getReferenceById(id);
+  }
+
+  public void passwordChange(String username, String oldPassword, String newPassword)
+      throws NoUserWithSuchCredentialsException, AccessDeniedException {
+    User currentUser = findByUsername(username);
+    if (passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+      currentUser.setPassword(passwordEncoder.encode(newPassword));
+      userRepository.save(currentUser);
+    }
+    else {
+      throw new AccessDeniedException();
+    }
+  }
+
+  public void sendEmailForPasswordRecovery(String email) throws NoUserWithSuchCredentialsException {
+    User user = findByEmailAddress(email);
+    ConfirmationToken confirmationToken = new ConfirmationToken(user);
+    confirmationTokenService.save(confirmationToken);
+    emailService.sendTokenForPasswordRecovery(email, confirmationToken);
+  }
+
+  public void passwordRecovery(String token, String newPassword) throws TokenInvalidException {
+    ConfirmationToken confirmationToken = confirmationTokenService
+        .findByConfirmationToken(token).orElseThrow(TokenInvalidException::new);
+    User user = confirmationToken.getUser();
+    confirmationTokenService.deleteById(confirmationToken.getTokenId());
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
   }
 }

@@ -24,7 +24,7 @@ public class NonAuthLikeService {
           .skip(page * usersForPage).limit(usersForPage).toList();
   }
 
-  public int countPostLikes(Post post) {
-    return likeRepository.countAllByLikedPost(post);
+  public int countPostLikes(int id) {
+    return likeRepository.countAllByLikedPost(new Post(id));
   }
 }

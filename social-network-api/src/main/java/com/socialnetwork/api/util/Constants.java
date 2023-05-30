@@ -22,6 +22,7 @@ public class Constants {
     public static final String RESULTS_PER_PAGE_QUERY = "n";
     public static final String ID_QUERY = "id";
     public static final String USERNAME_ATTRIBUTE = "username";
+    public static final String TOKEN_PARAMETER = "token";
   }
 
   public static class Exception {
@@ -30,5 +31,6 @@ public class Constants {
     public static final String ACCESS_DENIED = "Access denied.";
     public static final String MISSING_REQUEST_PARAMETER = " parameter is missing.";
     public static final String MISSING_PATH_VARIABLE = " path variable is missing.";
+    public static final String TOKEN_INVALID = "Token is invalid";
   }
 }
