@@ -63,42 +63,37 @@ public class PostMapper {
         throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
     User currentUser = nonAuthUserService.findByUsername(currentUserUsername);
     PostDto.Response.WithAuthor postDto = modelMapper.map(post, PostDto.Response.WithAuthor.class);
-    fillMissingFields(postDto, post, currentUser);
+    fillMissingFields(postDto, currentUser);
     return postDto;
   }
 
   public PostDto.Response.WithoutAuthor convertToPostDtoProfile(Post post, User currentUser)
         throws NoPostWithSuchIdException {
     PostDto.Response.WithoutAuthor postDto = modelMapper.map(post, PostDto.Response.WithoutAuthor.class);
-    fillMissingFields(postDto, post, currentUser);
+    fillMissingFields(postDto, currentUser);
     return postDto;
   }
 
-  private void fillMissingFields(PostDto.Response.WithoutAuthor postDto, Post post, User currentUser)
-        throws NoPostWithSuchIdException {
-    setPostDtoDetailsEnhanced(postDto, post, currentUser);
-
+  private void fillMissingFields(PostDto.Response.WithoutAuthor postDto, User currentUser) {
     if (postDto.getOriginalPost() != null) {
-      Post originalPost = postService.getReferenceById(postDto.getOriginalPost().getId());
-      setPostDtoDetails(postDto.getOriginalPost(), originalPost);
+      setPostDtoDetails(postDto.getOriginalPost(), currentUser);
+      if (postDto.getText() != null || postDto.getImage() != null) {
+        setPostDtoDetails(postDto, currentUser);
+      }
+    } else {
+      setPostDtoDetails(postDto, currentUser);
     }
   }
 
-  private void setPostDtoDetailsEnhanced(PostDto.Response.WithoutAuthor postDto, Post post, User currentUser) {
-    postDto.setLikesNumber(likeService.countPostLikes(post));
-    postDto.setBookmarksNumber(bookmarkService.countPostBookmarks(post));
-    postDto.setRetweetsNumber(postService.countPostRetweets(post));
-    postDto.setRepliesNumber(postService.countPostReplies(post));
+  private void setPostDtoDetails(PostDto.Response.WithoutAuthor postDto, User currentUser) {
+    int id = postDto.getId();
+    postDto.setLikesNumber(likeService.countPostLikes(id));
+    postDto.setBookmarksNumber(bookmarkService.countPostBookmarks(id));
+    postDto.setRetweetsNumber(postService.countPostRetweets(id));
+    postDto.setRepliesNumber(postService.countPostReplies(id));
 
     postDto.setBookmarked(bookmarkService.existsByIds(currentUser.getId(), postDto.getId()));
     postDto.setLiked(likeService.existsByIds(currentUser.getId(), postDto.getId()));
     postDto.setRetweeted(postService.isRetweetedByUser(currentUser.getId(), postDto.getId()));
-  }
-
-  private void setPostDtoDetails(PostDto.Response.WithoutAuthor postDto, Post post) {
-    postDto.setLikesNumber(likeService.countPostLikes(post));
-    postDto.setBookmarksNumber(bookmarkService.countPostBookmarks(post));
-    postDto.setRetweetsNumber(postService.countPostRetweets(post));
-    postDto.setRepliesNumber(postService.countPostReplies(post));
   }
 }

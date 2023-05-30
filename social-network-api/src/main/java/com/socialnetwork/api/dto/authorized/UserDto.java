@@ -52,6 +52,18 @@ public enum UserDto {
       String password;
       Boolean rememberMe;
     }
+
+    @Data
+    public static class PasswordEditing {
+      String oldPassword;
+      String newPassword;
+    }
+
+    @Data
+    public static class PasswordRecovery {
+      String token;
+      String newPassword;
+    }
   }
 
 

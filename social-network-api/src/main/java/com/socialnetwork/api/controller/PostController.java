@@ -149,7 +149,7 @@ public class PostController extends Controller {
     if (id != null && postDto.getText() == null && postDto.getImage() == null
             && postService.isRetweetedByUser(userService.findByUsername(username).getId(), id)) {
       postService.deleteUserRetweet(userService.findByUsername(username).getId(), id);
-      return ResponseEntity.status(HttpStatus.OK).body(postService.countPostRetweets(new Post(id)));
+      return ResponseEntity.status(HttpStatus.OK).body(postService.countPostRetweets(id));
     }
     return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.convertToPostDtoDefault(postService.save(
             postMapper.convertToPost(postDto, userService.findByUsername(username))), username));
@@ -181,7 +181,7 @@ public class PostController extends Controller {
           throws NoUserWithSuchCredentialsException {
     return ResponseEntity
             .status(bookmarkService.bookmarkUnBookmark(postId, username) ? HttpStatus.OK : HttpStatus.CREATED)
-            .body(bookmarkService.countPostBookmarks(new Post(postId)));
+            .body(bookmarkService.countPostBookmarks(postId));
   }
 
   @PostMapping("/{id}/likes")
@@ -191,7 +191,7 @@ public class PostController extends Controller {
     return ResponseEntity
             .status(likeService.likeUnlike(userService.findByUsername(username).getId(),
                     postId) ? HttpStatus.CREATED : HttpStatus.OK)
-            .body(likeService.countPostLikes(new Post(postId)));
+            .body(likeService.countPostLikes(postId));
   }
 
   @PostMapping("/{id}/views")
