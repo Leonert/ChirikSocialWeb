@@ -40,7 +40,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchField() {
+export default function SearchField(props) {
   const searchResult = useSelector((state) => state.search.searchResult);
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
@@ -61,7 +61,7 @@ export default function SearchField() {
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
-            value={searchText}
+            value={props.value || searchText}
             onChange={handleInputChange}
           />
         </Search>

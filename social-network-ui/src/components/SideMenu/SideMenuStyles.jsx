@@ -116,6 +116,9 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.divider,
     },
   },
+  itemWrapperReview: {
+    marginBottom: 20,
+  },
   itemWrapperLogOut: { marginTop: 40, display: 'flex', justifyContent: 'flex-end', padding: 0 },
   button: {
     height: '52px !important',

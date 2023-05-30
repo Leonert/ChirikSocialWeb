@@ -105,7 +105,7 @@ const homeSlice = createSlice({
         if (post.originalPost && +post.originalPost.id === +postId) {
           return {
             ...post,
-            originalPost: { ...post.originalPost, likesNumber },
+            originalPost: { ...post.originalPost, liked: !post.liked, likesNumber },
           };
         }
 

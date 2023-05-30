@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
+import { handleRegistrationModal } from '../../features/slices/authModalSlice';
 import { bookmarksPost, getPostId, likesPost, makeRetweet, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
@@ -10,42 +11,57 @@ import ReplyHeader from '../Post/ReplyHeader';
 
 export default function PostList({ isBookmarkPage }) {
   const posts = useSelector((state) => state.home.post);
-
+  const { user } = useSelector((state) => state.auth);
   const classes = usePostStyle();
   const dispatch = useDispatch();
-
   const handleRetweet = async (id) => {
     const response = await axiosIns.post(`/api/posts`, { originalPost: id });
-    const retweetsNumber = response.status === 200 ? response.data : response.data.originalPost.retweetsNumber;
-    dispatch(makeRetweet({ postId: id, retweetsNumber }));
+    if (response.status === 200) {
+      dispatch(removeRetweet({ id, username }));
+      dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
+    } else {
+      if (!isBookmarkPage && !isReply) dispatch(addOnePost(response.data));
+      dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
+    }
   };
-
   const handleReplay = (props) => {
-    dispatch(openReplayModal(props));
+    if (user) {
+      dispatch(openReplayModal(props));
+    } else {
+      dispatch(handleRegistrationModal(true));
+    }
   };
 
   const handleLike = (props) => {
-    axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
-      const LikeNumber = response.data;
-      dispatch(
-        likesPost({
-          postId: props,
-          likesNumber: LikeNumber,
-        })
-      );
-    });
+    if (user) {
+      axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
+        const LikeNumber = response.data;
+        dispatch(
+          likesPost({
+            postId: props,
+            likesNumber: LikeNumber,
+          })
+        );
+      });
+    } else {
+      dispatch(handleRegistrationModal(true));
+    }
   };
 
   const handleBookmark = (props) => {
-    axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
-      const bookmarksNum = response.data;
-      dispatch(
-        bookmarksPost({
-          postId: props,
-          bookmarksNumber: bookmarksNum,
-        })
-      );
-    });
+    if (user) {
+      axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
+        const bookmarksNum = response.data;
+        dispatch(
+          bookmarksPost({
+            postId: props,
+            bookmarksNumber: bookmarksNum,
+          })
+        );
+      });
+    } else {
+      dispatch(handleRegistrationModal(true));
+    }
   };
 
   return (

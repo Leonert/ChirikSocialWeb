@@ -61,6 +61,7 @@ export default function PasswordChange() {
           id="CurrentPassword"
           label="Current Password"
           variant="outlined"
+          autocomplete="new-password"
           type={showPassword ? 'text' : 'password'}
           fullWidth
           value={formik.values.CurrentPassword}
@@ -86,6 +87,7 @@ export default function PasswordChange() {
           id="NewPassword"
           label="New password"
           variant="outlined"
+          autocomplete="new-password"
           type={showPassword ? 'text' : 'password'}
           fullWidth
           value={formik.values.NewPassword}
@@ -104,6 +106,7 @@ export default function PasswordChange() {
           onChange={formik.handleChange}
           error={formik.touched.ConfirmPassword && Boolean(formik.errors.ConfirmPassword)}
           helperText={formik.touched.ConfirmPassword && formik.errors.ConfirmPassword}
+          autocomplete="new-password"
         />
         <Button variant="contained" type="submit" sx={{ borderRadius: 20 }}>
           Save

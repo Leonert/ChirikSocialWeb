@@ -2,22 +2,25 @@ import { Button, Dialog } from '@material-ui/core';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { handleLogOutModal, handleModal } from '../../features/slices/authModalSlice';
+import { handleLogOutModal } from '../../features/slices/authModalSlice';
+import { logoutUser } from '../../features/slices/authSlice';
 import { TweetIcon } from '../../icon';
 import { useLogOutStyle } from './LogOutModalStyle';
 
 function LogOutModal() {
   const classes = useLogOutStyle();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const openModal = useSelector((state) => state.authModal.modalLogOut);
   const onClose = () => {
     dispatch(handleLogOutModal(false));
   };
   const logOut = () => {
-    dispatch(handleModal(false));
     dispatch(handleLogOutModal(false));
+    dispatch(logoutUser());
+    navigate('/');
   };
 
   return (
