@@ -19,7 +19,8 @@ const FollowButton = ({ user }) => {
 
   const isFollowed = !!currUserFollower;
 
-  const handleFollow = () => {
+  const handleFollow = (e) => {
+    e.preventDefault();
     dispatch(followUser({ user: { ...user, currUserFollower: isFollowed } }));
   };
 
