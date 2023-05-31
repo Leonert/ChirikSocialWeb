@@ -91,7 +91,9 @@ const Profile = (props) => {
               <Typography component="h2" fontSize="18px">
                 {data.name}
               </Typography>
-              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>{data.userPosts.length} Tweets</Typography>
+              <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>
+                {data.withoutAuthorPosts.length} Tweets
+              </Typography>
             </Stack>
           </Stack>
         </Box>
