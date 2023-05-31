@@ -59,6 +59,7 @@ export default function SearchField(props) {
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
+            name="search"
             placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
             value={props.value || searchText}

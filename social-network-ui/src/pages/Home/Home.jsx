@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Form } from 'react-router-dom';
 
 import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
 import Following from '../../components/Following/Following';
@@ -41,7 +42,9 @@ function Home() {
         <ReplayModal />
       </Grid>
       <Grid item xs={5}>
-        <SearchField />
+        <Form method="post">
+          <SearchField />
+        </Form>
       </Grid>
     </Grid>
   );
