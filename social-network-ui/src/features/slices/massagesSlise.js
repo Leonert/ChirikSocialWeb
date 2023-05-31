@@ -3,7 +3,7 @@ import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
-    async ({ chatId, message }, { getState, dispatch }) => {
+    async ({ chatId, message, senderUsername, recipientUsername }, { getState, dispatch }) => {
         const state = getState();
         const trimmedMessage = message.trim();
         const chatIndex = state.messages.chats.findIndex((chat) => chat.chatId === chatId);
@@ -17,12 +17,12 @@ export const sendMessage = createAsyncThunk(
                 recipientId: chat.recipientId,
                 isRead: true,
                 messageId: null,
+                senderUsername,
+                recipientUsername,
             };
+            console.log(messageDto);
             try {
-                const response = await axiosIns.post(
-                    `/api/messages/chats/${chatId}/add-message`,
-                    messageDto
-                );
+                const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
                 const createdMessage = response.data;
                 createdMessage.messageId = createdMessage.messageId || null;
 
@@ -41,6 +41,7 @@ export const sendMessage = createAsyncThunk(
         }
     }
 );
+
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
@@ -96,8 +97,8 @@ const messagesSlice = createSlice({
             if (chat) {
                 const updatedMessage = {
                     ...message,
-                    recipientId: message.recipientId || chat.messages?.[0]?.recipientId,
-                    senderId: message.senderId || chat.messages?.[0]?.senderId,
+                    recipientId: chat.senderId,
+                    senderId: chat.recipientId,
                 };
 
                 if (chat.messages) {

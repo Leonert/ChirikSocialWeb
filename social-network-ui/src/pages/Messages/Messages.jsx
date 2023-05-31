@@ -31,12 +31,13 @@ const Messages = ({ chatId, senderId }) => {
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
-  const [Author, setAuthor ] = useState (null);
+  const [author, setAuthor] = useState(null);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const authorId = useSelector((state) => state.messages.authorId);
   const [recipientName, setRecipientName] = useState('');
   const [senderName, setSenderName] = useState('');
   const [chatName, setChatName] = useState('');
+
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
@@ -49,37 +50,46 @@ const Messages = ({ chatId, senderId }) => {
     scrollToBottom();
   }, [dispatch, authorId]);
 
-  const getIdAuthor = (username)  => {
-    if (setAuthor){
+  const getIdAuthor = (username) => {
+    if (username) {
       axiosIns.get(`/api/search/users?q=${username}`, {})
           .then((response) => {
             const author = response.data;
             const id = author[0].id;
-            console.log(id)
+            console.log(id);
+            setAuthor(id);
             dispatch(getAuthorId(id));
           });
-    } else {
-      return null;
     }
-  }
+  };
 
   const handleSendMessage = () => {
     const trimmedMessage = message.trim();
 
     if (trimmedMessage !== '') {
+      // Получение имени отправителя по идентификатору
+      const sender = chats.find((chat) => chat.chatId === (selectedChatId || chatId));
+      const senderName = sender ? sender.senderUsername : '';
+
       const messageToSend = {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
-        authorId: Author,
-        senderUsername: senderName, // используем senderName в качестве имени отправителя
-        chatName: chatName
+        authorId: author,
+        senderUsername: senderName,
+        recipientUsername: recipientName,
+        chatName: chatName,
+        parentId: messages[selectedChatId]?.messages
+            .slice()
+            .reverse()
+            .find((msg) => msg.senderId === sender?.senderId)?.messageId || undefined,
       };
-      dispatch(sendMessage(messageToSend))
-          .then(() => {
-            setMessage('');
-          });
+
+      dispatch(sendMessage(messageToSend)).then(() => {
+        setMessage('');
+      });
     }
   };
+
 
   const handleInputChange = (event) => {
     const { value } = event.target;
@@ -100,6 +110,12 @@ const Messages = ({ chatId, senderId }) => {
     setRecipientName(group.chats[0]?.recipientUsername || '');
     setSenderName(group.chats[0]?.senderUsername || '');
     setChatName(group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername || '');
+
+    // Добавьте следующие строки для установки имен в переписке
+    const senderUsername = group.chats[0]?.senderUsername || '';
+    const recipientUsername = group.chats[0]?.recipientUsername || '';
+    dispatch(setText(`${senderUsername} ${recipientUsername}`));
+
     try {
       await dispatch(fetchChatMessages(chatId));
       scrollToBottom();
@@ -107,6 +123,8 @@ const Messages = ({ chatId, senderId }) => {
       console.error('Error fetching chat messages:', error);
     }
   };
+
+
 
   useEffect(() => {
     if (username) {
@@ -199,10 +217,10 @@ const Messages = ({ chatId, senderId }) => {
                                     <div className={classes.userHeader}>
                                       <div>
                                         <Typography className={classes.chatName}>
-                                          {group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername}
+                                          {group.chatId === selectedChatId ? chatName : group.chats[0]?.senderUsername}
                                         </Typography>
                                         <Typography className={classes.username}>
-                                          {group.chatId === selectedChatId ? group.chats[0]?.recipientUsername : group.chats[0]?.senderUsername}
+                                          {group.chats[0]?.senderUsername}
                                         </Typography>
                                       </div>
                                     </div>
@@ -278,11 +296,13 @@ const Messages = ({ chatId, senderId }) => {
                                             [classes.ownMessageContent]: isOwnMessage,
                                           })}
                                       >
-                                        <span className={classes.tweetUserFullName}>{message.senderUsername}</span>
+                                        <span className={classes.tweetUserFullName}>
+                                          {isOwnMessage ? (message.senderUsername || recipientName) : (message.recipientUsername || recipientName)}
+                                        </span>
                                         <div
                                             className={classNames(
                                                 classes.myMessage,
-                                                message.message ? classes.myMessageWithTweet : classes.myMessageCommon
+                                                isOwnMessage ? (message.message ? classes.myMessage : classes.myMessageCommon) : (message.message ? classes.theirMessageWithTweet : classes.theirMessageCommon)
                                             )}
                                         >
                                           <span>{message.message}</span>
@@ -322,3 +342,4 @@ const Messages = ({ chatId, senderId }) => {
 };
 
 export default Messages;
+
