@@ -1,16 +1,13 @@
 import axiosIns from "../axiosInstance";
-import {useSelector} from "react-redux";
 
 export const ChatApi = {
     getUserChats: async (userId) => {
         try {
             const response = await axiosIns.get(`/api/messages`, {
                 params: {
-                    userId: userId,
+                    userId,
                 },
             });
-
-            console.log(response.data);
 
             return response.data;
         } catch (error) {

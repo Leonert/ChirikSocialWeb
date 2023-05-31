@@ -13,15 +13,15 @@ export const sendMessage = createAsyncThunk(
             const messageDto = {
                 chatId,
                 message: trimmedMessage,
-                senderId: chat.senderId,
-                recipientId: chat.recipientId,
+                recipientId: chat.senderId,
+                senderId: chat.recipientId,
                 isRead: true,
                 messageId: null,
                 senderUsername,
                 recipientUsername,
             };
-            console.log(messageDto);
-            try {
+
+
                 const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
                 const createdMessage = response.data;
                 createdMessage.messageId = createdMessage.messageId || null;
@@ -34,10 +34,7 @@ export const sendMessage = createAsyncThunk(
                     senderId: chat.senderId,
                     recipientId: chat.recipientId,
                 };
-            } catch (error) {
-                console.error(error);
-                throw error;
-            }
+
         }
     }
 );
@@ -91,7 +88,6 @@ const messagesSlice = createSlice({
         },
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
-
             const chat = state.chats.find((chat) => chat.chatId === chatId);
 
             if (chat) {

@@ -1,6 +1,6 @@
 import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
-import {EmojiIcon, ProfileIcon, SandMessageIcon} from '../../icon';
+import {ProfileIcon, SandMessageIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
 import { useMessagesStyles } from './MessagesStyles';
 import MessagesModal from "../../components/MessagesModal/MessagesModal";
@@ -35,7 +35,7 @@ const Messages = ({ chatId, senderId }) => {
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const authorId = useSelector((state) => state.messages.authorId);
   const [recipientName, setRecipientName] = useState('');
-  const [senderName, setSenderName] = useState('');
+  const [, setSenderName] = useState('');
   const [chatName, setChatName] = useState('');
 
 
@@ -56,7 +56,6 @@ const Messages = ({ chatId, senderId }) => {
           .then((response) => {
             const author = response.data;
             const id = author[0].id;
-            console.log(id);
             setAuthor(id);
             dispatch(getAuthorId(id));
           });
@@ -67,7 +66,6 @@ const Messages = ({ chatId, senderId }) => {
     const trimmedMessage = message.trim();
 
     if (trimmedMessage !== '') {
-      // Получение имени отправителя по идентификатору
       const sender = chats.find((chat) => chat.chatId === (selectedChatId || chatId));
       const senderName = sender ? sender.senderUsername : '';
 
@@ -77,7 +75,7 @@ const Messages = ({ chatId, senderId }) => {
         authorId: author,
         senderUsername: senderName,
         recipientUsername: recipientName,
-        chatName: chatName,
+        chatName,
         parentId: messages[selectedChatId]?.messages
             .slice()
             .reverse()
@@ -107,21 +105,18 @@ const Messages = ({ chatId, senderId }) => {
   const handleListItemClick = async (group) => {
     const chatId = group.chatId;
     dispatch(setSelectedChatId(chatId));
-    setRecipientName(group.chats[0]?.recipientUsername || '');
     setSenderName(group.chats[0]?.senderUsername || '');
+    setRecipientName(group.chats[0]?.recipientUsername || '');
+
     setChatName(group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername || '');
 
-    // Добавьте следующие строки для установки имен в переписке
     const senderUsername = group.chats[0]?.senderUsername || '';
     const recipientUsername = group.chats[0]?.recipientUsername || '';
     dispatch(setText(`${senderUsername} ${recipientUsername}`));
 
-    try {
-      await dispatch(fetchChatMessages(chatId));
-      scrollToBottom();
-    } catch (error) {
-      console.error('Error fetching chat messages:', error);
-    }
+    await dispatch(fetchChatMessages(chatId));
+    scrollToBottom();
+
   };
 
 
@@ -262,7 +257,7 @@ const Messages = ({ chatId, senderId }) => {
                       <IconButton onClick={handleExitClick} color="primary">
                         {ProfileIcon}
                       </IconButton>
-                      <Typography className={classes.username}>@{message.recipientUsername}</Typography>
+                      <Typography className={classes.username}>@{message.username}</Typography>
                     </div>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                   </Paper>
@@ -291,7 +286,7 @@ const Messages = ({ chatId, senderId }) => {
                                     <div className={classNames(classes.messageContainer, messageContainerClass)}>
                                       <div className={classNames(classes.messageContent, messageContentClass)}>
                                         <span className={classes.tweetUserFullName}>
-                                          {isOwnMessage ? (message.senderUsername || recipientName) : (message.recipientUsername || recipientName)}
+                                          {isOwnMessage ? (message.recipientUsername || recipientName) : (message. senderUsername|| recipientName)}
                                         </span>
                                         <div
                                             className={classNames(
