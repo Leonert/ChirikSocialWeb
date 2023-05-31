@@ -72,7 +72,7 @@ public enum NonAuthUserDto {
       String website;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
       LocalDateTime birthDate;
-      List<NonAuthPostDto.Response.WithoutAuthor> userPosts;
+      List<NonAuthPostDto.Response.WithoutAuthor> withoutAuthorPosts;
       int followersCounter;
       int followedCounter;
     }

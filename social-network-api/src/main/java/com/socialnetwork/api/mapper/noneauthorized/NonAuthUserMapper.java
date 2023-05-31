@@ -44,7 +44,7 @@ public class NonAuthUserMapper {
     NonAuthUserDto.Response.Profile profile = modelMapper.map(user, NonAuthUserDto.Response.Profile.class);
     profile.setFollowedCounter(user.getFollowed().size());
     profile.setFollowersCounter(user.getFollowers().size());
-    profile.setUserPosts(user.getPosts().stream().map(p -> {
+    profile.setWithoutAuthorPosts(user.getPosts().stream().map(p -> {
       try {
         return nonAuthPostMapper.convertToPostDtoProfile(p);
       } catch (NoPostWithSuchIdException e) {
