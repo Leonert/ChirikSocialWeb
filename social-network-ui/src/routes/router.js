@@ -7,12 +7,15 @@ import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import { FollowersPage } from '../pages/FollowersPage/FollowersPage';
 import { FollowingPage } from '../pages/FollowingPage/FollowingPage';
 import Home from '../pages/Home/Home';
+import homeSearchAction from '../pages/Home/homeSearchAction';
 import Messages from '../pages/Messages/Messages';
 import { Notifications } from '../pages/Notifications/Notifications';
 import PostPage from '../pages/PostPage/PostPage';
 import Profile from '../pages/Profile/Profile';
 import ProfilePosts from '../pages/Profile/ProfilePosts';
 import profileLoader from '../pages/Profile/profileLoader';
+import Search from '../pages/Search/Search';
+import searchLoader from '../pages/Search/searchLoader';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
 
 export const router = createBrowserRouter([
@@ -25,9 +28,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+        action: homeSearchAction,
       },
       {
-        path: '/search',
+        path: '/explore',
         element: <div></div>,
       },
       {
@@ -46,7 +50,11 @@ export const router = createBrowserRouter([
         path: '/setting',
         element: <SettingsPage />,
       },
-
+      {
+        path: '/search',
+        element: <Search />,
+        loader: searchLoader,
+      },
       {
         path: '/:username',
         element: <Profile />,
