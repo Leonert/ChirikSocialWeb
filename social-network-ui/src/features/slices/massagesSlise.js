@@ -1,7 +1,6 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
-import {useSelector} from "react-redux";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
     async ({ chatId, message }, { getState, dispatch }) => {
@@ -51,7 +50,6 @@ export const fetchChat = createAsyncThunk(
         return chats;
     }
 );
-
 
 export const fetchChatMessages = createAsyncThunk(
     'api/messages/fetchChatMessages',

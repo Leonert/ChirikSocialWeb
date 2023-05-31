@@ -1,17 +1,12 @@
 import {makeStyles} from "@mui/styles";
 
+
 export const useMessagesStyles = makeStyles((theme) => ({
-
   grid: {
-    padding: '12px 0px 0px 0px !important',
-
-  },
-  headerTitle: {
-    backgroundColor: theme.palette.background.lightDefault,
-
+    padding: "12px 0px 0px 0px !important",
   },
   messagesContainer: {
-    '& .MuiPaper-outlined': {
+    "& .MuiPaper-outlined": {
       padding: 0,
       borderRadius: 0,
       minHeight: '100vh',
@@ -30,7 +25,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     },
   },
   header: {
-    position: 'fixed',
+    position: "fixed",
     display: 'flex',
     margin: 0,
     padding: 0,
@@ -50,8 +45,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
       marginLeft: 15,
       fontWeight: 800,
     },
-    '& svg': {
-      marginRight: 20,
+    "& svg": {
+      marginRight: 20
     },
   },
   messagesTitle: {
@@ -59,9 +54,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     lineHeight: 1.1,
     fontSize: 29,
     fontWeight: 800,
-    margin: '0px 30px',
-    color: theme.palette.text.secondary,
-
+    margin: "0px 30px",
   },
   messagesText: {
     fontSize: 14,
@@ -73,7 +66,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     marginLeft: 30,
     height: 48,
     padding: theme.spacing(3.2),
-    '& .MuiButton-label': {
+    "& .MuiButton-label": {
       fontSize: 15,
     },
   },
@@ -120,14 +113,14 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   username: {
     marginLeft: 5,
-    display: 'inline-block',
-    color: theme.palette.text.primary,
+    display: "inline-block",
+    color: "rgb(255,255,255)",
     fontWeight: 400,
     fontSize: 15,
   },
   chatContainer: {
     minWidth: 600,
-    '& .MuiPaper-outlined': {
+    "& .MuiPaper-outlined": {
       padding: 0,
       borderRadius: 0,
       minHeight: '100vh',
@@ -140,17 +133,13 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   chatInfoWrapper: {
     width: 320,
-    margin: '0px auto',
+    margin: "0px auto",
     paddingTop: 300,
-
   },
   chatInfoTitle: {
     lineHeight: 1.1,
     fontSize: 29,
     fontWeight: 800,
-    color: theme.palette.text.secondary,
-
-
   },
   chatInfoText: {
     fontSize: 14,
@@ -161,7 +150,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatInfoButton: {
     height: 48,
     padding: theme.spacing(3.2),
-    '& .MuiButton-label': {
+    "& .MuiButton-label": {
       fontSize: 15,
     },
   },
@@ -185,13 +174,11 @@ export const useMessagesStyles = makeStyles((theme) => ({
     flex: 1,
     '& h6': {
       fontWeight: 800,
-
     },
   },
   chatAvatar: {
     width: theme.spacing(4),
     height: theme.spacing(4),
-
     marginRight: 15,
   },
   chat: {
@@ -224,11 +211,11 @@ export const useMessagesStyles = makeStyles((theme) => ({
     },
   },
   tweetUserInfoWrapper: {
-    display: 'flex',
+    display: "flex",
   },
   tweetAvatar: {
-    width: '18px !important',
-    height: '18px !important',
+    width: "18px !important",
+    height: "18px !important",
   },
   tweetUserFullName: {
     marginLeft: 3,
@@ -239,17 +226,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   tweetUsername: {
     marginLeft: 3,
-    color: theme.palette.text.secondary,
-    fontSize: 15,
-  },
-  tweetText:{
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    color: theme.palette.text.primaryChannel,
-    backgroundColor: 'rgb(29, 161, 242)',
-
-    padding: '11px 15px',
-    marginLeft: 3,
+    color: "rgb(83, 100, 113)",
     fontSize: 15,
   },
   myMessage: {
@@ -262,7 +239,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
 
     "& span": {
-      backgroundColor: "rgb(29, 161, 242)",
       color: "#fff",
       padding: "11px 15px",
       maxWidth: 384,
@@ -270,94 +246,89 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   myMessageCommon: {
     marginTop: 10,
-    '& span': {
-      borderRadius: '16px 16px 0px 16px',
+    "& span": {
+      borderRadius: "16px 16px 0px 16px",
     },
   },
   myMessageWithTweet: {
-    '& span': {
-      borderRadius: '0px 0px 0px 16px',
+    "& span": {
+      borderRadius: "0px 0px 0px 16px",
     },
   },
   myMessageDate: {
     fontSize: 12,
-    display: 'flex',
-    flexDirection: 'row-reverse',
+    display: "flex",
+    flexDirection: "row-reverse",
     marginTop: 5,
-    color: theme.palette.text.primary,
-    '& svg': {
+    color: "rgb(83, 100, 113)",
+    "& svg": {
       marginLeft: 5,
-      height: '1.2em',
-      color: 'rgb(29, 161, 242)',
+      height: "1.2em",
+      color: "rgb(29, 161, 242)"
     },
   },
   participantContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
   },
   participantTweetContainer: {
     marginTop: 10,
-    display: 'flex',
-    alignItems: 'flex-start',
-    '& a': {
-      color: 'inherit',
-      textDecoration: 'none',
+    display: "flex",
+    alignItems: "flex-start",
+    "& a": {
+      color: "inherit",
+      textDecoration: "none"
     },
   },
   participantTweetWrapper: {
-    border: '1px solid rgb(239, 243, 244)',
-    borderRadius: '16px 16px 16px 0px',
+    border: "1px solid rgb(239, 243, 244)",
+    borderRadius: "16px 16px 16px 0px",
     padding: 12,
     width: 384,
-    '&:hover': {
-      cursor: 'pointer',
-
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: "rgb(247, 249, 249)"
     },
   },
   participantTweetInfoWrapper: {
-    display: 'flex',
+    display: "flex",
   },
   participantTweetAvatar: {
-    width: '18px !important',
-    height: '18px !important',
+    width: "18px !important",
+    height: "18px !important",
   },
   participantTweetFullName: {
-
     marginLeft: 3,
     fontWeight: 700,
     fontSize: 15,
   },
   participantTweetUsername: {
     marginLeft: 3,
-    color: theme.palette.text.primary,
+    color: "rgb(83, 100, 113)",
     fontSize: 15,
   },
   participantMessageCommon: {
-    backgroundColor: theme.palette.background.default,
     marginTop: 10,
-    '& span': {
-      borderRadius: '16px 16px 16px 0px',
+    "& span": {
+      borderRadius: "16px 16px 16px 0px",
     },
   },
   participantMessageWithTweet: {
-
-    '& span': {
-      borderRadius: '0px 0px 16px 0px',
+    "& span": {
+      borderRadius: "0px 0px 16px 0px",
     },
   },
   participantMessage: {
-    display: 'flex',
-    alignItems: 'flex-start',
-
-    '& span': {
+    display: "flex",
+    alignItems: "flex-start",
+    "& span": {
       backgroundColor: theme.palette.background.lithe,
-
-      padding: '11px 16px',
+      padding: "11px 16px",
       maxWidth: 384,
     },
   },
   participantAvatar: {
-    marginTop: 'auto',
+    marginTop: "auto",
     width: theme.spacing(5),
     height: theme.spacing(5),
     marginRight: 10,
@@ -370,37 +341,37 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   chatFooter: {
     display: 'flex',
-    top: 600,
+    position: 'fixed',
+    bottom: 3,
     width: 598,
-    padding: '4px',
+    padding: 4,
     borderRight: 0,
     borderLeft: 0,
     borderBottom: 0,
-
   },
   chatIcon: {
-    '& .MuiIconButton-root': {
+    "& .MuiIconButton-root": {
       width: 30,
       height: 30,
-      '& span': {
+      "& span": {
         paddingTop: 2,
-        '& svg': {
-          height: '0.82em',
-        },
+        "& svg": {
+          height: "0.82em",
+        }
       },
     },
   },
   emojiIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 50,
-    '& .MuiIconButton-root': {
+    "& .MuiIconButton-root": {
       width: 30,
       height: 30,
-      '& span': {
+      "& span": {
         paddingTop: 2,
-        '& svg': {
-          height: '0.82em',
-        },
+        "& svg": {
+          height: "0.82em",
+        }
       },
     },
   },

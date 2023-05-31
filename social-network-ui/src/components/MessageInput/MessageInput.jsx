@@ -1,4 +1,4 @@
-import {withStyles} from "@mui/styles";
+import { withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField/TextField";
 
 export const MessageInput = withStyles((theme) => ({
@@ -9,8 +9,6 @@ export const MessageInput = withStyles((theme) => ({
             padding: "3px 14px",
             border: "1px solid rgb(207, 217, 222)",
             width: 490,
-            color: theme.palette.text.primary,
-
             '&.Mui-focused': {
                 '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
                 '& svg path': {
