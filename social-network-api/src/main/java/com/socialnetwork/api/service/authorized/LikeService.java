@@ -56,8 +56,8 @@ public class LikeService {
           .toList();
   }
 
-  public int countPostLikes(Post post) {
-    return likeRepository.countAllByLikedPost(post);
+  public int countPostLikes(int id) {
+    return likeRepository.countAllByLikedPost(new Post(id));
   }
 
   public boolean existsByIds(int userId, int postId) {

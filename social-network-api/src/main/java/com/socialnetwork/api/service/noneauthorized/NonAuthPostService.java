@@ -43,11 +43,11 @@ public class NonAuthPostService {
     return postRepository.getReferenceById(id);
   }
 
-  public int countPostRetweets(Post post) {
-    return postRepository.countAllByOriginalPostAndTextNullAndImageNull(post);
+  public int countPostRetweets(int id) {
+    return postRepository.countAllByOriginalPostAndTextNullAndImageNull(new Post(id));
   }
 
-  public int countPostReplies(Post post) {
-    return postRepository.countAllByOriginalPostAndTextNotNullAndImageNull(post);
+  public int countPostReplies(int id) {
+    return postRepository.countAllByOriginalPostAndTextNotNullAndImageNull(new Post(id));
   }
 }

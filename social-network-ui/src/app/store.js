@@ -6,6 +6,7 @@ import { customModalReducer } from '../features/slices/customModalSlice';
 import homeSlice from '../features/slices/homeSlice';
 import { likesReducer } from '../features/slices/postDatas/likesSlice';
 import { retweetsReducer } from '../features/slices/postDatas/retweetsSlice';
+import { postReducer } from '../features/slices/postSlice';
 import searchSlice from '../features/slices/searchSlice';
 import settingSlice from '../features/slices/settingSlice';
 import { snackbarReducer } from '../features/slices/snackbarSlice';
@@ -22,6 +23,7 @@ export const store = configureStore({
     authModal: authModalReducer,
     snackbar: snackbarReducer,
     home: homeSlice,
+    post: postReducer,
     subscriptions: subscriptionsReducer,
     following: followingReducer,
     followers: followersReducer,
