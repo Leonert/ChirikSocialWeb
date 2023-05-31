@@ -46,7 +46,7 @@ public class UserMapper {
     } catch (NoUserWithSuchCredentialsException e) {
       profile.setCurrUserFollower(false);
     }
-    profile.setUserPosts(user.getPosts().stream().map(p -> {
+    profile.setWithoutAuthorPosts(user.getPosts().stream().map(p -> {
       try {
         return postMapper.convertToPostDtoProfile(p, user);
       } catch (NoPostWithSuchIdException e) {
