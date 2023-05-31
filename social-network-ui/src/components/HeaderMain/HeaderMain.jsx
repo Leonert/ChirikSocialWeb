@@ -12,6 +12,7 @@ export default function HeaderMain() {
   const following = useSelector((state) => state.home.following);
   const dispatch = useDispatch();
   const classes = useHeaderMenuStyles();
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <div className={classes.wrapper}>
@@ -20,17 +21,21 @@ export default function HeaderMain() {
           <h2 style={{ paddingLeft: '20px', margin: '0 0 20px 0 ' }}>Home</h2>
         </Grid>
         <Grid item xs={6}>
-          <Button className={classes.buttonHeader} onClick={() => dispatch(changeStatusRecommendation())}>
-            For you
-          </Button>
+          {user && (
+            <Button className={classes.buttonHeader} onClick={() => dispatch(changeStatusRecommendation())}>
+              For you
+            </Button>
+          )}
         </Grid>
         <Grid item xs={6}>
-          <Button className={classes.buttonHeader} onClick={() => dispatch(changeStatusFollowing())}>
-            Following
-          </Button>
+          {user && (
+            <Button className={classes.buttonHeader} onClick={() => dispatch(changeStatusFollowing())}>
+              Following
+            </Button>
+          )}
         </Grid>
         <Grid item xs={6} className={classes.gridWrapper}>
-          {recommendation && (
+          {user && recommendation && (
             <Box
               sx={{
                 width: 70,
@@ -41,7 +46,7 @@ export default function HeaderMain() {
           )}
         </Grid>
         <Grid item xs={6} className={classes.gridWrapper}>
-          {following && (
+          {user && following && (
             <Box
               sx={{
                 width: 85,

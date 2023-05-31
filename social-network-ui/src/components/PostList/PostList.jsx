@@ -20,52 +20,48 @@ import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 import Spinner from '../Spinner/Spinner';
 
-
-export default function PostList({ isBookmarkPage, isReply }) {
+export default function PostList({ isBookmarkPage, isReplyPage }) {
   const posts = useSelector((state) => state.home.post);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const { user } = useSelector((state) => state.auth);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEndOfList, setIsEndOfList] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isEndOfList, setIsEndOfList] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(0);
+  // const [currentPage, setCurrentPage] = useState(0);
 
   const classes = usePostStyle();
   const dispatch = useDispatch();
+  // const handleScroll = useCallback(
+  //   (e) => {
+  //     if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+  //       if (isLoading || isEndOfList) return;
+  //       setIsLoading(true);
+  //       const nextPage = currentPage + 1;
 
-  const handleScroll = useCallback(
-    (e) => {
-      if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
-        if (isLoading || isEndOfList) return;
-        setIsLoading(true);
-        const nextPage = currentPage + 1;
+  //       dispatch(GetPosts(currentPage)).then((result) => {
+  //         if (GetPosts.fulfilled.match(result)) {
+  //           dispatch(getPost(result.payload));
+  //           if (result.payload.length === 0) {
+  //             setIsEndOfList(true);
+  //           }
+  //         }
+  //         setCurrentPage(nextPage);
+  //         setIsLoading(false);
+  //       });
+  //     }
+  //   },
+  //   [currentPage, dispatch, isLoading, isEndOfList]
+  // );
 
-        dispatch(GetPosts(currentPage)).then((result) => {
-          if (GetPosts.fulfilled.match(result)) {
-            dispatch(getPost(result.payload));
-            if (result.payload.length === 0) {
-              setIsEndOfList(true);
-            }
-          }
-          setCurrentPage(nextPage);
-          setIsLoading(false);
-        });
-      }
-    },
-    [currentPage, dispatch, isLoading, isEndOfList]
-  );
+  // useEffect(() => {
+  //   document.addEventListener('scroll', handleScroll);
 
-  useEffect(() => {
-    document.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     document.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, [handleScroll, isLoading]);
 
-    return () => {
-      document.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll, isLoading]);
-  
-
-  
   const handleRetweet = async (id) => {
     if (user) {
       const response = await axiosIns.post(`/api/posts`, { originalPost: id });
@@ -74,7 +70,7 @@ export default function PostList({ isBookmarkPage, isReply }) {
         dispatch(removeRetweet({ id, username }));
         dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
       } else {
-        if (!isBookmarkPage && !isReply) dispatch(addOnePost(response.data));
+        if (!isBookmarkPage && !isReplyPage) dispatch(addOnePost(response.data));
         dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
       }
     } else {
@@ -138,12 +134,12 @@ export default function PostList({ isBookmarkPage, isReply }) {
             }
             IdentifierReply={post.text === null && post.image === null}
             id={post.id}
-            classes={isReply ? classes.replyItem : classes.Page}
+            classes={isReplyPage ? classes.replyItem : classes.Page}
             username={post.author.username}
             avatar={post.author.profileImage}
             name={post.author.name}
             isBookmarkPage={isBookmarkPage}
-            isReply={isReply}
+            isReplyPage={isReplyPage}
             retweet={post.retweetsNumber}
             like={post.likesNumber}
             view={post.view}
@@ -192,7 +188,8 @@ export default function PostList({ isBookmarkPage, isReply }) {
             )}
           </Post>
         ))}
-      {!posts.length && (
+
+      {!posts.length && isReplyPage && (
         <Typography
           sx={{
             marginTop: '25px',
@@ -205,7 +202,7 @@ export default function PostList({ isBookmarkPage, isReply }) {
           So far, there are no replies. <br /> But you can fix it :)
         </Typography>
       )}
-      {isLoading && <Spinner />}
+      {/* {isLoading && <Spinner />} */}
     </div>
   );
 }

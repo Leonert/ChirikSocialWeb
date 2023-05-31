@@ -11,12 +11,12 @@ import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
 import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
-
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(GetPosts(0)).then((result) => {
@@ -34,7 +34,7 @@ function Home() {
     <Grid container spacing={2}>
       <Grid item xs={7}>
         <HeaderMain />
-        <ButtonShowMore />
+        {user && <ButtonShowMore />}
         {recommendation && <PostList />}
         {following && <Following />}
         {modalUserState && <ModalUser />}

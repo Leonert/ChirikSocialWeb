@@ -37,8 +37,8 @@ public class BookmarkService {
           .toList();
   }
 
-  public int countPostBookmarks(Post post) {
-    return bookmarkRepository.countAllByBookmarkedPost(post);
+  public int countPostBookmarks(int id) {
+    return bookmarkRepository.countAllByBookmarkedPost(new Post(id));
   }
 
   public boolean bookmarkUnBookmark(int postId, String username) throws NoUserWithSuchCredentialsException {

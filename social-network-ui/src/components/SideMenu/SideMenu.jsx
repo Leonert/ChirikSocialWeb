@@ -15,7 +15,7 @@ import {
   NotificationsIcon,
   ProfileIcon,
   SettingsIcon,
-  TweetIcon,
+
 } from '../../icon';
 import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
@@ -47,18 +47,19 @@ const SideMenu = () => {
   return (
     <>
       <ul className={classes.container}>
+       
+        <li>
+          <NavLink to={HOME} activeclassname={'selected'}>
+            <div className={classes.logoIcon}>
+              <IconButton>
+                {Chirick}
+                <span className={classes.title}>Chirik</span>
+              </IconButton>
+            </div>
+          </NavLink>
+        </li>
         {user ? (
           <>
-            <li>
-              <NavLink to={HOME} activeclassname={'selected'}>
-                <div className={classes.logoIcon}>
-                  <IconButton>
-                    {Chirick }
-                    <span className={classes.title}>Chirik</span>
-                  </IconButton>
-                </div>
-              </NavLink>
-            </li>
             <li className={classes.itemWrapper}>
               <NavLink to={HOME} activeclassname={'selected'}>
                 <div>
@@ -180,7 +181,6 @@ const SideMenu = () => {
             </div>
           </li>
         )}
-
         <li>
           <LogOutModal />
         </li>
