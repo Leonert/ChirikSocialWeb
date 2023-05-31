@@ -12,14 +12,15 @@ import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +31,21 @@ public class MessageServiceImpl implements MessageService {
   private final ChatRepository chatRepository;
 
   @Override
-  public List<MessageDto> getAllMessages() {
-    List<Message> messages = messageRepository.findAll();
-    return messages.stream()
-            .map(this::convertToMessageDto)
-            .collect(Collectors.toList());
+  public List<MessageDto> getAllMessages(User recipient) {
+    List<Message> receivedMessages = messageRepository.findByRecipient(recipient);
+    List<Message> sentMessages = messageRepository.findBySender(recipient);
+
+    List<MessageDto> messageDtos = new ArrayList<>();
+
+    for (Message message : receivedMessages) {
+      messageDtos.add(convertToMessageDto(message));
+    }
+
+    for (Message message : sentMessages) {
+      messageDtos.add(convertToMessageDto(message));
+    }
+
+    return messageDtos;
   }
 
   @Override

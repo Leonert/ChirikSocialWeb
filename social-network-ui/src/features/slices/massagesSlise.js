@@ -1,6 +1,7 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
+import {useSelector} from "react-redux";
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
     async ({ chatId, message }, { getState, dispatch }) => {
@@ -44,12 +45,13 @@ export const sendMessage = createAsyncThunk(
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
-    async () => {
-        const chats = await ChatApi.getUserChats();
+    async (userId) => {
+        const chats = await ChatApi.getUserChats(userId);
 
         return chats;
     }
 );
+
 
 export const fetchChatMessages = createAsyncThunk(
     'api/messages/fetchChatMessages',
@@ -73,8 +75,12 @@ const messagesSlice = createSlice({
         selectedChatId: null,
         text: '',
         visibleModalWindow: false,
+        authorId: ''
     },
     reducers: {
+        getAuthorId: (state, action) =>{
+            state.authorId = action.payload;
+        },
         setSelectedChatId: (state, action) => {
             state.selectedChatId = action.payload;
         },
@@ -148,6 +154,7 @@ export const {
     setText,
     toggleModalWindow,
     addChatMessage,
+    getAuthorId
 } = messagesSlice.actions;
 
 export const selectChats = (state) => state.messages.chats;

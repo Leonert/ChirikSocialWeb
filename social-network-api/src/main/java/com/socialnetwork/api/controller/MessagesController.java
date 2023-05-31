@@ -3,6 +3,7 @@ package com.socialnetwork.api.controller;
 import com.socialnetwork.api.dto.chat.ChatDto;
 import com.socialnetwork.api.dto.chat.CreateChatRequestDto;
 import com.socialnetwork.api.dto.chat.MessageDto;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -31,10 +33,21 @@ public class MessagesController {
   private final UserRepository userRepository;
 
   @GetMapping
-  public ResponseEntity<List<MessageDto>> getAllMessages() {
-    List<MessageDto> messages = messageService.getAllMessages();
-    return ResponseEntity.ok(messages);
+  public ResponseEntity<List<MessageDto>> getAllMessages(@RequestParam("userId") int userId) {
+    Optional<User> userOptional = userRepository.findById(userId);
+
+    if (userOptional.isPresent()) {
+      User user = userOptional.get();
+
+      List<MessageDto> messages = messageService.getAllMessages(user);
+      return ResponseEntity.ok(messages);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
+
+
+
 
   @GetMapping("/{id}")
   public ResponseEntity<MessageDto> getMessageById(@PathVariable("id") int id) {

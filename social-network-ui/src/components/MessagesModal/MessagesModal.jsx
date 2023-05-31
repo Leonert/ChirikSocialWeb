@@ -26,7 +26,7 @@ const MessagesModal = ({ visible, onClose }) => {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
-
+  const autherId = useSelector((state) => state.messages.authorId);
 
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
@@ -47,7 +47,7 @@ const MessagesModal = ({ visible, onClose }) => {
         message: '',
         timestamp: null,
         recipientId: selectedUser.id,
-        senderId: 1,
+        senderId: autherId,
         chatId: null,
         senderUsername: '',
         recipientUsername: ''
@@ -65,7 +65,7 @@ const MessagesModal = ({ visible, onClose }) => {
             onClose(createdChatDto);
           })
           .catch((error) => {
-            console.error('Error creating chat:', error);
+            alert('An error occurred while creating chat. Please try again later.'+ error);
           });
     }
   };

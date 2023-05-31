@@ -99,6 +99,7 @@ public enum UserDto {
 
     @Data
     public static class Default {
+      int id;
       String username;
       String name;
       String emailAddress;

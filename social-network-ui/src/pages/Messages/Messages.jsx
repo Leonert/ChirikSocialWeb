@@ -1,12 +1,13 @@
 import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
-import { SandMessageIcon} from '../../icon';
+import {ProfileIcon, SandMessageIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
 import { useMessagesStyles } from './MessagesStyles';
 import MessagesModal from "../../components/MessagesModal/MessagesModal";
 import {
   fetchChat,
   fetchChatMessages,
+  getAuthorId,
   selectChats,
   selectMessages,
   selectSelectedChatId,
@@ -20,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
+import axiosIns from "../../axiosInstance";
 
 const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
@@ -30,31 +32,52 @@ const Messages = ({ chatId, senderId }) => {
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
-
+  const [Author, setAuthor ] = useState (null);
+  const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
+  const autherId = useSelector((state) => state.messages.authorId);
   const scrollToBottom = () => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  useEffect(() => {
+    dispatch(fetchChat(autherId));
+    scrollToBottom();
 
-  const handleSendMessage = (senderId, recipientId) => {
+  }, [dispatch, autherId]);
+
+  const getIdAuthor = (username)  => {
+    if (setAuthor){
+      axiosIns.get(`/api/search/users?q=${username}`, {})
+          .then((response) => {
+        const author = response.data;
+        const id = author[0].id;
+        dispatch(getAuthorId(id));
+      });
+    }else{
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    getIdAuthor(autherId);
+    },[dispatch, username]);
+
+  const handleSendMessage = (user) => {
     const trimmedMessage = message.trim();
 
     if (trimmedMessage !== '') {
       const messageToSend = {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
-        senderId,
-        recipientId,
+        autherId
       };
 
       dispatch(sendMessage(messageToSend))
           .then(() => {
             setMessage('');
           })
-          .catch((error) => {
-            error('Failed to send message. Please try again.');
-          });
+
     }
   };
 
@@ -118,12 +141,12 @@ const Messages = ({ chatId, senderId }) => {
     dispatch(setSelectedChatId(undefined));
     dispatch(setText(''));
   };
-  // const handleKeyDown = (event) => {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //     handleSendMessage(selectedChatId, senderId);
-  //   }
-  // };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSendMessage(selectedChatId, senderId);
+    }
+  };
 
 
   return (
@@ -215,10 +238,11 @@ const Messages = ({ chatId, senderId }) => {
                   <Paper className={classes.chatHeader}>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                     <div style={{ flex: 1 }}>
-                      <Typography className={classes.username}>@{messages.senderUsername || ''}</Typography>
                       <IconButton onClick={handleExitClick} color="primary">
-                        <span className={classes.buttumContainer}>back</span>
+                        {ProfileIcon}
                       </IconButton>
+                      <Typography className={classes.username}>@{messages.senderUsername || ''}</Typography>
+
                     </div>
                   </Paper>
                   <div className={classes.chatContent}>
@@ -270,8 +294,7 @@ const Messages = ({ chatId, senderId }) => {
                         variant="outlined"
                         placeholder="Start a new message"
                         maxLength={254}
-
-                        // onKeyDown={handleKeyDown}
+                        onKeyDown={handleKeyDown}
                     />
                     <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
                       <IconButton onClick={() => handleSendMessage(senderId)} color="primary">
