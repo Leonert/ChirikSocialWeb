@@ -111,6 +111,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontWeight: 800,
     fontSize: 15,
   },
+
   username: {
     marginLeft: 5,
     display: "inline-block",
@@ -187,7 +188,9 @@ export const useMessagesStyles = makeStyles((theme) => ({
     height: 900,
     overflowY: 'auto',
     backgroundColor: theme.palette.background.lightDefault,
-
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   tweetContainer: {
     marginTop: 10,
@@ -200,6 +203,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
       textDecoration: 'none',
     },
   },
+
   tweetWrapper: {
 
     border: '1px solid rgb(29, 161, 242)',
@@ -237,7 +241,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     width: 184,
     backgroundColor: theme.palette.background.primary,
     color: theme.palette.text.secondary,
-
+    alignSelf: 'flex-end',
     "& span": {
       color: "#fff",
       padding: "11px 15px",
@@ -269,10 +273,12 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   participantContainer: {
     display: "flex",
+
     flexDirection: "row",
   },
   participantTweetContainer: {
     marginTop: 10,
+
     display: "flex",
     alignItems: "flex-start",
     "& a": {

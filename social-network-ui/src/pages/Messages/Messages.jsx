@@ -262,7 +262,7 @@ const Messages = ({ chatId, senderId }) => {
                       <IconButton onClick={handleExitClick} color="primary">
                         {ProfileIcon}
                       </IconButton>
-                      <Typography className={classes.username}>@{senderName.username}</Typography>
+                      <Typography className={classes.username}>@{message.recipientUsername}</Typography>
                     </div>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                   </Paper>
@@ -278,6 +278,8 @@ const Messages = ({ chatId, senderId }) => {
                                   !isValidDate(new Date(previousMessage.timestamp)) &&
                                   isValidDate(new Date(message.timestamp));
                               const isOwnMessage = message.senderId === senderId;
+                              const messageContainerClass = isOwnMessage ? classes.ownMessageContainer : classes.theirMessageContainer;
+                              const messageContentClass = isOwnMessage ? classes.ownMessageContent : classes.theirMessageContent;
 
                               return (
                                   <React.Fragment key={message.messageId}>
@@ -286,23 +288,15 @@ const Messages = ({ chatId, senderId }) => {
                                           {formatChatMessageDate(new Date(message.timestamp))}
                                         </div>
                                     )}
-                                    <div
-                                        className={classNames(classes.messageContainer, {
-                                          [classes.ownMessage]: isOwnMessage,
-                                        })}
-                                    >
-                                      <div
-                                          className={classNames(classes.messageContent, {
-                                            [classes.ownMessageContent]: isOwnMessage,
-                                          })}
-                                      >
+                                    <div className={classNames(classes.messageContainer, messageContainerClass)}>
+                                      <div className={classNames(classes.messageContent, messageContentClass)}>
                                         <span className={classes.tweetUserFullName}>
                                           {isOwnMessage ? (message.senderUsername || recipientName) : (message.recipientUsername || recipientName)}
                                         </span>
                                         <div
                                             className={classNames(
                                                 classes.myMessage,
-                                                isOwnMessage ? (message.message ? classes.myMessage : classes.myMessageCommon) : (message.message ? classes.theirMessageWithTweet : classes.theirMessageCommon)
+                                                isOwnMessage ? (message.message ? classes.myMessage : classes.messageContainer) : (message.message ? classes.theirMessageWithTweet : classes.theirMessageCommon)
                                             )}
                                         >
                                           <span>{message.message}</span>
@@ -316,6 +310,7 @@ const Messages = ({ chatId, senderId }) => {
                               );
                             })}
                   </Paper>
+
                   <div ref={chatEndRef}></div>
                   <Paper className={classes.chatFooter}>
                     <MessageInput
