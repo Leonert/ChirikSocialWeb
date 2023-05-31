@@ -128,36 +128,42 @@ const Profile = (props) => {
         </Stack>
         <Container sx={{ p: 1, maxWidth: '598px' }}>
           <Box>
-            <Typography variant="h6">{data.name}</Typography>
+            {data.name && <Typography variant="h6">{data.name}</Typography>}
             <Typography sx={{ mb: '10px' }} variant="body1">
               @{data.username}
             </Typography>
-            <Typography mb="12px" variant="body1" sx={{ wordWrap: 'break-word' }}>
-              {data.bio}
-            </Typography>
+            {data.bio && (
+              <Typography mb="12px" variant="body1" sx={{ wordWrap: 'break-word' }}>
+                {data.bio}
+              </Typography>
+            )}
             <Stack direction="row" flexWrap="wrap">
-              <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-                <LocationIcon sx={{ marginRight: 1 }} />
-                <Typography variant="body1">{data.location}</Typography>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-                <LinkIcon sx={{ marginRight: 1 }} />
-                <LinkMui
-                  href={formatWebsiteLink(data.website)}
-                  target="_blank"
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '234px',
-                    color: (theme) => theme.palette.background.lightBlue,
-                    textDecoration: 'underline',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {data.website}
-                </LinkMui>
-              </div>
+              {data.location && (
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+                  <LocationIcon sx={{ marginRight: 1 }} />
+                  <Typography variant="body1">{data.location}</Typography>
+                </div>
+              )}
+              {data.website && (
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+                  <LinkIcon sx={{ marginRight: 1 }} />
+                  <LinkMui
+                    href={formatWebsiteLink(data.website)}
+                    target="_blank"
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '234px',
+                      color: (theme) => theme.palette.background.lightBlue,
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {data.website}
+                  </LinkMui>
+                </div>
+              )}
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarIcon sx={{ marginRight: 1 }} />
                 <Typography variant="body1">Joined {formattedDate}</Typography>

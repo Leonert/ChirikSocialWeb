@@ -69,9 +69,7 @@ const followingSlice = createSlice({
   },
   reducers: {
     addFollowingUser(state, action) {
-      if (action.payload.currUserFollower) {
-        state.followingUsers.push(action.payload);
-      }
+      state.followingUsers.push(action.payload);
     },
     setTotalUsers: (state, action) => {
       state.isTotalUsers = true;
