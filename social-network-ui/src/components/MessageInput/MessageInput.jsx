@@ -2,6 +2,7 @@ import { withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField/TextField";
 
 export const MessageInput = withStyles((theme) => ({
+
     root: {
         '& .MuiOutlinedInput-root': {
             marginTop: 2,
@@ -24,9 +25,12 @@ export const MessageInput = withStyles((theme) => ({
             },
         },
         '& .MuiOutlinedInput-input': {
+            color: 'rgb(255,255,255)',
+
             "&::placeholder": {
-                color: theme.palette.text.primary,
+                color: 'rgb(255,255,255)',
             },
+
         },
     },
 }))(TextField);

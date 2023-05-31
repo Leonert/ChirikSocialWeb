@@ -329,6 +329,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     alignItems: "flex-start",
     "& span": {
       backgroundColor: theme.palette.background.lithe,
+
       padding: "11px 16px",
       maxWidth: 384,
     },
@@ -346,6 +347,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
   },
   chatFooter: {
+    backgroundColor: theme.palette.background.lightDefault,
+    color: theme.palette.text.primary,
     display: 'flex',
     position: 'fixed',
     bottom: 3,
@@ -354,6 +357,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderRight: 0,
     borderLeft: 0,
     borderBottom: 0,
+
   },
   chatIcon: {
     "& .MuiIconButton-root": {

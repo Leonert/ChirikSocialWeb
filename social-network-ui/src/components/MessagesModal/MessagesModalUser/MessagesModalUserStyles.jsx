@@ -32,7 +32,7 @@ export const useMessagesModalUserStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   username: {
-    color: 'rgb(83, 100, 113)',
+    color: theme.palette.text.primary,
     fontWeight: 400,
     fontSize: 15,
   },
