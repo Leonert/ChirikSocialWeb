@@ -141,4 +141,10 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     textAlign: 'center',
   },
+  title: {
+    marginLeft: 20,
+    background: 'linear-gradient(0deg, #ffff00, #0000ff)',
+    '-webkit-background-clip': 'text',
+    '-webkit-text-fill-color': 'transparent',
+  },
 }));

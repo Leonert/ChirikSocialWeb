@@ -16,7 +16,7 @@ export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { reje
   try {
     const { data } = await axiosIns({
       method: 'GET',
-      url: `api/posts?p=${portion}&n=20`,
+      url: `api/posts?p=${portion}&n=5`,
       headers: {
         'Content-Type': 'application/json',
       },

@@ -17,7 +17,6 @@ function FormModal({ buttonName }) {
   const id = useSelector((state) => state.home.postId);
   const post = useSelector((state) => state.home.post);
   const user = useSelector((state) => state.auth.user);
-
   const classes = useAddTweetFormStyles();
   const fileInputRef = useRef(null);
   const visiblePoll = false;
@@ -41,7 +40,6 @@ function FormModal({ buttonName }) {
       dispatch(replayMessage(''));
     });
   };
-
 
   return (
     <div>

@@ -1,12 +1,14 @@
 import { Typography } from '@mui/material';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
 import {
+  GetPosts,
   addOnePost,
   bookmarksPost,
+  getPost,
   getPostId,
   likesPost,
   makeRetweet,
@@ -16,13 +18,54 @@ import {
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
+import Spinner from '../Spinner/Spinner';
+
 
 export default function PostList({ isBookmarkPage, isReply }) {
   const posts = useSelector((state) => state.home.post);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const { user } = useSelector((state) => state.auth);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEndOfList, setIsEndOfList] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(0);
+
   const classes = usePostStyle();
   const dispatch = useDispatch();
+
+  const handleScroll = useCallback(
+    (e) => {
+      if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+        if (isLoading || isEndOfList) return;
+        setIsLoading(true);
+        const nextPage = currentPage + 1;
+
+        dispatch(GetPosts(currentPage)).then((result) => {
+          if (GetPosts.fulfilled.match(result)) {
+            dispatch(getPost(result.payload));
+            if (result.payload.length === 0) {
+              setIsEndOfList(true);
+            }
+          }
+          setCurrentPage(nextPage);
+          setIsLoading(false);
+        });
+      }
+    },
+    [currentPage, dispatch, isLoading, isEndOfList]
+  );
+
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll);
+
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll, isLoading]);
+  
+
+  
   const handleRetweet = async (id) => {
     if (user) {
       const response = await axiosIns.post(`/api/posts`, { originalPost: id });
@@ -162,6 +205,7 @@ export default function PostList({ isBookmarkPage, isReply }) {
           So far, there are no replies. <br /> But you can fix it :)
         </Typography>
       )}
+      {isLoading && <Spinner />}
     </div>
   );
 }

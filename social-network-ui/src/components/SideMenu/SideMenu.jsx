@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { handleLogOutModal } from '../../features/slices/authModalSlice';
 import {
   BookmarksIcon,
+  Chirick,
   ExploreIcon,
   HomeIcon,
   MessagesIcon,
@@ -49,17 +50,17 @@ const SideMenu = () => {
         {user ? (
           <>
             <li>
-              <NavLink to={HOME} activeclassname ={'selected'}>
+              <NavLink to={HOME} activeclassname={'selected'}>
                 <div className={classes.logoIcon}>
                   <IconButton>
-                    {TweetIcon}
+                    {Chirick }
                     <span className={classes.title}>Chirik</span>
                   </IconButton>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={HOME} activeclassname ={'selected'}>
+              <NavLink to={HOME} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>
@@ -71,7 +72,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SEARCH} activeclassname ={'selected'}>
+              <NavLink to={SEARCH} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>
@@ -83,7 +84,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={NOTIFICATIONS} activeclassname ={'selected'}>
+              <NavLink to={NOTIFICATIONS} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>
@@ -95,7 +96,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={MESSAGES} activeclassname ={'selected'}>
+              <NavLink to={MESSAGES} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <span>{MessagesIcon}</span>
@@ -107,7 +108,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={BOOKMARKS} activeclassname ={'selected'}>
+              <NavLink to={BOOKMARKS} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>
@@ -119,7 +120,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={user?.username} activeclassname ={'selected'}>
+              <NavLink to={user?.username} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>
@@ -131,7 +132,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SETTING} activeclassname ={'selected'}>
+              <NavLink to={SETTING} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>

@@ -11,11 +11,11 @@ import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
 import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
+
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

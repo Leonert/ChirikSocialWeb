@@ -30,7 +30,7 @@ function LogOutModal() {
           {TweetIcon}
         </div>
         <Typography className={classes.header} component="h2">
-          Log out of Twitter?
+          Log out of Chirik?
         </Typography>
         <Typography className={classes.item}>
           You can always log back in at any time. If you just want to switch accounts, you can do that by adding an
