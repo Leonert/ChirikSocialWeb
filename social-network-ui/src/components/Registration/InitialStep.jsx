@@ -36,7 +36,7 @@ const InitialStep = (props) => {
             dispatch(handleLoginModal(true));
             dispatch(handleModal(true));
           }}
-          sx={{ cursor: 'pointer' }}
+          sx={{ cursor: 'pointer', color: '#fff' }}
         >
           Log in
         </Link>
