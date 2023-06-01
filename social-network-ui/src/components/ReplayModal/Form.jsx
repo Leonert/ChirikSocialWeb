@@ -35,7 +35,6 @@ function FormModal({ buttonName }) {
 
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
-      console.log(response.data);
       dispatch(addOnePost(response.data));
       dispatch(addReply(targetPost.id));
       dispatch(clothReplayModal());

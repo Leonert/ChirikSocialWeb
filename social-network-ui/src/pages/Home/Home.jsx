@@ -29,7 +29,7 @@ function Home() {
     return () => {
       dispatch(clearPosts());
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <Grid container spacing={2}>

@@ -1,14 +1,14 @@
 import { Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
+// import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
 import {
-  GetPosts,
+  // GetPosts,
   addOnePost,
-  bookmarksPost,
-  getPost,
+  bookmarksPost, // getPost,
   getPostId,
   likesPost,
   makeRetweet,
@@ -25,7 +25,6 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
   const posts = useSelector((state) => state.home.post);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const { user } = useSelector((state) => state.auth);
-  console.log(posts);
 
   // const [isLoading, setIsLoading] = useState(false);
   // const [isEndOfList, setIsEndOfList] = useState(false);

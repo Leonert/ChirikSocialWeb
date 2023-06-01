@@ -4,8 +4,6 @@ import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui
 import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
 
-import { Chirick } from '../../icon';
-
 const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {
     backgroundColor: theme.palette.background.default,

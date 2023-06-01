@@ -4,7 +4,7 @@ import { Box, Button, IconButton, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import { changePassword, changePasswordModal } from '../../features/slices/settingSlice';

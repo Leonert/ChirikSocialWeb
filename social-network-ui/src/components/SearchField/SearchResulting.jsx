@@ -1,4 +1,4 @@
-import { Avatar, CardHeader } from '@mui/material';
+import { CardHeader } from '@mui/material';
 import React from 'react';
 
 import AvatarLink from '../UI/AvatarLink';

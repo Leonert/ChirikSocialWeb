@@ -14,7 +14,7 @@ export const FollowerUser = ({ user }) => {
     dispatch(followUser({ user }));
   }, []);
 
-  useEffect(() => {}, [currUserFollower]);
+  // useEffect(() => {}, [currUserFollower]);
 
   return (
     <ListItem

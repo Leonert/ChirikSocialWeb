@@ -6,8 +6,6 @@ export const changePassword = createAsyncThunk(
   'oldPassword/newPassword',
   async ({ oldPass, newPass }, { dispatch, rejectWithValue }) => {
     try {
-      console.log(oldPass, 444444444);
-      console.log(newPass, 555555555555);
       const { data, status } = await axiosIns.post(`/api/login/password-change`, {
         oldPassword: oldPass,
         newPassword: newPass,
