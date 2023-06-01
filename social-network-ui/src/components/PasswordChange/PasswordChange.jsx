@@ -4,10 +4,10 @@ import { Box, Button, IconButton, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 
-import { changePasswordModal } from '../../features/slices/settingSlice';
+import { changePassword, changePasswordModal } from '../../features/slices/settingSlice';
 import CloseButton from '../SideMenu/AddTweetModal/AddTweetForm/CloseButton/CloseButton';
 
 export default function PasswordChange() {
@@ -15,6 +15,7 @@ export default function PasswordChange() {
   const theme = useTheme();
   const primaryColor = theme.palette.text.secondary;
   const secondaryColor = theme.palette.background.lightBlue;
+
   const formik = useFormik({
     initialValues: {
       CurrentPassword: '',
@@ -35,9 +36,11 @@ export default function PasswordChange() {
         .oneOf([yup.ref('NewPassword'), null], 'Passwords must match')
         .required('Mandatory fields'),
     }),
+
     onSubmit: (values) => {
+      const { CurrentPassword, NewPassword } = values;
       alert(JSON.stringify(values, null, 2));
-      dispatch(changePasswordModal(false));
+      dispatch(changePassword({ oldPass: CurrentPassword, newPass: NewPassword }));
     },
   });
 
@@ -61,7 +64,7 @@ export default function PasswordChange() {
           id="CurrentPassword"
           label="Current Password"
           variant="outlined"
-          autocomplete="new-password"
+          autoComplete="new-password"
           type={showPassword ? 'text' : 'password'}
           fullWidth
           value={formik.values.CurrentPassword}
@@ -87,7 +90,7 @@ export default function PasswordChange() {
           id="NewPassword"
           label="New password"
           variant="outlined"
-          autocomplete="new-password"
+          autoComplete="new-password"
           type={showPassword ? 'text' : 'password'}
           fullWidth
           value={formik.values.NewPassword}
@@ -106,7 +109,7 @@ export default function PasswordChange() {
           onChange={formik.handleChange}
           error={formik.touched.ConfirmPassword && Boolean(formik.errors.ConfirmPassword)}
           helperText={formik.touched.ConfirmPassword && formik.errors.ConfirmPassword}
-          autocomplete="new-password"
+          autoComplete="new-password"
         />
         <Button variant="contained" type="submit" sx={{ borderRadius: 20 }}>
           Save

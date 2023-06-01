@@ -22,7 +22,7 @@ const Bookmarks = () => {
     <>
       <Container
         maxWidth="sm"
-        sx={isLoading ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}}
+        sx={isLoading ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : { margin: '0' }}
       >
         <Typography sx={isLoading ? { display: 'none' } : { marginTop: '10px', fontWeight: 'bold', fontSize: '42px' }}>
           Bookmarks

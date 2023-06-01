@@ -1,9 +1,10 @@
 import CloseIcon from '@mui/icons-material/Close';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { Chirick } from '../../icon';
 import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
+
+import { Chirick } from '../../icon';
 
 const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {

@@ -18,12 +18,14 @@ import {
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
-import Spinner from '../Spinner/Spinner';
+
+// import Spinner from '../Spinner/Spinner';
 
 export default function PostList({ isBookmarkPage, isReplyPage }) {
   const posts = useSelector((state) => state.home.post);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const { user } = useSelector((state) => state.auth);
+  console.log(posts);
 
   // const [isLoading, setIsLoading] = useState(false);
   // const [isEndOfList, setIsEndOfList] = useState(false);
