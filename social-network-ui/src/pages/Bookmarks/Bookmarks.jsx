@@ -16,7 +16,7 @@ const Bookmarks = () => {
     return () => {
       dispatch(clearPosts());
     };
-  }, []);
+  });
 
   return (
     <>
