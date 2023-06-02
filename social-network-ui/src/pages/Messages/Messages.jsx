@@ -22,6 +22,8 @@ import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
+import {Menu, MenuItem} from "@mui/material";
+
 const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
@@ -37,7 +39,44 @@ const Messages = ({ chatId, senderId }) => {
   const [recipientName, setRecipientName] = useState('');
   const [, setSenderName] = useState('');
   const [chatName, setChatName] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedChatIndex, setSelectedChatIndex] = useState(null);
 
+  const handleClick = (event, index) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedChatIndex(index);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedChatIndex(null);
+  };
+  const handleContextMenu = (event, index) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleClick(event, index);
+  };
+
+  const handleDeleteChat = () => {
+    if (selectedChatIndex !== null) {
+      const chatId = groupedChats[selectedChatIndex]?.chatId;
+      if (chatId) {
+        axiosIns
+            .delete(`/api/messages/chats/${chatId}`)
+            .then((response) => {
+              // Успішно видалено чат
+              console.log('Chat deleted:', response);
+              // Оновити список чатів або виконати іншу необхідну логіку
+            })
+            .catch((error) => {
+              // Помилка при видаленні чату
+              console.error('Error deleting chat:', error);
+              // Додати необхідну обробку помилки
+            });
+      }
+    }
+    handleClose();
+  };
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
@@ -107,6 +146,7 @@ const Messages = ({ chatId, senderId }) => {
     dispatch(setSelectedChatId(chatId));
     setSenderName(group.chats[0]?.senderUsername || '');
     setRecipientName(group.chats[0]?.recipientUsername || '');
+    setSelectedChatId(group.chatId);
 
     setChatName(group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername || '');
 
@@ -195,13 +235,16 @@ const Messages = ({ chatId, senderId }) => {
                   <>
                     <div className={classes.searchWrapper}></div>
                     <List component="nav" className={classes.list} aria-label="main mailbox folders">
-                      {groupedChats.map((group) =>
+                      {groupedChats.map((group, index) =>
                           group && group.chats && group.chats.length > 0 ? (
                               <ListItem
                                   key={group.chatId}
                                   button
-                                  className={classes.listItem}
+                                  className={classNames(classes.listItem, {
+                                    [classes.selected]: group.chatId === selectedChatId,
+                                  })}
                                   onClick={() => handleListItemClick(group)}
+                                  onContextMenu={(event) => handleContextMenu(event, index)}
                               >
                                 <div className={classes.userWrapper}>
                                   <Avatar
@@ -212,10 +255,11 @@ const Messages = ({ chatId, senderId }) => {
                                     <div className={classes.userHeader}>
                                       <div>
                                         <Typography className={classes.chatName}>
-                                          {group.chatId === selectedChatId ? chatName : group.chats[0]?.senderUsername}
+                                          @{group.chats[0]?.senderUsername}
                                         </Typography>
                                         <Typography className={classes.username}>
-                                          {group.chats[0]?.senderUsername}
+                                          @{group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername}
+
                                         </Typography>
                                       </div>
                                     </div>
@@ -224,6 +268,9 @@ const Messages = ({ chatId, senderId }) => {
                               </ListItem>
                           ) : null
                       )}
+                      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+                        <MenuItem onClick={handleDeleteChat}>Видалити</MenuItem>
+                      </Menu>
                     </List>
                   </>
               )}
@@ -257,7 +304,7 @@ const Messages = ({ chatId, senderId }) => {
                       <IconButton onClick={handleExitClick} color="primary">
                         {ProfileIcon}
                       </IconButton>
-                      <Typography className={classes.username}>@{message.username}</Typography>
+                      <Typography className={classes.username}>@{message.senderUsername}</Typography>
                     </div>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                   </Paper>
@@ -278,6 +325,7 @@ const Messages = ({ chatId, senderId }) => {
 
                               return (
                                   <React.Fragment key={message.messageId}>
+
                                     {showDateSeparator && (
                                         <div className={classes.dateSeparator}>
                                           {formatChatMessageDate(new Date(message.timestamp))}

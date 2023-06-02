@@ -1,4 +1,5 @@
 import {makeStyles} from "@mui/styles";
+import {defaultTheme} from "../../theme";
 
 
 export const useMessagesStyles = makeStyles((theme) => ({
@@ -80,10 +81,12 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   listItem: {
     padding: 0,
-    backgroundColor: theme.palette.background.lightDefault,
-    '& :hover': {
-      backgroundColor: theme.palette.background.paper,
-    },
+  },
+  '& :hover': {
+    backgroundColor: theme.palette.background.lightBlue,
+  },
+  selected: {
+    backgroundColor: theme.palette.background.lightBlue,
   },
   userWrapper: {
     height: 76,
@@ -135,6 +138,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatInfoWrapper: {
     width: 320,
     margin: "0px auto",
+    color: theme.palette.text.primary,
+
     paddingTop: 300,
   },
   chatInfoTitle: {
@@ -167,7 +172,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderTop: 0,
     borderLeft: 0,
     borderRight: 0,
-    borderBottom: '1px solid #EFF3F4',
     borderRadius: 0,
     alignItems: 'center',
     backgroundColor: theme.palette.background.lightDefault,

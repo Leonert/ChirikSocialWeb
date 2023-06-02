@@ -11,12 +11,10 @@ export const useMessagesModalStyles = makeStyles((theme) => ({
         },
     },
     headerMessage: {
-        marginLeft: 15,
+        marginLeft: 0,
 
     },
     button: {
-        marginLeft: "auto",
-
         display: "flex",
         justifyContent:"space-around",
         height: 30,
@@ -25,8 +23,7 @@ export const useMessagesModalStyles = makeStyles((theme) => ({
         height: 550,
         width: 598,
         padding: 0,
-        backgroundColor: theme.palette.background.lightDefault,
-
+        borderRadius: 16,
     },
     divider: {
         height: 1,

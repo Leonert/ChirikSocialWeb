@@ -23,6 +23,8 @@ public interface MessageService {
 
   void deleteMessage(int id);
 
+  void deleteChat(int chatId);
+
   List<MessageDto> searchMessages(String keyword);
 
   void markAsRead(int id);

@@ -76,7 +76,7 @@ public class LoginController {
   public ResponseEntity<?> passwordChange(@RequestAttribute(USERNAME_ATTRIBUTE) String username,
                                             @RequestBody UserDto.Request.PasswordEditing passwords)
       throws NoUserWithSuchCredentialsException, AccessDeniedException {
-    userService.passwordChange(username, passwords.getOldPassword(), passwords. getNewPassword());
+    userService.passwordChange(username, passwords.getOldPassword(), passwords.getNewPassword());
     return ResponseEntity.ok().build();
   }
 

@@ -20,8 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -114,6 +112,10 @@ public class MessageServiceImpl implements MessageService {
     messageRepository.deleteById(id);
   }
 
+  @Override
+  public void deleteChat(int chatId) {
+    chatRepository.deleteById(chatId);
+  }
   @Override
   public List<MessageDto> searchMessages(String keyword) {
     List<Message> messages = messageRepository.findByMessageContainingIgnoreCase(keyword);

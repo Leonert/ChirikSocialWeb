@@ -24,5 +24,10 @@ export const ChatApi = {
 
             return [];
         }
+    },
+    deleteChatId: async  (chatId)=>{
+        const response = await axiosIns.get(`/api/messages/chats/${chatId}`);
+
+        return response.data;
     }
 };

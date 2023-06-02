@@ -38,138 +38,139 @@ const SideMenu = () => {
   const handleClickOpenAddTweet = () => {
     setVisibleAddTweet(true);
   };
+
   const onCloseAddTweet = () => {
     setVisibleAddTweet(false);
   };
 
   return (
-    <>
-      <ul className={classes.container}>
-        <li>
-          <NavLink to={HOME} activeclassname={'selected'}>
-            <div className={classes.logoIcon}>
-              <IconButton>
-                {TweetIcon}
-                <span className={classes.title}>Chirik</span>
-              </IconButton>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={HOME} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{HomeIcon}</span>
-                  <Typography variant={'h5'}>Home</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={SEARCH} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{ExploreIcon}</span>
-                  <Typography variant={'h5'}>Explore</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={NOTIFICATIONS} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{NotificationsIcon}</span>
-                  <Typography variant={'h5'}>Notifications</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={MESSAGES} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <span>{MessagesIcon}</span>
-                <Typography className={classes.label} variant="h5">
-                  Messages
-                </Typography>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={BOOKMARKS} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{BookmarksIcon}</span>
-                  <Typography variant={'h5'}>Bookmarks</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={user?.username} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{ProfileIcon}</span>
-                  <Typography variant={'h5'}>Profile</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <NavLink to={SETTING} activeclassname={'selected'}>
-            <div>
-              <Hidden smDown>
-                <>
-                  <span>{SettingsIcon}</span>
-                  <Typography variant={'h5'}>Setting</Typography>
-                </>
-              </Hidden>
-            </div>
-          </NavLink>
-        </li>
-        <li className={classes.itemWrapper}>
-          <Button
-            onClick={handleClickOpenAddTweet}
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            fullWidth
-          >
-            <Hidden smDown>Tweet</Hidden>
-            <Hidden mdUp>
-              <CreateIcon />
-            </Hidden>
-          </Button>
-          <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
-        </li>
-        {user && (
-          <li className={classes.itemWrapperLogOut}>
-            <SearchResulting
-              action={<LogOutButton handelClick={OpenLogOutModal} />}
-              id={user.username}
-              name={user.name}
-              nickname={user.username}
-            />
+      <>
+        <ul className={classes.container}>
+          <li>
+            <NavLink to={HOME} activeClassName={'selected'}>
+              <div className={classes.logoIcon}>
+                <IconButton>
+                  <span className={classes.title}>Chirik</span>
+                </IconButton>
+              </div>
+            </NavLink>
           </li>
-        )}
+          <li className={classes.itemWrapper}>
+            <NavLink to={HOME} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <>
+                    <span>{HomeIcon}</span>
+                    <Typography variant={'h5'}>Home</Typography>
+                  </>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <NavLink to={SEARCH} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <>
+                    <span>{ExploreIcon}</span>
+                    <Typography variant={'h5'}>Explore</Typography>
+                  </>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <NavLink to={NOTIFICATIONS} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <>
+                    <span>{NotificationsIcon}</span>
+                    <Typography variant={'h5'}>Notifications</Typography>
+                  </>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <NavLink to={MESSAGES} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <span>{MessagesIcon}</span>
+                  <Typography className={classes.label} variant="h5">
+                    Messages
+                  </Typography>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <NavLink to={BOOKMARKS} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <>
+                    <span>{BookmarksIcon}</span>
+                    <Typography variant={'h5'}>Bookmarks</Typography>
+                  </>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <NavLink to={user?.username} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <>
+                    <span>{ProfileIcon}</span>
+                    <Typography variant={'h5'}>Profile</Typography>
+                  </>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <NavLink to={SETTING} activeClassName={'selected'}>
+              <div>
+                <Hidden smDown>
+                  <>
+                    <span>{SettingsIcon}</span>
+                    <Typography variant={'h5'}>Setting</Typography>
+                  </>
+                </Hidden>
+              </div>
+            </NavLink>
+          </li>
+          <li className={classes.itemWrapper}>
+            <Button
+                onClick={handleClickOpenAddTweet}
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                fullWidth
+            >
+              <Hidden smDown>Tweet</Hidden>
+              <Hidden mdUp>
+                <CreateIcon />
+              </Hidden>
+            </Button>
+            <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
+          </li>
+          {user && (
+              <li className={classes.itemWrapperLogOut}>
+                <SearchResulting
+                    action={<LogOutButton handleClick={OpenLogOutModal} />}
+                    id={user.username}
+                    name={user.name}
+                    nickname={user.username}
+                />
+              </li>
+          )}
 
-        <li>
-          <LogOutModal />
-        </li>
-      </ul>
-    </>
+          <li>
+            <LogOutModal />
+          </li>
+        </ul>
+      </>
   );
 };
+
 export default SideMenu;

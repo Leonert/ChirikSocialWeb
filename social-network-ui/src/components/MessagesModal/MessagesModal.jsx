@@ -1,13 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  InputAdornment,
-  List,
-  ListItem,
-} from '@material-ui/core';
+
 
 
 import { SearchIcon } from '../../icon';
@@ -19,6 +10,11 @@ import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../axiosInstance";
 import {addResult, removeResult} from "../../features/slices/searchSlice";
 import {useState} from "react";
+import {IconButton, InputAdornment, List, ListItem} from "@mui/material";
+import DialogTitle from "@mui/material/DialogTitle";
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
+import DialogContent from "@mui/material/DialogContent";
 
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
@@ -89,6 +85,7 @@ const MessagesModal = ({ visible, onClose }) => {
             Next
           </Button>
         </DialogTitle>
+
         <DialogContent className={classes.content}>
           <form>
             <MessagesModalInput

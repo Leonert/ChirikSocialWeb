@@ -105,6 +105,13 @@ public class MessagesController {
     return ResponseEntity.noContent().build();
   }
 
+  @DeleteMapping("/chats/{chatId}")
+  public ResponseEntity<Void> deleteChat(@PathVariable("chatId") int chatId) {
+    messageService.deleteChat(chatId);
+
+    return ResponseEntity.noContent().build();
+  }
+
   @PostMapping("/chats/create")
   public ResponseEntity<ChatDto> createChat(@RequestBody CreateChatRequestDto requestDto) {
     MessageDto messageDto = requestDto.getMessageDto();
