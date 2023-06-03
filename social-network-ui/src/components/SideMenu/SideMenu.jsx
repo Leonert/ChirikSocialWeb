@@ -16,7 +16,7 @@ import {
   SettingsIcon,
   TweetIcon,
 } from '../../icon';
-import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
+import { BOOKMARKS, EXPLORE, HOME, MESSAGES, NOTIFICATIONS, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
 import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
@@ -68,7 +68,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={SEARCH} activeClassName={'selected'}>
+          <NavLink to={EXPLORE} activeClassName={'selected'}>
             <div>
               <Hidden smDown>
                 <>
