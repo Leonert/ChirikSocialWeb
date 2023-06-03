@@ -97,8 +97,16 @@ const Search = () => {
         />
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs variant="fullWidth" value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
-            <Tab label="Users" {...a11yProps(0)} />
-            <Tab label="Posts" {...a11yProps(1)} />
+            <Tab
+              label="Users"
+              {...a11yProps(0)}
+              sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
+            />
+            <Tab
+              label="Posts"
+              {...a11yProps(1)}
+              sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
+            />
           </Tabs>
         </Box>
         <TabPanel tabValue={tabValue} index={0}>
