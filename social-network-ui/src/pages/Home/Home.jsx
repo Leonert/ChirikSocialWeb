@@ -40,7 +40,6 @@ function Home() {
         {recommendation && <PostList />}
         {following && <Following />}
         {modalUserState && <ModalUser />}
-        <ReplayModal />
       </Grid>
       <Grid item xs={5}>
         <Form method="post">
