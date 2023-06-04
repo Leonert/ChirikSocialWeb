@@ -1,5 +1,4 @@
 import {makeStyles} from "@mui/styles";
-import {defaultTheme} from "../../theme";
 
 
 export const useMessagesStyles = makeStyles((theme) => ({
@@ -20,6 +19,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
 
 
     },
+
     buttumContainer: {
       marginTop: 10,
       display: 'flex',
@@ -98,6 +98,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     paddingBottom: 8,
     cursor: 'pointer',
   },
+
   userAvatar: {
     width: theme.spacing(5),
     height: theme.spacing(5),
@@ -182,9 +183,11 @@ export const useMessagesStyles = makeStyles((theme) => ({
     },
   },
   chatAvatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
+    width: theme.spacing(5),
+    height: theme.spacing(5),
     marginRight: 15,
+    background: theme.palette.background.paper,
+
   },
   chat: {
     padding: '53px 15px',
@@ -251,6 +254,31 @@ export const useMessagesStyles = makeStyles((theme) => ({
       padding: "11px 15px",
       maxWidth: 384,
     },
+  },
+
+
+
+  ownMessageWithTweet: {
+    padding: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'flex-start',
+    borderRadius: theme.spacing(1),
+    backgroundColor: theme.palette.background.default,
+    border: `1px solid ${theme.palette.primary.main}`,
+  },
+  theirMessageWithTweet: {
+    padding: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'flex-start',
+    borderRadius: theme.spacing(1),
+    backgroundColor: theme.palette.background.default,
+    border: `1px solid ${theme.palette.primary.main}`,
+  },
+  ownMessageRight: {
+    marginLeft: 'auto', // Розташування справа для відправника
+  },
+  theirMessageLeft: {
+    marginRight: 'auto', // Розташування зліва для отримувача
   },
   myMessageCommon: {
     marginTop: 10,
@@ -350,6 +378,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     marginTop: 5,
     color: theme.palette.text.primary,
   },
+
   chatFooter: {
     backgroundColor: theme.palette.background.lightDefault,
     color: theme.palette.text.primary,

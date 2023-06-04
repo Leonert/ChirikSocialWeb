@@ -1,4 +1,4 @@
-import { Avatar, Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
+import {Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 import {ProfileIcon, SandMessageIcon} from '../../icon';
 import { DEFAULT_PROFILE_IMG } from '../../util/url';
@@ -22,7 +22,7 @@ import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
-import {Menu, MenuItem} from "@mui/material";
+import {Avatar, Menu, MenuItem} from "@mui/material";
 
 const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
@@ -107,7 +107,6 @@ const Messages = ({ chatId, senderId }) => {
     if (trimmedMessage !== '') {
       const sender = chats.find((chat) => chat.chatId === (selectedChatId || chatId));
       const senderName = sender ? sender.senderUsername : '';
-
       const messageToSend = {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
@@ -259,7 +258,6 @@ const Messages = ({ chatId, senderId }) => {
                                         </Typography>
                                         <Typography className={classes.username}>
                                           @{group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername}
-
                                         </Typography>
                                       </div>
                                     </div>
@@ -320,12 +318,18 @@ const Messages = ({ chatId, senderId }) => {
                                   !isValidDate(new Date(previousMessage.timestamp)) &&
                                   isValidDate(new Date(message.timestamp));
                               const isOwnMessage = message.senderId === senderId;
-                              const messageContainerClass = isOwnMessage ? classes.ownMessageContainer : classes.theirMessageContainer;
-                              const messageContentClass = isOwnMessage ? classes.ownMessageContent : classes.theirMessageContent;
+                              const messageContainerClass = isOwnMessage
+                                  ? classes.ownMessageContainer
+                                  : classes.theirMessageContainer;
+                              const messageContentClass = isOwnMessage
+                                  ? classes.ownMessageContent
+                                  : classes.theirMessageContent;
+                              const messageSender = isOwnMessage
+                                  ? message.recipientUsername || recipientName
+                                  : message.senderUsername || recipientName;
 
                               return (
                                   <React.Fragment key={message.messageId}>
-
                                     {showDateSeparator && (
                                         <div className={classes.dateSeparator}>
                                           {formatChatMessageDate(new Date(message.timestamp))}
@@ -333,17 +337,21 @@ const Messages = ({ chatId, senderId }) => {
                                     )}
                                     <div className={classNames(classes.messageContainer, messageContainerClass)}>
                                       <div className={classNames(classes.messageContent, messageContentClass)}>
-                                        <span className={classes.tweetUserFullName}>
-                                          {isOwnMessage ? (message.recipientUsername || recipientName) : (message. senderUsername|| recipientName)}
+                                        <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>
+                                          {messageSender}
                                         </span>
-                                        <div
-                                            className={classNames(
-                                                classes.myMessage,
-                                                isOwnMessage ? (message.message ? classes.myMessage : classes.messageContainer) : (message.message ? classes.theirMessageWithTweet : classes.theirMessageCommon)
-                                            )}
-                                        >
-                                          <span>{message.message}</span>
-                                        </div>
+                                        {message.message && (
+                                            <div
+                                                className={classNames(
+                                                    classes.messageContent,
+                                                    isOwnMessage ? classes.ownMessageWithTweet : classes.theirMessageWithTweet,
+                                                    isOwnMessage ? classes.ownMessageRight : classes.theirMessageLeft
+                                                )}
+                                            >
+                                              <span>{message.message}</span>
+                                            </div>
+                                        )}
+
                                         <Typography className={classes.messageTimestamp}>
                                           {formatChatMessageDate(new Date(message.timestamp))}
                                         </Typography>
