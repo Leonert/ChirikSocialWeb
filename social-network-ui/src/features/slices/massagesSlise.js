@@ -1,6 +1,8 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
+
+
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
     async ({ chatId, message, senderUsername, recipientUsername }, { getState, dispatch }) => {
@@ -44,12 +46,13 @@ export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
     async (userId) => {
         const chats = await ChatApi.getUserChats(userId);
+        console.log(chats)
 
         return chats;
     }
 );
 
-export const fetchChatMessages = createAsyncThunk(
+    export const fetchChatMessages = createAsyncThunk(
     'api/messages/fetchChatMessages',
     async (chatId, { rejectWithValue }) => {
         try {
@@ -122,13 +125,13 @@ const messagesSlice = createSlice({
                 const { chatId, message, senderId, recipientId } = action.payload;
 
                 const chatIndex = state.chats.findIndex((chat) => chat.chatId === chatId);
-
                 if (chatIndex !== -1) {
                     const updatedMessage = {
                         ...message,
                         recipientId: recipientId || state.chats[chatIndex].recipientId,
                         senderId: senderId || state.chats[chatIndex].senderId,
                     };
+
 
                     state.chats[chatIndex].messages.push(updatedMessage);
                 }

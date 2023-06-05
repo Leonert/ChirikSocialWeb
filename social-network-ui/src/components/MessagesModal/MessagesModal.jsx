@@ -15,6 +15,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
+import CloseButton from "../AddTweetModal/AddTweetForm/CloseButton/CloseButton";
 
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
@@ -71,7 +72,7 @@ const MessagesModal = ({ visible, onClose }) => {
       <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title" className={classes.header}>
           <IconButton onClick={onClose} color="secondary" aria-label="close">
-            <CloseIcon color="secondary" />
+            <CloseButton color="#fff" />
           </IconButton>
           <span className={classes.headerMessage}>New message</span>
           <Button

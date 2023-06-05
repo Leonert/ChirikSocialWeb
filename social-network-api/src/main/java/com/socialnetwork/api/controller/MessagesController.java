@@ -47,8 +47,6 @@ public class MessagesController {
   }
 
 
-
-
   @GetMapping("/{id}")
   public ResponseEntity<MessageDto> getMessageById(@PathVariable("id") int id) {
     MessageDto message = messageService.getMessageById(id);

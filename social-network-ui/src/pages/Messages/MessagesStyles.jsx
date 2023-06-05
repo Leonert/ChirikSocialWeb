@@ -13,13 +13,11 @@ export const useMessagesStyles = makeStyles((theme) => ({
       borderTop: 0,
       borderBottom: 0,
       alignItems: 'end',
-
       backgroundColor: theme.palette.background.lightDefault,
       color: theme.palette.text.primary,
 
 
     },
-
     buttumContainer: {
       marginTop: 10,
       display: 'flex',
@@ -28,8 +26,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   header: {
     position: "fixed",
     display: 'flex',
-    margin: 0,
-    padding: 0,
+
     width: 329,
     height: 47,
     zIndex: 1,
@@ -197,7 +194,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.lightDefault,
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
   },
   tweetContainer: {
     marginTop: 10,
@@ -241,38 +237,49 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   myMessage: {
+    display:'flex',
+    flexDirection: 'column',
     top: 100,
-    border: '1px solid rgb(29, 161, 242)',
     borderRadius: '16px 16px 0px 16px',
     padding: 12,
-    width: 184,
     backgroundColor: theme.palette.background.primary,
     color: theme.palette.text.secondary,
-    alignSelf: 'flex-end',
     "& span": {
       color: "#fff",
       padding: "11px 15px",
       maxWidth: 384,
     },
+
+  },
+  MyMassageSender:{
+    marginLeft: '20%',
+    display:'flex',
+    flexDirection: 'column',
+    top: 100,
+    borderRadius: '16px 16px 0px 16px',
+    padding: 12,
+    backgroundColor: theme.palette.background.primary,
+    color: theme.palette.text.secondary,
+    alignItems: 'flex-end',
+
   },
 
-
-
-  ownMessageWithTweet: {
+  ownMessageWith: {
     padding: theme.spacing(1),
-    display: 'flex',
-    alignItems: 'flex-start',
     borderRadius: theme.spacing(1),
     backgroundColor: theme.palette.background.default,
     border: `1px solid ${theme.palette.primary.main}`,
   },
   theirMessageWithTweet: {
-    padding: theme.spacing(1),
-    display: 'flex',
+    marginRight: '20%',
+    display:'flex',
+    flexDirection: 'column',
+    top: 100,
+    borderRadius: '16px 16px 0px 16px',
+    padding: 12,
+    backgroundColor: theme.palette.background.primary,
+    color: theme.palette.text.secondary,
     alignItems: 'flex-start',
-    borderRadius: theme.spacing(1),
-    backgroundColor: theme.palette.background.default,
-    border: `1px solid ${theme.palette.primary.main}`,
   },
   ownMessageRight: {
     marginLeft: 'auto', // Розташування справа для відправника
@@ -395,7 +402,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatIcon: {
     "& .MuiIconButton-root": {
       width: 30,
-      height: 30,
+      height: 50,
       "& span": {
         paddingTop: 2,
         "& svg": {
@@ -409,7 +416,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     right: 50,
     "& .MuiIconButton-root": {
       width: 30,
-      height: 30,
+      height: 15,
       "& span": {
         paddingTop: 2,
         "& svg": {

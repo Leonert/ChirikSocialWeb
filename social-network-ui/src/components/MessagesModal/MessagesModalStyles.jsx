@@ -6,6 +6,9 @@ export const useMessagesModalStyles = makeStyles((theme) => ({
         margin: 0,
         backgroundColor: theme.palette.background.default,
         border: 0,
+        display: "flex",
+        justifyContent:"space-between",
+
         "& svg": {
             fontSize: 26,
         },
@@ -15,8 +18,7 @@ export const useMessagesModalStyles = makeStyles((theme) => ({
 
     },
     button: {
-        display: "flex",
-        justifyContent:"space-around",
+        padding: 12,
         height: 30,
     },
     content: {

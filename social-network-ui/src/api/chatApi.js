@@ -3,6 +3,10 @@ import axiosIns from "../axiosInstance";
 export const ChatApi = {
     getUserChats: async (userId) => {
         try {
+            if (!userId) {
+                throw new Error('Missing userId');
+            }
+
             const response = await axiosIns.get(`/api/messages`, {
                 params: {
                     userId,

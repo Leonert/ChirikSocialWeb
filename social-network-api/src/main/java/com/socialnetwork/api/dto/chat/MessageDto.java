@@ -1,13 +1,17 @@
 package com.socialnetwork.api.dto.chat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDateTime;
+
+import static com.socialnetwork.api.util.Constants.Response.TIME_FORMAT;
 
 @Data
 public class MessageDto {
   private int messageId;
   private boolean isRead;
   private String message;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
   private LocalDateTime timestamp;
   private int recipientId;
   private int senderId;
@@ -21,6 +25,7 @@ public class MessageDto {
     private int chatId;
     private boolean isRead;
     private String message;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_FORMAT)
     private LocalDateTime timestamp;
     private int recipientId;
     private int senderId;

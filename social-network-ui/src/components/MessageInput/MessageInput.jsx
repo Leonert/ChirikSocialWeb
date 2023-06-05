@@ -6,12 +6,12 @@ export const MessageInput = withStyles((theme) => ({
     root: {
         '& .MuiOutlinedInput-root': {
             marginTop: 2,
-            borderRadius: 20,
-            padding: "3px 14px",
-            border: "1px solid rgb(207, 217, 222)",
-            width: 490,
+            borderRadius: 5,
+            padding: "10px 20px",
+            border: "1px solid rgb(37, 51, 65)",
+            width: 550,
             '&.Mui-focused': {
-                '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
+                '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.dark },
                 '& svg path': {
                     fill: theme.palette.primary.main,
                 },

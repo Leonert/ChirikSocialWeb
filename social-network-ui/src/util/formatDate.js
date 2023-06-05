@@ -9,8 +9,8 @@ export const formatChatMessageDate = (dateString) => {
     }
     const currentDate = moment();
 
-    const formattedDate = dateTime.format("MMM D");
-    const formattedTime = dateTime.format("h:mm A");
+    const formattedDate = dateTime.format(" MMM,D");
+    const formattedTime = dateTime.format("HH:mm");
 
     if (isToday(dateTime)) {
         return formattedTime;
@@ -20,8 +20,6 @@ export const formatChatMessageDate = (dateString) => {
         return dateTime.format("ddd") + " " + formattedTime;
     } else if (dateTime.year() === currentDate.year()) {
         return formattedDate + ", " + formattedTime;
-    } else {
-        return formattedDate + " " + dateTime.year() + ", " + formattedTime;
     }
 };
 

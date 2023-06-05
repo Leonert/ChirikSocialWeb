@@ -23,6 +23,8 @@ import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
 import {Avatar, Menu, MenuItem} from "@mui/material";
+import SockJsClient from 'react-stomp';
+
 
 const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
@@ -37,25 +39,10 @@ const Messages = ({ chatId, senderId }) => {
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const authorId = useSelector((state) => state.messages.authorId);
   const [recipientName, setRecipientName] = useState('');
-  const [, setSenderName] = useState('');
+  const [senderName, setSenderName] = useState('');
   const [chatName, setChatName] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedChatIndex, setSelectedChatIndex] = useState(null);
-
-  const handleClick = (event, index) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedChatIndex(index);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setSelectedChatIndex(null);
-  };
-  const handleContextMenu = (event, index) => {
-    event.preventDefault();
-    event.stopPropagation();
-    handleClick(event, index);
-  };
 
   const handleDeleteChat = () => {
     if (selectedChatIndex !== null) {
@@ -64,15 +51,8 @@ const Messages = ({ chatId, senderId }) => {
         axiosIns
             .delete(`/api/messages/chats/${chatId}`)
             .then((response) => {
-              // Успішно видалено чат
               console.log('Chat deleted:', response);
-              // Оновити список чатів або виконати іншу необхідну логіку
             })
-            .catch((error) => {
-              // Помилка при видаленні чату
-              console.error('Error deleting chat:', error);
-              // Додати необхідну обробку помилки
-            });
       }
     }
     handleClose();
@@ -83,11 +63,6 @@ const Messages = ({ chatId, senderId }) => {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  useEffect(() => {
-    dispatch(fetchChat(authorId));
-    scrollToBottom();
-  }, [dispatch, authorId]);
 
   const getIdAuthor = (username) => {
     if (username) {
@@ -122,7 +97,9 @@ const Messages = ({ chatId, senderId }) => {
 
       dispatch(sendMessage(messageToSend)).then(() => {
         setMessage('');
+
       });
+
     }
   };
 
@@ -159,30 +136,6 @@ const Messages = ({ chatId, senderId }) => {
   };
 
 
-
-  useEffect(() => {
-    if (username) {
-      getIdAuthor(username);
-    }
-  }, [username]);
-
-  useEffect(() => {
-    const fetchChatsAndScroll = async () => {
-      await dispatch(fetchChat());
-      scrollToBottom();
-    };
-
-    fetchChatsAndScroll();
-  }, [dispatch]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  function isValidDate(date) {
-    return date instanceof Date && !isNaN(date);
-  }
-
   const groupedChats = Object.values(chats).reduce((result, chat) => {
     const existingGroup = result.find((group) => group.chatId === chat.chatId);
     if (existingGroup) {
@@ -208,6 +161,44 @@ const Messages = ({ chatId, senderId }) => {
       handleSendMessage(selectedChatId, senderId);
     }
   };
+  const handleClick = (event, index) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedChatIndex(index);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedChatIndex(null);
+  };
+  const handleContextMenu = (event, index) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleClick(event, index);
+  };
+  useEffect(() => {
+    if (username) {
+      getIdAuthor(username);
+    }
+  }, [username]);
+
+  useEffect(() => {
+    const fetchChatsAndScroll = async () => {
+      await dispatch(fetchChat());
+      scrollToBottom();
+    };
+
+    fetchChatsAndScroll();
+  }, [dispatch]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    dispatch(fetchChat(authorId));
+    scrollToBottom();
+  }, [dispatch, authorId]);
+
 
   return (
       <>
@@ -267,7 +258,7 @@ const Messages = ({ chatId, senderId }) => {
                           ) : null
                       )}
                       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                        <MenuItem onClick={handleDeleteChat}>Видалити</MenuItem>
+                        <MenuItem onClick={handleDeleteChat}>Deleted</MenuItem>
                       </Menu>
                     </List>
                   </>
@@ -302,67 +293,36 @@ const Messages = ({ chatId, senderId }) => {
                       <IconButton onClick={handleExitClick} color="primary">
                         {ProfileIcon}
                       </IconButton>
-                      <Typography className={classes.username}>@{message.senderUsername}</Typography>
+                      <Typography className={classes.username}>@{senderName}</Typography>
                     </div>
                     <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
                   </Paper>
                   <Paper className={classes.chat}>
-                    {Array.isArray(messages?.messages) &&
-                        messages.messages
-                            .filter((message) => message.message.trim() !== '')
-                            .reverse()
-                            .map((message, index) => {
-                              const previousMessage = messages[selectedChatId]?.messages[index - 1];
-                              const showDateSeparator =
-                                  previousMessage &&
-                                  !isValidDate(new Date(previousMessage.timestamp)) &&
-                                  isValidDate(new Date(message.timestamp));
-                              const isOwnMessage = message.senderId === senderId;
-                              const messageContainerClass = isOwnMessage
-                                  ? classes.ownMessageContainer
-                                  : classes.theirMessageContainer;
-                              const messageContentClass = isOwnMessage
-                                  ? classes.ownMessageContent
-                                  : classes.theirMessageContent;
-                              const messageSender = isOwnMessage
-                                  ? message.recipientUsername || recipientName
-                                  : message.senderUsername || recipientName;
 
-                              return (
-                                  <React.Fragment key={message.messageId}>
-                                    {showDateSeparator && (
-                                        <div className={classes.dateSeparator}>
-                                          {formatChatMessageDate(new Date(message.timestamp))}
-                                        </div>
-                                    )}
-                                    <div className={classNames(classes.messageContainer, messageContainerClass)}>
-                                      <div className={classNames(classes.messageContent, messageContentClass)}>
-                                        <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>
-                                          {messageSender}
-                                        </span>
-                                        {message.message && (
-                                            <div
-                                                className={classNames(
-                                                    classes.messageContent,
-                                                    isOwnMessage ? classes.ownMessageWithTweet : classes.theirMessageWithTweet,
-                                                    isOwnMessage ? classes.ownMessageRight : classes.theirMessageLeft
-                                                )}
-                                            >
-                                              <span>{message.message}</span>
-                                            </div>
-                                        )}
+                    <React.Fragment >
+                      {Array.isArray(messages?.messages) &&  messages.messages
+                          .filter((message) => message.message.trim() !== '')
+                          .reverse()
+                          .map ((massage) => (
 
-                                        <Typography className={classes.messageTimestamp}>
-                                          {formatChatMessageDate(new Date(message.timestamp))}
-                                        </Typography>
-                                      </div>
-                                    </div>
-                                  </React.Fragment>
-                              );
-                            })}
+                          <div key={massage.messageId}>
+                            <div className={classNames(classes.messageContent)}>
+                              <div className={authorId === massage.senderId ? classes.MyMassageSender : classes.theirMessageWithTweet}>
+                              <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>
+                                {massage.senderUsername}</span>
+                                <span className={classes.messageTimestamp}> {formatChatMessageDate(massage.timestamp)}</span>
+
+                                <span  className={classes.ownMessageWith}>{massage.message}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          )
+                      )
+                      }
+                      <div ref={chatEndRef}></div>
+                    </React.Fragment>
                   </Paper>
-
-                  <div ref={chatEndRef}></div>
                   <Paper className={classes.chatFooter}>
                     <MessageInput
                         multiline
