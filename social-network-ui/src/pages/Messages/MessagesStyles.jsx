@@ -122,7 +122,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   usernameTop:{
-    marginLeft: 213,
+    marginLeft: 200,
     display: "inline-block",
     color: "rgb(255,255,255)",
     fontWeight: 400,
@@ -172,8 +172,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     margin: 0,
     padding: 0,
     paddingLeft: 15,
-    width: 598,
-    height: 53,
+    width: 601,
     zIndex: 1,
     borderTop: 0,
     borderLeft: 0,
