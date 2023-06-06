@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class MessagesController {
   private final MessageService messageService;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @GetMapping
   public ResponseEntity<List<MessageDto>> getAllMessages(@RequestParam("userId") int userId) {
@@ -139,6 +141,7 @@ public class MessagesController {
     messageDto.setChatId(chatId);
 
     MessageDto createdMessageDto = messageService.addMessage(messageDto, chatDto);
+
     return ResponseEntity.created(URI.create("/api/messages/"
             + createdMessageDto.getMessageId())).body(createdMessageDto);
   }

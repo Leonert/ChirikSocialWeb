@@ -92,7 +92,6 @@ const messagesSlice = createSlice({
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
             const chat = state.chats.find((chat) => chat.chatId === chatId);
-
             if (chat) {
                 const updatedMessage = {
                     ...message,
@@ -106,7 +105,6 @@ const messagesSlice = createSlice({
                     chat.messages = [updatedMessage];
                 }
             }
-
             const users = state.chats.map((chat) => ({
                 chatId: chat.chatId,
                 senderId: chat.senderId,

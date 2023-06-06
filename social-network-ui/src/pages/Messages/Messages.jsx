@@ -23,7 +23,8 @@ import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
 import {Avatar, Menu, MenuItem} from "@mui/material";
-import SockJsClient from 'react-stomp';
+import {NavLink, useLoaderData} from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 
 const Messages = ({ chatId, senderId }) => {
@@ -239,7 +240,8 @@ const Messages = ({ chatId, senderId }) => {
                                 <div className={classes.userWrapper}>
                                   <Avatar
                                       className={classes.userAvatar}
-                                      src={(group.chats[0]?.avatar?.src || '') ? group.chats[0].avatar.src : DEFAULT_PROFILE_IMG}
+                                      alt="Profile Picture"
+
                                   />
                                   <div style={{ flex: 1 }}>
                                     <div className={classes.userHeader}>
@@ -272,8 +274,12 @@ const Messages = ({ chatId, senderId }) => {
               <div className={classes.chatContainer}>
                 <Paper variant="outlined">
                   <div className={classes.chatInfoWrapper}>
-                    <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
-                    <div className={classes.chatInfoText}>Choose one from your existing messages, or start a new one.</div>
+                    <div className={classes.chatInfoTitle}>
+                      You don’t have a message selected
+                    </div>
+                    <div className={classes.chatInfoText}>
+                      Choose one from your existing messages, or start a new one.
+                    </div>
                     <Button
                         onClick={onOpenModalWindow}
                         className={classes.chatInfoButton}
@@ -290,12 +296,18 @@ const Messages = ({ chatId, senderId }) => {
                 <Paper variant="outlined">
                   <Paper className={classes.chatHeader}>
                     <div style={{ flex: 1 }}>
-                      <IconButton onClick={handleExitClick} color="primary">
-                        {ProfileIcon}
+                      <IconButton className={classes.ArrowBackIcon} onClick={handleExitClick} color="primary">
+                        <ArrowBackIcon  />
                       </IconButton>
-                      <Typography className={classes.username}>@{senderName}</Typography>
+
+                      <Typography className={classes.usernameTop}>@{senderName}</Typography>
                     </div>
-                    <Avatar className={classes.chatAvatar} src={DEFAULT_PROFILE_IMG} />
+                    <Avatar className={classes.chatAvatar}
+                            sx={{
+                              borderRadius: '50%',
+                              border: (theme) => `4px solid ${theme.palette.background.paper}`,
+                            }}
+                    />
                   </Paper>
                   <Paper className={classes.chat}>
 
@@ -310,9 +322,9 @@ const Messages = ({ chatId, senderId }) => {
                               <div className={authorId === massage.senderId ? classes.MyMassageSender : classes.theirMessageWithTweet}>
                               <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>
                                 {massage.senderUsername}</span>
-                                <span className={classes.messageTimestamp}> {formatChatMessageDate(massage.timestamp)}</span>
-
-                                <span  className={classes.ownMessageWith}>{massage.message}</span>
+                                <span className={authorId === massage.senderId ? classes.ownMessageWith : classes.senderMessageWith}>{massage.message}
+                                  <span className={classes.messageTimestamp}>{formatChatMessageDate(massage.timestamp)}</span>
+                                </span>
                               </div>
                             </div>
                           </div>
