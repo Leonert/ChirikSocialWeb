@@ -12,6 +12,7 @@ import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;
+import com.socialnetwork.api.service.CloudinaryService;
 import com.socialnetwork.api.service.ConfirmationTokenService;
 import com.socialnetwork.api.service.EmailService;
 import com.socialnetwork.api.service.NotificationService;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,7 @@ public class UserService {
   private final FollowsRepository followsRepository;
   private final NotificationService notificationService;
   private final ConfirmationTokenService confirmationTokenService;
+  private final CloudinaryService cloudinaryService;
   private final ModelMapper modelMapper;
 
   private final EmailService emailService;
@@ -130,8 +133,28 @@ public class UserService {
   }
 
   public User editProfile(UserDto.Request.ProfileEditing editedUser, String username)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException, IOException {
     User userToUpdate = findByUsername(username);
+
+    if (!editedUser.getProfileImage().isEmpty()) {
+      if (!userToUpdate.getProfileImage().isEmpty()) {
+        cloudinaryService.deleteProfilePic(String.valueOf(userToUpdate.getId()));
+      }
+      editedUser.setProfileImage(
+              cloudinaryService.uploadProfilePic(editedUser.getProfileImage(), String.valueOf(userToUpdate.getId()))
+      );
+    }
+
+    if (!editedUser.getProfileBackgroundImage().isEmpty()) {
+      if (!userToUpdate.getProfileBackgroundImage().isEmpty()) {
+        cloudinaryService.deleteBackgroundPic(String.valueOf(userToUpdate.getId()));
+      }
+      editedUser.setProfileBackgroundImage(cloudinaryService.uploadBackgroundPic(
+              editedUser.getProfileBackgroundImage(),
+              String.valueOf(userToUpdate.getId())
+      ));
+    }
+
     modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
     modelMapper.map(editedUser, userToUpdate);
     userRepository.save(userToUpdate);

@@ -9,6 +9,16 @@ public class Constants {
     public static final Integer POSTS_PER_PAGE_DEFAULT = 3; // posts
   }
 
+  public static class Cloudinary {
+    public static final String CLOUDINARY_SCHEME = "cloudinary://";
+    public static final String AVATAR_PRESET = "avatarPicsPreset";
+    public static final String BACKGROUND_PRESET = "backgroundPicsPreset";
+    public static final String POSTS_PRESET = "postPicsPreset";
+    public static final String POSTS_FOLDER = "postPics/";
+    public static final String AVATAR_FOLDER = "avatarPics/";
+    public static final String BACKGROUND_FOLDER = "backgroundPics/";
+  }
+
   public static class Auth {
     public static final String USERNAME_TAKEN = "User with such username already exists.";
     public static final String EMAIL_TAKEN = "User with such email address already exists.";

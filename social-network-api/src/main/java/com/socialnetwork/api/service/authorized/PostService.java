@@ -7,6 +7,7 @@ import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.ViewRepository;
+import com.socialnetwork.api.service.CloudinaryService;
 import com.socialnetwork.api.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
@@ -23,6 +24,7 @@ import java.util.List;
 public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
+  private final CloudinaryService cloudinaryService;
   private final NotificationService notificationService;
   private final ModelMapper modelMapper;
   private final ViewRepository viewRepository;
@@ -36,6 +38,9 @@ public class PostService {
 
   public Post save(Post post) {
     post.setCreatedDate(LocalDateTime.now());
+    if (!post.getImage().isEmpty()) {
+      post.setImage(cloudinaryService.uploadPostPic(post.getImage(), String.valueOf(post.getId())));
+    }
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
     return post;
