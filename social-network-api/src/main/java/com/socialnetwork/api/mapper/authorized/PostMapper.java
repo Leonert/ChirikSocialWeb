@@ -20,11 +20,8 @@ import java.util.List;
 public class PostMapper {
 
   private final ModelMapper modelMapper;
-
   private final LikeService likeService;
-
   private final BookmarkService bookmarkService;
-
   private final PostService postService;
   private final NonAuthUserService nonAuthUserService;
 
