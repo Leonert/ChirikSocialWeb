@@ -12,9 +12,6 @@ import static com.socialnetwork.api.util.Constants.Cloudinary.CLOUDINARY_SCHEME;
 import static com.socialnetwork.api.util.Constants.Cloudinary.AVATAR_PRESET;
 import static com.socialnetwork.api.util.Constants.Cloudinary.BACKGROUND_PRESET;
 import static com.socialnetwork.api.util.Constants.Cloudinary.POSTS_PRESET;
-import static com.socialnetwork.api.util.Constants.Cloudinary.AVATAR_FOLDER;
-import static com.socialnetwork.api.util.Constants.Cloudinary.BACKGROUND_FOLDER;
-import static com.socialnetwork.api.util.Constants.Cloudinary.POSTS_FOLDER;
 
 @Service
 @PropertySource("classpath:application.properties")
@@ -39,22 +36,6 @@ public class CloudinaryService {
 
   public String uploadPostPic(String base64Img, String publicId) {
     return upload(base64Img, POSTS_PRESET, publicId);
-  }
-
-  public void deleteProfilePic(String publicId) throws IOException {
-    deletePic(AVATAR_FOLDER + publicId);
-  }
-
-  public void deleteBackgroundPic(String publicId) throws IOException {
-    deletePic(BACKGROUND_FOLDER + publicId);
-  }
-
-  public void deletePostPic(String publicId) throws IOException {
-    deletePic(POSTS_FOLDER + publicId);
-  }
-
-  private void deletePic(String publicId) throws IOException {
-    cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("invalidate", true));
   }
 
   private String upload(String base64Img, String uploadPreset, String publicId) {

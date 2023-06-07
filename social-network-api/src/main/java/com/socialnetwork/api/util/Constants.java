@@ -14,9 +14,6 @@ public class Constants {
     public static final String AVATAR_PRESET = "avatarPicsPreset";
     public static final String BACKGROUND_PRESET = "backgroundPicsPreset";
     public static final String POSTS_PRESET = "postPicsPreset";
-    public static final String POSTS_FOLDER = "postPics/";
-    public static final String AVATAR_FOLDER = "avatarPics/";
-    public static final String BACKGROUND_FOLDER = "backgroundPics/";
   }
 
   public static class Auth {
