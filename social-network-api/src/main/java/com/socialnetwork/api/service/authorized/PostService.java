@@ -7,6 +7,7 @@ import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.ViewRepository;
+import com.socialnetwork.api.service.CloudinaryService;
 import com.socialnetwork.api.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
@@ -23,6 +24,7 @@ import java.util.List;
 public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
+  private final CloudinaryService cloudinaryService;
   private final NotificationService notificationService;
   private final ModelMapper modelMapper;
   private final ViewRepository viewRepository;
@@ -34,8 +36,13 @@ public class PostService {
     return postRepository.getReferenceById(id);
   }
 
-  public Post save(Post post) {
+  public Post save(Post post, String image) throws NoPostWithSuchIdException {
     post.setCreatedDate(LocalDateTime.now());
+
+    if (!image.isEmpty()) {
+      post.setImage(cloudinaryService.uploadPostPic(image, String.valueOf(post.getId())));
+    }
+
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
     return post;
@@ -53,13 +60,13 @@ public class PostService {
   }
 
   public List<Post> getPosts(int page, int postsNumber) {
-    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by("createdDate"))).toList();
+    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))).toList();
   }
 
   public List<Post> getUnviewedPosts(int page, int postsNumber, String currentUserUsername)
           throws NoUserWithSuchCredentialsException {
     return postRepository.findAllPostsUnViewedByUser(userService.findByUsername(currentUserUsername).getId(),
-            PageRequest.of(page, postsNumber, Sort.by("createdDate"))
+            PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))
     );
   }
 
@@ -68,7 +75,7 @@ public class PostService {
     Post post = getReferenceById(postId);
     return postRepository.findAllByOriginalPostAndTextIsNotNull(
             post,
-            PageRequest.of(page, usersForPage, Sort.by("createdDate")));
+            PageRequest.of(page, usersForPage, Sort.by(Sort.Direction.DESC, "createdDate")));
   }
 
   public List<User> getRetweets(int id, String currentUserUsername, int page, int usersForPage)

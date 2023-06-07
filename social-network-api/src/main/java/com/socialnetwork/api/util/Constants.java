@@ -9,6 +9,13 @@ public class Constants {
     public static final Integer POSTS_PER_PAGE_DEFAULT = 3; // posts
   }
 
+  public static class Cloudinary {
+    public static final String CLOUDINARY_SCHEME = "cloudinary://";
+    public static final String AVATAR_PRESET = "avatarPicsPreset";
+    public static final String BACKGROUND_PRESET = "backgroundPicsPreset";
+    public static final String POSTS_PRESET = "postPicsPreset";
+  }
+
   public static class Auth {
     public static final String USERNAME_TAKEN = "User with such username already exists.";
     public static final String EMAIL_TAKEN = "User with such email address already exists.";
@@ -32,5 +39,9 @@ public class Constants {
     public static final String MISSING_REQUEST_PARAMETER = " parameter is missing.";
     public static final String MISSING_PATH_VARIABLE = " path variable is missing.";
     public static final String TOKEN_INVALID = "Token is invalid";
+  }
+
+  public static class Image {
+    public static final String BASE_64_PREFIX = "data:image";
   }
 }

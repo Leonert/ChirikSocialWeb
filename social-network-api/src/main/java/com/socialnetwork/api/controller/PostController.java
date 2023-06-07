@@ -151,8 +151,10 @@ public class PostController extends Controller {
       postService.deleteUserRetweet(userService.findByUsername(username).getId(), id);
       return ResponseEntity.status(HttpStatus.OK).body(postService.countPostRetweets(id));
     }
+    String image = postDto.getImage();
+    postDto.setImage(null);
     return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.convertToPostDtoDefault(postService.save(
-            postMapper.convertToPost(postDto, userService.findByUsername(username))), username));
+            postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username));
   }
 
   @PostMapping("/edit")
