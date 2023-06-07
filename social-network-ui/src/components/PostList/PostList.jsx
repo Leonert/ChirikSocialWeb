@@ -80,7 +80,7 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
             id={post.id}
             classes={isReplyPage ? classes.replyItem : classes.Page}
             username={post.author.username}
-            avatar={post.author.profileImage}
+            profileImage={post.author.profileImage}
             name={post.author.name}
             isBookmarkPage={isBookmarkPage}
             isReplyPage={isReplyPage}
