@@ -102,7 +102,7 @@ public class UserController extends Controller {
   @PostMapping("p")
   public ResponseEntity<UserDtoInterface> editProfile(@RequestBody UserDto.Request.ProfileEditing userDto,
                                                       @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-          throws NoUserWithSuchCredentialsException, IOException {
+          throws NoUserWithSuchCredentialsException {
     return ResponseEntity.ok(userMapper.mapForProfile(userService.editProfile(userDto, username), username));
   }
 

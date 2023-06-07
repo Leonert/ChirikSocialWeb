@@ -43,4 +43,8 @@ public class Constants {
     public static final String MISSING_PATH_VARIABLE = " path variable is missing.";
     public static final String TOKEN_INVALID = "Token is invalid";
   }
+
+  public static class Image {
+    public static final String BASE_64_PREFIX = "data:image";
+  }
 }

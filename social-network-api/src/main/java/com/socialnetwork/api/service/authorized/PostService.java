@@ -39,9 +39,10 @@ public class PostService {
   public Post save(Post post) {
     post.setCreatedDate(LocalDateTime.now());
     if (!post.getImage().isEmpty()) {
-      post.setImage(cloudinaryService.uploadPostPic(post.getImage(), String.valueOf(post.getId())));
+      post.setImage(cloudinaryService.uploadPostPic(post.getImage(), String.valueOf(postRepository.save(post).getId())));
+    } else {
+      postRepository.save(post);
     }
-    postRepository.save(post);
     notificationService.saveReplyRetweet(post);
     return post;
   }
@@ -58,13 +59,13 @@ public class PostService {
   }
 
   public List<Post> getPosts(int page, int postsNumber) {
-    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by("createdDate"))).toList();
+    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC,"createdDate"))).toList();
   }
 
   public List<Post> getUnviewedPosts(int page, int postsNumber, String currentUserUsername)
           throws NoUserWithSuchCredentialsException {
     return postRepository.findAllPostsUnViewedByUser(userService.findByUsername(currentUserUsername).getId(),
-            PageRequest.of(page, postsNumber, Sort.by("createdDate"))
+            PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC,"createdDate"))
     );
   }
 
@@ -73,7 +74,7 @@ public class PostService {
     Post post = getReferenceById(postId);
     return postRepository.findAllByOriginalPostAndTextIsNotNull(
             post,
-            PageRequest.of(page, usersForPage, Sort.by("createdDate")));
+            PageRequest.of(page, usersForPage, Sort.by(Sort.Direction.DESC,"createdDate")));
   }
 
   public List<User> getRetweets(int id, String currentUserUsername, int page, int usersForPage)
