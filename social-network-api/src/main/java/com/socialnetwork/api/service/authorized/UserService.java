@@ -4,7 +4,6 @@ import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.exception.custom.EmailException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.exception.custom.TokenExpiredException;
 import com.socialnetwork.api.exception.custom.TokenInvalidException;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.keys.FollowPk;
@@ -12,18 +11,17 @@ import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;
-import com.socialnetwork.api.service.CloudinaryService;
-import com.socialnetwork.api.service.ConfirmationTokenService;
-import com.socialnetwork.api.service.EmailService;
 import com.socialnetwork.api.service.NotificationService;
+import com.socialnetwork.api.service.ConfirmationTokenService;
+import com.socialnetwork.api.service.CloudinaryService;
+import com.socialnetwork.api.service.EmailService;
+import com.socialnetwork.api.service.FollowsService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +36,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final FollowsRepository followsRepository;
   private final NotificationService notificationService;
+  private final FollowsService followsService;
   private final ConfirmationTokenService confirmationTokenService;
   private final CloudinaryService cloudinaryService;
   private final ModelMapper modelMapper;
@@ -127,8 +126,12 @@ public class UserService {
   public List<User> getListForConnectPage(String currentUserUsername, int page,
                                           int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
-    return userRepository.findAll(PageRequest.of(page, usersForPage))
-            .stream().filter(u -> !isFollowed(currentUser, u)).toList();
+    List<User> following = followsService.findAllByFollowerUser(currentUser);
+    return userRepository.findAll().stream()
+            .filter(u -> !following.contains(u) && !Objects.equals(currentUser, u))
+            .skip(page * usersForPage)
+            .limit(usersForPage)
+            .toList();
   }
 
   public boolean isFollowed(User currentUser, User user) {
