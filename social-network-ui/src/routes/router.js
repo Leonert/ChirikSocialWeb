@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from '../layout/Layout';
 import Bookmarks from '../pages/Bookmarks/Bookmarks';
+import Connect from '../pages/Connect/Connect';
 import EmailConfirmation from '../pages/EmailConfirmation/EmailConfirmation';
 import Explore from '../pages/Explore/Explore';
 import { FollowersPage } from '../pages/FollowersPage/FollowersPage';
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: '/search',
         element: <Search />,
+      },
+      {
+        path: '/connect_people',
+        element: <Connect />,
       },
       {
         path: '/:username',
