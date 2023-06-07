@@ -16,8 +16,9 @@ import {
   SettingsIcon,
   TweetIcon,
 } from '../../icon';
-import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
+import { BOOKMARKS, EXPLORE, HOME, MESSAGES, NOTIFICATIONS, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
+import ReplayModal from '../ReplayModal/ReplayModal';
 import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
 import LogOutButton from './LogOutButton';
@@ -44,6 +45,7 @@ const SideMenu = () => {
 
   return (
     <>
+      <ReplayModal />
       <ul className={classes.container}>
         <li>
           <NavLink to={HOME} activeClassName={'selected'}>
@@ -68,7 +70,7 @@ const SideMenu = () => {
           </NavLink>
         </li>
         <li className={classes.itemWrapper}>
-          <NavLink to={SEARCH} activeClassName={'selected'}>
+          <NavLink to={EXPLORE} activeClassName={'selected'}>
             <div>
               <Hidden smDown>
                 <>

@@ -5,6 +5,7 @@ export default async function homeSearchAction({ params, request }) {
   const searchValue = formData.get('search');
   const searchParams = new URLSearchParams();
   searchParams.append('value', searchValue);
+  searchParams.append('tab', 'users');
 
   return redirect(`/search?${searchParams}`);
 }
