@@ -120,48 +120,9 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
               color: '#93989D',
               textAlign: 'center',
               fontWeight: 'bold',
-              fontSize: '32px',
+              fontSize: '32px',}}>
 
-      {posts &&
-        posts.map((post) => (
-          <Post
-            key={post.id}
-            replay={
-              post.originalPost ? (
-                post.text === null && post.image === null ? (
-                  <ReplyHeader repeat={post.author.name} />
-                ) : (
-                  <Typography className={classes.reply}>Reply</Typography>
-                )
-              ) : null
-            }
-            IdentifierReply={post.text === null && post.image === null}
-            id={post.id}
-            classes={isReplyPage ? classes.replyItem : classes.Page}
-            username={post.author.username}
-            profileImage={post.author.profileImage}
-            name={post.author.name}
-            isBookmarkPage={isBookmarkPage}
-            isReplyPage={isReplyPage}
-            retweet={post.retweetsNumber}
-            like={post.likesNumber}
-            view={post.view}
-            reply={post.repliesNumber}
-            content={post.text}
-            data={post.createdDate}
-            image={post.image}
-            originalPost={post.originalPost}
-            liked={post.liked}
-            bookmarked={post.bookmarked}
-            retweeted={post.retweeted}
-            bookmark={post.bookmarksNumber}
-            handleClick={() => dispatch(getPostId(`${post.id}`))}
-            handleClickLike={() => handleLike(`${post.id}`)}
-            handleClickReplay={() => handleReplay(`${post.id}`)}
-            handleClickRetweet={() => handleRetweet(`${post.id}`)}
-            handleClickBookmark={() => handleBookmark(`${post.id}`)}
-
-          >
+      
             No more results.
           </Typography>
         }
