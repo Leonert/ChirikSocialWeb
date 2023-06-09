@@ -12,9 +12,13 @@ spring.mail.port=
 spring.mail.username=
 spring.mail.password=
 spring.mail.properties.mail.smtp.auth=
-spring.mail.properties.mail.smtp.ssl.trust=
 spring.mail.properties.mail.smtp.starttls.enable=
+spring.mail.properties.mail.smtp.ssl.enable=
 jwt.secret=
 jwt.expire.normal=
 jwt.expire.remember=
 email.confirmation.url=
+email.recovery.url=
+#TODO
+spring.jpa.defer-datasource-initialization=
+

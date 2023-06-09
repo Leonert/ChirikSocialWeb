@@ -60,7 +60,7 @@ export default function Post(props) {
       {props.content != null && (
         <CardHeader
           className={classes.pageItem}
-          avatar={<AvatarLink alt={props.name} src={props.avatar} to={`/${props.username}`} />}
+          avatar={<AvatarLink alt={props.name} avatar={props.profileImage} to={`/${props.username}`} />}
           action={
             <Tooltip title="More">
               <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
