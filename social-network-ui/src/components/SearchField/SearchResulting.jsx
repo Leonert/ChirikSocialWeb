@@ -7,9 +7,18 @@ import NameLink from '../UI/NameLink';
 const SearchResulting = (props) => {
   return (
     <CardHeader
+      key={props.id}
       sx={{ width: '90%', padding: '10px 0' }}
       avatar={<AvatarLink alt={props.name} src={props.avatar} to={`/${props.nickname}`} />}
-      action={props.action}
+      action={
+        <div
+          style={{
+            paddingTop: '10px',
+          }}
+        >
+          {props.action}
+        </div>
+      }
       title={<NameLink name={props.name} to={`/${props.nickname}`} />}
       subheader={<NameLink name={props.nickname} to={`/${props.nickname}`} />}
     />
