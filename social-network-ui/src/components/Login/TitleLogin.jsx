@@ -8,7 +8,7 @@ export const TitleLogin = ({ firstPage }) => {
           sx={{ fontSize: '32px', fontWeight: '600', textAlign: 'center', marginBottom: '30px', color: 'white' }}
           variant="h3"
         >
-          Sign in to Twitter
+          Sign in to Chirick
         </Typography>
       ) : (
         <Typography

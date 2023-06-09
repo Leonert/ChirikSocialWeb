@@ -16,7 +16,7 @@ export const GetPosts = createAsyncThunk('posts/getPost', async (portion, { reje
   try {
     const { data } = await axiosIns({
       method: 'GET',
-      url: `api/posts?p=${portion}&n=20`,
+      url: `api/posts?p=${portion}&n=5`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -98,7 +98,7 @@ const homeSlice = createSlice({
         if (post.originalPost && +post.originalPost.id === +postId) {
           return {
             ...post,
-            originalPost: { ...post.originalPost, bookmarksNumber },
+            originalPost: { ...post.originalPost, bookmarked: !post.originalPost.bookmarked, bookmarksNumber },
           };
         }
 
@@ -116,7 +116,22 @@ const homeSlice = createSlice({
         if (post.originalPost && +post.originalPost.id === +postId) {
           return {
             ...post,
-            originalPost: { ...post.originalPost, likesNumber },
+            originalPost: { ...post.originalPost, liked: !post.originalPost.liked, likesNumber },
+          };
+        }
+
+        return post;
+      });
+    },
+    addReply: (state, action) => {
+      state.post = state.post.map((post) => {
+        if (+post.id === +action.payload) {
+          return { ...post, repliesNumber: post.repliesNumber + 1 };
+        }
+        if (post.originalPost && +post.originalPost.id === +action.payload) {
+          return {
+            ...post,
+            originalPost: { ...post.originalPost, repliesNumber: post.originalPost.repliesNumber + 1 },
           };
         }
 
@@ -154,4 +169,5 @@ export const {
   makeRetweet,
   likesPost,
   addOnePost,
+  addReply,
 } = homeSlice.actions;

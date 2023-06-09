@@ -1,5 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import axiosIns from '../../axiosInstance';
+
+export const changePassword = createAsyncThunk(
+  'oldPassword/newPassword',
+  async ({ oldPass, newPass }, { dispatch, rejectWithValue }) => {
+    try {
+      const { data, status } = await axiosIns.post(`/api/login/password-change`, {
+        oldPassword: oldPass,
+        newPassword: newPass,
+      });
+
+      if (status === 200) {
+        dispatch(changePasswordModal(false));
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const settingSlice = createSlice({
   name: 'setting',
   initialState: {
@@ -83,7 +104,6 @@ const settingSlice = createSlice({
       state.changePassword = action.payload;
       state.sideSetting = !action.payload;
     },
-    
   },
 });
 

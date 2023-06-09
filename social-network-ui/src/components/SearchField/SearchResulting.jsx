@@ -1,18 +1,26 @@
-import { Avatar, CardHeader } from '@mui/material';
+import { CardHeader } from '@mui/material';
 import React from 'react';
+
+import AvatarLink from '../UI/AvatarLink';
+import NameLink from '../UI/NameLink';
 
 const SearchResulting = (props) => {
   return (
     <CardHeader
-      sx={{ width: '90%' , padding:"10px 0" }}
-      avatar={
-        <Avatar aria-label="recipe" src={props.avatar}>
-          {props.name}
-        </Avatar>
+      key={props.id}
+      sx={{ width: '90%', padding: '10px 0' }}
+      avatar={<AvatarLink alt={props.name} src={props.avatar} to={`/${props.nickname}`} />}
+      action={
+        <div
+          style={{
+            paddingTop: '10px',
+          }}
+        >
+          {props.action}
+        </div>
       }
-      action={props.action}
-      title={props.name}
-      subheader={props.nickname}
+      title={<NameLink name={props.name} to={`/${props.nickname}`} />}
+      subheader={<NameLink name={props.nickname} to={`/${props.nickname}`} />}
     />
   );
 };

@@ -116,6 +116,10 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.divider,
     },
   },
+ 
+  itemWrapperReview: {
+    marginBottom: 20,
+  },
   itemWrapperLogOut: { marginTop: 40, display: 'flex', justifyContent: 'flex-end', padding: 0 },
   button: {
     height: '52px !important',
@@ -136,5 +140,11 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     fontSize: 12,
     color: theme.palette.common.white,
     textAlign: 'center',
+  },
+  title: {
+    marginLeft: 20,
+    background: 'linear-gradient(0deg, #ffff00, #0000ff)',
+    '-webkit-background-clip': 'text',
+    '-webkit-text-fill-color': 'transparent',
   },
 }));
