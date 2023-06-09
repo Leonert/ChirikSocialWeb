@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { addOnePost, addReply, clothReplayModal, replayMessage } from '../../features/slices/homeSlice';
+import { addOnePost, clothReplayModal, replayMessage } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
@@ -17,6 +17,7 @@ function FormModal({ buttonName }) {
   const id = useSelector((state) => state.home.postId);
   const post = useSelector((state) => state.home.post);
   const user = useSelector((state) => state.auth.user);
+
   const classes = useAddTweetFormStyles();
   const fileInputRef = useRef(null);
   const visiblePoll = false;
@@ -36,11 +37,11 @@ function FormModal({ buttonName }) {
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
       dispatch(addOnePost(response.data));
-      dispatch(addReply(targetPost.id));
       dispatch(clothReplayModal());
       dispatch(replayMessage(''));
     });
   };
+
 
   return (
     <div>

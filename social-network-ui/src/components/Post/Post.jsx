@@ -57,6 +57,7 @@ export default function Post(props) {
   return (
     <Card className={props.classes}>
       {props.replay}
+
       {props.content != null && (
         <CardHeader
           className={classes.pageItem}
@@ -76,6 +77,7 @@ export default function Post(props) {
           }
         />
       )}
+
       {props.content && !props.postPage && (
         <Link to={`/${props.username}/${props.id}`}>
           <CardContent className={classes.pageItem}>
@@ -85,6 +87,7 @@ export default function Post(props) {
           </CardContent>
         </Link>
       )}
+
       {props.content && props.postPage && (
         <CardContent className={classes.pageItem}>
           <Typography variant="body2" className={classes.iconColor}>
@@ -137,7 +140,6 @@ export default function Post(props) {
           </Typography>
         </Box>
       )}
-
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
           <CardActions

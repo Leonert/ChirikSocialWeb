@@ -40,10 +40,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchField(props) {
+export default function SearchField() {
   const searchResult = useSelector((state) => state.search.searchResult);
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
   const [searchText, setSearchText] = useState('');
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
@@ -54,23 +53,20 @@ export default function SearchField(props) {
 
   return (
     <Box>
-      {user && (
-        <Toolbar>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              name="search"
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              value={props.value || searchText}
-              onChange={handleInputChange}
-            />
-          </Search>
-        </Toolbar>
-      )}
-
+      <Toolbar>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            name="search"
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+            value={searchText}
+            onChange={handleInputChange}
+          />
+        </Search>
+      </Toolbar>
       {searchResult.length > 0 && (
         <Box>
           <SearchWrapper />

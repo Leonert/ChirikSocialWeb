@@ -45,7 +45,7 @@ const Messages = () => {
                 <Typography variant="h6">Messages</Typography>
               </div>
             </Paper>
-            {message.length === 0 ? (
+            {length === 0 ? (
               <>
                 <div className={classes.messagesTitle}>Send a message, get a message</div>
                 <div className={classes.messagesText}>

@@ -18,7 +18,7 @@ const InitialStep = (props) => {
         width: '100%',
       }}
     >
-      <Typography sx={{ fontSize: '36px', marginTop: '10px', marginBottom: '20px' }}>Join Chirik now! </Typography>
+      <Typography sx={{ fontSize: '36px', marginTop: '10px', marginBottom: '20px' }}>Join Twitter now! </Typography>
       {/* <Button startIcon={<GoogleIcon />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
         <Typography sx={{ fontSize: '14px' }}> Register with Google </Typography>
       </Button>
@@ -36,7 +36,7 @@ const InitialStep = (props) => {
             dispatch(handleLoginModal(true));
             dispatch(handleModal(true));
           }}
-          sx={{ cursor: 'pointer', color: '#fff' }}
+          sx={{ cursor: 'pointer' }}
         >
           Log in
         </Link>
