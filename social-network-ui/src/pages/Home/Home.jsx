@@ -8,7 +8,6 @@ import Following from '../../components/Following/Following';
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
 import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
-import ReplayModal from '../../components/ReplayModal/ReplayModal';
 import SearchField from '../../components/SearchField/SearchField';
 import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
@@ -39,7 +38,6 @@ function Home() {
         {recommendation && <PostList />}
         {following && <Following />}
         {modalUserState && <ModalUser />}
-        <ReplayModal />
       </Grid>
       <Grid item xs={5}>
         <Form method="post">

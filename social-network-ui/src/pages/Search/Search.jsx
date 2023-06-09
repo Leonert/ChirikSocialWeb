@@ -1,21 +1,10 @@
 import SearchIcon from '@mui/icons-material/Search';
-import {
-  Avatar,
-  Box,
-  Divider,
-  InputAdornment,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  TextField,
-  Typography,
-  alpha,
-} from '@mui/material';
+import { Box, InputAdornment, Tab, Tabs, TextField, alpha } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link, useLoaderData, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
-import FollowButton from '../Profile/FollowButton';
+import PostsList from './PostsList';
+import UsersList from './UsersList';
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -31,16 +20,51 @@ function useDebounce(value, delay) {
   return debouncedValue;
 }
 
+function TabPanel(props) {
+  const { children, tabValue, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={tabValue !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {tabValue === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
 const Search = () => {
-  const { data } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  // const [tabValue, setTabValue] = useState('0');
   const searchValue = searchParams.get('value');
+  const tabUrlValue = searchParams.get('tab');
+  const tabIndex = tabUrlValue === 'users' ? 0 : 1;
+  const [tabValue, setTabValue] = useState(tabIndex);
   const [searchInputValue, setSearchInputValue] = useState(searchValue);
-  const debouncedValue = useDebounce(searchInputValue, 300);
+  const debouncedValue = useDebounce(searchInputValue, 400);
+
+  const handleTabChange = (event, newValue) => {
+    if (newValue === 0) {
+      setSearchParams({ value: searchValue, tab: 'users' });
+    } else {
+      setSearchParams({ value: searchValue, tab: 'posts' });
+    }
+
+    setTabValue(newValue);
+  };
+
   useEffect(() => {
     if (debouncedValue !== '') {
-      setSearchParams({ value: debouncedValue });
+      setSearchParams({ value: debouncedValue, tab: tabUrlValue });
     }
   }, [debouncedValue]);
 
@@ -71,29 +95,26 @@ const Search = () => {
             ),
           }}
         />
-
-        <List>
-          {data.length > 0 ? (
-            data.map((user) => (
-              <Link key={user.id} to={`/${user.username}`}>
-                <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
-                  <Avatar sx={{ mr: '20px' }} alt={user.name} src={user.profileImage} />
-                  <Stack justifyContent="space-between" alignItems="center" direction="row" width="100%">
-                    <Stack>
-                      <ListItemText primary={user.name} />
-                      <ListItemText primary={`@${user.username}`} />
-                      <ListItemText primary={user.bio} />
-                    </Stack>
-                    <FollowButton user={user} />
-                  </Stack>
-                  <Divider />
-                </ListItem>
-              </Link>
-            ))
-          ) : (
-            <Typography>No results found.</Typography>
-          )}
-        </List>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs variant="fullWidth" value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
+            <Tab
+              label="Users"
+              {...a11yProps(0)}
+              sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
+            />
+            <Tab
+              label="Posts"
+              {...a11yProps(1)}
+              sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
+            />
+          </Tabs>
+        </Box>
+        <TabPanel tabValue={tabValue} index={0}>
+          <UsersList key={debouncedValue} searchValue={debouncedValue} />
+        </TabPanel>
+        <TabPanel tabValue={tabValue} index={1}>
+          <PostsList key={debouncedValue} searchValue={debouncedValue} />
+        </TabPanel>
       </Box>
     </>
   );

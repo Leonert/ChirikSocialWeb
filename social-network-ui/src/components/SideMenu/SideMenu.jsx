@@ -17,8 +17,9 @@ import {
   SettingsIcon,
 
 } from '../../icon';
-import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
+import { BOOKMARKS, EXPLORE, HOME, MESSAGES, NOTIFICATIONS, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
+import ReplayModal from '../ReplayModal/ReplayModal';
 import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
 import LogOutButton from './LogOutButton';
@@ -46,6 +47,7 @@ const SideMenu = () => {
 
   return (
     <>
+      <ReplayModal />
       <ul className={classes.container}>
        
         <li>
