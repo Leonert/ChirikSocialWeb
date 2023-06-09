@@ -15,7 +15,6 @@ import {
   NotificationsIcon,
   ProfileIcon,
   SettingsIcon,
-
 } from '../../icon';
 import { BOOKMARKS, EXPLORE, HOME, MESSAGES, NOTIFICATIONS, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
@@ -49,7 +48,6 @@ const SideMenu = () => {
     <>
       <ReplayModal />
       <ul className={classes.container}>
-       
         <li>
           <NavLink to={HOME} activeclassname={'selected'}>
             <div className={classes.logoIcon}>
@@ -75,7 +73,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SEARCH} activeclassname={'selected'}>
+              <NavLink to={EXPLORE} activeclassname={'selected'}>
                 <div>
                   <Hidden smDown>
                     <>
