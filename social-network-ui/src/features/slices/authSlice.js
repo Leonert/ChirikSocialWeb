@@ -51,12 +51,19 @@ const authSlice = createSlice({
     error: null,
     loading: false,
   },
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.token = null;
+      state.user = null;
+      localStorage.removeItem(TOKEN);
+    },
+  },
   extraReducers: {
     [loginUser.pending]: (state, action) => {
       state.loading = true;
       state.error = null;
     },
+
     [loginUser.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
@@ -87,3 +94,4 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
+export const { logoutUser } = authSlice.actions;

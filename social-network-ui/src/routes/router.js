@@ -15,7 +15,6 @@ import Profile from '../pages/Profile/Profile';
 import ProfilePosts from '../pages/Profile/ProfilePosts';
 import profileLoader from '../pages/Profile/profileLoader';
 import Search from '../pages/Search/Search';
-import searchLoader from '../pages/Search/searchLoader';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
 
 export const router = createBrowserRouter([
@@ -54,7 +53,6 @@ export const router = createBrowserRouter([
       {
         path: '/search',
         element: <Search />,
-        loader: searchLoader,
       },
       {
         path: '/:username',
