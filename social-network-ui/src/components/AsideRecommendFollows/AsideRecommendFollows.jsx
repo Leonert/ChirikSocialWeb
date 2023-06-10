@@ -10,7 +10,7 @@ const AsideRecommendFollows = () => {
   const [recommendedUsers, setRecommendedUsers] = useState([]);
   const fetchRecommendedUsers = async () => {
     try {
-      const { data } = await axiosIns.get('api/users/connect?n=5');
+      const { data } = await axiosIns.get('api/users/connect?n=3');
       setRecommendedUsers(data);
     } catch (e) {
       return json(e);
