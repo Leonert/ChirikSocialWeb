@@ -14,21 +14,23 @@ const SearchWrapper = () => {
   };
 
   return (
-    <Box sx={{ padding: '30px' }}>
-      <Box display="flex" justifyContent="flex-end" sx={{ width: '92%' }}>
-        <CloseButton onClose={delateResult} />
-      </Box>
+    <Box sx={{ position: 'absolute', width: '22%' }}>
+      <Box sx={{ padding: '30px' }}>
+        <Box display="flex" justifyContent="flex-end" alignContent="center" sx={{ width: '92%' }}>
+          <CloseButton onClose={delateResult} />
+        </Box>
 
-      {searchResult &&
-        searchResult.map((res) => (
-          <SearchResulting
-            action={<CloseButton onClose={(e) => dispatch(removeResultItem(res.id))} />}
-            key={res.id}
-            id={res.id}
-            name={res.name}
-            nickname={res.username}
-          />
-        ))}
+        {searchResult &&
+          searchResult.map((res) => (
+            <SearchResulting
+              action={<CloseButton onClose={(e) => dispatch(removeResultItem(res.id))} />}
+              key={res.id}
+              id={res.id}
+              name={res.name}
+              nickname={res.username}
+            />
+          ))}
+      </Box>
     </Box>
   );
 };
