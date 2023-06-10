@@ -196,21 +196,20 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
               )}
             </Post>
           ))}
-
-        {!posts.length && isReplyPage && (
-          <Typography
-            sx={{
-              marginTop: '25px',
-              color: '#93989D',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '32px',
-            }}
-          >
-            So far, there are no replies. <br /> But you can fix it :)
-          </Typography>
-        )}
       </InfiniteScroll>
+      {!posts.length && isReplyPage && (
+        <Typography
+          sx={{
+            marginTop: '25px',
+            color: '#93989D',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '32px',
+          }}
+        >
+          So far, there are no replies. <br /> But you can fix it :)
+        </Typography>
+      )}
     </div>
   );
 }
