@@ -27,6 +27,10 @@ public class PostMapper {
 
   public Post convertToPost(PostDto.Request.Created postDto, User user)
         throws NoPostWithSuchIdException {
+    System.out.println("++++++++++++++++++++++++++++++++++++");
+    System.out.println(postDto.getImage());
+    System.out.println(postDto.getText());
+    System.out.println("++++++++++++++++++++++++++++++++++++");
     Integer originalPost = postDto.getOriginalPost();
     Post post = modelMapper.map(postDto, Post.class);
     post.setAuthor(user);
