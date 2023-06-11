@@ -111,65 +111,11 @@ const Messages = ({ chatId, senderId }) => {
   };
 
   const onOpenModalWindow = () => {
-    dispatch(toggleModalWindow());
+    setVisibleModalWindow(true);
   };
 
   const onCloseModalWindow = () => {
-    dispatch(toggleModalWindow());
-  };
-
-  const handleListItemClick = async (group) => {
-    const chatId = group.chatId;
-    dispatch(setSelectedChatId(chatId));
-    setSenderName(group.chats[0]?.senderUsername || '');
-    setRecipientName(group.chats[0]?.recipientUsername || '');
-    setSelectedChatId(group.chatId);
-
-    setChatName(group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername || '');
-
-    const senderUsername = group.chats[0]?.senderUsername || '';
-    const recipientUsername = group.chats[0]?.recipientUsername || '';
-    dispatch(setText(`${senderUsername} ${recipientUsername}`));
-
-    await dispatch(fetchChatMessages(chatId));
-    scrollToBottom();
-
-  };
-
-
-  const groupedChats = Object.values(chats).reduce((result, chat) => {
-    const existingGroup = result.find((group) => group.chatId === chat.chatId);
-    if (existingGroup) {
-      existingGroup.chats.push(chat);
-    } else {
-      result.push({
-        chatId: chat.chatId,
-        chats: [chat],
-      });
-    }
-
-    return result;
-  }, []);
-
-  const handleExitClick = () => {
-    dispatch(setSelectedChatId(undefined));
-    dispatch(setText(''));
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      handleSendMessage(selectedChatId, senderId);
-    }
-  };
-  const handleClick = (event, index) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedChatIndex(index);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setSelectedChatIndex(null);
+    setVisibleModalWindow(false);
   };
   const handleContextMenu = (event, index) => {
     event.preventDefault();

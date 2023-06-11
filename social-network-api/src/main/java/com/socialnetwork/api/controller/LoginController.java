@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.CONFIRMATION_REQUIRED;
-import static com.socialnetwork.api.util.Constants.Auth.TOKEN_PARAMETER;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 

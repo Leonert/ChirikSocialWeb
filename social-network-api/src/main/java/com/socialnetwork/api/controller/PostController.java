@@ -6,6 +6,7 @@ import com.socialnetwork.api.dto.authorized.PostDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.exception.custom.PostWithNoDataException;
 import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
@@ -34,9 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.socialnetwork.api.util.Constants.Auth.ID_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.ID_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.PAGE_NUMBER_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.RESULTS_PER_PAGE_QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.POSTS_PER_PAGE_DEFAULT;
@@ -144,15 +145,20 @@ public class PostController extends Controller {
   @PostMapping()
   public ResponseEntity<?> addPost(@RequestBody PostDto.Request.Created postDto,
                                    @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-          throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException {
+          throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException, PostWithNoDataException {
     Integer id = postDto.getOriginalPost();
+    if (id == null && postDto.getImage() == null && postDto.getText() == null) {
+      throw new PostWithNoDataException();
+    }
     if (id != null && postDto.getText() == null && postDto.getImage() == null
             && postService.isRetweetedByUser(userService.findByUsername(username).getId(), id)) {
       postService.deleteUserRetweet(userService.findByUsername(username).getId(), id);
       return ResponseEntity.status(HttpStatus.OK).body(postService.countPostRetweets(id));
     }
+    String image = postDto.getImage();
+    postDto.setImage(null);
     return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.convertToPostDtoDefault(postService.save(
-            postMapper.convertToPost(postDto, userService.findByUsername(username))), username));
+            postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username));
   }
 
   @PostMapping("/edit")

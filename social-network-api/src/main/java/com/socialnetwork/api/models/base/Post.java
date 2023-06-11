@@ -33,10 +33,10 @@ public class Post {
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User author;
 
-  @Column(name = "text")
+  @Column(name = "text", length = 280)
   private String text;
 
-  @Column(name = "image", length = 15000000)
+  @Column(name = "image", length = 350)
   private String image;
 
   @Column(name = "created_date")
