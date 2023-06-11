@@ -1,7 +1,8 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.authorized.UserDto;
-import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.EmailException;
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.socialnetwork.api.util.Constants.Auth.EMAIL_TAKEN;
-import static com.socialnetwork.api.util.Constants.Auth.QUERY;
+import static com.socialnetwork.api.util.Constants.Request.QUERY;
+import static com.socialnetwork.api.util.Constants.Request.TOKEN_PARAMETER;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_TAKEN;
 
 @RestController
@@ -54,8 +56,8 @@ public class RegistrationController {
   }
 
   @PatchMapping()
-  public ResponseEntity<?> activateAccount(@RequestParam("token") String confirmationToken)
-        throws EmailVerificationException {
+  public ResponseEntity<?> activateAccount(@RequestParam(TOKEN_PARAMETER) String confirmationToken)
+      throws EmailException, NoUserWithSuchCredentialsException {
     userService.verifyAccount(confirmationToken);
     return ResponseEntity.ok(new Response("Ok"));
   }

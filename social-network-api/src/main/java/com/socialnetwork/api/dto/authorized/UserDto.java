@@ -52,6 +52,18 @@ public enum UserDto {
       String password;
       Boolean rememberMe;
     }
+
+    @Data
+    public static class PasswordEditing {
+      String oldPassword;
+      String newPassword;
+    }
+
+    @Data
+    public static class PasswordRecovery {
+      String token;
+      String newPassword;
+    }
   }
 
 
@@ -73,7 +85,7 @@ public enum UserDto {
       String website;
       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
       LocalDateTime birthDate;
-      List<PostDto.Response.WithoutAuthor> userPosts;
+      List<PostDto.Response.WithoutAuthor> withoutAuthorPosts;
       int followersCounter;
       int followedCounter;
       boolean isCurrUserFollower;

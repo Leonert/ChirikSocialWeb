@@ -3,10 +3,13 @@ package com.socialnetwork.api.service.authorized;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.models.base.Hashtag;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.ViewRepository;
+import com.socialnetwork.api.service.CloudinaryService;
+import com.socialnetwork.api.service.HashtagService;
 import com.socialnetwork.api.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
@@ -16,13 +19,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
+  private final CloudinaryService cloudinaryService;
+  private final HashtagService hashtagService;
   private final NotificationService notificationService;
   private final ModelMapper modelMapper;
   private final ViewRepository viewRepository;
@@ -34,11 +43,40 @@ public class PostService {
     return postRepository.getReferenceById(id);
   }
 
-  public Post save(Post post) {
+  public Post save(Post post, String image) throws NoPostWithSuchIdException {
     post.setCreatedDate(LocalDateTime.now());
+
+    if (image != null) {
+      post.setImage(cloudinaryService.uploadPostPic(image, String.valueOf(post.getId())));
+    }
+
+    if (post.getText() != null) {
+      findAllHashtags(post.getText()).forEach(h ->
+              hashtagService.findByName(h).ifPresentOrElse(
+                hashtag -> {
+                  hashtag.setQuantity(hashtag.getQuantity() + 1);
+                  hashtagService.save(hashtag);
+                },
+                () -> hashtagService.save(new Hashtag(h, 1))
+              )
+      );
+    }
+
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
     return post;
+  }
+
+  private Set<String> findAllHashtags(String text) {
+    Set<String> hashtags = new HashSet<>();
+    Pattern pattern = Pattern.compile("#\\w+");
+    Matcher matcher = pattern.matcher(text);
+
+    while (matcher.find()) {
+      hashtags.add(matcher.group());
+    }
+
+    return hashtags;
   }
 
   public Post edit(Post editedPost, Post originalPost) {
@@ -53,13 +91,13 @@ public class PostService {
   }
 
   public List<Post> getPosts(int page, int postsNumber) {
-    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by("createdDate"))).toList();
+    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))).toList();
   }
 
   public List<Post> getUnviewedPosts(int page, int postsNumber, String currentUserUsername)
           throws NoUserWithSuchCredentialsException {
     return postRepository.findAllPostsUnViewedByUser(userService.findByUsername(currentUserUsername).getId(),
-            PageRequest.of(page, postsNumber, Sort.by("createdDate"))
+            PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))
     );
   }
 
@@ -68,7 +106,7 @@ public class PostService {
     Post post = getReferenceById(postId);
     return postRepository.findAllByOriginalPostAndTextIsNotNull(
             post,
-            PageRequest.of(page, usersForPage, Sort.by("createdDate")));
+            PageRequest.of(page, usersForPage, Sort.by(Sort.Direction.DESC, "createdDate")));
   }
 
   public List<User> getRetweets(int id, String currentUserUsername, int page, int usersForPage)
@@ -88,12 +126,12 @@ public class PostService {
     return postRepository.existsById(postId);
   }
 
-  public int countPostRetweets(Post post) {
-    return postRepository.countAllByOriginalPostAndTextNullAndImageNull(post);
+  public int countPostRetweets(int id) {
+    return postRepository.countAllByOriginalPostAndTextNullAndImageNull(new Post(id));
   }
 
-  public int countPostReplies(Post post) {
-    return postRepository.countAllByOriginalPostAndTextNotNullAndImageNull(post);
+  public int countPostReplies(int id) {
+    return postRepository.countAllByOriginalPostAndTextNotNullAndImageNull(new Post(id));
   }
 
   public void deleteUserRetweet(int userId, int postId) {

@@ -1,6 +1,6 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.exception.custom.EmailVerificationException;
+import com.socialnetwork.api.exception.custom.EmailException;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +25,34 @@ public class EmailService {
   @Value("${email.confirmation.url}")
   private String confirmAccountUrl;
 
+  @Value("${email.recovery.url}")
+  private String passwordRecoveryUrl;
+
   @Async
-  public void sendEmail(User user, ConfirmationToken token) {
+  public void sendTokenForAccountActivation(User user, ConfirmationToken token) {
     MimeMessagePreparator mailMessage = mimeMessage -> {
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-      try {
-        message.setFrom(emailAddressFrom, "FP3 Social Network");
-        message.addTo(user.getEmailAddress());
-        message.setSubject("Complete Registration");
-        message.setText("To confirm your account, please click here: "
-              + confirmAccountUrl + token.getConfirmationToken());
-      } catch (Exception e) {
-        throw new EmailVerificationException("Unexpected error");
-      }
+      message.setFrom(emailAddressFrom, "FP3 Social Network");
+      message.addTo(user.getEmailAddress());
+      message.setSubject("Complete Registration");
+      message.setText("To confirm your account, please click here: "
+          + confirmAccountUrl + token.getConfirmationToken());
+      System.out.println(token.getConfirmationToken());
+    };
+
+    javaMailSender.send(mailMessage);
+  }
+
+  @Async
+  public void sendTokenForPasswordRecovery(String email, ConfirmationToken token) {
+    MimeMessagePreparator mailMessage = mimeMessage -> {
+      MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+      message.setFrom(emailAddressFrom, "FP3 Social Network");
+      message.addTo(email);
+      message.setSubject("Recover your password");
+      message.setText("To recover your password, please click here: "
+          + passwordRecoveryUrl + token.getConfirmationToken());
+      System.out.println(token.getConfirmationToken());
     };
 
     javaMailSender.send(mailMessage);

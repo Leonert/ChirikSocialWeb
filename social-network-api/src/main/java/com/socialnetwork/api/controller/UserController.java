@@ -21,11 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.PAGE_NUMBER_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.RESULTS_PER_PAGE_QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
@@ -101,7 +102,7 @@ public class UserController extends Controller {
   @PostMapping("p")
   public ResponseEntity<UserDtoInterface> editProfile(@RequestBody UserDto.Request.ProfileEditing userDto,
                                                       @RequestAttribute(USERNAME_ATTRIBUTE) String username)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return ResponseEntity.ok(userMapper.mapForProfile(userService.editProfile(userDto, username), username));
   }
 
