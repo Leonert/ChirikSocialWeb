@@ -79,10 +79,10 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
         const LikeNumber = response.data;
         dispatch(
-            likesPost({
-              postId: props,
-              likesNumber: LikeNumber,
-            })
+          likesPost({
+            postId: props,
+            likesNumber: LikeNumber,
+          })
         );
       });
     } else {
@@ -95,10 +95,10 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
       axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
         const bookmarksNum = response.data;
         dispatch(
-            bookmarksPost({
-              postId: props,
-              bookmarksNumber: bookmarksNum,
-            })
+          bookmarksPost({
+            postId: props,
+            bookmarksNumber: bookmarksNum,
+          })
         );
       });
     } else {
@@ -107,109 +107,109 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
   };
 
   return (
-      <div style={{ marginBottom: '40px' }}>
-        <InfiniteScroll
-            dataLength={posts.length}
-            next={fetchPosts}
-            hasMore={hasMorePosts}
-            endMessage={
-              <Typography
-                  sx={{
-                    marginTop: '25px',
-                    color: '#93989D',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    fontSize: '32px',
-                  }}
-              >
-                No more results.
-              </Typography>
-            }
-            loader={<Spinner />}
-        >
-          {posts &&
-              posts.map((post) => (
-                  <Post
-                      key={post.id}
-                      replay={
-                        post.originalPost ? (
-                            post.text === null && post.image === null ? (
-                                <ReplyHeader repeat={post.author.name} />
-                            ) : (
-                                <Typography className={classes.reply}>Reply</Typography>
-                            )
-                        ) : null
-                      }
-                      IdentifierReply={post.text === null && post.image === null}
-                      id={post.id}
-                      classes={isReplyPage ? classes.replyItem : classes.Page}
-                      username={post.author.username}
-                      avatar={post.author.profileImage}
-                      name={post.author.name}
-                      isBookmarkPage={isBookmarkPage}
-                      isReplyPage={isReplyPage}
-                      retweet={post.retweetsNumber}
-                      like={post.likesNumber}
-                      view={post.view}
-                      reply={post.repliesNumber}
-                      content={post.text}
-                      data={post.createdDate}
-                      image={post.image}
-                      originalPost={post.originalPost}
-                      liked={post.liked}
-                      bookmarked={post.bookmarked}
-                      retweeted={post.retweeted}
-                      bookmark={post.bookmarksNumber}
-                      handleClick={() => dispatch(getPostId(`${post.id}`))}
-                      handleClickLike={() => handleLike(`${post.id}`)}
-                      handleClickReplay={() => handleReplay(`${post.id}`)}
-                      handleClickRetweet={() => handleRetweet(`${post.id}`)}
-                      handleClickBookmark={() => handleBookmark(`${post.id}`)}
-                  >
-                    {post.originalPost && (
-                        <Post
-                            IdentifierOriginal={post.text != null && post.image === null}
-                            id={post.originalPost.id}
-                            classes={classes.PageSmall}
-                            key={post.originalPost.id}
-                            isBookmarkPage={isBookmarkPage}
-                            username={post.originalPost.author.username}
-                            avatar={post.originalPost.author.profileImage}
-                            name={post.originalPost.author.name}
-                            retweet={post.originalPost.retweetsNumber}
-                            like={post.originalPost.likesNumber}
-                            view={post.originalPost.view}
-                            reply={post.originalPost.repliesNumber}
-                            content={post.originalPost.text}
-                            data={post.originalPost.createdDate}
-                            image={post.originalPost.image}
-                            liked={post.originalPost.liked}
-                            bookmarked={post.originalPost.bookmarked}
-                            retweeted={post.originalPost.retweeted}
-                            bookmark={post.originalPost.bookmarksNumber}
-                            handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
-                            handleClickLike={() => handleLike(`${post.originalPost.id}`)}
-                            handleClickReplay={() => handleReplay(`${post.originalPost.id}`)}
-                            handleClickRetweet={() => handleRetweet(`${post.originalPost.id}`)}
-                            handleClickBookmark={() => handleBookmark(`${post.originalPost.id}`)}
-                        />
-                    )}
-                  </Post>
-              ))}
-        </InfiniteScroll>
-        {!posts.length && isReplyPage && (
-            <Typography
-                sx={{
-                  marginTop: '25px',
-                  color: '#93989D',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '32px',
-                }}
+    <div style={{ marginBottom: '40px' }}>
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={fetchPosts}
+        hasMore={hasMorePosts}
+        endMessage={
+          <Typography
+            sx={{
+              marginTop: '25px',
+              color: '#93989D',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: '32px',
+            }}
+          >
+            No more results.
+          </Typography>
+        }
+        loader={<Spinner />}
+      >
+        {posts &&
+          posts.map((post) => (
+            <Post
+              key={post.id}
+              replay={
+                post.originalPost ? (
+                  post.text === null && post.image === null ? (
+                    <ReplyHeader repeat={post.author.name} />
+                  ) : (
+                    <Typography className={classes.reply}>Reply</Typography>
+                  )
+                ) : null
+              }
+              IdentifierReply={post.text === null && post.image === null}
+              id={post.id}
+              classes={isReplyPage ? classes.replyItem : classes.Page}
+              username={post.author.username}
+              avatar={post.author.profileImage}
+              name={post.author.name}
+              isBookmarkPage={isBookmarkPage}
+              isReplyPage={isReplyPage}
+              retweet={post.retweetsNumber}
+              like={post.likesNumber}
+              view={post.view}
+              reply={post.repliesNumber}
+              content={post.text}
+              data={post.createdDate}
+              image={post.image}
+              originalPost={post.originalPost}
+              liked={post.liked}
+              bookmarked={post.bookmarked}
+              retweeted={post.retweeted}
+              bookmark={post.bookmarksNumber}
+              handleClick={() => dispatch(getPostId(`${post.id}`))}
+              handleClickLike={() => handleLike(`${post.id}`)}
+              handleClickReplay={() => handleReplay(`${post.id}`)}
+              handleClickRetweet={() => handleRetweet(`${post.id}`)}
+              handleClickBookmark={() => handleBookmark(`${post.id}`)}
             >
-              So far, there are no replies. <br /> But you can fix it :)
-            </Typography>
-        )}
-      </div>
+              {post.originalPost && (
+                <Post
+                  IdentifierOriginal={post.text != null && post.image === null}
+                  id={post.originalPost.id}
+                  classes={classes.PageSmall}
+                  key={post.originalPost.id}
+                  isBookmarkPage={isBookmarkPage}
+                  username={post.originalPost.author.username}
+                  avatar={post.originalPost.author.profileImage}
+                  name={post.originalPost.author.name}
+                  retweet={post.originalPost.retweetsNumber}
+                  like={post.originalPost.likesNumber}
+                  view={post.originalPost.view}
+                  reply={post.originalPost.repliesNumber}
+                  content={post.originalPost.text}
+                  data={post.originalPost.createdDate}
+                  image={post.originalPost.image}
+                  liked={post.originalPost.liked}
+                  bookmarked={post.originalPost.bookmarked}
+                  retweeted={post.originalPost.retweeted}
+                  bookmark={post.originalPost.bookmarksNumber}
+                  handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
+                  handleClickLike={() => handleLike(`${post.originalPost.id}`)}
+                  handleClickReplay={() => handleReplay(`${post.originalPost.id}`)}
+                  handleClickRetweet={() => handleRetweet(`${post.originalPost.id}`)}
+                  handleClickBookmark={() => handleBookmark(`${post.originalPost.id}`)}
+                />
+              )}
+            </Post>
+          ))}
+      </InfiniteScroll>
+      {!posts.length && isReplyPage && (
+        <Typography
+          sx={{
+            marginTop: '25px',
+            color: '#93989D',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '32px',
+          }}
+        >
+          So far, there are no replies. <br /> But you can fix it :)
+        </Typography>
+      )}
+    </div>
   );
 }
