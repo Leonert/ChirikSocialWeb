@@ -21,19 +21,29 @@ insert into users (bio, birth_date, created_date, email_address, is_enabled, loc
 insert into users (bio, birth_date, created_date, email_address, is_enabled, location, name, password, profile_background_image, profile_image, username, website) values ('Vladlena bio', '2007-12-03 10:15:30', current_date, 'vladlena@gmail.com', true, 'location', 'Vladlena V.', '$2a$10$FgDVYsJxJNu6CCwpprnnKOkT8by0Uf9aX6q5MNdh/LA6qc80spZ86', null, null,  'vladlena', 'website');
 
 
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 10:15:30', null, 'Original post for user 1', 1, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 11:15:30', null, 'Another original post for user 1', 1, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 12:15:30', null, 'Reply to post1 from user2', 2, 1);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 13:15:30', null, 'Reply to post1 from user4', 4, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 10:15:30', null, 'Original post for user 1 #FirstPost #Chirik #TestHashtag', 1, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 11:15:30', null, 'Another original post for user 1 #HashtagsAdded', 1, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 12:15:30', null, 'Reply to post1 from user2. #Kyiv #Chirik', 2, 1);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 13:15:30', null, 'Reply to post1 from user4. #Chirik', 4, 1);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 14:15:30', null, null, 1, 1);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 15:15:30', null, null, 2, 2);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 16:15:30', null, 'Original post from user2', 2, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 17:15:30', null, 'Original post from user3', 3, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 16:15:30', null, 'Original post from user2 #Chirik #weather #TestHashtag', 2, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 17:15:30', null, 'Original post from user3. #Ukraine #Chirik', 3, null);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 18:15:30', null, 'Another original post from user3', 3, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 19:15:30', null, 'Another original post from user2', 2, null);
-insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 20:15:30', null, 'Retweet post 2 with comment for post 2 from user4', 4, 2);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 19:15:30', null, 'Another original post from user2 #2023 #Ukraine #Kyiv', 2, null);
+insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 20:15:30', null, 'Retweet post 2 with comment for post 2 from user4 #2023 #SocialNetwork #Chirik #iPhone14', 4, 2);
 insert into posts (created_date, image, text, user_id, original_post_id) values ('2007-12-03 21:15:30', null, null, 1, 7);
 
+insert into hashtags (name, quantity) values ('#Chirik', 6);
+insert into hashtags (name, quantity) values ('#FirstPost', 1);
+insert into hashtags (name, quantity) values ('#HashtagsAdded', 1);
+insert into hashtags (name, quantity) values ('#Kyiv', 2);
+insert into hashtags (name, quantity) values ('#weather', 1);
+insert into hashtags (name, quantity) values ('#Ukraine', 2);
+insert into hashtags (name, quantity) values ('#2023', 2);
+insert into hashtags (name, quantity) values ('#SocialNetwork', 1);
+insert into hashtags (name, quantity) values ('#iPhone14', 1);
+insert into hashtags (name, quantity) values ('#TestHashtag', 2);
 
 insert into follows values (1, 2);
 insert into follows values (1, 3);

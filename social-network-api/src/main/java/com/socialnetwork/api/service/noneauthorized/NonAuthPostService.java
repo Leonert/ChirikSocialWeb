@@ -17,7 +17,9 @@ public class NonAuthPostService {
   private final PostRepository postRepository;
 
   public List<Post> getPosts(int page, int postsNumber) {
-    return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by("createdDate"))).toList();
+    return postRepository.findAll(PageRequest.of(
+            page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate")
+    )).toList();
   }
 
   public List<Post> getReplies(int id, int page, int usersForPage)
@@ -25,7 +27,7 @@ public class NonAuthPostService {
     Post post = getReferenceById(id);
     return postRepository.findAllByOriginalPostAndTextIsNotNull(
           post,
-          PageRequest.of(page, usersForPage, Sort.by("createdDate")));
+          PageRequest.of(page, usersForPage, Sort.by(Sort.Direction.DESC, "createdDate")));
   }
 
   public List<User> getRetweets(int id, int page, int usersForPage) throws NoPostWithSuchIdException {

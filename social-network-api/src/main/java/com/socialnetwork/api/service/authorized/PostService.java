@@ -3,11 +3,13 @@ package com.socialnetwork.api.service.authorized;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.models.base.Hashtag;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.ViewRepository;
 import com.socialnetwork.api.service.CloudinaryService;
+import com.socialnetwork.api.service.HashtagService;
 import com.socialnetwork.api.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
@@ -17,7 +19,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +31,7 @@ public class PostService {
   private final PostRepository postRepository;
   private final UserService userService;
   private final CloudinaryService cloudinaryService;
+  private final HashtagService hashtagService;
   private final NotificationService notificationService;
   private final ModelMapper modelMapper;
   private final ViewRepository viewRepository;
@@ -39,13 +46,37 @@ public class PostService {
   public Post save(Post post, String image) throws NoPostWithSuchIdException {
     post.setCreatedDate(LocalDateTime.now());
 
-    if (!image.isEmpty()) {
+    if (image != null) {
       post.setImage(cloudinaryService.uploadPostPic(image, String.valueOf(post.getId())));
+    }
+
+    if (post.getText() != null) {
+      findAllHashtags(post.getText()).forEach(h ->
+              hashtagService.findByName(h).ifPresentOrElse(
+                hashtag -> {
+                  hashtag.setQuantity(hashtag.getQuantity() + 1);
+                  hashtagService.save(hashtag);
+                },
+                () -> hashtagService.save(new Hashtag(h, 1))
+              )
+      );
     }
 
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
     return post;
+  }
+
+  private Set<String> findAllHashtags(String text) {
+    Set<String> hashtags = new HashSet<>();
+    Pattern pattern = Pattern.compile("#\\w+");
+    Matcher matcher = pattern.matcher(text);
+
+    while (matcher.find()) {
+      hashtags.add(matcher.group());
+    }
+
+    return hashtags;
   }
 
   public Post edit(Post editedPost, Post originalPost) {
