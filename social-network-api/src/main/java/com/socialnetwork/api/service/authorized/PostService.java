@@ -50,15 +50,17 @@ public class PostService {
       post.setImage(cloudinaryService.uploadPostPic(image, String.valueOf(post.getId())));
     }
 
-    findAllHashtags(post.getText()).forEach(h ->
-            hashtagService.findByName(h).ifPresentOrElse(
-              hashtag -> {
-                hashtag.setQuantity(hashtag.getQuantity() + 1);
-                hashtagService.save(hashtag);
-              },
-              () -> hashtagService.save(new Hashtag(h, 1))
-            )
-    );
+    if (post.getText() != null) {
+      findAllHashtags(post.getText()).forEach(h ->
+              hashtagService.findByName(h).ifPresentOrElse(
+                hashtag -> {
+                  hashtag.setQuantity(hashtag.getQuantity() + 1);
+                  hashtagService.save(hashtag);
+                },
+                () -> hashtagService.save(new Hashtag(h, 1))
+              )
+      );
+    }
 
     postRepository.save(post);
     notificationService.saveReplyRetweet(post);
