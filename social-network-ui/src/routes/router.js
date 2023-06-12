@@ -18,6 +18,7 @@ import ProfilePosts from '../pages/Profile/ProfilePosts';
 import profileLoader from '../pages/Profile/profileLoader';
 import Search from '../pages/Search/Search';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
+import Trends from '../pages/Trends/Trends';
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: '/connect_people',
         element: <Connect />,
+      },
+      {
+        path: '/trends',
+        element: <Trends />,
       },
       {
         path: '/:username',
