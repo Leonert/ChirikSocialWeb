@@ -16,6 +16,8 @@ const AsideContainer = ({ header, children, asideActions, isSticky }) => {
         backgroundColor: (theme) => theme.palette.background.lightDefault,
         position: isSticky ? 'sticky' : 'relative',
         top: 0,
+        mb: '16px',
+        mt: '16px',
       }}
     >
       <Typography sx={{ p: '12px 16px', fontSize: '26px', fontWeight: 700 }}>{header}</Typography>
