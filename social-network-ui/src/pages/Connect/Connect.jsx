@@ -11,7 +11,6 @@ import FollowButton from '../Profile/FollowButton';
 const Connect = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
-
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
 
   const fetchSuggestedUsers = async () => {
@@ -24,7 +23,7 @@ const Connect = () => {
       } else {
         setHasMoreUsers(true);
       }
-      setUsers((prevPosts) => [...prevPosts, ...data]);
+      setUsers((prevUsers) => [...prevUsers, ...data]);
       setPage((prevPage) => prevPage + 1);
     } catch (e) {
       return json({ Error: e });
