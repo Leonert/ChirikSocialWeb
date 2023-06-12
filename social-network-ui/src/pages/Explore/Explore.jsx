@@ -3,14 +3,14 @@ import React from 'react';
 
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
 import SearchField from '../../components/SearchField/SearchField';
-import Trends from './Trends';
+import TrendsSection from './TrendsSection';
 
 const Explore = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}>
         <SearchField />
-        <Trends/>
+        <TrendsSection />
       </Grid>
       <Grid item xs={5}>
         <AsideRecommendFollows />
