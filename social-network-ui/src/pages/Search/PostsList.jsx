@@ -28,7 +28,9 @@ const PostsList = ({ searchValue }) => {
 
   const fetchPosts = async () => {
     try {
-      const { data } = await axiosIns.get(`/api/search/posts?q=${searchValue}&p=${page}`);
+      const encodedSearchValue = encodeURIComponent(searchValue);
+
+      const { data } = await axiosIns.get(`/api/search/posts?q=${encodedSearchValue}&p=${page}`);
       if (data.length === 0) {
         setHasMorePosts(false);
       } else if (data.length < 10 && page === 0) {
