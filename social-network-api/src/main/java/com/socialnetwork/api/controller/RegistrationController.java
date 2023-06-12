@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.socialnetwork.api.util.Constants.Auth.EMAIL_TAKEN;
-import static com.socialnetwork.api.util.Constants.Auth.QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.TOKEN_PARAMETER;
+import static com.socialnetwork.api.util.Constants.Request.QUERY;
+import static com.socialnetwork.api.util.Constants.Request.TOKEN_PARAMETER;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_TAKEN;
 
 @RestController

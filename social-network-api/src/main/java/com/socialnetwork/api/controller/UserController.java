@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.socialnetwork.api.util.Constants.Auth.PAGE_NUMBER_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.RESULTS_PER_PAGE_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.PAGE_NUMBER_QUERY;
+import static com.socialnetwork.api.util.Constants.Request.RESULTS_PER_PAGE_QUERY;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;

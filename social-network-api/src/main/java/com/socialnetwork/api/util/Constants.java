@@ -16,6 +16,14 @@ public class Constants {
     public static final String POSTS_PRESET = "postPicsPreset";
   }
 
+  public static class Request {
+    public static final String QUERY = "q";
+    public static final String PAGE_NUMBER_QUERY = "p";
+    public static final String RESULTS_PER_PAGE_QUERY = "n";
+    public static final String ID_QUERY = "id";
+    public static final String TOKEN_PARAMETER = "token";
+  }
+
   public static class Auth {
     public static final String USERNAME_TAKEN = "User with such username already exists.";
     public static final String EMAIL_TAKEN = "User with such email address already exists.";
@@ -24,12 +32,7 @@ public class Constants {
     public static final String NO_SUCH_EMAIL = "User with such email doesnt`t exist.";
     public static final String WRONG_PASSWORD = "You entered an incorrect password. Check the password.";
     public static final String CONFIRMATION_REQUIRED = "The account exists but needs to be activated.";
-    public static final String QUERY = "q";
-    public static final String PAGE_NUMBER_QUERY = "p";
-    public static final String RESULTS_PER_PAGE_QUERY = "n";
-    public static final String ID_QUERY = "id";
     public static final String USERNAME_ATTRIBUTE = "username";
-    public static final String TOKEN_PARAMETER = "token";
   }
 
   public static class Exception {
@@ -39,6 +42,7 @@ public class Constants {
     public static final String MISSING_REQUEST_PARAMETER = " parameter is missing.";
     public static final String MISSING_PATH_VARIABLE = " path variable is missing.";
     public static final String TOKEN_INVALID = "Token is invalid";
+    public static final String EMPTY_POST = "Attempt to create an empty post";
   }
 
   public static class Image {
