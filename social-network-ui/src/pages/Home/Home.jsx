@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form } from 'react-router-dom';
 
+import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
+import AsideTrends from '../../components/AsideTrends/AsideTrends';
 import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
 import Following from '../../components/Following/Following';
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
@@ -43,6 +45,8 @@ function Home() {
         <Form method="post">
           <SearchField />
         </Form>
+        <AsideTrends />
+        <AsideRecommendFollows />
       </Grid>
     </Grid>
   );
