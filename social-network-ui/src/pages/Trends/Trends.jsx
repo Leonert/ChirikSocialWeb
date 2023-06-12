@@ -16,7 +16,7 @@ const Trends = () => {
 
   const fetchTrends = async () => {
     try {
-      const { data } = await axiosIns.get(`/api/trends/hashtags?p=${page}&n=5`);
+      const { data } = await axiosIns.get(`/api/trends/hashtags?p=${page}&n=11`);
       if (data.length === 0) {
         setHasMorePosts(false);
       } else if (data.length < 5 && page === 0) {
