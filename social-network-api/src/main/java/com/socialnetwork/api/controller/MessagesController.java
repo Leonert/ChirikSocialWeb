@@ -9,6 +9,7 @@ import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,8 +33,9 @@ public class MessagesController {
   private final MessageService messageService;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
-  private final SimpMessagingTemplate messagingTemplate;
 
+  @Autowired
+  private SimpMessagingTemplate messagingTemplate;
   @GetMapping
   public ResponseEntity<List<MessageDto>> getAllMessages(@RequestParam("userId") int userId) {
     Optional<User> userOptional = userRepository.findById(userId);
@@ -42,6 +44,8 @@ public class MessagesController {
       User user = userOptional.get();
 
       List<MessageDto> messages = messageService.getAllMessages(user);
+      messagingTemplate.convertAndSendToUser(user.getUsername(), "/queue/messages", messages);
+
       return ResponseEntity.ok(messages);
     } else {
       return ResponseEntity.notFound().build();
@@ -108,6 +112,7 @@ public class MessagesController {
   @DeleteMapping("/chats/{chatId}")
   public ResponseEntity<Void> deleteChat(@PathVariable("chatId") int chatId) {
     messageService.deleteChat(chatId);
+    messagingTemplate.convertAndSend("/topic/messages", chatId);
 
     return ResponseEntity.noContent().build();
   }
@@ -122,7 +127,7 @@ public class MessagesController {
 
     chatDto.setChatId(createdMessageDto.getChatId());
     chatDto.addMessage(createdMessageDto);
-
+    messagingTemplate.convertAndSend("/topic/messages", chatDto);
     return ResponseEntity.created(URI.create("/api/messages/chats/"
             + createdMessageDto.getChatId())).body(chatDto);
   }
@@ -141,6 +146,8 @@ public class MessagesController {
     messageDto.setChatId(chatId);
 
     MessageDto createdMessageDto = messageService.addMessage(messageDto, chatDto);
+    List<MessageDto> updatedMessages = messageService.getMessagesByChatId(chatId);
+    messagingTemplate.convertAndSend("/topic/message", updatedMessages);
 
     return ResponseEntity.created(URI.create("/api/messages/"
             + createdMessageDto.getMessageId())).body(createdMessageDto);

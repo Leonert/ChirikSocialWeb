@@ -1,20 +1,21 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import { Hidden, IconButton, Typography } from '@mui/material';
+import {Hidden, IconButton, List, ListItem, Popover, Typography} from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import classnames from "classnames";
 
 import { handleLogOutModal } from '../../features/slices/authModalSlice';
 import {
-  BookmarksIcon,
+
+  BookmarksIcon, Chirick, DisplayIcon,
   ExploreIcon,
   HomeIcon,
-  MessagesIcon,
+  MessagesIcon, MoreIcon,
   NotificationsIcon,
   ProfileIcon,
   SettingsIcon,
-  TweetIcon,
 } from '../../icon';
 import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
@@ -22,9 +23,19 @@ import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from '../AddTweetModal/AddTweetModal';
 import LogOutButton from './LogOutButton';
 import { useSideMenuStyles } from './SideMenuStyles';
+import {useGlobalStyles} from "../../util/globalClasses";
+import DisplayModal from "./DisplayModal/DisplayModal";
+import ReplayModal from "../ReplayModal/ReplayModal";
+
+
 
 const SideMenu = () => {
   const classes = useSideMenuStyles();
+  const globalClasses = useGlobalStyles();
+  const [visibleDisplayModal, setVisibleDisplayModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const openPopover = Boolean(anchorEl);
   const dispatch = useDispatch();
 
   const [visibleAddTweet, setVisibleAddTweet] = useState(false);
@@ -42,17 +53,37 @@ const SideMenu = () => {
     setVisibleAddTweet(false);
   };
 
+  const onOpenDisplayModal = () => {
+    setVisibleDisplayModal(true);
+    handleClosePopup();
+  };
+
+  const onCloseDisplayModal = () => {
+    setVisibleDisplayModal(false);
+  };
+  const handleClosePopup = () => {
+    setAnchorEl(null);
+  };
+  const handleOpenPopup = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+
   return (
       <>
+        <ReplayModal />
         <ul className={classes.container}>
           <li>
-            <NavLink to={HOME} activeclassname={'selected'}>
-              <div className={classes.logoIcon}>
-                <IconButton>
-                  <span className={classes.title}>Chirik</span>
-                </IconButton>
-              </div>
-            </NavLink>
+            <li>
+              <NavLink to={HOME} activeclassname={'selected'}>
+                <div className={classes.logoIcon}>
+                  <IconButton>
+                    {Chirick}
+                    <span className={classes.title}>Chirik</span>
+                  </IconButton>
+                </div>
+              </NavLink>
+            </li>
           </li>
           <li className={classes.itemWrapper}>
             <NavLink to={HOME} activeclassname={'selected'}>
@@ -139,6 +170,45 @@ const SideMenu = () => {
             </NavLink>
           </li>
           <li className={classes.itemWrapper}>
+            <div onClick={handleOpenPopup}>
+              <Hidden smDown>
+                <>
+                  <span>{MoreIcon}</span>
+                  <Typography variant={"h5"}>
+                    More
+                  </Typography>
+                </>
+              </Hidden>
+            </div>
+            <Popover
+                open={openPopover}
+                anchorEl={anchorEl}
+                onClose={handleClosePopup}
+                classes={{
+                  paper: classes.popover,
+                }}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+            >
+              <div className={classnames(classes.listItemWrapper, globalClasses.svg)}>
+                <List>
+                  <ListItem onClick={onOpenDisplayModal}>
+                    {DisplayIcon}
+                    <Typography variant={"body1"} component={"span"}>
+                      Display
+                    </Typography>
+                  </ListItem>
+                </List>
+              </div>
+            </Popover>
+          </li>
+          <li className={classes.itemWrapper}>
             <Button
                 onClick={handleClickOpenAddTweet}
                 className={classes.button}
@@ -152,6 +222,10 @@ const SideMenu = () => {
               </Hidden>
             </Button>
             <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
+            <DisplayModal
+                visible={visibleDisplayModal}
+                onClose={onCloseDisplayModal}
+            />
           </li>
           {user && (
               <li className={classes.itemWrapperLogOut}>

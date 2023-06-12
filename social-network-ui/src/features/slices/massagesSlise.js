@@ -15,38 +15,35 @@ export const sendMessage = createAsyncThunk(
             const messageDto = {
                 chatId,
                 message: trimmedMessage,
-                recipientId: chat.senderId,
                 senderId: chat.recipientId,
+                recipientId: chat.senderId,
                 isRead: true,
                 messageId: null,
-                senderUsername,
-                recipientUsername,
+                senderUsername: recipientUsername,
+                recipientUsername: senderUsername,
             };
 
+            const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
+            const createdMessage = response.data;
+            createdMessage.messageId = createdMessage.messageId || null;
 
-                const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
-                const createdMessage = response.data;
-                createdMessage.messageId = createdMessage.messageId || null;
+            dispatch(addChatMessage({ chatId, message: createdMessage }));
 
-                dispatch(addChatMessage({ chatId, message: createdMessage }));
-
-                return {
-                    chatId,
-                    message: createdMessage,
-                    senderId: chat.senderId,
-                    recipientId: chat.recipientId,
-                };
+            return {
+                chatId,
+                message: createdMessage,
+                senderId: chat.recipientId,
+                recipientId: chat.senderId,
+            };
 
         }
     }
 );
 
-
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
     async (userId) => {
         const chats = await ChatApi.getUserChats(userId);
-        console.log(chats)
 
         return chats;
     }
@@ -89,6 +86,10 @@ const messagesSlice = createSlice({
         toggleModalWindow: (state) => {
             state.visibleModalWindow = !state.visibleModalWindow;
         },
+        addChat: (state, action) => {
+            const newChat = action.payload;
+            state.chats.push(newChat);
+        },
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
             const chat = state.chats.find((chat) => chat.chatId === chatId);
@@ -116,6 +117,7 @@ const messagesSlice = createSlice({
                 state.selectedChatId = chatId;
             }
         },
+
     },
     extraReducers: (builder) => {
         builder
@@ -126,18 +128,27 @@ const messagesSlice = createSlice({
                 if (chatIndex !== -1) {
                     const updatedMessage = {
                         ...message,
-                        recipientId: recipientId || state.chats[chatIndex].recipientId,
-                        senderId: senderId || state.chats[chatIndex].senderId,
+                        recipientId: recipientId || state.chats[chatIndex].senderId,
+                        senderId: senderId || state.chats[chatIndex].recipientId,
                     };
 
+                    if (state.chats[chatIndex].messages) {
+                        state.chats[chatIndex].messages.push(updatedMessage);
+                    } else {
+                        state.chats[chatIndex].messages = [updatedMessage];
+                    }
 
-                    state.chats[chatIndex].messages.push(updatedMessage);
+                    // Оновлення статусу першого повідомлення від автора чату на "отримано"
+                    if (updatedMessage.senderId === state.chats[chatIndex].authorId) {
+                        updatedMessage.isRead = true;
+                    }
                 }
             })
 
             .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;
             })
+
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
                 state.messages[chatId] = messages;
@@ -146,6 +157,7 @@ const messagesSlice = createSlice({
 });
 
 export const {
+    addChat,
     setSelectedChatId,
     setText,
     toggleModalWindow,

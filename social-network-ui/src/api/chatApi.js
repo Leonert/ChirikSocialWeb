@@ -19,6 +19,7 @@ export const ChatApi = {
         }
     },
 
+
     getChatMessages: async (chatId) => {
         try {
             const response = await axiosIns.get(`/api/messages/chats/${chatId}`);

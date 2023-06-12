@@ -1,6 +1,7 @@
 export const HOME = '/';
 export const LOGIN = '/login';
 export const NOTIFICATIONS = '/notifications';
+export const SEARCH = "/search";
 export const MESSAGES = '/messages';
 export const BOOKMARKS = '/bookmarks';
 export const SETTING = '/setting';

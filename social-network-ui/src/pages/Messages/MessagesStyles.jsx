@@ -74,6 +74,10 @@ export const useMessagesStyles = makeStyles((theme) => ({
     '& .Mui-selected': {
       borderRight: '1px solid rgb(27, 149, 224)',
     },
+    // Add the following styles
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
   listItem: {
     padding: 0,
@@ -130,7 +134,9 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   chatContainer: {
     minWidth: 600,
-    "& .MuiPaper-outlined": {
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiPaper-outlined': {
       padding: 0,
       borderRadius: 0,
       minHeight: '100vh',
@@ -138,9 +144,9 @@ export const useMessagesStyles = makeStyles((theme) => ({
       borderTop: 0,
       borderBottom: 0,
       backgroundColor: theme.palette.background.lightDefault,
-
     },
   },
+
   chatInfoWrapper: {
     width: 320,
     margin: "0px auto",
@@ -196,7 +202,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chat: {
     padding: '53px 15px',
     color: theme.palette.text.primary,
-    height: 900,
+    height: 600,
     overflowY: 'auto',
     backgroundColor: theme.palette.background.lightDefault,
     display: 'flex',
@@ -219,7 +225,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
 
   tweetWrapper: {
-
     border: '1px solid rgb(29, 161, 242)',
     borderRadius: '16px 16px 0px 16px',
     padding: 12,
@@ -247,6 +252,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     color: "rgb(83, 100, 113)",
     fontSize: 15,
   },
+
   myMessage: {
     display:'flex',
     flexDirection: 'column',
@@ -284,7 +290,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
   senderMessageWith:{
     padding: theme.spacing(1),
     borderRadius: '0px  13px 13px 13px',
-
     backgroundColor: theme.palette.background.default,
     border: `1px solid ${theme.palette.primary.main}`,
   },
@@ -296,7 +301,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     top: 100,
     borderRadius: '16px  0px 16px 16px',
-    padding: 12,
+    padding: 10,
     backgroundColor: theme.palette.background.primary,
     color: theme.palette.text.secondary,
     alignItems: 'flex-start',
@@ -340,6 +345,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
       textDecoration: "none"
     },
   },
+
   participantTweetWrapper: {
     border: "1px solid rgb(239, 243, 244)",
     borderRadius: "16px 16px 16px 0px",

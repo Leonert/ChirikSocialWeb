@@ -1,21 +1,20 @@
-
-
-
 import { SearchIcon } from '../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
 import { useMessagesModalStyles } from './MessagesModalStyles';
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
-import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../axiosInstance";
 import {addResult, removeResult} from "../../features/slices/searchSlice";
-import {useState} from "react";
+import React, {useState} from "react";
 import {IconButton, InputAdornment, List, ListItem} from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import CloseButton from "../AddTweetModal/AddTweetForm/CloseButton/CloseButton";
+import {addChat} from "../../features/slices/massagesSlise";
+
+
 
 const MessagesModal = ({ visible, onClose }) => {
   const classes = useMessagesModalStyles();
@@ -23,7 +22,7 @@ const MessagesModal = ({ visible, onClose }) => {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
-  const autherId = useSelector((state) => state.messages.authorId);
+  const authorId = useSelector((state) => state.messages.authorId);
 
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
@@ -34,7 +33,9 @@ const MessagesModal = ({ visible, onClose }) => {
 
   const handleListItemClick = (user) => {
     setSelectedUser(user);
+
   };
+
 
   const handleCreateChat = () => {
     if (selectedUser) {
@@ -44,12 +45,11 @@ const MessagesModal = ({ visible, onClose }) => {
         message: '',
         timestamp: null,
         recipientId: selectedUser.id,
-        senderId: autherId,
+        senderId: authorId,
         chatId: null,
         senderUsername: '',
-        recipientUsername: ''
+        recipientUsername: selectedUser.username,
       };
-
       const chatDto = {
         chatId: null,
         messages: [messageDto]
@@ -59,6 +59,7 @@ const MessagesModal = ({ visible, onClose }) => {
           .post('/api/messages/chats/create', { messageDto, chatDto })
           .then((response) => {
             const createdChatDto = response.data;
+            dispatch(addChat(createdChatDto));
             onClose(createdChatDto);
           })
           .catch((error) => {

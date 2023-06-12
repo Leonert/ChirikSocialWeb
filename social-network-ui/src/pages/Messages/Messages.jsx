@@ -1,16 +1,17 @@
 import {Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
-import {ProfileIcon, SandMessageIcon} from '../../icon';
-import { DEFAULT_PROFILE_IMG } from '../../util/url';
+import {SandMessageIcon} from '../../icon';
+
 import { useMessagesStyles } from './MessagesStyles';
 import MessagesModal from "../../components/MessagesModal/MessagesModal";
 import {
+  addChatMessage,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
   selectChats,
   selectMessages,
-  selectSelectedChatId,
+  selectSelectedChatId, selectUsers,
   selectVisibleModalWindow,
   sendMessage,
   setSelectedChatId,
@@ -22,10 +23,12 @@ import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
-import {Avatar, Menu, MenuItem} from "@mui/material";
-import {NavLink, useLoaderData} from "react-router-dom";
+import {Avatar, Menu, MenuItem, Snackbar} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
 
+import SockJsClient from 'react-stomp';
+export const SOCKET_URL = 'http://localhost:8080/websocket';
 
 const Messages = ({ chatId, senderId }) => {
   const classes = useMessagesStyles();
@@ -44,20 +47,32 @@ const Messages = ({ chatId, senderId }) => {
   const [chatName, setChatName] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedChatIndex, setSelectedChatIndex] = useState(null);
+  const [status, setStatus] = useState(false);
+  const [error, setError] = useState(null);
+  const users = useSelector(selectUsers);
 
   const handleDeleteChat = () => {
     if (selectedChatIndex !== null) {
       const chatId = groupedChats[selectedChatIndex]?.chatId;
+      setSenderName('');
+      setRecipientName('');
       if (chatId) {
         axiosIns
             .delete(`/api/messages/chats/${chatId}`)
             .then((response) => {
-              console.log('Chat deleted:', response);
+              dispatch(fetchChat());
+              setStatus(true);
+              setError(null);
             })
+            .catch((error) => {
+              setStatus(true);
+              setError(error.message);
+            });
       }
     }
     handleClose();
   };
+
 
   const scrollToBottom = () => {
     if (chatEndRef.current) {
@@ -77,26 +92,64 @@ const Messages = ({ chatId, senderId }) => {
     }
   };
 
+  const onMessageReceived = (msg) => {
+     dispatch(sendMessage(msg)).then(() => {
+      setMessage('');
+    });
+    dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
+    dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
+    });
+  };
+  const onConnected = () => {
+    console.log('Connected to WebSocket');
+  };
+
+
+  const handleListItemClick = async (group) => {
+    const chatId = group.chatId;
+    dispatch(setSelectedChatId(chatId));
+    setSelectedChatId(chatId);
+
+    const senderUsername = group.chats[0]?.senderUsername || '';
+    const recipientUsername = group.chats[0]?.recipientUsername || '';
+    const newSenderName = username === senderUsername ? senderUsername : recipientUsername;
+    const newRecipientName = username === senderUsername ? recipientUsername : senderUsername;
+
+    setSenderName(newSenderName);
+    setRecipientName(newRecipientName);
+    setChatName(group.chatId === selectedChatId ? chatName : newSenderName);
+
+    dispatch(setText(`${newSenderName} ${newRecipientName}`));
+    await dispatch(fetchChatMessages(chatId));
+  };
+
+
+
   const handleSendMessage = () => {
     const trimmedMessage = message.trim();
-
+    if (!selectedChatId) {
+      return;
+    }
     if (trimmedMessage !== '') {
       const sender = chats.find((chat) => chat.chatId === (selectedChatId || chatId));
-      const senderName = sender ? sender.senderUsername : '';
+      const senderUsername = senderName || '';
+      const recipientUsername = recipientName || '';
+
       const messageToSend = {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
         authorId: author,
-        senderUsername: senderName,
-        recipientUsername: recipientName,
+        senderUsername: recipientUsername,
+        recipientUsername: senderUsername,
         chatName,
-        parentId: messages[selectedChatId]?.messages
-            .slice()
-            .reverse()
-            .find((msg) => msg.senderId === sender?.senderId)?.messageId || undefined,
+        parentId:
+            messages[selectedChatId]?.messages
+                .slice()
+                .reverse()
+                .find((msg) => msg.senderId === sender?.senderId)?.messageId || undefined,
       };
 
-      dispatch(sendMessage(messageToSend)).then(() => {
+      return dispatch(sendMessage(messageToSend)).then(() => {
         setMessage('');
 
       });
@@ -105,17 +158,57 @@ const Messages = ({ chatId, senderId }) => {
   };
 
 
+
+
+
   const handleInputChange = (event) => {
     const { value } = event.target;
     setMessage(value);
   };
 
   const onOpenModalWindow = () => {
-    setVisibleModalWindow(true);
+    dispatch(toggleModalWindow());
   };
 
   const onCloseModalWindow = () => {
-    setVisibleModalWindow(false);
+    dispatch(toggleModalWindow());
+  };
+
+
+
+  const groupedChats = Object.values(chats).reduce((result, chat) => {
+    const existingGroup = result.find((group) => group.chatId === chat.chatId);
+    if (existingGroup) {
+      existingGroup.chats.push(chat);
+    } else {
+      result.push({
+        chatId: chat.chatId,
+        chats: [chat],
+      });
+    }
+
+    return result;
+  }, []);
+
+  const handleExitClick = () => {
+    dispatch(setSelectedChatId(undefined));
+    dispatch(setText(''));
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSendMessage(selectedChatId, senderId);
+    }
+  };
+  const handleClick = (event, index) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedChatIndex(index);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedChatIndex(null);
   };
   const handleContextMenu = (event, index) => {
     event.preventDefault();
@@ -129,12 +222,7 @@ const Messages = ({ chatId, senderId }) => {
   }, [username]);
 
   useEffect(() => {
-    const fetchChatsAndScroll = async () => {
-      await dispatch(fetchChat());
-      scrollToBottom();
-    };
-
-    fetchChatsAndScroll();
+    dispatch(fetchChat());
   }, [dispatch]);
 
   useEffect(() => {
@@ -147,8 +235,24 @@ const Messages = ({ chatId, senderId }) => {
   }, [dispatch, authorId]);
 
 
+
+  const action = (
+      <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+        <CloseIcon fontSize="small" />
+      </IconButton>
+  );
+
   return (
       <>
+        <SockJsClient
+            url={SOCKET_URL}
+            topics={['/topic/message']}
+            onConnect={onConnected}
+            onDisconnect={() => ("Disconnected!")}
+            onMessage={onMessageReceived}
+            debug={false}
+        />
+
         <Grid className={classes.grid} md={4} item>
           <div className={classes.messagesContainer}>
             <Paper variant="outlined">
@@ -192,12 +296,16 @@ const Messages = ({ chatId, senderId }) => {
                                   <div style={{ flex: 1 }}>
                                     <div className={classes.userHeader}>
                                       <div>
-                                        <Typography className={classes.chatName}>
-                                          @{group.chats[0]?.senderUsername}
-                                        </Typography>
-                                        <Typography className={classes.username}>
-                                          @{group.chatId === selectedChatId ? chatName : group.chats[0]?.recipientUsername}
-                                        </Typography>
+                                        {
+                                          group.chats[0]?.senderUsername === username
+                                              ?
+                                              <Typography className={classes.chatName}>
+                                                @{group.chats[0]?.recipientUsername}
+                                              </Typography>
+                                              :<Typography className={classes.chatName}>
+                                                @{group.chats[0]?.senderUsername}
+                                              </Typography>
+                                        }
                                       </div>
                                     </div>
                                   </div>
@@ -237,7 +345,7 @@ const Messages = ({ chatId, senderId }) => {
                   </div>
                 </Paper>
               </div>
-          ) : (
+          )  : (
               <div className={classes.chatContainer}>
                 <Paper variant="outlined">
                   <Paper className={classes.chatHeader}>
@@ -245,8 +353,13 @@ const Messages = ({ chatId, senderId }) => {
                       <IconButton className={classes.ArrowBackIcon} onClick={handleExitClick} color="primary">
                         <ArrowBackIcon  />
                       </IconButton>
+                      {
+                        senderName === username ?
+                            <Typography className={classes.usernameTop}>@{recipientName}</Typography>
+                            :
+                            <Typography className={classes.usernameTop}>@{senderName}</Typography>
 
-                      <Typography className={classes.usernameTop}>@{senderName}</Typography>
+                      }
                     </div>
                     <Avatar className={classes.chatAvatar}
                             sx={{
@@ -264,6 +377,8 @@ const Messages = ({ chatId, senderId }) => {
                           .map ((massage) => (
 
                           <div key={massage.messageId}>
+                            <div ref={chatEndRef}></div>
+
                             <div className={classNames(classes.messageContent)}>
                               <div className={authorId === massage.senderId ? classes.MyMassageSender : classes.theirMessageWithTweet}>
                               <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>
@@ -276,6 +391,7 @@ const Messages = ({ chatId, senderId }) => {
                           </div>
 
                           )
+
                       )
                       }
                       <div ref={chatEndRef}></div>
@@ -300,6 +416,13 @@ const Messages = ({ chatId, senderId }) => {
               </div>
           )}
         </Grid>
+        <Snackbar
+            open={status}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message={error ? `${error}` : 'Deleted successfully'}
+            action={action}
+        />
         <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
       </>
   );
