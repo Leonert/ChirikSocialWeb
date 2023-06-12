@@ -12,23 +12,26 @@ const Connect = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
+  console.log(users);
 
   const fetchSuggestedUsers = async () => {
     try {
       const { data } = await axiosIns.get(`/api/users/connect?p=${page}`);
-      if (data.length === 0) {
-        setHasMoreUsers(false);
-      } else if (data.length < 10 && page === 0) {
-        setHasMoreUsers(false);
+
+      if (page === 0) {
+        setUsers(data);
       } else {
-        setHasMoreUsers(true);
+        setUsers((prevUsers) => [...prevUsers, ...data]);
       }
-      setUsers((prevUsers) => [...prevUsers, ...data]);
+
+      setHasMoreUsers(data.length === 10);
+
       setPage((prevPage) => prevPage + 1);
     } catch (e) {
       return json({ Error: e });
     }
   };
+
   useEffect(() => {
     fetchSuggestedUsers();
   }, []);
@@ -51,44 +54,32 @@ const Connect = () => {
           Connect
         </Typography>
       </Stack>
-      <InfiniteScroll
-        dataLength={users.length}
-        next={fetchSuggestedUsers}
-        hasMore={hasMoreUsers}
-        endMessage={
-          <Typography
-            sx={{
-              marginTop: '25px',
-              color: '#93989D',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '32px',
-              mb: '40px',
-            }}
-          >
-            No more connections
-          </Typography>
-        }
-        loader={<Spinner />}
-      >
-        {users.length > 0 &&
-          users.map((user) => (
-            <Link key={user.id} to={`/${user.username}`}>
-              <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
-                <Avatar sx={{ mr: '20px' }} alt={user.name} src={user.profileImage} />
-                <Stack justifyContent="space-between" alignItems="center" direction="row" width="100%">
-                  <Stack>
-                    <ListItemText primary={user.name} />
-                    <ListItemText primary={`@${user.username}`} />
-                    <ListItemText primary={user.bio} />
+      <Box mb="40px">
+        <InfiniteScroll
+          dataLength={users.length}
+          next={fetchSuggestedUsers}
+          hasMore={hasMoreUsers}
+          loader={<Spinner />}
+        >
+          {users.length > 0 &&
+            users.map((user) => (
+              <Link key={user.id} to={`/${user.username}`}>
+                <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
+                  <Avatar sx={{ mr: '20px' }} alt={user.name} src={user.profileImage} />
+                  <Stack justifyContent="space-between" alignItems="center" direction="row" width="100%">
+                    <Stack>
+                      <ListItemText primary={user.name} />
+                      <ListItemText primary={`@${user.username}`} />
+                      <ListItemText primary={user.bio} />
+                    </Stack>
+                    <FollowButton user={user} />
                   </Stack>
-                  <FollowButton user={user} />
-                </Stack>
-                <Divider />
-              </ListItem>
-            </Link>
-          ))}
-      </InfiniteScroll>
+                  <Divider />
+                </ListItem>
+              </Link>
+            ))}
+        </InfiniteScroll>
+      </Box>
     </Box>
   );
 };
