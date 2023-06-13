@@ -40,9 +40,9 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
     }
   };
 
-  // useEffect(() => {
-  //   fetchPosts();
-  // }, []);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   const handleRetweet = async (id) => {
     if (user) {
