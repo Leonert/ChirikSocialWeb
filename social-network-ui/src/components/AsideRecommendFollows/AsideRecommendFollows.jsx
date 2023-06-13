@@ -4,17 +4,21 @@ import { Link, json } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
 import FollowButton from '../../pages/Profile/FollowButton';
+import Spinner from '../Spinner/Spinner';
 import AsideContainer from '../UI/AsideContainer';
 
 const AsideRecommendFollows = () => {
   const [recommendedUsers, setRecommendedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const fetchRecommendedUsers = async () => {
+    setLoading(true);
     try {
       const { data } = await axiosIns.get('api/users/connect?n=3');
       setRecommendedUsers(data);
     } catch (e) {
       return json(e);
     }
+    setLoading(false);
   };
   useEffect(() => {
     fetchRecommendedUsers();
@@ -22,6 +26,7 @@ const AsideRecommendFollows = () => {
 
   return (
     <AsideContainer header="For you" asideActions="/connect_people">
+      {loading && <Spinner />}
       {recommendedUsers.map((user) => (
         <Link key={user.id} to={`/${user.username}`}>
           <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
