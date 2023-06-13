@@ -8,7 +8,6 @@ import SearchResulting from './SearchResulting';
 
 const SearchWrapper = () => {
   const searchResult = useSelector((state) => state.search.searchResult);
-  console.log(searchResult);
   const dispatch = useDispatch();
   const delateResult = () => {
     dispatch(removeResult());

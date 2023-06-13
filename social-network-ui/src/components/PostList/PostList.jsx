@@ -17,7 +17,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
   const [posts, setPosts] = useState([]);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
-
+  const [isScrolledToTop, setIsScrolledToTop] = useState(false);
   const classes = usePostStyle();
   const dispatch = useDispatch();
   const fetchPosts = async () => {
@@ -39,10 +39,24 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
       return { Error: e };
     }
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setIsScrolledToTop(scrollTop === 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    if (isScrolledToTop) {
+      fetchPosts();
+    }
+  }, [isScrolledToTop]);
 
   const handleRetweet = async (id) => {
     if (user) {
