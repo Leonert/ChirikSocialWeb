@@ -9,7 +9,7 @@ const SearchResulting = (props) => {
     <CardHeader
       key={props.id}
       sx={{ width: '90%', padding: '10px 0' }}
-      avatar={<AvatarLink alt={props.name} src={props.avatar} to={`/${props.nickname}`} />}
+      avatar={<AvatarLink alt={props.name} avatar={props.avatar} to={`/${props.nickname}`} />}
       action={
         <div
           style={{

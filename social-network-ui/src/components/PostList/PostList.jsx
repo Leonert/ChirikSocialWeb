@@ -36,7 +36,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
       setPosts((prevPosts) => [...prevPosts, ...data]);
       setPage((prevPage) => prevPage + 1);
     } catch (e) {
-      return json({ Error: e });
+      return { Error: e };
     }
   };
 

@@ -8,6 +8,7 @@ import SearchResulting from './SearchResulting';
 
 const SearchWrapper = () => {
   const searchResult = useSelector((state) => state.search.searchResult);
+  console.log(searchResult);
   const dispatch = useDispatch();
   const delateResult = () => {
     dispatch(removeResult());
@@ -28,6 +29,7 @@ const SearchWrapper = () => {
               id={res.id}
               name={res.name}
               nickname={res.username}
+              avatar={res.profileImage}
             />
           ))}
       </Box>

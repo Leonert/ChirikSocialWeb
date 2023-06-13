@@ -15,27 +15,15 @@ function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
   const following = useSelector((state) => state.home.following);
   const modalUserState = useSelector((state) => state.home.modalUser);
-  const dispatch = useDispatch();
+
   const { user } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    dispatch(GetPosts(0)).then((result) => {
-      if (GetPosts.fulfilled.match(result)) {
-        dispatch(getPost(result.payload));
-      }
-    });
-
-    return () => {
-      dispatch(clearPosts());
-    };
-  }, [dispatch]);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}>
         <HeaderMain />
         {user && <ButtonShowMore />}
-        {recommendation && <PostList />}
+        {recommendation && <PostList apiUrl="api/posts?" />}
         {following && <Following />}
         {modalUserState && <ModalUser />}
       </Grid>
