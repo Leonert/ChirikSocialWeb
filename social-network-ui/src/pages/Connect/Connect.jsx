@@ -12,7 +12,6 @@ const Connect = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMoreUsers, setHasMoreUsers] = useState(true);
-  console.log(users);
 
   const fetchSuggestedUsers = async () => {
     try {
