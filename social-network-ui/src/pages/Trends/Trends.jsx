@@ -17,14 +17,14 @@ const Trends = () => {
   const fetchTrends = async () => {
     try {
       const { data } = await axiosIns.get(`/api/trends/hashtags?p=${page}&n=11`);
-      if (data.length === 0) {
-        setHasMorePosts(false);
-      } else if (data.length < 5 && page === 0) {
-        setHasMorePosts(false);
+      if (page === 0) {
+        setTrends(data);
       } else {
-        setHasMorePosts(true);
+        setTrends((prevUsers) => [...prevUsers, ...data]);
       }
-      setTrends((prevTrends) => [...prevTrends, ...data]);
+
+      setHasMorePosts(data.length === 10);
+
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
       return json({ Error: error });
