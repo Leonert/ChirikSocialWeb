@@ -5,52 +5,45 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
-import {
-  addOnePost,
-  bookmarksPost,
-  getPost,
-  getPostId,
-  likesPost,
-  makeRetweet,
-  openReplayModal,
-  removeRetweet,
-} from '../../features/slices/homeSlice';
+import { addOnePost, getPostId, makeRetweet, openReplayModal, removeRetweet } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 import Spinner from '../Spinner/Spinner';
 
-export default function PostList({ isBookmarkPage, isReplyPage }) {
-  const posts = useSelector((state) => state.home.post);
+export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const { user } = useSelector((state) => state.auth);
-
-  const [hasMorePosts, setHasMorePosts] = useState(false);
-  const [page, setPage] = useState(1);
+  const [posts, setPosts] = useState([]);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [page, setPage] = useState(0);
 
   const classes = usePostStyle();
   const dispatch = useDispatch();
   const fetchPosts = async () => {
     try {
       setHasMorePosts(true);
-      const { data } = await axiosIns.get(`api/posts?p=${page}&n=5`);
+
+      const { data } = await axiosIns.get(`${apiUrl}p=${page}&n=5`);
+
       if (data.length === 0) {
         setHasMorePosts(false);
       } else if (data.length < 5 && page === 0) {
         setHasMorePosts(false);
-        dispatch(getPost(data));
       } else {
         setHasMorePosts(true);
-        dispatch(getPost(data));
-        setPage((prevPage) => prevPage + 1);
       }
+      setPosts((prevPosts) => [...prevPosts, ...data]);
+      setPage((prevPage) => prevPage + 1);
     } catch (e) {
-      return { Error: e };
+      return json({ Error: e });
     }
   };
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+
+  // useEffect(() => {
+  //   fetchPosts();
+  // }, []);
+
   const handleRetweet = async (id) => {
     if (user) {
       const response = await axiosIns.post(`/api/posts`, { originalPost: id });
@@ -77,11 +70,28 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
-        const LikeNumber = response.data;
-        dispatch(
-          likesPost({
-            postId: props,
-            likesNumber: LikeNumber,
+        const likesNumber = response.data;
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
+              if (+post.id === +props) {
+                return {
+                  ...post,
+                  liked: !post.liked,
+                  likesNumber: likesNumber,
+                };
+              } else {
+                return {
+                  ...post,
+                  originalPost: {
+                    ...post.originalPost,
+                    liked: !post.originalPost.liked,
+                    likesNumber: likesNumber,
+                  },
+                };
+              }
+            }
+            return post;
           })
         );
       });
@@ -94,10 +104,27 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
     if (user) {
       axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
         const bookmarksNum = response.data;
-        dispatch(
-          bookmarksPost({
-            postId: props,
-            bookmarksNumber: bookmarksNum,
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
+              if (+post.id === +props) {
+                return {
+                  ...post,
+                  bookmarked: !post.bookmarked,
+                  bookmarksNumber: bookmarksNum,
+                };
+              } else {
+                return {
+                  ...post,
+                  originalPost: {
+                    ...post.originalPost,
+                    bookmarked: !post.originalPost.bookmarked,
+                    bookmarksNumber: bookmarksNum,
+                  },
+                };
+              }
+            }
+            return post;
           })
         );
       });
@@ -144,7 +171,7 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
               id={post.id}
               classes={isReplyPage ? classes.replyItem : classes.Page}
               username={post.author.username}
-              avatar={post.author.profileImage}
+              profileImage={post.author.profileImage}
               name={post.author.name}
               isBookmarkPage={isBookmarkPage}
               isReplyPage={isReplyPage}
@@ -174,7 +201,7 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
                   key={post.originalPost.id}
                   isBookmarkPage={isBookmarkPage}
                   username={post.originalPost.author.username}
-                  avatar={post.originalPost.author.profileImage}
+                  profileImage={post.originalPost.author.profileImage}
                   name={post.originalPost.author.name}
                   retweet={post.originalPost.retweetsNumber}
                   like={post.originalPost.likesNumber}
