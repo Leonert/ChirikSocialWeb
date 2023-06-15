@@ -4,9 +4,12 @@ import com.socialnetwork.api.dto.DtoInterface;
 import com.socialnetwork.api.dto.UserDtoInterface;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
+import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
 import com.socialnetwork.api.models.additional.Response;
+import com.socialnetwork.api.service.authorized.LikeService;
 import com.socialnetwork.api.service.authorized.UserService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthUserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,14 +39,17 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 public class UserController extends Controller {
   private final UserService userService;
   private final UserMapper userMapper;
+  private final LikeService likeService;
+  private final PostMapper postMapper;
+  private final NonAuthPostMapper nonAuthPostMapper;
   private final NonAuthUserService nonAuthUserService;
   private final NonAuthUserMapper nonAuthUserMapper;
 
   @GetMapping("p/{username}")
   public UserDtoInterface getProfileByUsername(
-        @PathVariable("username") String username,
-        @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
-        throws NoUserWithSuchCredentialsException {
+          @PathVariable("username") String username,
+          @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
+          throws NoUserWithSuchCredentialsException {
     if (currentUserUsername.isEmpty()) {
       return nonAuthUserMapper.mapForProfile(nonAuthUserService.findByUsername(username));
     }
@@ -57,17 +62,17 @@ public class UserController extends Controller {
                @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
                @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (currentUserUsername.isEmpty()) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowers(username,
-            pageD, resultsD)));
+              pageD, resultsD)));
 
     }
     String currentUserUsernameD = currentUserUsername.get();
     return getListResponseEntity(userMapper.mapForListing(userService.getFollowers(username, currentUserUsernameD,
-          pageD, resultsD), currentUserUsernameD));
+            pageD, resultsD), currentUserUsernameD));
   }
 
   @GetMapping("{username}/followed")
@@ -76,16 +81,16 @@ public class UserController extends Controller {
               @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
               @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
               @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
     if (currentUserUsername.isEmpty()) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowed(username,
-            pageD, resultsD)));
+              pageD, resultsD)));
     }
     String currentUserUsernameD = currentUserUsername.get();
     return getListResponseEntity(userMapper.mapForListing(userService.getFollowed(username, currentUserUsernameD,
-          pageD, resultsD), currentUserUsernameD));
+            pageD, resultsD), currentUserUsernameD));
   }
 
   @GetMapping("connect")
@@ -93,10 +98,10 @@ public class UserController extends Controller {
     getConnect(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
              @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
              @RequestAttribute(USERNAME_ATTRIBUTE) String currentUserUsername)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return getListResponseEntity(userMapper.mapForListing(
-          userService.getListForConnectPage(currentUserUsername, page.orElse(PAGE_NUMBER_DEFAULT),
-                postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername));
+            userService.getListForConnectPage(currentUserUsername, page.orElse(PAGE_NUMBER_DEFAULT),
+                    postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername));
   }
 
   @PostMapping("p")
@@ -109,9 +114,22 @@ public class UserController extends Controller {
   @PostMapping("p/{username}")
   public ResponseEntity<?> followUnfollow(@PathVariable("username") String username,
                                           @RequestAttribute(USERNAME_ATTRIBUTE) String currentUserUsername)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return userService.followUnfollow(username, currentUserUsername)
-          ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("User was subscribed successfully")) :
-          ResponseEntity.status(HttpStatus.OK).body(new Response("User was unsubscribed"));
+            ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("User was subscribed successfully")) :
+            ResponseEntity.status(HttpStatus.OK).body(new Response("User was unsubscribed"));
+  }
+
+  @GetMapping("p/{username}/liked")
+  public ResponseEntity<?> getLikedPosts(@PathVariable("username") String username,
+                                         @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
+          throws NoUserWithSuchCredentialsException {
+    if (currentUserUsername.isEmpty()) {
+      return getListResponseEntity(nonAuthPostMapper.mapForListing(
+              likeService.getUserLikedPosts(userService.findByUsername(username))));
+    }
+    return getListResponseEntity(postMapper.mapForListing(
+            likeService.getUserLikedPosts(userService.findByUsername(username)),
+            currentUserUsername.get()));
   }
 }
