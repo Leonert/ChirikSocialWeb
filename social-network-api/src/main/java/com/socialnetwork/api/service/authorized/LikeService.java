@@ -18,9 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LikeService {
   private final LikeRepository likeRepository;
-
   private final UserService userService;
-
   private final NotificationService notificationService;
   private final PostRepository postRepository;
 
@@ -33,6 +31,10 @@ public class LikeService {
       delete(userId, postId);
       return false;
     }
+  }
+
+  public List<Post> getUserLikedPosts(User user) {
+    return likeRepository.findPostsByUserLiked(user);
   }
 
   public void save(int userId, int postId) {
