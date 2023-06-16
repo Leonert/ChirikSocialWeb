@@ -19,8 +19,8 @@ function Home() {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={7}>
+    <Grid container sx={{ margin: '0', paddingTop: '0' }}>
+      <Grid item xs={7} sx={{ paddingTop: '0' }}>
         <HeaderMain />
         {user && <ButtonShowMore />}
         {recommendation && <PostList apiUrl="api/posts?" />}
