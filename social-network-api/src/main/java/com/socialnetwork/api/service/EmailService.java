@@ -1,6 +1,5 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.exception.custom.EmailException;
 import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import lombok.RequiredArgsConstructor;

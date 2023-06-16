@@ -9,6 +9,8 @@ import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
 import com.socialnetwork.api.models.additional.Response;
+import com.socialnetwork.api.security.CurrentUser;
+import com.socialnetwork.api.security.JwtUserDetails;
 import com.socialnetwork.api.service.authorized.LikeService;
 import com.socialnetwork.api.service.authorized.UserService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthUserService;
@@ -18,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,6 @@ import java.util.Optional;
 
 import static com.socialnetwork.api.util.Constants.Request.PAGE_NUMBER_QUERY;
 import static com.socialnetwork.api.util.Constants.Request.RESULTS_PER_PAGE_QUERY;
-import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
 
@@ -48,12 +48,12 @@ public class UserController extends Controller {
   @GetMapping("p/{username}")
   public UserDtoInterface getProfileByUsername(
           @PathVariable("username") String username,
-          @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
+          @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
-    if (currentUserUsername.isEmpty()) {
+    if (currentUser == null) {
       return nonAuthUserMapper.mapForProfile(nonAuthUserService.findByUsername(username));
     }
-    return userMapper.mapForProfile(userService.findByUsername(username), currentUserUsername.get());
+    return userMapper.mapForProfile(userService.findByUsername(username), currentUser.getUsername());
   }
 
   @GetMapping("{username}/followers")
@@ -61,18 +61,18 @@ public class UserController extends Controller {
     getFollowers(@PathVariable("username") String username,
                @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-               @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
+               @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
-    if (currentUserUsername.isEmpty()) {
+    if (currentUser == null) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowers(username,
               pageD, resultsD)));
 
     }
-    String currentUserUsernameD = currentUserUsername.get();
-    return getListResponseEntity(userMapper.mapForListing(userService.getFollowers(username, currentUserUsernameD,
-            pageD, resultsD), currentUserUsernameD));
+    String currentUserUsername = currentUser.getUsername();
+    return getListResponseEntity(userMapper.mapForListing(userService.getFollowers(username, currentUserUsername,
+            pageD, resultsD), currentUserUsername));
   }
 
   @GetMapping("{username}/followed")
@@ -80,56 +80,59 @@ public class UserController extends Controller {
     getFollowed(@PathVariable("username") String username,
               @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
               @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-              @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
+              @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
-    if (currentUserUsername.isEmpty()) {
+    if (currentUser == null) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowed(username,
               pageD, resultsD)));
     }
-    String currentUserUsernameD = currentUserUsername.get();
-    return getListResponseEntity(userMapper.mapForListing(userService.getFollowed(username, currentUserUsernameD,
-            pageD, resultsD), currentUserUsernameD));
+    String currentUserUsername = currentUser.getUsername();
+    return getListResponseEntity(userMapper.mapForListing(userService.getFollowed(username, currentUserUsername,
+            pageD, resultsD), currentUserUsername));
   }
 
   @GetMapping("connect")
   public ResponseEntity<List<? extends DtoInterface>>
     getConnect(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-             @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-             @RequestAttribute(USERNAME_ATTRIBUTE) String currentUserUsername)
+               @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
+               @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
+    String username = currentUser != null ? currentUser.getUsername() : null;
     return getListResponseEntity(userMapper.mapForListing(
-            userService.getListForConnectPage(currentUserUsername, page.orElse(PAGE_NUMBER_DEFAULT),
-                    postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), currentUserUsername));
+            userService.getListForConnectPage(username, page.orElse(PAGE_NUMBER_DEFAULT),
+                    postsPerPage.orElse(RESULTS_PER_PAGE_DEFAULT)), username));
   }
 
   @PostMapping("p")
   public ResponseEntity<UserDtoInterface> editProfile(@RequestBody UserDto.Request.ProfileEditing userDto,
-                                                      @RequestAttribute(USERNAME_ATTRIBUTE) String username)
+                                                      @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
-    return ResponseEntity.ok(userMapper.mapForProfile(userService.editProfile(userDto, username), username));
+    return ResponseEntity.ok(userMapper.mapForProfile(
+            userService.editProfile(userDto, currentUser.getUsername()), currentUser.getUsername()
+    ));
   }
 
   @PostMapping("p/{username}")
   public ResponseEntity<?> followUnfollow(@PathVariable("username") String username,
-                                          @RequestAttribute(USERNAME_ATTRIBUTE) String currentUserUsername)
+                                          @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
-    return userService.followUnfollow(username, currentUserUsername)
+    return userService.followUnfollow(username, currentUser.getUsername())
             ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("User was subscribed successfully")) :
             ResponseEntity.status(HttpStatus.OK).body(new Response("User was unsubscribed"));
   }
 
   @GetMapping("p/{username}/liked")
   public ResponseEntity<?> getLikedPosts(@PathVariable("username") String username,
-                                         @RequestAttribute(USERNAME_ATTRIBUTE) Optional<String> currentUserUsername)
+                                         @CurrentUser JwtUserDetails currentUser)
           throws NoUserWithSuchCredentialsException {
-    if (currentUserUsername.isEmpty()) {
+    if (currentUser == null) {
       return getListResponseEntity(nonAuthPostMapper.mapForListing(
               likeService.getUserLikedPosts(userService.findByUsername(username))));
     }
     return getListResponseEntity(postMapper.mapForListing(
             likeService.getUserLikedPosts(userService.findByUsername(username)),
-            currentUserUsername.get()));
+            currentUser.getUsername()));
   }
 }
