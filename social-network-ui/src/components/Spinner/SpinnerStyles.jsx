@@ -1,40 +1,38 @@
-import {makeStyles} from "@material-ui/core";
-
-
+import { makeStyles } from '@material-ui/core';
 
 export const useSpinnerStyles = makeStyles((theme) => ({
-    loading: {
-        width: 30,
-        margin: "0px auto",
-        paddingTop: props => (props.paddingTop !== undefined) ? props.paddingTop : 50,
-        paddingBottom: 50,
+  loading: {
+    width: 30,
+    margin: '0px auto',
+    paddingTop: (props) => (props.paddingTop !== undefined ? props.paddingTop : 50),
+    paddingBottom: (props) => (props.paddingTop !== undefined ? props.paddingTop : 50),
+  },
+  spinner: {
+    height: 26,
+    width: 26,
+    animation: `$spinner 0.75s linear 0s infinite`,
+    '& svg': {
+      height: '100%',
+      width: '100%',
     },
-    spinner: {
-        height: 26,
-        width: 26,
-        animation: `$spinner 0.75s linear 0s infinite`,
-        "& svg": {
-            height: "100%",
-            width: "100%"
-        },
+  },
+  '@keyframes spinner': {
+    '0%': {
+      transform: 'rotate(0deg)',
     },
-    "@keyframes spinner": {
-        "0%": {
-            transform: "rotate(0deg)",
-        },
-        "100%": {
-            transform: "rotate(360deg)",
-        }
+    '100%': {
+      transform: 'rotate(360deg)',
     },
-    backCircle: {
-        stroke: theme.palette.primary.main,
-        strokeWidth: 4,
-        opacity: 0.2
-    },
-    frontCircle: {
-        stroke: theme.palette.primary.main,
-        strokeWidth: 4,
-        strokeDasharray: 80,
-        strokeDashoffset: 60
-    },
+  },
+  backCircle: {
+    stroke: theme.palette.primary.main,
+    strokeWidth: 4,
+    opacity: 0.2,
+  },
+  frontCircle: {
+    stroke: theme.palette.primary.main,
+    strokeWidth: 4,
+    strokeDasharray: 80,
+    strokeDashoffset: 60,
+  },
 }));
