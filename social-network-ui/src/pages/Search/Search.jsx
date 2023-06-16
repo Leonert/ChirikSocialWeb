@@ -3,22 +3,9 @@ import { Box, InputAdornment, Tab, Tabs, TextField, alpha } from '@mui/material'
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import useDebounce from '../../util/useDebounce';
 import PostsList from './PostsList';
 import UsersList from './UsersList';
-
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 function TabPanel(props) {
   const { children, tabValue, index, ...other } = props;

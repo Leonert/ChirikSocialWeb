@@ -10,7 +10,7 @@ import Following from '../../components/Following/Following';
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
 import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
-import SearchField from '../../components/SearchField/SearchField';
+import SearchInput from '../../components/SearchInput/SearchInput';
 import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
@@ -42,8 +42,8 @@ function Home() {
         {modalUserState && <ModalUser />}
       </Grid>
       <Grid item xs={5}>
-        <Form method="post">
-          <SearchField />
+        <Form action="/" method="post">
+          <SearchInput />
         </Form>
         <AsideTrends />
         <AsideRecommendFollows />

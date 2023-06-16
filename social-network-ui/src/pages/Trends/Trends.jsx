@@ -6,7 +6,7 @@ import { Form, Link, NavLink, json } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
-import SearchField from '../../components/SearchField/SearchField';
+import SearchInput from '../../components/SearchInput/SearchInput';
 import Spinner from '../../components/Spinner/Spinner';
 
 const Trends = () => {
@@ -93,7 +93,7 @@ const Trends = () => {
       </Grid>
       <Grid item xs={5}>
         <Form method="post">
-          <SearchField />
+          <SearchInput />
         </Form>
         <AsideRecommendFollows />
       </Grid>

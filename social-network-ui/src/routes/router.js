@@ -26,11 +26,11 @@ export const router = createBrowserRouter([
 
     element: <Layout />,
     errorElement: <div>Error page</div>,
+    action: homeSearchAction,
     children: [
       {
         index: true,
         element: <Home />,
-        action: homeSearchAction,
       },
       {
         path: '/explore',
