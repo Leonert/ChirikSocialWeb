@@ -1,15 +1,18 @@
 import { Grid } from '@mui/material';
 import React from 'react';
+import { Form } from 'react-router-dom';
 
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
-import SearchField from '../../components/SearchField/SearchField';
+import SearchInput from '../../components/SearchInput/SearchInput';
 import TrendsSection from './TrendsSection';
 
 const Explore = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={7}>
-        <SearchField />
+        <Form action="/" method="post">
+          <SearchInput />
+        </Form>
         <TrendsSection />
       </Grid>
       <Grid item xs={5}>
