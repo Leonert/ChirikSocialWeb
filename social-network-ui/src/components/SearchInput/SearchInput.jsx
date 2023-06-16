@@ -69,7 +69,7 @@ const SearchInput = () => {
         <Link key={option.id} to={`/${option.username}`}>
           <ListItem {...props}>
             <ListItemAvatar>
-              <Avatar src={option.avatar} />
+              <Avatar src={option.profileImage} />
             </ListItemAvatar>
             <Stack>
               <ListItemText primary={option.name} />
