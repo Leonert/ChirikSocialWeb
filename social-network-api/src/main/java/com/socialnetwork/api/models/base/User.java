@@ -4,6 +4,7 @@ import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.security.oauth2.AuthProvider;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -94,8 +95,13 @@ public class User {
   @Transient
   private boolean isCurrUserFollower;
 
-  public User() {
+  @Transient
+  private AuthProvider provider;
 
+  @Transient
+  private String providerId;
+
+  public User() {
   }
 
   public User(int id) {

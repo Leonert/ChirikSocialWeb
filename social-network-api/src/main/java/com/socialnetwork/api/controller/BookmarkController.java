@@ -7,7 +7,7 @@ import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.security.CurrentUser;
-import com.socialnetwork.api.security.JwtUserDetails;
+import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class BookmarkController {
   private final PostMapper postMapper;
 
   @GetMapping()
-  public ResponseEntity<List<PostDtoInterface>> getUserNotifications(@CurrentUser JwtUserDetails currentUser)
+  public ResponseEntity<List<PostDtoInterface>> getUserNotifications(@CurrentUser UserPrincipal currentUser)
         throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     List<PostDtoInterface> outcome = new ArrayList<>();
     String username = currentUser.getUsername();

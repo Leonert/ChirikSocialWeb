@@ -10,7 +10,7 @@ import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.security.CurrentUser;
-import com.socialnetwork.api.security.JwtUserDetails;
+import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.authorized.LikeService;
 import com.socialnetwork.api.service.authorized.UserService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthUserService;
@@ -48,7 +48,7 @@ public class UserController extends Controller {
   @GetMapping("p/{username}")
   public UserDtoInterface getProfileByUsername(
           @PathVariable("username") String username,
-          @CurrentUser JwtUserDetails currentUser)
+          @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     if (currentUser == null) {
       return nonAuthUserMapper.mapForProfile(nonAuthUserService.findByUsername(username));
@@ -61,7 +61,7 @@ public class UserController extends Controller {
     getFollowers(@PathVariable("username") String username,
                @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-               @CurrentUser JwtUserDetails currentUser)
+               @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
@@ -80,7 +80,7 @@ public class UserController extends Controller {
     getFollowed(@PathVariable("username") String username,
               @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
               @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-              @CurrentUser JwtUserDetails currentUser)
+              @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
@@ -97,7 +97,7 @@ public class UserController extends Controller {
   public ResponseEntity<List<? extends DtoInterface>>
     getConnect(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-               @CurrentUser JwtUserDetails currentUser)
+               @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     String username = currentUser != null ? currentUser.getUsername() : null;
     return getListResponseEntity(userMapper.mapForListing(
@@ -107,7 +107,7 @@ public class UserController extends Controller {
 
   @PostMapping("p")
   public ResponseEntity<UserDtoInterface> editProfile(@RequestBody UserDto.Request.ProfileEditing userDto,
-                                                      @CurrentUser JwtUserDetails currentUser)
+                                                      @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     return ResponseEntity.ok(userMapper.mapForProfile(
             userService.editProfile(userDto, currentUser.getUsername()), currentUser.getUsername()
@@ -116,7 +116,7 @@ public class UserController extends Controller {
 
   @PostMapping("p/{username}")
   public ResponseEntity<?> followUnfollow(@PathVariable("username") String username,
-                                          @CurrentUser JwtUserDetails currentUser)
+                                          @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     return userService.followUnfollow(username, currentUser.getUsername())
             ? ResponseEntity.status(HttpStatus.CREATED).body(new Response("User was subscribed successfully")) :
@@ -125,7 +125,7 @@ public class UserController extends Controller {
 
   @GetMapping("p/{username}/liked")
   public ResponseEntity<?> getLikedPosts(@PathVariable("username") String username,
-                                         @CurrentUser JwtUserDetails currentUser)
+                                         @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     if (currentUser == null) {
       return getListResponseEntity(nonAuthPostMapper.mapForListing(

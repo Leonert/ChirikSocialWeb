@@ -1,7 +1,11 @@
 package com.socialnetwork.api.configs;
 
 import com.socialnetwork.api.filter.JwtAuthFilter;
-import com.socialnetwork.api.security.JwtAuthenticationEntryPoint;
+import com.socialnetwork.api.security.jwt.JwtAuthenticationEntryPoint;
+import com.socialnetwork.api.security.oauth2.CustomOAuth2UserService;
+import com.socialnetwork.api.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  private final CustomOAuth2UserService customOAuth2UserService;
+  private final OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler;
+  private final OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler;
+  private final HttpCookieOAuth2AuthorizationRequestRepository httpOAuth2RequestRepository;
   private final JwtAuthFilter jwtAuthFilter;
-
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
   @Bean
@@ -53,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/**/*.js")
             .permitAll()
             .antMatchers(
-                    "/auth/**",
+                    "/oauth/**",
                     "/oauth2/**",
                     "/h2-console/**",
                     "/api/login/**",
@@ -66,7 +73,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticated()
             .and()
             .exceptionHandling()
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
+            .oauth2Login()
+            .authorizationEndpoint()
+            .baseUri("/oauth2/authorize")
+            .authorizationRequestRepository(httpOAuth2RequestRepository)
+            .and()
+            .redirectionEndpoint()
+            .baseUri("/oauth2/callback/*")
+            .and()
+            .userInfoEndpoint()
+            .userService(customOAuth2UserService)
+            .and()
+            .successHandler(oauth2AuthenticationSuccessHandler)
+            .failureHandler(oauth2AuthenticationFailureHandler);
 
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }

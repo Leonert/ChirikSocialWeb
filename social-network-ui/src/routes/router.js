@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import OAuthRedirectHandler from '../components/OAuthRedirectHandler/OAuthRedirectHandler';
 import { Layout } from '../layout/Layout';
 import Bookmarks from '../pages/Bookmarks/Bookmarks';
 import Connect from '../pages/Connect/Connect';

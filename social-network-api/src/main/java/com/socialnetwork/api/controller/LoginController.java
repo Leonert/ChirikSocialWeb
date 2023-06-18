@@ -8,8 +8,8 @@ import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.CurrentUser;
-import com.socialnetwork.api.security.JwtTokenUtil;
-import com.socialnetwork.api.security.JwtUserDetails;
+import com.socialnetwork.api.security.jwt.JwtTokenUtil;
+import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.NotificationService;
 import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class LoginController {
   }
 
   @GetMapping("jwt")
-  public ResponseEntity<?> loginByToken(@CurrentUser JwtUserDetails currentUser, HttpServletRequest request)
+  public ResponseEntity<?> loginByToken(@CurrentUser UserPrincipal currentUser, HttpServletRequest request)
         throws NoUserWithSuchCredentialsException {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
     if (authHeader.startsWith(BEARER)) {
@@ -70,7 +70,7 @@ public class LoginController {
   }
 
   @PostMapping("password-change")
-  public ResponseEntity<?> passwordChange(@CurrentUser JwtUserDetails currentUser,
+  public ResponseEntity<?> passwordChange(@CurrentUser UserPrincipal currentUser,
                                           @RequestBody UserDto.Request.PasswordEditing passwords)
       throws NoUserWithSuchCredentialsException, AccessDeniedException {
     userService.passwordChange(currentUser.getUsername(), passwords.getOldPassword(), passwords. getNewPassword());

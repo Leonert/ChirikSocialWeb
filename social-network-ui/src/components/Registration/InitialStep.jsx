@@ -1,5 +1,5 @@
-// import GoogleIcon from '@mui/icons-material/Google';
-import { Box, Link, Typography } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
+import { Box, Divider, Link, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -19,15 +19,19 @@ const InitialStep = (props) => {
       }}
     >
       <Typography sx={{ fontSize: '36px', marginTop: '10px', marginBottom: '20px' }}>Join Chirik now! </Typography>
-      {/* <Button startIcon={<GoogleIcon />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
-        <Typography sx={{ fontSize: '14px' }}> Register with Google </Typography>
-      </Button>
-      <Divider sx={{ '&::after, &::before': { borderColor: 'rgba(255, 255, 255, 0.4)' }, marginBottom: '12px' }}>
-        or
-      </Divider> */}
-      <Button onClick={props.onCreateAccount} sx={{ maxWidth: '300px', width: '100%', marginBottom: '30px' }}>
-        <Typography sx={{ fontSize: '14px' }}> Registration </Typography>
-      </Button>
+
+      <Link href={`http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:3000/oauth2/redirect`}>
+        <Button startIcon={<GoogleIcon />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
+          <Typography sx={{ fontSize: '14px' }}> Register with Google </Typography>
+        </Button>
+        <Divider sx={{ '&::after, &::before': { borderColor: 'rgba(255, 255, 255, 0.4)' }, marginBottom: '12px' }}>
+          or
+        </Divider>
+        <Button onClick={props.onCreateAccount} sx={{ maxWidth: '300px', width: '100%', marginBottom: '30px' }}>
+          <Typography sx={{ fontSize: '14px' }}> Registration </Typography>
+        </Button>
+      </Link>
+
       <Typography sx={{ fontSize: '14px' }}>
         Already have an account?{' '}
         <Link
