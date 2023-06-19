@@ -12,15 +12,34 @@ export const useStylesItemNotification = makeStyles((theme) =>
       },
     },
 
+    link: {
+      display: 'inline-block',
+    },
+
     avatar: {
       borderRadius: '50%',
-      width: '50px',
-      height: '50px',
-      backgroundColor: 'red',
+      width: '40px',
+      height: '40px',
+      backgroundColor: '#ffffff',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: '4px',
+    },
+    avatarImg: {
+      borderRadius: '50%',
+      width: '40px',
+      height: '40px',
+    },
+    avatarText: {
+      borderRadius: '50%',
+      width: '40px',
+      height: '40px',
+      fontSize: '20px',
+      color: 'black',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     username: {
       display: 'inline-block',

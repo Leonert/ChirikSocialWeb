@@ -12,6 +12,7 @@ export const ListUsersRetweer = forwardRef(function ListUsersRetweer(props, ref)
   const { loading, listUsers, isTotalUsers } = useSelector((state) => state.retweets);
   const [currentPage, setCurrentPage] = useState(0);
   const { id } = useParams();
+
   const handleScroll = useCallback(
     (e) => {
       if (e.target.scrollTop + e.target.offsetHeight >= e.target.scrollHeight) {
@@ -44,8 +45,6 @@ export const ListUsersRetweer = forwardRef(function ListUsersRetweer(props, ref)
       dispatch(getUsersRetweet({ id, currentPage }));
     }
   }, []);
-
-  useEffect(() => {}, [listUsers]);
 
   return (
     <ul>
