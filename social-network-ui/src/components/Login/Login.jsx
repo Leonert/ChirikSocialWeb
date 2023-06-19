@@ -179,7 +179,11 @@ export const Login = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       onMouseDown={(e) => e.preventDefault()}
                     >
-                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      {showPassword ? (
+                        <VisibilityIcon sx={{ color: 'gray' }} />
+                      ) : (
+                        <VisibilityOffIcon sx={{ color: 'gray' }} />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -188,7 +192,7 @@ export const Login = () => {
 
             <FormControlLabel
               control={<Checkbox checked={formik.values.rememberMe} onChange={formik.handleChange} name="rememberMe" />}
-              sx={{ display: 'block', marginBottom: '140px' }}
+              sx={{ display: 'block', marginBottom: '140px', color: 'white' }}
               label="Remember me"
             />
 
