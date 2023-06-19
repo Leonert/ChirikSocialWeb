@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Grid, InputAdornment, Stack, Tab, Tabs, TextField, alpha, useMediaQuery } from '@mui/material';
+import { Box, Grid, InputAdornment, Tab, Tabs, TextField, alpha, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
