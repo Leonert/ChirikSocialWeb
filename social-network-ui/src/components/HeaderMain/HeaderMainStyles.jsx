@@ -5,7 +5,6 @@ export const useHeaderMenuStyles = makeStyles((theme) => ({
     top: '0',
     listStyle: 'none',
     margin: '0',
-    maxWidth: '600px',
     backdropFilter: 'blur(10px)',
     backgroundColor: 'rgba(11,18,23,0.7)',
     padding: '20px 0 ',

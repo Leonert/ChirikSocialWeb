@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import { Hidden, IconButton, Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -41,11 +41,11 @@ const SideMenu = () => {
       <ReplayModal />
       <ul className={classes.container}>
         <li>
-          <NavLink to={HOME} activeclassname={'selected'}>
+          <NavLink to={HOME}>
             <div className={classes.logoIcon}>
               <IconButton>
                 {Chirick}
-                <span className={classes.title}>Chirik</span>
+                <span className={`${classes.title} ${classes.label}`}>Chirik</span>
               </IconButton>
             </div>
           </NavLink>
@@ -53,101 +53,97 @@ const SideMenu = () => {
         {user ? (
           <>
             <li className={classes.itemWrapper}>
-              <NavLink to={HOME} activeclassname={'selected'}>
+              <NavLink to={HOME}>
                 <div>
-                  <Hidden smDown>
-                    <>
-                      <span>{HomeIcon}</span>
-                      <Typography variant={'h5'}>Home</Typography>
-                    </>
-                  </Hidden>
+                  <span>{HomeIcon}</span>
+                  <Typography className={classes.label} variant={'h5'}>
+                    Home
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={EXPLORE} activeclassname={'selected'}>
+              <NavLink to={EXPLORE}>
                 <div>
-                  <Hidden smDown>
-                    <>
-                      <span>{ExploreIcon}</span>
-                      <Typography variant={'h5'}>Explore</Typography>
-                    </>
-                  </Hidden>
+                  <span>{ExploreIcon}</span>
+                  <Typography className={classes.label} variant={'h5'}>
+                    Explore
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={NOTIFICATIONS} activeclassname={'selected'}>
+              <NavLink to={NOTIFICATIONS}>
                 <div>
-                  <Hidden smDown>
-                    <>
-                      <span>{NotificationsIcon}</span>
-                      <Typography variant={'h5'}>Notifications</Typography>
-                    </>
-                  </Hidden>
+                  <span>{NotificationsIcon}</span>
+                  <Typography className={classes.label} variant={'h5'}>
+                    Notifications
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={MESSAGES} activeclassname={'selected'}>
+              <NavLink to={MESSAGES}>
                 <div>
-                  <Hidden smDown>
-                    <span>{MessagesIcon}</span>
-                    <Typography className={classes.label} variant="h5">
-                      Messages
-                    </Typography>
-                  </Hidden>
+                  <span>{MessagesIcon}</span>
+                  <Typography className={classes.label} variant="h5">
+                    Messages
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={BOOKMARKS} activeclassname={'selected'}>
+              <NavLink to={BOOKMARKS}>
                 <div>
-                  <Hidden smDown>
-                    <>
-                      <span>{BookmarksIcon}</span>
-                      <Typography variant={'h5'}>Bookmarks</Typography>
-                    </>
-                  </Hidden>
+                  <span>{BookmarksIcon}</span>
+                  <Typography className={classes.label} variant={'h5'}>
+                    Bookmarks
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={user?.username} activeclassname={'selected'}>
+              <NavLink to={user?.username}>
                 <div>
-                  <Hidden smDown>
-                    <>
-                      <span>{ProfileIcon}</span>
-                      <Typography variant={'h5'}>Profile</Typography>
-                    </>
-                  </Hidden>
+                  <span>{ProfileIcon}</span>
+                  <Typography className={classes.label} variant={'h5'}>
+                    Profile
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SETTING} activeclassname={'selected'}>
+              <NavLink to={SETTING}>
                 <div>
-                  <Hidden smDown>
-                    <>
-                      <span>{SettingsIcon}</span>
-                      <Typography variant={'h5'}>Setting</Typography>
-                    </>
-                  </Hidden>
+                  <span>{SettingsIcon}</span>
+                  <Typography className={classes.label} variant={'h5'}>
+                    Setting
+                  </Typography>
                 </div>
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
+              <IconButton
+                onClick={handleClickOpenAddTweet}
+                sx={{
+                  height: '50px',
+                  width: '50px',
+                  backgroundColor: (theme) => theme.palette.background.lightBlue,
+                  color: 'white',
+                }}
+                className={`${classes.tweetIconButton} ${classes.tweetButton}`}
+              >
+                <CreateIcon />
+              </IconButton>
               <Button
                 onClick={handleClickOpenAddTweet}
-                className={classes.button}
+                className={`${classes.button} ${classes.tweetBtn}`}
                 variant="contained"
                 color="primary"
                 fullWidth
               >
-                <Hidden smDown>Tweet</Hidden>
-                <Hidden mdUp>
-                  <CreateIcon />
-                </Hidden>
+                <Typography component="span">Tweet</Typography>
+                <CreateIcon />
               </Button>
               <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
             </li>
@@ -159,12 +155,10 @@ const SideMenu = () => {
         ) : (
           <li className={classes.itemWrapper}>
             <div>
-              <Hidden smDown>
-                <>
-                  <span>{ExploreIcon}</span>
-                  <Typography variant={'h5'}>Review</Typography>
-                </>
-              </Hidden>
+              <span>{ExploreIcon}</span>
+              <Typography className={classes.label} variant={'h5'}>
+                Review
+              </Typography>
             </div>
           </li>
         )}

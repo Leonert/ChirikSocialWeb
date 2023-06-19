@@ -2,6 +2,9 @@ import { makeStyles } from '@mui/styles';
 
 export const useAddTweetModalStyles = makeStyles((theme) => ({
   content: {
+    '& .MuiPaper-root': {
+      width: '100%',
+    },
     top: '-20%',
     '& .MuiDialogTitle-root': {
       padding: '5px 15px',
@@ -19,7 +22,7 @@ export const useAddTweetModalStyles = makeStyles((theme) => ({
     },
   },
   dialogContent: {
-    width: 598,
+    width: '100%',
     minHeight: 288,
     padding: '10px 20px 10px 20px',
     backgroundColor: theme.palette.background.default,
