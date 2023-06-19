@@ -24,7 +24,7 @@ export const FollowingUser = ({ user }) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         '&:hover': {
-          backgroundColor: '#eceff1',
+          backgroundColor: 'none',
         },
       }}
     >
@@ -49,9 +49,8 @@ export const FollowingUser = ({ user }) => {
             backgroundColor: 'none',
             border: '1px solid gray',
             color: 'rgb(48, 63, 159)',
-
             '&:hover': {
-              backgroundColor: '#ffcdd2',
+              backgroundColor: 'none',
             },
           }}
         >
