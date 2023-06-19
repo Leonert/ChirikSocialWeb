@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Divider, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, ListItem, ListItemText, Stack, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Form, Link, NavLink, json } from 'react-router-dom';
@@ -13,6 +13,7 @@ const Trends = () => {
   const [trends, setTrends] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMorePosts, setHasMorePosts] = useState(true);
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   const fetchTrends = async () => {
     try {
@@ -37,7 +38,7 @@ const Trends = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={7}>
+      <Grid item xs={matches ? 7 : 12}>
         <Box sx={{ maxWidth: '600px', width: '100%' }}>
           <Stack direction="row" p="6px 0" alignItems="center">
             <NavLink
@@ -91,12 +92,14 @@ const Trends = () => {
           </InfiniteScroll>
         </Box>
       </Grid>
-      <Grid item xs={5}>
-        <Form method="post">
-          <SearchInput />
-        </Form>
-        <AsideRecommendFollows />
-      </Grid>
+      {matches && (
+        <Grid item xs={5}>
+          <Form method="post">
+            <SearchInput />
+          </Form>
+          <AsideRecommendFollows />
+        </Grid>
+      )}
     </Grid>
   );
 };
