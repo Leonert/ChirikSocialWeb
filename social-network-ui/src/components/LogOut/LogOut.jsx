@@ -20,7 +20,7 @@ const LogOut = () => {
       <CardHeader
         key={user.id}
         sx={{ width: '90%', padding: '10px 0' }}
-        avatar={<AvatarLink alt={user.name} src={user.profileImage} to={`/${user.username}`} />}
+        avatar={<AvatarLink alt={user.name} avatar={user.profileImage} to={`/${user.username}`} />}
         action={
           <div
             style={{
