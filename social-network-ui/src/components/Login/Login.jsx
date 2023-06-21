@@ -37,6 +37,7 @@ export const Login = () => {
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const openRegistrationModal = () => {
     dispatch(handleRegistrationModal(true));
@@ -64,10 +65,11 @@ export const Login = () => {
       formData.append('password', values.password);
       formData.append('rememberMe', values.rememberMe);
 
-      dispatch(handleSnackbar(true));
-      dispatch(handleModal(false));
       dispatch(loginUser(values));
-      resetForm();
+
+      if (user !== null) {
+        resetForm();
+      }
       navigate('/');
     },
   });
