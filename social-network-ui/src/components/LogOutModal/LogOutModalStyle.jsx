@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/material';
 
 export const useLogOutStyle = makeStyles((theme) => ({
   Page: {
@@ -34,8 +34,8 @@ export const useLogOutStyle = makeStyles((theme) => ({
     backgroundColor: `${theme.palette.primary.main} !important`,
     borderRadius: '30px !important',
     '&:hover': {
-    backgroundColor: `${theme.palette.primary.light} !important`,
-  },
+      backgroundColor: `${theme.palette.primary.light} !important`,
+    },
     '& .MuiButton-label': {
       fontSize: 16,
       color: theme.palette.text.primary,

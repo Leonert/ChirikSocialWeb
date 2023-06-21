@@ -1,7 +1,7 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/material';
 
 export const useActionIconButtonStyles = makeStyles((theme) => ({
-    icon: {
-        display: "inline-block"
-    }
+  icon: {
+    display: 'inline-block',
+  },
 }));

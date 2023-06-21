@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/material';
 
 export const useAddTweetFormStyles = makeStyles((theme) => ({
   content: {

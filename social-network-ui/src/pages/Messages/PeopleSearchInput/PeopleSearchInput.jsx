@@ -1,5 +1,4 @@
-import { TextField } from '@mui/material';
-import { withStyles } from '@mui/styles';
+import { TextField, withStyles } from '@mui/material';
 
 export const PeopleSearchInput = withStyles((theme) => ({
   root: {

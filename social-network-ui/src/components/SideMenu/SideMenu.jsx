@@ -1,4 +1,4 @@
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from '@mui/icons-material/Create';
 import { Button, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';

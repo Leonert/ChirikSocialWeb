@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/material';
 
 const usePostPageStyles = makeStyles((theme) => ({
   replyWrapper: {

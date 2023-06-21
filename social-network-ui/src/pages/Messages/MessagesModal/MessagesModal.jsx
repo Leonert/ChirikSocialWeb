@@ -1,4 +1,4 @@
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, List, ListItem } from '@mui/material';
 import React, { useState } from 'react';
 
