@@ -3,18 +3,8 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
-import {
-  Badge,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Badge, Box, Card, CardContent, CardHeader, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,7 +16,50 @@ import { handleOpenLikeModal } from '../../features/slices/postDatas/likesSlice'
 import { handleOpenRetweetModal } from '../../features/slices/postDatas/retweetsSlice';
 import AvatarLink from '../UI/AvatarLink';
 import NameLink from '../UI/NameLink';
-import { usePostStyle } from './PostStyle';
+
+const CardSize = styled(Card)(({ theme, isReplyPage }) => ({
+  backgroundColor: theme.palette.background.paper + ' !important',
+
+  color: theme.palette.text.primary,
+  padding: '20px ',
+  boxShadow: 'none !important',
+  borderRadius: '10px  ',
+  margin: '0',
+  ...(isReplyPage
+    ? { border: `1px solid transparent` }
+    : { marginTop: '20px', border: `1px solid ${theme.palette.divider}` }),
+}));
+
+const CardHeaderItem = styled(CardHeader)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
+  fontWeight: 800 + ' !important',
+  fontSize: 15 + ' !important',
+}));
+
+const IconButtonCloth = styled(IconButton)(({ theme }) => ({
+  color: '#fff !important',
+}));
+
+const CardContentWrapper = styled(CardContent)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
+  fontWeight: ' 800  !important',
+  fontSize: ' 15  !important',
+}));
+const TypographyActions = styled(Typography)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-end',
+  fontSize: '14px !important',
+  color: theme.palette.grey[300],
+  cursor: 'pointer',
+}));
+const TypographyNumber = styled(Typography)(({ theme }) => ({
+  fontWeight: '700 !important',
+  fontSize: '15px !important',
+  color: theme.palette.primary.main,
+  marginRight: '5px !important',
+}));
 
 const options = {
   year: 'numeric',
@@ -38,13 +71,11 @@ const options = {
 };
 
 export default function Post(props) {
-  const classes = usePostStyle();
-
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { isOpenLikeModal } = useSelector((state) => state.likes);
   const { isOpenRetweetModal } = useSelector((state) => state.retweets);
- 
+
   const handleClickOpenLikesModal = () => {
     dispatch(handleCustomModal(true));
     dispatch(handleOpenLikeModal(true));
@@ -55,18 +86,17 @@ export default function Post(props) {
   };
 
   return (
-    <Card className={props.classes}>
+    <CardSize isReplyPage={props.isReplyPage}>
       {props.replay}
       {props.content != null && (
-        <CardHeader
-          className={classes.pageItem}
+        <CardHeaderItem
           avatar={<AvatarLink alt={props.name} avatar={props.profileImage} to={`/${props.username}`} />}
           action={
             props.username === user.username ? (
               <Tooltip title="Delete">
-                <IconButton aria-label="settings" onClick={props.handleClickDelete} className={classes.iconColor}>
+                <IconButtonCloth aria-label="settings" onClick={props.handleClickDelete}>
                   <MoreHorizIcon />
-                </IconButton>
+                </IconButtonCloth>
               </Tooltip>
             ) : null
           }
@@ -80,26 +110,33 @@ export default function Post(props) {
       )}
       {props.content && !props.postPage && (
         <Link to={`/${props.username}/${props.id}`}>
-          <CardContent className={classes.pageItem}>
-            <Typography variant="body2" className={classes.iconColor}>
+          <CardContentWrapper>
+            <Typography variant="body2" color="#B9CAD3" style={{ overflowWrap: 'break-word' }}>
               {props.content}
             </Typography>
-          </CardContent>
+          </CardContentWrapper>
         </Link>
       )}
       {props.content && props.postPage && (
-        <CardContent className={classes.pageItem}>
-          <Typography variant="body2" className={classes.iconColor}>
+        <CardContentWrapper>
+          <Typography variant="body2" color="#B9CAD3">
             {props.content}
           </Typography>
-        </CardContent>
+        </CardContentWrapper>
       )}
 
       {!props.isReplyPage && props.children}
 
-      {props.image && <CardMedia component="img" image={props.image} alt="Post image" className={classes.iconImg} />}
+      {props.image && (
+        <CardMedia
+          component="img"
+          image={props.image}
+          alt="Post image"
+          sx={{ maxWidth: '90%', maxHeight: '400px', margin: 'auto', borderRadius: '2%', objectFit: 'contain' }}
+        />
+      )}
       {props.postPage && (
-        <Typography variant="body2" className={classes.date}>
+        <Typography variant="body2" color="#B9CAD3" sx={{ padding: '15px 0 10px 16px' }}>
           {new Date(props.date).toLocaleString('en-US', options)}
         </Typography>
       )}
@@ -113,38 +150,29 @@ export default function Post(props) {
             borderBottom: '1px solid #38444D',
           }}
         >
-          <Typography onClick={handleClickOpenRetweetModal} mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
-              {props.retweet}
-            </Typography>{' '}
+          <TypographyActions onClick={handleClickOpenRetweetModal} mr={2}>
+            <TypographyNumber variant="span">{props.retweet}</TypographyNumber>
             Retweets
-          </Typography>
-          <Typography mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
-              {props.reply}
-            </Typography>{' '}
+          </TypographyActions>
+          <TypographyActions mr={2}>
+            <TypographyNumber variant="span">{props.reply}</TypographyNumber>
             Quotes
-          </Typography>
-          <Typography onClick={handleClickOpenLikesModal} mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
-              {props.like}
-            </Typography>{' '}
+          </TypographyActions>
+          <TypographyActions onClick={handleClickOpenLikesModal} mr={2}>
+            <TypographyNumber variant="span">{props.like}</TypographyNumber>
             Likes
-          </Typography>
-          <Typography mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
-              {props.bookmark}
-            </Typography>{' '}
+          </TypographyActions>
+          <TypographyActions mr={2}>
+            <TypographyNumber variant="span">{props.bookmark}</TypographyNumber>
             Bookmarks
-          </Typography>
+          </TypographyActions>
         </Box>
       )}
 
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
-          <CardActions
+          <CardContentWrapper
             disableSpacing
-            className={classes.pageItem}
             sx={{
               display: 'flex',
               justifyContent: 'space-around',
@@ -154,7 +182,7 @@ export default function Post(props) {
             <Tooltip title="Reply">
               <IconButton
                 aria-label="ChatBubbleOutline"
-                className={props.replayed ? classes.iconActions : classes.iconColor}
+                style={{ color: props.replayed ? '#ec2121 ' : '#B9CAD3' }}
                 onClick={props.handleClickReplay}
               >
                 <Badge badgeContent={props.reply} color="primary">
@@ -165,7 +193,7 @@ export default function Post(props) {
             <Tooltip title="Retweet">
               <IconButton
                 aria-label="ChatBubbleOutline"
-                className={props.retweeted ? classes.iconActions : classes.iconColor}
+                style={{ color: props.retweeted ? '#ec2121 ' : '#B9CAD3' }}
                 onClick={props.handleClickRetweet}
               >
                 <Badge badgeContent={props.retweet} color="primary">
@@ -176,7 +204,7 @@ export default function Post(props) {
             <Tooltip title="Like">
               <IconButton
                 aria-label="add to favorites"
-                className={props.liked ? classes.iconActions : classes.iconColor}
+                style={{ color: props.liked ? '#ec2121' : '#B9CAD3' }}
                 onClick={props.handleClickLike}
               >
                 <Badge badgeContent={props.like} color="primary">
@@ -187,7 +215,7 @@ export default function Post(props) {
             <Tooltip title="Bookmarks">
               <IconButton
                 aria-label="add to favorites"
-                className={props.bookmarked ? classes.iconActions : classes.iconColor}
+                style={{ color: props.bookmarked ? '#ec2121' : '#B9CAD3' }}
                 onClick={props.handleClickBookmark}
               >
                 <Badge badgeContent={props.bookmark} color="primary">
@@ -195,12 +223,11 @@ export default function Post(props) {
                 </Badge>
               </IconButton>
             </Tooltip>
-          </CardActions>
+          </CardContentWrapper>
         )
       ) : props.originalPost || props.IdentifierOriginal ? null : (
-        <CardActions
+        <CardContentWrapper
           disableSpacing
-          className={classes.pageItem}
           sx={{
             display: 'flex',
             justifyContent: 'space-around',
@@ -210,7 +237,7 @@ export default function Post(props) {
           <Tooltip title="Reply">
             <IconButton
               aria-label="ChatBubbleOutline"
-              className={props.replayed ? classes.iconActions : classes.iconColor}
+              style={{ color: props.replayed ? '#ec2121 ' : '#B9CAD3' }}
               onClick={props.handleClickReplay}
             >
               <Badge badgeContent={props.reply} color="primary">
@@ -221,7 +248,7 @@ export default function Post(props) {
           <Tooltip title="Retweet">
             <IconButton
               aria-label="ChatBubbleOutline"
-              className={props.retweeted ? classes.iconActions : classes.iconColor}
+              style={{ color: props.retweeted ? '#ec2121 ' : '#B9CAD3' }}
               onClick={props.handleClickRetweet}
             >
               <Badge badgeContent={props.retweet} color="primary">
@@ -232,7 +259,7 @@ export default function Post(props) {
           <Tooltip title="Like">
             <IconButton
               aria-label="add to favorites"
-              className={props.liked ? classes.iconActions : classes.iconColor}
+              style={{ color: props.liked ? '#ec2121' : '#B9CAD3' }}
               onClick={props.handleClickLike}
             >
               <Badge badgeContent={props.like} color="primary">
@@ -244,7 +271,7 @@ export default function Post(props) {
             <Tooltip title="Bookmarks">
               <IconButton
                 aria-label="add to favorites"
-                className={props.bookmarked ? classes.iconActions : classes.iconColor}
+                style={{ color: props.bookmarked ? '#ec2121' : '#B9CAD3' }}
                 onClick={props.handleClickBookmark}
               >
                 <Badge badgeContent={props.bookmark} color="primary">
@@ -253,10 +280,10 @@ export default function Post(props) {
               </IconButton>
             </Tooltip>
           )}
-        </CardActions>
+        </CardContentWrapper>
       )}
       {isOpenLikeModal && <UsersLikeModal />}
       {isOpenRetweetModal && <UsersRetweetModal />}
-    </Card>
+    </CardSize>
   );
 }

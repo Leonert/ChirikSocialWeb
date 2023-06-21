@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,12 +8,18 @@ import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
 import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
-import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
 import ReplayModal from '../ReplayModal/ReplayModal';
 import Spinner from '../Spinner/Spinner';
 
 const PostsContext = React.createContext([]);
+
+const TypographyWrapper = styled(Typography)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  paddingRight: '20px',
+}));
+
 export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost, lickedProfile }) {
   const username = useSelector((state) =>
     state.auth.user && state.auth.user.username ? state.auth.user.username : null
@@ -24,7 +31,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-  const classes = usePostStyle();
+
   const dispatch = useDispatch();
   const tweetPost = useSelector((state) => state.home.tweetedPost);
 
@@ -87,8 +94,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
           prevPosts
             .map((post) => {
               if (+post.id === +id) {
-               
-
                 return {
                   ...post,
                   retweeted: false,
@@ -140,8 +145,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const handleClickDelete = (props) => {
     if (user) {
       axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
-     
-
         setPosts((prevPosts) =>
           prevPosts.filter(
             (post) => post.id && +post.id !== +props && (!post.originalPost || +post.originalPost.id !== +props)
@@ -155,7 +158,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
-    
         setPosts((prevPosts) =>
           prevPosts.map((post) => {
             if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
@@ -171,7 +173,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                   originalPost: {
                     ...post.originalPost,
                     liked: !post.originalPost.liked,
-                    likesNumber: response.data
+                    likesNumber: response.data,
                   },
                 };
               }
@@ -259,13 +261,13 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                     post.text === null && post.image === null ? (
                       <ReplyHeader repeat={post.author && post.author.name ? post.author.name : username} />
                     ) : (
-                      <Typography className={classes.reply}>Reply</Typography>
+                      <TypographyWrapper>Reply</TypographyWrapper>
                     )
                   ) : null
                 }
                 IdentifierReply={post.text === null && post.image === null}
                 id={post.id}
-                classes={isReplyPage ? classes.replyItem : classes.Page}
+                size={isReplyPage}
                 username={post.author && post.author.username ? post.author.username : user ? user.username : ''}
                 profileImage={
                   post.author && post.author.profileImage ? post.author.profileImage : user ? user.profileImage : ''
@@ -296,7 +298,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                   <Post
                     IdentifierOriginal={post.text != null && post.image === null}
                     id={post.originalPost.id}
-                    classes={classes.PageSmall}
                     key={post.originalPost.id}
                     isBookmarkPage={isBookmarkPage}
                     username={post.originalPost.author.username}
