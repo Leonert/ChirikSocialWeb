@@ -22,11 +22,11 @@ const PostPage = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const post = useSelector((state) => state.post);
-  console.log(post, 2222);
+
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
       dispatch(addOnePost(response.data));
-      console.log(response.data, 23);
+
       dispatch(addReply());
       dispatch(replayMessage(''));
     });
@@ -43,7 +43,6 @@ const PostPage = () => {
     const fetchPost = async () => {
       const response = await axiosIns.get(`/api/posts/${id}`);
       dispatch(setPost(response.data));
-      console.log(response.data, 34);
 
       return response;
     };
@@ -53,7 +52,7 @@ const PostPage = () => {
 
       if (response.data !== '') {
         dispatch(getPost(response.data));
-        console.log(response.data, 67);
+
         setIsLoading(false);
       }
 

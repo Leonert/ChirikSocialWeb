@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Form } from 'react-router-dom';
 
@@ -12,7 +12,6 @@ import HeaderMain from '../../components/HeaderMain/HeaderMain';
 import ModalUser from '../../components/ModalUser/ModalUser';
 import PostList from '../../components/PostList/PostList';
 import SearchInput from '../../components/SearchInput/SearchInput';
-import { GetPosts, clearPosts, getPost } from '../../features/slices/homeSlice';
 
 function Home() {
   const recommendation = useSelector((state) => state.home.recommendation);
