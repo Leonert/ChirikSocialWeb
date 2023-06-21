@@ -1,17 +1,16 @@
-import {Button, Grid, IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
 import React, {useEffect, useRef, useState} from 'react';
 import {SandMessageIcon} from '../../icon';
 
 import { useMessagesStyles } from './MessagesStyles';
 import MessagesModal from "../../components/MessagesModal/MessagesModal";
 import {
-  addChatMessage,
+  addChatMessage, delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
   selectChats,
   selectMessages,
-  selectSelectedChatId, selectUsers,
+  selectSelectedChatId,
   selectVisibleModalWindow,
   sendMessage,
   setSelectedChatId,
@@ -23,11 +22,12 @@ import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
-import {Avatar, Menu, MenuItem, Snackbar} from "@mui/material";
+import {Avatar, Grid, IconButton, List, ListItem, Menu, MenuItem, Paper, Snackbar, Typography} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 
 import SockJsClient from 'react-stomp';
+import Button from "@mui/material/Button";
 export const SOCKET_URL = 'http://localhost:8080/websocket';
 
 const Messages = ({ chatId, senderId }) => {
@@ -49,18 +49,26 @@ const Messages = ({ chatId, senderId }) => {
   const [selectedChatIndex, setSelectedChatIndex] = useState(null);
   const [status, setStatus] = useState(false);
   const [error, setError] = useState(null);
-  const users = useSelector(selectUsers);
 
+  const Chats = useSelector((state) => state.messages.chats)
+  // console.log(author,123)
+  // console.log(senderName,authorId,senderId,'senderName')
+  // console.log(recipientName,'recipientName')
+  const ItemDeleteChats = (props) =>{
+
+  }
   const handleDeleteChat = () => {
+
     if (selectedChatIndex !== null) {
       const chatId = groupedChats[selectedChatIndex]?.chatId;
       setSenderName('');
       setRecipientName('');
       if (chatId) {
+
         axiosIns
             .delete(`/api/messages/chats/${chatId}`)
             .then((response) => {
-              dispatch(fetchChat());
+              // dispatch(fetchChat());
               setStatus(true);
               setError(null);
             })
@@ -68,6 +76,7 @@ const Messages = ({ chatId, senderId }) => {
               setStatus(true);
               setError(error.message);
             });
+        dispatch(delletedChats(chatId))
       }
     }
     handleClose();
@@ -96,6 +105,7 @@ const Messages = ({ chatId, senderId }) => {
      dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
+     dispatch(fetchChat());
     dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
     dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
     });
@@ -139,8 +149,8 @@ const Messages = ({ chatId, senderId }) => {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
         authorId: author,
-        senderUsername: recipientUsername,
-        recipientUsername: senderUsername,
+        senderUsername: senderUsername,
+        recipientUsername: recipientUsername,
         chatName,
         parentId:
             messages[selectedChatId]?.messages
@@ -148,6 +158,8 @@ const Messages = ({ chatId, senderId }) => {
                 .reverse()
                 .find((msg) => msg.senderId === sender?.senderId)?.messageId || undefined,
       };
+
+
 
       return dispatch(sendMessage(messageToSend)).then(() => {
         setMessage('');
@@ -198,7 +210,7 @@ const Messages = ({ chatId, senderId }) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSendMessage(selectedChatId, senderId);
+      handleSendMessage(selectedChatId, authorId);
     }
   };
   const handleClick = (event, index) => {

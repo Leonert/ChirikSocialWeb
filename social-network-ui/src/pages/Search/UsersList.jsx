@@ -14,7 +14,9 @@ const UsersList = ({ searchValue }) => {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axiosIns.get(`/api/search/users?q=${searchValue}&p=${page}`);
+      const encodedSearchValue = encodeURIComponent(searchValue);
+
+      const { data } = await axiosIns.get(`/api/search/users?q=${encodedSearchValue}&p=${page}`);
       if (data.length === 0) {
         setHasMoreUsers(false);
       } else if (data.length < 10 && page === 0) {

@@ -23,22 +23,32 @@ const MessagesModal = ({ visible, onClose }) => {
   const [searchText, setSearchText] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const authorId = useSelector((state) => state.messages.authorId);
-
+  const [chatUsers, setChatUsers] = useState([]);
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
       event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
+      console.log(response.data)
     });
     setSearchText(event.target.value);
+
   };
 
   const handleListItemClick = (user) => {
     setSelectedUser(user);
-
+    console.log(user)
   };
 
 
   const handleCreateChat = () => {
     if (selectedUser) {
+      console.log(selectedUser,1233)
+      if (chatUsers === 0){
+        setChatUsers(chatUsers.push(selectedUser))
+      }else {
+        setChatUsers((prevChatUsers)=>[...prevChatUsers,selectedUser])
+      }
+
+      console.log(chatUsers)
       const messageDto = {
         messageId: null,
         isRead: false,

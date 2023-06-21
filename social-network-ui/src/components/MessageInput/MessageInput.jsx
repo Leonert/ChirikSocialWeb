@@ -30,7 +30,6 @@ export const MessageInput = withStyles((theme) => ({
             "&::placeholder": {
                 color: 'rgb(255,255,255)',
             },
-
         },
     },
 }))(TextField);

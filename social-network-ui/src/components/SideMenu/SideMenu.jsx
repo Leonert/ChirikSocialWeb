@@ -19,7 +19,6 @@ import {
 } from '../../icon';
 import { BOOKMARKS, HOME, MESSAGES, NOTIFICATIONS, SEARCH, SETTING } from '../../util/path-constants';
 import LogOutModal from '../LogOutModal/LogOutModal';
-import SearchResulting from '../SearchField/SearchResulting';
 import AddTweetModal from '../AddTweetModal/AddTweetModal';
 import LogOutButton from './LogOutButton';
 import { useSideMenuStyles } from './SideMenuStyles';
@@ -229,12 +228,7 @@ const SideMenu = () => {
           </li>
           {user && (
               <li className={classes.itemWrapperLogOut}>
-                <SearchResulting
-                    action={<LogOutButton handleClick={OpenLogOutModal} />}
-                    id={user.username}
-                    name={user.name}
-                    nickname={user.username}
-                />
+
               </li>
           )}
 

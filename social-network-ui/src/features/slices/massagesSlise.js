@@ -1,44 +1,51 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
+import {useSelector} from "react-redux";
 
 
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
-    async ({ chatId, message, senderUsername, recipientUsername }, { getState, dispatch }) => {
+    async ({ chatId, message,authorId ,senderUsername, recipientUsername }, { getState, dispatch }) => {
         const state = getState();
         const trimmedMessage = message.trim();
         const chatIndex = state.messages.chats.findIndex((chat) => chat.chatId === chatId);
 
+
         if (chatIndex !== -1) {
             const chat = state.messages.chats[chatIndex];
+
+
             const messageDto = {
                 chatId,
                 message: trimmedMessage,
-                senderId: chat.recipientId,
-                recipientId: chat.senderId,
-                isRead: true,
+                senderId: authorId,
+                recipientId: chat.recipientId,
+                isRead: false,
                 messageId: null,
-                senderUsername: recipientUsername,
-                recipientUsername: senderUsername,
+                senderUsername: senderUsername,
+                recipientUsername: recipientUsername,
             };
 
+            console.log(messageDto)
             const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
             const createdMessage = response.data;
             createdMessage.messageId = createdMessage.messageId || null;
 
             dispatch(addChatMessage({ chatId, message: createdMessage }));
+            // console.log(addChatMessage)
 
             return {
                 chatId,
                 message: createdMessage,
-                senderId: chat.recipientId,
-                recipientId: chat.senderId,
+                senderId: chat.senderId,
+                recipientId: chat.recipientId,
             };
 
         }
     }
 );
+
 
 export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
@@ -66,11 +73,11 @@ const messagesSlice = createSlice({
     name: 'messages',
     initialState: {
         chats: [],
-        users: [],
         messages: {},
         selectedChatId: null,
         text: '',
         visibleModalWindow: false,
+        users:[],
         authorId: ''
     },
     reducers: {
@@ -90,15 +97,19 @@ const messagesSlice = createSlice({
             const newChat = action.payload;
             state.chats.push(newChat);
         },
+        delletedChats: (state, action)=>{
+            state.chats = state.chats.filter(chat => chat.chatId !== action.payload)
+        },
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
             const chat = state.chats.find((chat) => chat.chatId === chatId);
             if (chat) {
                 const updatedMessage = {
                     ...message,
-                    recipientId: chat.senderId,
-                    senderId: chat.recipientId,
+                    senderId: chat.senderId,
+                    recipientId: chat.recipientId,
                 };
+                // console.log(updatedMessage)
 
                 if (chat.messages) {
                     chat.messages.push(updatedMessage);
@@ -106,12 +117,13 @@ const messagesSlice = createSlice({
                     chat.messages = [updatedMessage];
                 }
             }
-            const users = state.chats.map((chat) => ({
-                chatId: chat.chatId,
-                senderId: chat.senderId,
-                recipientId: chat.recipientId,
-            }));
-            state.users = users;
+            // const users = state.chats.map((chat) => ({
+            //     chatId: chat.chatId,
+            //     senderId: chat.senderId,
+            //     recipientId: chat.recipientId,
+            // }));
+            // state.users = users;
+            // console.log(users)
 
             if (state.selectedChatId !== chatId) {
                 state.selectedChatId = chatId;
@@ -131,6 +143,7 @@ const messagesSlice = createSlice({
                         recipientId: recipientId || state.chats[chatIndex].senderId,
                         senderId: senderId || state.chats[chatIndex].recipientId,
                     };
+                    // console.log(updatedMessage)
 
                     if (state.chats[chatIndex].messages) {
                         state.chats[chatIndex].messages.push(updatedMessage);
@@ -138,7 +151,6 @@ const messagesSlice = createSlice({
                         state.chats[chatIndex].messages = [updatedMessage];
                     }
 
-                    // Оновлення статусу першого повідомлення від автора чату на "отримано"
                     if (updatedMessage.senderId === state.chats[chatIndex].authorId) {
                         updatedMessage.isRead = true;
                     }
@@ -157,6 +169,7 @@ const messagesSlice = createSlice({
 });
 
 export const {
+    delletedChats,
     addChat,
     setSelectedChatId,
     setText,
