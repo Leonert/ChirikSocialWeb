@@ -13,21 +13,21 @@ import ReplayModal from '../ReplayModal/ReplayModal';
 import Spinner from '../Spinner/Spinner';
 
 const PostsContext = React.createContext([]);
-export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
-  const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
+export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost: incomingPost, lickedProfile }) {
+  const username = useSelector((state) =>
+    state.auth.user && state.auth.user.username ? state.auth.user.username : null
+  );
+
   const { user } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
-  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(incomingPost ? false : true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-
   const classes = usePostStyle();
   const dispatch = useDispatch();
-
   const fetchPosts = async () => {
     try {
       setHasMorePosts(true);
-
       const { data } = await axiosIns.get(`${apiUrl}p=${page}&n=5`);
 
       if (data.length === 0) {
@@ -37,8 +37,14 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
       } else {
         setHasMorePosts(true);
       }
-      setPosts((prevPosts) => [...prevPosts, ...data]);
-      setPage((prevPage) => prevPage + 1);
+      const filteredPosts = data.filter((post, index, self) => self.findIndex((p) => p.id === post.id) === index);
+
+      if (page === 0) {
+        setPosts(filteredPosts);
+      } else {
+        setPosts((prevPosts) => [...prevPosts, ...filteredPosts]);
+      }
+      setPage(page + 1);
     } catch (e) {
       return { Error: e };
     }
@@ -47,8 +53,15 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    fetchPosts();
-  }, []);
+    if (!incomingPost) {
+      setPosts([]);
+      setPage(0);
+      fetchPosts();
+    } else {
+      console.log(incomingPost, 'incomingPost');
+      incomingPost && setPosts(incomingPost);
+    }
+  }, [incomingPost]);
 
   const handleRetweet = async (id) => {
     if (user) {
@@ -177,7 +190,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
   const handleSendRequest = (props) => {
     setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
     setOpenModal(false);
-  
   };
 
   return (
@@ -212,7 +224,9 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
                 replay={
                   post.originalPost ? (
                     post.text === null && post.image === null ? (
-                      <ReplyHeader repeat={post.author.name} />
+                      <ReplyHeader
+                        repeat={post.author && post.author.name ? post.author.name : username ? username : ''}
+                      />
                     ) : (
                       <Typography className={classes.reply}>Reply</Typography>
                     )
@@ -221,9 +235,11 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl }) {
                 IdentifierReply={post.text === null && post.image === null}
                 id={post.id}
                 classes={isReplyPage ? classes.replyItem : classes.Page}
-                username={post.author.username}
-                profileImage={post.author.profileImage}
-                name={post.author.name}
+                username={post.author && post.author.username ? post.author.username : user ? user.username : ''}
+                profileImage={
+                  post.author && post.author.profileImage ? post.author.profileImage : user ? user.profileImage : ''
+                }
+                name={post.author && post.author.name ? post.author.name : user ? user.name : ''}
                 isBookmarkPage={isBookmarkPage}
                 isReplyPage={isReplyPage}
                 retweet={post.retweetsNumber}

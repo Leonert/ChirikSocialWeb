@@ -3,14 +3,16 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
 import { addOnePost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
+import AvatarLink from '../../../UI/AvatarLink';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
-import ProfileAvatar from './ProfileAvatar/ProfileAvatar';
+import CloseButton from './CloseButton/CloseButton';
 
 const MAX_LENGTH = 280;
 
@@ -20,14 +22,20 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
   const [visiblePoll, setVisiblePoll] = useState(false);
   const [remainingChars, setRemainingChars] = useState(280);
+  const [selectedImage, setSelectedImage] = useState(null);
   const classes = useAddTweetFormStyles({ qT: quoteTweet, isScheduled: selectedScheduleDate !== null });
   const textLimitPercent = Math.round((text.length / 280) * 100);
   const textCount = remainingChars;
   const fileInputRef = useRef(null);
   const params = useParams();
+  const { user } = useSelector((state) => state.auth);
 
   const handleClickImage = () => {
     fileInputRef.current.click();
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
   };
 
   const getBase64Image = async () => {
@@ -59,17 +67,21 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const uploadTweetImages = async () => {};
 
   const handleClickAddTweet = async () => {
-    const base64Image = fileInputRef.current.files[0] ? await getBase64Image() : null;
+    const base64Image = selectedImage ? await getBase64Image() : null;
     await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
       dispatch(addOnePost(response.data));
     });
-
+  
     setText('');
     setVisiblePoll(false);
     setSelectedScheduleDate(null);
     onCloseModal();
   };
+  
 
+  const handleCloseImage = () => {
+    setSelectedImage(null);
+  };
   const handleClickQuoteTweet = async () => {
     const result = await uploadTweetImages();
     dispatch({
@@ -100,7 +112,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   return (
     <>
       <div className={classes.content}>
-        <ProfileAvatar />
+        <AvatarLink avatar={user.profileImage} name={user.username} />
         <div className={classes.textareaWrapper}>
           <TextareaAutosize
             onChange={handleChangeTextarea}
@@ -122,7 +134,13 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
                 <InsertEmoticonIcon />
               </IconButton>
               <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
-              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
             </div>
           )}
         </div>
@@ -166,6 +184,13 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
           </Button>
         </div>
       </div>
+      {selectedImage && (
+        <div className={classes.selectedImageWrapper}>
+          <img src={URL.createObjectURL(selectedImage)} alt="Selected" className={classes.selectedImage} />
+
+          <CloseButton onClose={handleCloseImage} classesProps={classes.selectedImageClothe} />
+        </div>
+      )}
     </>
   );
 };

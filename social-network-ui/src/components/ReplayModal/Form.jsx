@@ -4,10 +4,9 @@ import React, { useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { addOnePost, addReply, clothReplayModal, replayMessage } from '../../features/slices/homeSlice';
+import { replayMessage } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
-import { PostsContext } from '../PostList/PostList';
 import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
 import TextInput from './TextInput';
 
@@ -33,13 +32,26 @@ function FormModal({ buttonName, posts, onSendRequest }) {
       dispatch(replayMessage(event.target.value));
     }
   };
+  let targetPost = posts.find((item) => {
+    if (+item.id === +id) {
+      return true;
+    }
+    if (item.originalPost && +item.originalPost.id === +id) {
+      return true;
+    }
+    return false;
+  });
 
-  const targetPost = posts.find((item) => +item.id === +id) || posts.find((item) => +item.originalPost.id === +id);
-
+  if (targetPost && targetPost.originalPost && +targetPost.originalPost.id === +id) {
+    targetPost = targetPost.originalPost;
+  }
+  console.log(targetPost.id, 343434);
+  console.log(targetPost, 222222);
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
       dispatch(replayMessage(''));
       onSendRequest(response.data);
+      console.log(response.data, 34444);
     });
   };
 
@@ -50,25 +62,35 @@ function FormModal({ buttonName, posts, onSendRequest }) {
           <div className={classes.content}>
             <Avatar
               aria-label="recipe"
-              alt={targetPost.author.name}
+              alt={targetPost.author && targetPost.author.name ? targetPost.author.name : user.name}
               src={
                 targetPost.originalPost
                   ? targetPost.originalPost && targetPost.text != null && targetPost.image == null
-                    ? targetPost.author.profileImage
+                    ? targetPost.author && targetPost.author.profileImage
+                      ? targetPost.author.profileImage
+                      : user.profileImage
                     : targetPost.originalPost.author.profileImage
-                  : targetPost.author.profileImage
+                  : targetPost.author && targetPost.author.profileImage
+                  ? targetPost.author.profileImage
+                  : user.profileImage
               }
             ></Avatar>
             <Typography className={classes.itemNick}>
               @
               {targetPost.originalPost
                 ? targetPost.originalPost && targetPost.text != null && targetPost.image == null
-                  ? targetPost.author.name
+                  ? targetPost.author && targetPost.author.name
+                    ? targetPost.author.name
+                    : user.name
                   : targetPost.originalPost.author.name
-                : targetPost.author.name}
+                : targetPost.author && targetPost.author.name
+                ? targetPost.author.name
+                : user.name}
             </Typography>
           </div>
-          <Typography className={classes.item}>Send replay @{targetPost.author.name}</Typography>
+          <Typography className={classes.item}>
+            Send replay @{targetPost.author && targetPost.author.name ? targetPost.author.name : user.name}
+          </Typography>
           <div className={classes.content}>
             <Avatar aria-label="recipe" alt={user.name} src={user.profileImage} />
             <Typography className={classes.itemNick}>@{user.name}</Typography>

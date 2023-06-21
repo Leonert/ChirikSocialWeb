@@ -44,7 +44,6 @@ export default function Post(props) {
 
   const { isOpenLikeModal } = useSelector((state) => state.likes);
   const { isOpenRetweetModal } = useSelector((state) => state.retweets);
-
   const handleClickOpenLikesModal = () => {
     dispatch(handleCustomModal(true));
     dispatch(handleOpenLikeModal(true));

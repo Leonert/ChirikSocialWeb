@@ -72,4 +72,22 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
       position: 'absolute',
     },
   },
+  selectedImageWrapper: {
+    position: 'relative',
+    width: '100%',
+  },
+  selectedImage: {
+    borderRadius: 20,
+    width: '100%',
+  },
+  selectedImageClothe: {
+    position: 'absolute',
+    borderRadius: '50% !important',
+    backgroundColor: theme.palette.background.default,
+    top: '10px',
+    right: 10,
+    color: theme.palette.text.secondary + '!important',
+    width: '10px ! important',
+    height: '60px ! important',
+  },
 }));

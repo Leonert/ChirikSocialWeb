@@ -38,7 +38,7 @@ const homeSlice = createSlice({
     postId: '',
     replayModal: false,
     message: '',
-    targetPost:[]
+    targetPost: [],
   },
   reducers: {
     changeStatusRecommendation: (state) => {
@@ -65,11 +65,9 @@ const homeSlice = createSlice({
     },
     openReplayModal: (state, actions) => {
       state.postId = actions.payload;
-      
     },
     clothReplayModal: (state) => {
       state.postId = '';
-      
     },
     replayMessage: (state, actions) => {
       state.message = actions.payload;
@@ -124,7 +122,7 @@ const homeSlice = createSlice({
         return post;
       });
     },
-    setTargetPost:()=>{},
+    setTargetPost: () => {},
 
     addReply: (state, action) => {
       state.post = state.post.map((post) => {
