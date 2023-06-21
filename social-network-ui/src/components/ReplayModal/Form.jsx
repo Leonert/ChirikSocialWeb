@@ -46,8 +46,7 @@ function FormModal({ buttonName, posts, onSendRequest }) {
   if (targetPost && targetPost.originalPost && +targetPost.originalPost.id === +id) {
     targetPost = targetPost.originalPost;
   }
-  console.log(targetPost.id, 343434);
-  console.log(targetPost, 222222);
+
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
       dispatch(replayMessage(''));

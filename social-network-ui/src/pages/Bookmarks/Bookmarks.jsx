@@ -12,7 +12,7 @@ const Bookmarks = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const post = useSelector((state) => state.home.post);
-  console.log(post);
+
   useEffect(() => {
     dispatch(getBookmarks()).then(() => setIsLoading(false));
 

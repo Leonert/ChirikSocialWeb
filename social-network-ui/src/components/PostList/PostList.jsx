@@ -21,7 +21,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const { user } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
 
-  const [hasMorePosts, setHasMorePosts] = useState(incomingPost ? false : true);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const classes = usePostStyle();
@@ -68,8 +68,8 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
       setPage(0);
       fetchPosts();
     } else {
-      setPosts(incomingPost);
       setHasMorePosts(false);
+      setPosts(incomingPost);
     }
   }, [incomingPost]);
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
     if (user) {
       axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
         const data = response.data;
-        console.log(data);
+
         setPosts((prevPosts) =>
           prevPosts.filter(
             (post) => post.id && +post.id !== +props && (!post.originalPost || +post.originalPost.id !== +props)
