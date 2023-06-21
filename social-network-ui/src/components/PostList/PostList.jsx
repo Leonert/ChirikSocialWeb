@@ -87,7 +87,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
           prevPosts
             .map((post) => {
               if (+post.id === +id) {
-                console.log(response, 200);
+               
 
                 return {
                   ...post,
@@ -140,7 +140,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const handleClickDelete = (props) => {
     if (user) {
       axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
-        const data = response.data;
+     
 
         setPosts((prevPosts) =>
           prevPosts.filter(
@@ -155,7 +155,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
-        const likesNumber = response.data;
+    
         setPosts((prevPosts) =>
           prevPosts.map((post) => {
             if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
@@ -163,7 +163,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 return {
                   ...post,
                   liked: !post.liked,
-                  likesNumber: likesNumber,
+                  likesNumber: response.data,
                 };
               } else {
                 return {
@@ -171,7 +171,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                   originalPost: {
                     ...post.originalPost,
                     liked: !post.originalPost.liked,
-                    likesNumber: likesNumber,
+                    likesNumber: response.data
                   },
                 };
               }
