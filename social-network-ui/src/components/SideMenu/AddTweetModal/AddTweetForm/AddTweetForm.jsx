@@ -2,12 +2,12 @@ import { Button, CircularProgress, IconButton, TextareaAutosize } from '@materia
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
-import { addOnePost } from '../../../../features/slices/homeSlice';
+import { tweetedPost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import AvatarLink from '../../../UI/AvatarLink';
@@ -69,15 +69,15 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleClickAddTweet = async () => {
     const base64Image = selectedImage ? await getBase64Image() : null;
     await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
-      dispatch(addOnePost(response.data));
+      dispatch(tweetedPost(response.data));
     });
-  
+
     setText('');
     setVisiblePoll(false);
     setSelectedScheduleDate(null);
     onCloseModal();
+    setSelectedImage(null);
   };
-  
 
   const handleCloseImage = () => {
     setSelectedImage(null);
@@ -176,7 +176,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
                 ? handleClickQuoteTweet
                 : handleClickAddTweet
             }
-            disabled={visiblePoll ? !text || text.length < MAX_LENGTH - 1 : !text || text.length >= MAX_LENGTH + 2}
+            disabled={(visiblePoll ? !text || text.length < MAX_LENGTH - 1 : !text) && !selectedImage}
             color="primary"
             variant="contained"
           >

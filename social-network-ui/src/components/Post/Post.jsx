@@ -41,9 +41,10 @@ export default function Post(props) {
   const classes = usePostStyle();
 
   const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state.auth);
   const { isOpenLikeModal } = useSelector((state) => state.likes);
   const { isOpenRetweetModal } = useSelector((state) => state.retweets);
+ 
   const handleClickOpenLikesModal = () => {
     dispatch(handleCustomModal(true));
     dispatch(handleOpenLikeModal(true));
@@ -61,11 +62,13 @@ export default function Post(props) {
           className={classes.pageItem}
           avatar={<AvatarLink alt={props.name} avatar={props.profileImage} to={`/${props.username}`} />}
           action={
-            <Tooltip title="More">
-              <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
-                <MoreHorizIcon />
-              </IconButton>
-            </Tooltip>
+            props.username === user.username ? (
+              <Tooltip title="Delete">
+                <IconButton aria-label="settings" onClick={props.handleClickDelete} className={classes.iconColor}>
+                  <MoreHorizIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null
           }
           title={<NameLink name={props.name} to={`/${props.username}`} />}
           subheader={

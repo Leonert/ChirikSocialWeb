@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
-import { clothReplayModal, getPostId, openReplayModal } from '../../features/slices/homeSlice';
+import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
 import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
@@ -13,18 +13,21 @@ import ReplayModal from '../ReplayModal/ReplayModal';
 import Spinner from '../Spinner/Spinner';
 
 const PostsContext = React.createContext([]);
-export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost: incomingPost, lickedProfile }) {
+export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost, lickedProfile }) {
   const username = useSelector((state) =>
     state.auth.user && state.auth.user.username ? state.auth.user.username : null
   );
 
   const { user } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
+
   const [hasMorePosts, setHasMorePosts] = useState(incomingPost ? false : true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const classes = usePostStyle();
   const dispatch = useDispatch();
+  const tweetPost = useSelector((state) => state.home.tweetedPost);
+
   const fetchPosts = async () => {
     try {
       setHasMorePosts(true);
@@ -42,7 +45,13 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
       if (page === 0) {
         setPosts(filteredPosts);
       } else {
-        setPosts((prevPosts) => [...prevPosts, ...filteredPosts]);
+        setPosts((prevPosts) => {
+          const updatedPosts = [...prevPosts, ...filteredPosts];
+          const uniquePosts = updatedPosts.filter(
+            (post, index, self) => self.findIndex((p) => p.id === post.id) === index
+          );
+          return uniquePosts;
+        });
       }
       setPage(page + 1);
     } catch (e) {
@@ -58,10 +67,15 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
       setPage(0);
       fetchPosts();
     } else {
-      console.log(incomingPost, 'incomingPost');
-      incomingPost && setPosts(incomingPost);
+      setPosts(incomingPost);
+      setHasMorePosts(false);
     }
   }, [incomingPost]);
+  useEffect(() => {
+    if (typeof tweetPost === 'object' && tweetPost !== null) {
+      setPosts((prevPost) => [tweetPost, ...prevPost]);
+    }
+  }, [tweetPost]);
 
   const handleRetweet = async (id) => {
     if (user) {
@@ -121,7 +135,21 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
   const handleClose = () => {
     setOpenModal(false);
   };
-
+  const handleClickDelete = (props) => {
+    if (user) {
+      axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
+        const data = response.data;
+        console.log(data);
+        setPosts((prevPosts) =>
+          prevPosts.filter(
+            (post) => post.id && +post.id !== +props && (!post.originalPost || +post.originalPost.id !== +props)
+          )
+        );
+      });
+    } else {
+      dispatch(handleRegistrationModal(true));
+    }
+  };
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
@@ -149,6 +177,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
             return post;
           })
         );
+        lickedProfile && setPosts((prevPosts) => prevPosts.filter((post) => +post.id !== +props));
       });
     } else {
       dispatch(handleRegistrationModal(true));
@@ -215,7 +244,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
               No more results.
             </Typography>
           }
-          loader={<Spinner />}
+          loader={posts.length === 0 ? null : <Spinner />}
         >
           {posts &&
             posts.map((post) => (
@@ -259,6 +288,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 handleClickReplay={() => handleReplay(`${post.id}`)}
                 handleClickRetweet={() => handleRetweet(`${post.id}`)}
                 handleClickBookmark={() => handleBookmark(`${post.id}`)}
+                handleClickDelete={() => handleClickDelete(`${post.id}`)}
               >
                 {post.originalPost && (
                   <Post
@@ -286,6 +316,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                     handleClickReplay={() => handleReplay(`${post.originalPost.id}`)}
                     handleClickRetweet={() => handleRetweet(`${post.originalPost.id}`)}
                     handleClickBookmark={() => handleBookmark(`${post.originalPost.id}`)}
+                    handleClickDelete={() => handleClickDelete(`${post.originalPost.id}`)}
                   />
                 )}
               </Post>
@@ -302,6 +333,19 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
             }}
           >
             So far, there are no replies. <br /> But you can fix it :)
+          </Typography>
+        )}
+        {!posts.length && lickedProfile && (
+          <Typography
+            sx={{
+              marginTop: '25px',
+              color: '#93989D',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: '32px',
+            }}
+          >
+            Sorry, you didn't like any post.
           </Typography>
         )}
       </div>

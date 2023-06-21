@@ -12,8 +12,12 @@ export const ProfileLicked = () => {
     try {
       const response = await axiosIns.get(`/api/users/p/${data.username}/liked`);
       const lick = response.data;
-      console.log(lick, 'lick');
-      setPosts(lick);
+
+      if (response.status === 204) {
+        setPosts([]);
+      } else {
+        setPosts(lick);
+      }
     } catch (e) {
       console.error(e);
       return { Error: e };
@@ -25,5 +29,5 @@ export const ProfileLicked = () => {
     fetchPosts();
   }, []);
 
-  return <PostList incomingPost={ posts} lickedProfile={true} />;
+  return <PostList incomingPost={posts} lickedProfile={true} />;
 };

@@ -39,6 +39,7 @@ const homeSlice = createSlice({
     replayModal: false,
     message: '',
     targetPost: [],
+    tweetedPost: '',
   },
   reducers: {
     changeStatusRecommendation: (state) => {
@@ -48,6 +49,9 @@ const homeSlice = createSlice({
     changeStatusFollowing: (state) => {
       state.recommendation = false;
       state.following = true;
+    },
+    tweetedPost: (state, action) => {
+      return { ...state, tweetedPost: action.payload };
     },
     getPost: (state, action) => {
       if (Array.isArray(action.payload)) {
@@ -156,6 +160,7 @@ const homeSlice = createSlice({
 
 export default homeSlice.reducer;
 export const {
+  tweetedPost,
   changeStatusRecommendation,
   changeStatusFollowing,
   getPost,

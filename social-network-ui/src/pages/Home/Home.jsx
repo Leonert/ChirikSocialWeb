@@ -21,6 +21,7 @@ function Home() {
 
   const { user } = useSelector((state) => state.auth);
   const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
+
   return (
     <Grid container sx={{ margin: '0', paddingTop: '0' }}>
       <Grid item xs={12} md={7} sx={{ paddingTop: '0' }}>

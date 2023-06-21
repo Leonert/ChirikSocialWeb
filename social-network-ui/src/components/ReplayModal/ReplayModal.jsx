@@ -10,6 +10,7 @@ import FormModal from './Form';
 const ReplayModal = ({ openModal, handleClose, posts, onSendRequest }) => {
   const classes = useAddTweetModalStyles();
   const open = openModal || false;
+
   return (
     <Dialog className={classes.content} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle className={classes.header} id="form-dialog-title">
@@ -21,4 +22,5 @@ const ReplayModal = ({ openModal, handleClose, posts, onSendRequest }) => {
     </Dialog>
   );
 };
+
 export default ReplayModal;

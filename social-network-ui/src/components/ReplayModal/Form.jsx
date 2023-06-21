@@ -1,6 +1,6 @@
 import { Avatar, Button } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
@@ -39,6 +39,7 @@ function FormModal({ buttonName, posts, onSendRequest }) {
     if (item.originalPost && +item.originalPost.id === +id) {
       return true;
     }
+
     return false;
   });
 
@@ -51,7 +52,6 @@ function FormModal({ buttonName, posts, onSendRequest }) {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
       dispatch(replayMessage(''));
       onSendRequest(response.data);
-      console.log(response.data, 34444);
     });
   };
 

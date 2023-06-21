@@ -1,7 +1,7 @@
 import { CircularProgress, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+
 
 import axiosIns from '../../axiosInstance';
 import PostList from '../../components/PostList/PostList';
