@@ -1,5 +1,4 @@
-import { Button, Dialog } from '@material-ui/core';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Dialog, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

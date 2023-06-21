@@ -1,36 +1,26 @@
+import { Avatar, Typography } from '@mui/material';
 import React from 'react';
-import {Avatar,Typography} from "@material-ui/core";
 
-
-
-import {useMessagesModalUserStyles} from "./MessagesModalUserStyles";
-
+import { useMessagesModalUserStyles } from './MessagesModalUserStyles';
 
 const MessagesModalUser = ({ user }) => {
-    const classes = useMessagesModalUserStyles();
+  const classes = useMessagesModalUserStyles();
 
-    return (
-        <div className={classes.container}>
-            <Avatar className={classes.listAvatar} src={user?.avatar?.src} />
-            <div style={{ flex: 1 }}>
-                <div className={classes.header}>
-                    <div style={{ width: 350 }}>
-                        <Typography className={classes.fullName}>
-                            {user?.fullName}
-                        </Typography>
-                        <Typography
-                            className={classes.username}
-                            variant="caption"
-                            display="block"
-                            gutterBottom
-                        >
-                            @{user?.username}
-                        </Typography>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className={classes.container}>
+      <Avatar className={classes.listAvatar} src={user?.avatar?.src} />
+      <div style={{ flex: 1 }}>
+        <div className={classes.header}>
+          <div style={{ width: 350 }}>
+            <Typography className={classes.fullName}>{user?.fullName}</Typography>
+            <Typography className={classes.username} variant="caption" display="block" gutterBottom>
+              @{user?.username}
+            </Typography>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
-export default MessagesModalUser
+export default MessagesModalUser;

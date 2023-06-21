@@ -1,6 +1,4 @@
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -1,6 +1,6 @@
-import { Button, CircularProgress, IconButton, TextareaAutosize } from '@material-ui/core';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
+import { Button, CircularProgress, IconButton, TextareaAutosize } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';

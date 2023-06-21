@@ -83,7 +83,7 @@ const EditProfileModal = () => {
           website: values.website,
           birthDate: formattedDate,
         });
-        const {profileImage, profileBackgroundImage} = response.data;
+        const { profileImage, profileBackgroundImage } = response.data;
 
         setOpenEditModal(false);
         setLoadedAvatarPicture(profileImage || '');
@@ -127,16 +127,13 @@ const EditProfileModal = () => {
     <>
       <Button
         onClick={handleOpenEditModal}
-        variant="outlined"
         startIcon={<EditIcon />}
+        variant="contained"
         sx={{
           textTransform: 'unset',
-          backgroundColor: (theme) => theme.palette.background.lightBlue,
+
           borderRadius: '4px',
           color: (theme) => theme.palette.text.primary,
-          '&:hover': {
-            backgroundColor: 'rgb(48, 63, 159)',
-          },
         }}
       >
         Edit Profile

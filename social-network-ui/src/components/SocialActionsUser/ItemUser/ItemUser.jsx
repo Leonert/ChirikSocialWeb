@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';

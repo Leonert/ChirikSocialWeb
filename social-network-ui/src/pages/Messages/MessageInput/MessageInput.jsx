@@ -1,33 +1,33 @@
-import {withStyles} from "@mui/styles";
-import TextField from "@material-ui/core/TextField/TextField";
+import { TextField } from '@mui/material';
+import { withStyles } from '@mui/styles';
 
 export const MessageInput = withStyles((theme) => ({
-    root: {
-        '& .MuiOutlinedInput-root': {
-            marginTop: 2,
-            borderRadius: 20,
-            padding: "3px 14px",
-            border: "1px solid rgb(207, 217, 222)",
-            width: 490,
-            '&.Mui-focused': {
-                backgroundColor: theme.palette.secondary.light,
-                '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
-                '& svg path': {
-                    fill: theme.palette.primary.main,
-                },
-            },
-            '&:hover': {
-                '& fieldset': { borderColor: 'transparent' },
-            },
-            '& fieldset': {
-                borderColor: 'transparent',
-                borderWidth: 1,
-            },
+  root: {
+    '& .MuiOutlinedInput-root': {
+      marginTop: 2,
+      borderRadius: 20,
+      padding: '3px 14px',
+      border: '1px solid rgb(207, 217, 222)',
+      width: 490,
+      '&.Mui-focused': {
+        backgroundColor: theme.palette.secondary.light,
+        '& fieldset': { borderWidth: 1, borderColor: theme.palette.primary.main },
+        '& svg path': {
+          fill: theme.palette.primary.main,
         },
-        '& .MuiOutlinedInput-input': {
-            "&::placeholder": {
-                color: "rgb(15, 20, 25)",
-            },
-        },
+      },
+      '&:hover': {
+        '& fieldset': { borderColor: 'transparent' },
+      },
+      '& fieldset': {
+        borderColor: 'transparent',
+        borderWidth: 1,
+      },
     },
+    '& .MuiOutlinedInput-input': {
+      '&::placeholder': {
+        color: 'rgb(15, 20, 25)',
+      },
+    },
+  },
 }))(TextField);

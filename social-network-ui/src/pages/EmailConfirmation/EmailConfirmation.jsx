@@ -1,6 +1,6 @@
-import { Box, CircularProgress, Container, Typography } from '@material-ui/core';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Box, CircularProgress, Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@material-ui/core';
+import { Avatar, Button, Grid, IconButton, InputAdornment, List, ListItem, Paper, Typography } from '@mui/material';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';

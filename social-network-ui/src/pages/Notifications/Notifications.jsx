@@ -1,5 +1,4 @@
-import { Grid } from '@material-ui/core';
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 import { ListNotifications } from '../../components/NotificationItems/ListNotifications/ListNotifications';
 import { useStyles } from './NotificationsStyles';

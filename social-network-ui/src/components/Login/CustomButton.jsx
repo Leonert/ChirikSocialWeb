@@ -13,12 +13,9 @@ export const CustomButton = ({
 }) => {
   const settings = {
     textTransform: 'unset',
-    backgroundColor: 'rgb(63, 81, 181)',
+
     borderRadius: '4px',
     color: 'rgb(255, 255, 255)',
-    '&:hover': {
-      backgroundColor: 'rgb(48, 63, 159)',
-    },
   };
 
   return (
@@ -29,6 +26,7 @@ export const CustomButton = ({
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       sx={{ ...settings, ...styles }}
+      variant="contained"
     >
       {children}
     </Button>

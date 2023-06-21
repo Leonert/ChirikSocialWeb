@@ -1,6 +1,5 @@
-import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import { IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -128,7 +127,7 @@ const SideMenu = () => {
                 sx={{
                   height: '50px',
                   width: '50px',
-                  backgroundColor: (theme) => theme.palette.background.lightBlue,
+                  backgroundColor: (theme) => theme.palette.primary.main,
                   color: 'white',
                 }}
                 className={`${classes.tweetIconButton} ${classes.tweetButton}`}

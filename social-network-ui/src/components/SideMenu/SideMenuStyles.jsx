@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 
 export const useSideMenuStyles = makeStyles((theme) => ({
   container: {
-    position: 'fixed',
+    position: 'sticky',
     top: 0,
     listStyle: 'none',
     padding: 0,
@@ -161,11 +161,11 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     '-webkit-text-fill-color': 'transparent',
   },
   label: { display: 'none' },
-  tweetBtn: { display: 'none' },
+  tweetBtn: { display: 'none !important' },
 
   [theme.breakpoints.up('lg')]: {
     tweetIconButton: { display: 'none !important' },
-    tweetBtn: { display: 'inline-flex' },
+    tweetBtn: { display: 'inline-flex !important' },
     itemWrapper: { justifyContent: 'flex-start' },
     itemWrapperLogOut: { justifyContent: 'flex-end' },
 

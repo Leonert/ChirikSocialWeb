@@ -1,4 +1,4 @@
-import { Avatar, Button } from '@material-ui/core';
+import { Avatar, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
