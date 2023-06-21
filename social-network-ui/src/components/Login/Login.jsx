@@ -18,7 +18,6 @@ import * as yup from 'yup';
 
 import { handleModal, handleRegistrationModal } from '../../features/slices/authModalSlice';
 import { loginUser } from '../../features/slices/authSlice';
-import { handleSnackbar } from '../../features/slices/snackbarSlice';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { CustomButton } from './CustomButton';
 import { TitleLogin } from './TitleLogin';
