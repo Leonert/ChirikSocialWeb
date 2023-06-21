@@ -170,7 +170,7 @@ const RegistrationModal = () => {
 
   return (
     <div>
-      <Button sx={{ p: '7px  34px', fontSize: '16px' }} onClick={handleOpen}>
+      <Button variant="contained" sx={{ p: '7px  34px', fontSize: '16px' }} onClick={handleOpen}>
         Sign up
       </Button>
       <Modal

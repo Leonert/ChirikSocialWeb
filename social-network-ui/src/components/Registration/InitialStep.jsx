@@ -25,7 +25,11 @@ const InitialStep = (props) => {
       <Divider sx={{ '&::after, &::before': { borderColor: 'rgba(255, 255, 255, 0.4)' }, marginBottom: '12px' }}>
         or
       </Divider> */}
-      <Button onClick={props.onCreateAccount} sx={{ maxWidth: '300px', width: '100%', marginBottom: '30px' }}>
+      <Button
+        variant="contained"
+        onClick={props.onCreateAccount}
+        sx={{ maxWidth: '300px', width: '100%', marginBottom: '30px' }}
+      >
         <Typography sx={{ fontSize: '14px' }}> Registration </Typography>
       </Button>
       <Typography sx={{ fontSize: '14px' }}>
