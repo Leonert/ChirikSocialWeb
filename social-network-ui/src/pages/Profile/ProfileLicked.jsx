@@ -19,8 +19,6 @@ export const ProfileLicked = () => {
         setPosts(lick);
       }
     } catch (e) {
-      console.error(e);
-
       return { Error: e };
     }
   };
