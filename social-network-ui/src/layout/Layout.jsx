@@ -1,4 +1,5 @@
 import { Box, Container, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
@@ -9,12 +10,15 @@ import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { loginUserWithJwt } from '../features/slices/authSlice';
 import { TOKEN } from '../util/constants';
-import { useLayoutStyles } from './LayoutStyles';
 
 export const Layout = () => {
-  const classes = useLayoutStyles();
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  const CustomContainer = styled(Container)(({ theme }) => ({
+    height: '100vh',
+    display: 'flex',
+  }));
 
   useLayoutEffect(() => {
     const token = localStorage.getItem(TOKEN);
@@ -26,9 +30,9 @@ export const Layout = () => {
 
   return (
     <>
-      <Container className={classes.wrapper} maxWidth="lg">
+      <CustomContainer maxWidth="lg">
         <Stack direction="row" container>
-          <Box sx={{ minWidth: { xs: 86, lg: 256 } }} className={classes.sideMenuWrapper} item>
+          <Box sx={{ minWidth: { xs: 86, lg: 256 } }} item>
             <SideMenu />
           </Box>
           <Box flex="1">
@@ -41,7 +45,7 @@ export const Layout = () => {
           />
           <CustomModalWindow />
         </Stack>
-      </Container>
+      </CustomContainer>
       <CustomSnackbar />
       {!user && <BottomLine />}
     </>

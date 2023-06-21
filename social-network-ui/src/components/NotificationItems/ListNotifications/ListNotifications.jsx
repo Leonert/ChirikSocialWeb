@@ -4,10 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications, removeNotifications } from '../../../features/slices/userDatas/notificationsSlice';
 import Spinner from '../../Spinner/Spinner';
 import { ItemNotification } from '../ItemNotification/ItemNotification';
-import { useStylesListNotification } from './LitsNotificationStyle';
 
 export const ListNotifications = () => {
-  const classes = useStylesListNotification();
   const { list, loading } = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
 
@@ -20,9 +18,9 @@ export const ListNotifications = () => {
   }, []);
 
   return (
-    <ul className={classes.list}>
+    <ul>
       {list.length === 0 && loading ? (
-        <Spinner />
+        <Spinner p="50px 0" />
       ) : (
         list.map((notification, index) => {
           return <ItemNotification key={index} notification={notification} />;

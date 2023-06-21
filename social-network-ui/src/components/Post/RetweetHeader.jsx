@@ -1,16 +1,20 @@
 import RepeatIcon from '@mui/icons-material/Repeat';
-import { Box } from '@mui/material';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import { usePostStyle } from './PostStyle';
+const PageItem = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
+  fontWeight: 800 + ' !important',
+  fontSize: 15 + ' !important',
+}));
 
 const ReplyHeader = (props) => {
-  const classes = usePostStyle();
   return (
-    <Box className={classes.replyHeader}>
+    <Box sx={{ padding: '15px', display: 'flex', columnGap: '15px' }}>
       <RepeatIcon />
-      <Typography className={classes.pageItem}>{props.repeat} Retweeted</Typography>
+      <PageItem>{props.repeat} Retweeted</PageItem>
     </Box>
   );
 };

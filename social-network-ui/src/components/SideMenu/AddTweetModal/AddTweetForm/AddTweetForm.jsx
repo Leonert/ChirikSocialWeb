@@ -1,6 +1,7 @@
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import { Button, CircularProgress, IconButton, TextareaAutosize } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -9,18 +10,28 @@ import axiosIns from '../../../../axiosInstance';
 import { addOnePost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
-import { useAddTweetFormStyles } from './AddTweetFormStyles';
 import ProfileAvatar from './ProfileAvatar/ProfileAvatar';
 
+const CustomContentTextarea = styled(TextareaAutosize)(({ theme }) => ({
+  marginTop: 10,
+  width: '98%',
+  border: 0,
+  fontSize: 20,
+  outline: 'none',
+  fontFamily: 'inherit',
+  resize: 'none',
+  backgroundColor: 'transparent',
+  caretColor: localStorage.getItem === 'DEFAULT' ? '#000' : '#fff',
+  color: localStorage.getItem === 'DEFAULT' ? '#000' : '#fff',
+}));
 const MAX_LENGTH = 280;
 
 const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onCloseModal }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
-  const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
+  // const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
   const [visiblePoll, setVisiblePoll] = useState(false);
   const [remainingChars, setRemainingChars] = useState(280);
-  const classes = useAddTweetFormStyles({ qT: quoteTweet, isScheduled: selectedScheduleDate !== null });
   const textLimitPercent = Math.round((text.length / 280) * 100);
   const textCount = remainingChars;
   const fileInputRef = useRef(null);
@@ -66,7 +77,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
 
     setText('');
     setVisiblePoll(false);
-    setSelectedScheduleDate(null);
+    // setSelectedScheduleDate(null);
     onCloseModal();
   };
 
@@ -99,22 +110,40 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
 
   return (
     <>
-      <div className={classes.content}>
+      <div style={{ display: 'flex', width: '100%', backgroundColor: (theme) => theme.palette.background.default }}>
         <ProfileAvatar />
-        <div className={classes.textareaWrapper}>
-          <TextareaAutosize
+        <div
+          style={{
+            marginLeft: 15,
+            width: '100%',
+            backgroundColor: (theme) => theme.palette.background.default,
+            borderRadius: '20px !important',
+          }}
+        >
+          <CustomContentTextarea
             onChange={handleChangeTextarea}
-            className={classes.contentTextarea}
             placeholder={visiblePoll ? 'Ask a question...' : title}
             value={text}
             maxRows={maxRows}
           />
         </div>
       </div>
-      <div className={classes.footer}>
-        <div className={classes.footerWrapper}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            position: 'relative',
+            paddingTop: 5,
+            paddingBottom: 5,
+            left: -13,
+            justifyContent: 'space-between',
+            maxWidth: 450,
+            marginTop: 10,
+            paddingLeft: 70,
+          }}
+        >
           {buttonName !== 'Reply' && (
-            <div className={classes.quoteImage}>
+            <div>
               <IconButton color="primary" aria-label="add to shopping cart" onClick={handleClickImage}>
                 <PermMediaIcon />
               </IconButton>
@@ -126,13 +155,23 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
             </div>
           )}
         </div>
-        <div className={classes.footerAddForm}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           {text && (
             <>
-              <span id={'textCount'} className={classes.textCount}>
+              <span id={'textCount'} style={{ color: (theme) => theme.palette.text.secondary, zIndex: '2' }}>
                 {textCount}
               </span>
-              <div className={classes.footerAddFormCircleProgress}>
+              <div
+                style={{
+                  position: 'relative',
+                  width: 20,
+                  height: 20,
+                  margin: '0 10px',
+                  '& .MuiCircularProgress-root': {
+                    position: 'absolute',
+                  },
+                }}
+              >
                 <CircularProgress
                   variant="determinate"
                   size={20}

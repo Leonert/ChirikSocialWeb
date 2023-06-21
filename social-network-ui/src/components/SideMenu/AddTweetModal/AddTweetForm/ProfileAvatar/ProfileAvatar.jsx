@@ -1,19 +1,21 @@
 import { Avatar } from '@mui/material';
-import React, { memo } from 'react';
+import { styled } from '@mui/material/styles';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useGlobalStyles } from '../../../../../util/globalClasses';
 import { PROFILE } from '../../../../../util/path-constants';
 
-const ProfileAvatar = memo(() => {
-  const globalClasses = useGlobalStyles();
+const CustomProfileAvatar = styled(Avatar)(({ theme }) => ({
+  width: '46px !important',
+  height: '46px !important',
+}));
 
+const ProfileAvatar = () => {
   return (
     <Link to={`${PROFILE}`}>
-      <Avatar className={globalClasses.avatar} />
+      <CustomProfileAvatar />
     </Link>
   );
-});
+};
 
-ProfileAvatar.displayName = 'ProfileAvatar';
 export default ProfileAvatar;

@@ -51,7 +51,7 @@ export const ListUsersLike = forwardRef(function ListUsersLike(props, ref) {
 
   return (
     <ul>
-      {loading && <Spinner />}
+      {loading && <Spinner p="50px 0" />}
       {listUsers.length === 0 && !loading ? (
         <Typography sx={{ textAlign: 'center' }} variant="h5">
           The likes are not there.

@@ -58,7 +58,7 @@ const Connect = () => {
           dataLength={users.length}
           next={fetchSuggestedUsers}
           hasMore={hasMoreUsers}
-          loader={<Spinner />}
+          loader={<Spinner p="50px 0" />}
         >
           {users.length > 0 &&
             users.map((user) => (

@@ -1,7 +1,6 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Typography } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import MenuList from '@mui/material/MenuList';
-import { useTheme } from '@mui/material/styles';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

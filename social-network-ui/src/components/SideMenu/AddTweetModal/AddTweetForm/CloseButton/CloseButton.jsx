@@ -1,18 +1,25 @@
 import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { CloseIcon } from '../../../../../icon';
-import { useCloseButtonStyles } from './CloseButtonStyles';
+
+const Close = styled('div')(({ theme }) => ({
+  width: '10px ! important',
+  '& .MuiIconButton-root': {
+    marginRight: 15,
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.text.secondary,
+  },
+}));
 
 const CloseButton = ({ onClose }) => {
-  const classes = useCloseButtonStyles();
-
   return (
-    <div className={classes.close}>
-      <Button onClick={onClose} className={classes.closeButton}>
+    <Close>
+      <Button onClick={onClose} sx={{ color: '#fff !important' }}>
         {CloseIcon}
       </Button>
-    </div>
+    </Close>
   );
 };
 

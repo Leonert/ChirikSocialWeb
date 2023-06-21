@@ -18,10 +18,9 @@ export const Followers = () => {
   const path = location.pathname.split('/')[location.pathname.split('/').length - 1];
   const { followersUsers, loading, isTotalUsers } = useSelector((state) => state.followers);
   const [currentPage, setCurrentPage] = useState(0);
-  
+
   useEffect(() => {
     if (followersUsers.length === 0 && !loading) {
-      
       dispatch(loadFollowers({ username }));
     }
 
@@ -74,7 +73,7 @@ export const Followers = () => {
             flexDirection: 'column',
           }}
         >
-          {loading && followersUsers.length === 0 && <Spinner />}
+          {loading && followersUsers.length === 0 && <Spinner p="50px 0" />}
           {followersUsers.length > 0 ? (
             followersUsers.map((user) => {
               return <FollowerUser key={user.username} user={user} />;

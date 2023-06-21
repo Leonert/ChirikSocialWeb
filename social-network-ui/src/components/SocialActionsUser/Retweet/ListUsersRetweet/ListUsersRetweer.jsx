@@ -48,7 +48,7 @@ export const ListUsersRetweer = forwardRef(function ListUsersRetweer(props, ref)
 
   return (
     <ul>
-      {loading && <Spinner />}
+      {loading && <Spinner p="50px 0" />}
       {listUsers.length === 0 && !loading ? (
         <Typography sx={{ textAlign: 'center' }} variant="h5">
           The retweets are not there.

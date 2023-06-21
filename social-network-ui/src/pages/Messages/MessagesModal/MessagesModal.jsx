@@ -1,11 +1,19 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, List, ListItem } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 
 import { SearchIcon } from '../../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
-import { useMessagesModalStyles } from './MessagesModalStyles';
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
+
+const Header = styled(DialogTitle)(({ theme }) => ({
+  margin: 0,
+  border: 0,
+  '& svg': {
+    fontSize: 26,
+  },
+}));
 
 const MessagesModal = ({ visible, onClose }) => {
   const users = [
@@ -17,7 +25,6 @@ const MessagesModal = ({ visible, onClose }) => {
     },
   ];
 
-  const classes = useMessagesModalStyles();
   const [selectedIndex] = useState();
 
   const [text, setText] = useState('');
@@ -36,13 +43,13 @@ const MessagesModal = ({ visible, onClose }) => {
 
   return (
     <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title" className={classes.header}>
+      <Header id="form-dialog-title">
         <IconButton onClick={onClose} color="secondary" aria-label="close">
           <CloseIcon color="secondary" />
         </IconButton>
-        <span className={classes.headerMessage}>New message</span>
+        <span style={{ marginLeft: 15 }}>New message</span>
         <Button
-          className={classes.button}
+          sx={{ marginLeft: 'auto', height: 30 }}
           type="submit"
           variant="contained"
           color="primary"
@@ -50,8 +57,8 @@ const MessagesModal = ({ visible, onClose }) => {
         >
           Next
         </Button>
-      </DialogTitle>
-      <DialogContent className={classes.content}>
+      </Header>
+      <DialogContent sx={{ height: 550, width: 598, padding: 0 }}>
         <form onSubmit={handleClickSearch}>
           <MessagesModalInput
             fullWidth
@@ -64,7 +71,7 @@ const MessagesModal = ({ visible, onClose }) => {
             }}
           />
         </form>
-        <div className={classes.divider} />
+        <div style={{ height: 1, backgroundColor: 'rgb(207, 217, 222)' }} />
         <List component="nav" aria-label="main mailbox folders">
           {users.map((user) => (
             <ListItem

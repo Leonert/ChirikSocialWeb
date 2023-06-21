@@ -26,7 +26,7 @@ const AsideRecommendFollows = () => {
 
   return (
     <AsideContainer header="For you" asideActions="/connect_people">
-      {loading && <Spinner />}
+      {loading && <Spinner p="50px 0" />}
       {recommendedUsers.map((user) => (
         <Link key={user.id} to={`/${user.username}`}>
           <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>

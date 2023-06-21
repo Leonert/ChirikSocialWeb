@@ -15,6 +15,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,7 +27,24 @@ import { handleOpenLikeModal } from '../../features/slices/postDatas/likesSlice'
 import { handleOpenRetweetModal } from '../../features/slices/postDatas/retweetsSlice';
 import AvatarLink from '../UI/AvatarLink';
 import NameLink from '../UI/NameLink';
-import { usePostStyle } from './PostStyle';
+
+const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
+  fontWeight: 800 + ' !important',
+  fontSize: 15 + ' !important',
+}));
+const CustomCardContent = styled(CardContent)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  backgroundColor: theme.palette.background.paper,
+  fontWeight: 800 + ' !important',
+  fontSize: 15 + ' !important',
+}));
+const CustomCardMedia = styled(CardMedia)(({ theme }) => ({
+  maxWidth: '90%',
+  margin: 'auto',
+  borderRadius: '2%',
+}));
 
 const options = {
   year: 'numeric',
@@ -38,8 +56,6 @@ const options = {
 };
 
 export default function Post(props) {
-  const classes = usePostStyle();
-
   const dispatch = useDispatch();
 
   const { isOpenLikeModal } = useSelector((state) => state.likes);
@@ -58,12 +74,11 @@ export default function Post(props) {
     <Card className={props.classes}>
       {props.replay}
       {props.content != null && (
-        <CardHeader
-          className={classes.pageItem}
+        <CustomCardHeader
           avatar={<AvatarLink alt={props.name} avatar={props.profileImage} to={`/${props.username}`} />}
           action={
             <Tooltip title="More">
-              <IconButton aria-label="settings" onClick={props.handleClick} className={classes.iconColor}>
+              <IconButton aria-label="settings" onClick={props.handleClick} className="iconColor">
                 <MoreHorizIcon />
               </IconButton>
             </Tooltip>
@@ -78,26 +93,26 @@ export default function Post(props) {
       )}
       {props.content && !props.postPage && (
         <Link to={`/${props.username}/${props.id}`}>
-          <CardContent className={classes.pageItem}>
-            <Typography variant="body2" className={classes.iconColor}>
+          <CustomCardContent>
+            <Typography variant="body2" className="iconColor">
               {props.content}
             </Typography>
-          </CardContent>
+          </CustomCardContent>
         </Link>
       )}
       {props.content && props.postPage && (
-        <CardContent className={classes.pageItem}>
-          <Typography variant="body2" className={classes.iconColor}>
+        <CustomCardContent>
+          <Typography variant="body2" className="iconColor">
             {props.content}
           </Typography>
-        </CardContent>
+        </CustomCardContent>
       )}
 
       {!props.isReplyPage && props.children}
 
-      {props.image && <CardMedia component="img" image={props.image} alt="Post image" className={classes.iconImg} />}
+      {props.image && <CustomCardMedia component="img" image={props.image} alt="Post image" />}
       {props.postPage && (
-        <Typography variant="body2" className={classes.date}>
+        <Typography variant="body2" sx={{ padding: '15px 0 10px 16px', color: '#8a9da8' }}>
           {new Date(props.date).toLocaleString('en-US', options)}
         </Typography>
       )}
@@ -111,28 +126,98 @@ export default function Post(props) {
             borderBottom: '1px solid #38444D',
           }}
         >
-          <Typography onClick={handleClickOpenRetweetModal} mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
+          <Typography
+            onClick={handleClickOpenRetweetModal}
+            mr={2}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              fontSize: '14px !important',
+              color: (theme) => theme.palette.grey[300],
+              cursor: 'pointer',
+            }}
+          >
+            <Typography
+              variant="span"
+              sx={{
+                fontWeight: '700 !important',
+                fontSize: '15px !important',
+                color: (theme) => theme.palette.primary.main,
+                marginRight: '5px !important',
+              }}
+            >
               {props.retweet}
-            </Typography>{' '}
+            </Typography>
             Retweets
           </Typography>
-          <Typography mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
+          <Typography
+            mr={2}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              fontSize: '14px !important',
+              color: (theme) => theme.palette.grey[300],
+              cursor: 'pointer',
+            }}
+          >
+            <Typography
+              variant="span"
+              sx={{
+                fontWeight: '700 !important',
+                fontSize: '15px !important',
+                color: (theme) => theme.palette.primary.main,
+                marginRight: '5px !important',
+              }}
+            >
               {props.reply}
-            </Typography>{' '}
+            </Typography>
             Quotes
           </Typography>
-          <Typography onClick={handleClickOpenLikesModal} mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
+          <Typography
+            onClick={handleClickOpenLikesModal}
+            mr={2}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              fontSize: '14px !important',
+              color: (theme) => theme.palette.grey[300],
+              cursor: 'pointer',
+            }}
+          >
+            <Typography
+              variant="span"
+              sx={{
+                fontWeight: '700 !important',
+                fontSize: '15px !important',
+                color: (theme) => theme.palette.primary.main,
+                marginRight: '5px !important',
+              }}
+            >
               {props.like}
-            </Typography>{' '}
+            </Typography>
             Likes
           </Typography>
-          <Typography mr={2} className={classes.actionTypo}>
-            <Typography variant="span" className={classes.actionNumber}>
+          <Typography
+            mr={2}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              fontSize: '14px !important',
+              color: (theme) => theme.palette.grey[300],
+              cursor: 'pointer',
+            }}
+          >
+            <Typography
+              variant="span"
+              sx={{
+                fontWeight: '700 !important',
+                fontSize: '15px !important',
+                color: (theme) => theme.palette.primary.main,
+                marginRight: '5px !important',
+              }}
+            >
               {props.bookmark}
-            </Typography>{' '}
+            </Typography>
             Bookmarks
           </Typography>
         </Box>
@@ -142,8 +227,11 @@ export default function Post(props) {
         props.originalPost && props.IdentifierReply ? null : (
           <CardActions
             disableSpacing
-            className={classes.pageItem}
             sx={{
+              color: (theme) => theme.palette.text.primary,
+              backgroundColor: (theme) => theme.palette.background.paper,
+              fontWeight: 800 + ' !important',
+              fontSize: 15 + ' !important',
               display: 'flex',
               justifyContent: 'space-around',
               padding: '8px 80px',
@@ -152,7 +240,7 @@ export default function Post(props) {
             <Tooltip title="Reply">
               <IconButton
                 aria-label="ChatBubbleOutline"
-                className={props.replayed ? classes.iconActions : classes.iconColor}
+                className={props.replayed ? 'iconActions' : 'iconColor'}
                 onClick={props.handleClickReplay}
               >
                 <Badge badgeContent={props.reply} color="primary">
@@ -163,7 +251,7 @@ export default function Post(props) {
             <Tooltip title="Retweet">
               <IconButton
                 aria-label="ChatBubbleOutline"
-                className={props.retweeted ? classes.iconActions : classes.iconColor}
+                className={props.retweeted ? 'iconActions' : 'iconColor'}
                 onClick={props.handleClickRetweet}
               >
                 <Badge badgeContent={props.retweet} color="primary">
@@ -174,7 +262,7 @@ export default function Post(props) {
             <Tooltip title="Like">
               <IconButton
                 aria-label="add to favorites"
-                className={props.liked ? classes.iconActions : classes.iconColor}
+                className={props.liked ? 'iconActions' : 'iconColor'}
                 onClick={props.handleClickLike}
               >
                 <Badge badgeContent={props.like} color="primary">
@@ -185,7 +273,7 @@ export default function Post(props) {
             <Tooltip title="Bookmarks">
               <IconButton
                 aria-label="add to favorites"
-                className={props.bookmarked ? classes.iconActions : classes.iconColor}
+                className={props.bookmarked ? 'iconActions' : 'iconColor'}
                 onClick={props.handleClickBookmark}
               >
                 <Badge badgeContent={props.bookmark} color="primary">
@@ -198,8 +286,11 @@ export default function Post(props) {
       ) : props.originalPost || props.IdentifierOriginal ? null : (
         <CardActions
           disableSpacing
-          className={classes.pageItem}
           sx={{
+            color: (theme) => theme.palette.text.primary,
+            backgroundColor: (theme) => theme.palette.background.paper,
+            fontWeight: 800 + ' !important',
+            fontSize: 15 + ' !important',
             display: 'flex',
             justifyContent: 'space-around',
             padding: '8px 80px',
@@ -208,7 +299,7 @@ export default function Post(props) {
           <Tooltip title="Reply">
             <IconButton
               aria-label="ChatBubbleOutline"
-              className={props.replayed ? classes.iconActions : classes.iconColor}
+              className={props.replayed ? 'iconActions' : 'iconColor'}
               onClick={props.handleClickReplay}
             >
               <Badge badgeContent={props.reply} color="primary">
@@ -219,7 +310,7 @@ export default function Post(props) {
           <Tooltip title="Retweet">
             <IconButton
               aria-label="ChatBubbleOutline"
-              className={props.retweeted ? classes.iconActions : classes.iconColor}
+              className={props.retweeted ? 'iconActions' : 'iconColor'}
               onClick={props.handleClickRetweet}
             >
               <Badge badgeContent={props.retweet} color="primary">
@@ -230,7 +321,7 @@ export default function Post(props) {
           <Tooltip title="Like">
             <IconButton
               aria-label="add to favorites"
-              className={props.liked ? classes.iconActions : classes.iconColor}
+              className={props.liked ? 'iconActions' : 'iconColor'}
               onClick={props.handleClickLike}
             >
               <Badge badgeContent={props.like} color="primary">
@@ -242,7 +333,7 @@ export default function Post(props) {
             <Tooltip title="Bookmarks">
               <IconButton
                 aria-label="add to favorites"
-                className={props.bookmarked ? classes.iconActions : classes.iconColor}
+                className={props.bookmarked ? 'iconActions' : 'iconColor'}
                 onClick={props.handleClickBookmark}
               >
                 <Badge badgeContent={props.bookmark} color="primary">

@@ -1,12 +1,19 @@
 import { IconButton } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import { useActionIconButtonStyles } from './ActionIconButtonStyles';
-
+const PREFIX = 'ActionIconButton';
+const classes = {
+  icon: `${PREFIX}-icon`,
+};
+const Root = styled('div')(({ theme }) => ({
+  [`${classes.icon}`]: {
+    display: 'inline-block',
+  },
+}));
 // const HOVER_DELAY = 500;
 
 const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
-  const classes = useActionIconButtonStyles();
   const delayHandler = null;
 
   // const handleHoverAction = () => {
@@ -18,7 +25,7 @@ const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
   };
 
   return (
-    <div id={id} className={classes.icon}>
+    <Root id={id} className={classes.icon}>
       <IconButton
         onClick={onClick}
         // onMouseEnter={handleHoverAction}
@@ -29,7 +36,7 @@ const ActionIconButton = ({ id, onClick, icon, size = 'small', disabled }) => {
       >
         <>{icon}</>
       </IconButton>
-    </div>
+    </Root>
   );
 };
 export default ActionIconButton;

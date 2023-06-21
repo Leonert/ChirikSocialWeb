@@ -1,11 +1,7 @@
-// import ArchiveIcon from '@mui/icons-material/Archive';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
 import KeyIcon from '@mui/icons-material/Key';
-// import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import PersonIcon from '@mui/icons-material/Person';
-import { Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

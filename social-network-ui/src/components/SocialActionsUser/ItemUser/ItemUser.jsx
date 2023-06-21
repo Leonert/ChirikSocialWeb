@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,11 +8,55 @@ import { handleOpenLikeModal } from '../../../features/slices/postDatas/likesSli
 import { handleOpenRetweetModal } from '../../../features/slices/postDatas/retweetsSlice';
 import { followUser } from '../../../features/slices/userDatas/followingSlice';
 import { CustomButton } from '../../Login/CustomButton';
-import { useStylesItemUser } from './ItemUserStyles';
+
+const Item = styled('li')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+
+  padding: '26px 26px 26px 40px',
+  border: '1px solid #90a4ae',
+  borderCollapse: 'collapse',
+  '&:hover': {
+    backgroundColor: '#132433 ',
+  },
+  '&:first-child': {
+    borderTopLeftRadius: '5px',
+    borderTopRightRadius: '5px',
+  },
+  '&:last-child': {
+    borderBottomLeftRadius: '5px',
+    borderBottomRightRadius: '5px',
+  },
+}));
+const User = styled(Link)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  cursor: 'pointer',
+}));
+const Avatar = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  cursor: 'pointer',
+}));
+const AvatarImg = styled('img')(({ theme }) => ({
+  borderRadius: '50%',
+  width: '50px',
+  height: '50px',
+}));
+const Name = styled('div')(({ theme }) => ({
+  fontSize: '20px',
+  color: 'white',
+}));
+const Username = styled('div')(({ theme }) => ({
+  fontSize: '16px',
+  color: '#78909c',
+}));
 
 export const ItemUser = ({ user }) => {
   const { name, username, profileImage, currUserFollower } = user;
-  const classes = useStylesItemUser();
   const dispatch = useDispatch();
 
   const handleFollow = useCallback(() => {
@@ -24,17 +69,16 @@ export const ItemUser = ({ user }) => {
   }, [user, dispatch]);
 
   return (
-    <li className={classes.item}>
-      <Link onClick={navigateToUser} to={`/`} className={classes.user}>
-        <div className={classes.avatar}>
-          <img src={profileImage} alt={name} className={classes.avatarImg} />
-        </div>
+    <Item>
+      <User onClick={navigateToUser} to={`/`}>
+        <Avatar>
+          <AvatarImg src={profileImage} alt={name} />
+        </Avatar>
         <div>
-          {' '}
-          <div className={classes.name}>{name}</div>
-          <div className={classes.username}>{username}</div>
+          <Name>{name}</Name>
+          <Username>{username}</Username>
         </div>
-      </Link>
+      </User>
       <div>
         <CustomButton
           handleClick={handleFollow}
@@ -54,6 +98,6 @@ export const ItemUser = ({ user }) => {
           </Typography>
         </CustomButton>
       </div>
-    </li>
+    </Item>
   );
 };

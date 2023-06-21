@@ -125,7 +125,7 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
             No more results.
           </Typography>
         }
-        loader={<Spinner />}
+        loader={<Spinner p="50px 0" />}
       >
         {posts &&
           posts.map((post) => (

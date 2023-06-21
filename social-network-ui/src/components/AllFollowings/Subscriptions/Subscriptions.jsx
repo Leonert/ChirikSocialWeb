@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
@@ -6,11 +7,61 @@ import { Link, useParams } from 'react-router-dom';
 import { getUser } from '../../../api/getUserByUsername';
 import { handleFollowers, handleFollowing } from '../../../features/slices/subscriptionsSlice';
 import { ArrowBack } from '../../ArrowBack/ArrowBack';
-import { useStyles } from './SubscriptionsStyles';
+
+const SubscriptionsWrap = styled(Box)(({ theme }) => ({
+  width: '100%',
+  backgroundColor: '#ffffff',
+  display: 'flex',
+  flexDirection: 'column',
+}));
+
+const Header = styled(Box)(({ theme }) => ({
+  padding: '20px 0',
+  borderBottom: '1px solid #eceff1',
+  width: '100%',
+  backgroundColor: 'rgb(15, 20, 25)',
+}));
+const User = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  padding: '0 20px',
+}));
+const Arrow = styled(Box)(({ theme }) => ({
+  marginRight: '20px',
+}));
+const Name = styled(Typography)(({ theme }) => ({
+  color: '#ffffff',
+}));
+const Username = styled(Typography)(({ theme }) => ({
+  marginRight: '10px',
+  color: 'gray',
+  fontSize: ' 12px',
+}));
+const FollowersWrap = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+}));
+const Follower = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  '&:hover': {
+    backgroundColor: 'rgb(15, 20, 45)',
+  },
+  cursor: 'pointer',
+}));
+const FollowerItem = styled(Typography)(({ theme }) => ({
+  textAlign: 'center',
+  display: 'block',
+  padding: '20px',
+  boxSizing: 'border-box',
+  border: '5px solid transparent',
+  borderRadius: '7px',
+  fontSize: ' 16px',
+}));
 
 export const Subscriptions = (props) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const { followers } = useSelector((state) => state.subscriptions);
   const { following } = useSelector((state) => state.subscriptions);
   // const { user } = useSelector((state) => state.auth);
@@ -38,44 +89,35 @@ export const Subscriptions = (props) => {
   }, []);
 
   return (
-    <Box className={classes.subscriptionsWrap}>
-      <Box className={classes.header}>
-        <Box className={classes.user}>
-          <Box className={classes.arrow}>
+    <SubscriptionsWrap>
+      <Header>
+        <User>
+          <Arrow>
             <ArrowBack />
-          </Box>
+          </Arrow>
           <Box>
-            <Typography className={classes.name} variant="h6">
-              {user && user?.name}
-            </Typography>
-
-            <Typography className={classes.username}>@{username}</Typography>
+            <Name variant="h6">{user && user?.name}</Name>
+            <Username>@{username}</Username>
           </Box>
-        </Box>
-        <Box className={classes.followersWrap}>
+        </User>
+        <FollowersWrap>
           <Link to={`/${username}/followers`}>
-            <Box onClick={hadeleFollowersCLick} className={classes.follower}>
-              <Typography
-                style={followers ? { borderBottom: '5px solid rgb(48, 63, 159)' } : {}}
-                className={classes.followerItem}
-              >
+            <Follower onClick={hadeleFollowersCLick}>
+              <FollowerItem style={followers ? { borderBottom: '5px solid rgb(48, 63, 159)' } : {}}>
                 Followers
-              </Typography>
-            </Box>
+              </FollowerItem>
+            </Follower>
           </Link>
           <Link to={`/${username}/following`}>
-            <Box onClick={hadeleFollowingCLick} className={classes.follower}>
-              <Typography
-                style={following ? { borderBottom: '5px solid rgb(48, 63, 159)' } : {}}
-                className={classes.followerItem}
-              >
+            <Follower onClick={hadeleFollowingCLick}>
+              <FollowerItem style={following ? { borderBottom: '5px solid rgb(48, 63, 159)' } : {}}>
                 Following
-              </Typography>
-            </Box>
+              </FollowerItem>
+            </Follower>
           </Link>
-        </Box>
-      </Box>
+        </FollowersWrap>
+      </Header>
       <Box>{props.children}</Box>
-    </Box>
+    </SubscriptionsWrap>
   );
 };

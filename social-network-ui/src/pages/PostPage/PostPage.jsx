@@ -12,10 +12,8 @@ import PostList from '../../components/PostList/PostList';
 import TextInput from '../../components/ReplayModal/TextInput';
 import { addOnePost, clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
 import { addReply, makeRetweet, setBookmark, setLike, setPost } from '../../features/slices/postSlice';
-import usePostPageStyles from './PostPageStyles';
 
 const PostPage = () => {
-  const pageClasses = usePostPageStyles();
   const postClasses = usePostStyle();
   const dispatch = useDispatch();
   const text = useSelector((state) => state.home.message);
@@ -155,7 +153,14 @@ const PostPage = () => {
       )}
 
       {!isLoading && post && (
-        <Box className={pageClasses.replyWrapper}>
+        <Box
+          sx={{
+            margin: '20px 0 0 0',
+            borderTop: `1px solid #38444D`,
+            borderBottom: `1px solid #38444D`,
+            padding: '15px 0',
+          }}
+        >
           <TextInput handleTextChange={handleTextChange} />
           <Box sx={{ marginTop: '15px', textAlign: 'right' }}>
             <Button disabled={text.length === 0} onClick={sendRequest} color="primary" variant="contained">
