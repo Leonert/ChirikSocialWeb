@@ -4,6 +4,7 @@ export const useLayoutStyles = makeStyles((theme) => ({
   wrapper: {
     height: '100vh',
     display: 'flex',
+   
   },
   leftSideGrid: {
     '& .MuiGrid-item': {

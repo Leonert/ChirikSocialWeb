@@ -4,23 +4,25 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { addOnePost, addReply, clothReplayModal, replayMessage } from '../../features/slices/homeSlice';
+import { replayMessage } from '../../features/slices/homeSlice';
 import { EmojiIcon, MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
 import TextInput from './TextInput';
 
-function FormModal({ buttonName }) {
+function FormModal({ buttonName, posts, onSendRequest }) {
   const dispatch = useDispatch();
 
   const text = useSelector((state) => state.home.message);
   const id = useSelector((state) => state.home.postId);
-  const post = useSelector((state) => state.home.post);
+
   const user = useSelector((state) => state.auth.user);
+
   const classes = useAddTweetFormStyles();
   const fileInputRef = useRef(null);
   const visiblePoll = false;
   const MAX_LENGTH = 280;
+
   const handleClickImage = () => {
     fileInputRef.current.click();
   };
@@ -30,15 +32,25 @@ function FormModal({ buttonName }) {
       dispatch(replayMessage(event.target.value));
     }
   };
+  let targetPost = posts.find((item) => {
+    if (+item.id === +id) {
+      return true;
+    }
+    if (item.originalPost && +item.originalPost.id === +id) {
+      return true;
+    }
 
-  const targetPost = post.find((item) => +item.id === +id);
+    return false;
+  });
+
+  if (targetPost && targetPost.originalPost && +targetPost.originalPost.id === +id) {
+    targetPost = targetPost.originalPost;
+  }
 
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
-      dispatch(addOnePost(response.data));
-      dispatch(addReply(targetPost.id));
-      dispatch(clothReplayModal());
       dispatch(replayMessage(''));
+      onSendRequest(response.data);
     });
   };
 
@@ -47,12 +59,39 @@ function FormModal({ buttonName }) {
       {targetPost && (
         <>
           <div className={classes.content}>
-            <Avatar aria-label="recipe" alt={targetPost.author.name} src={targetPost.author.profileImage}></Avatar>
-            <Typography className={classes.itemNick}>@{targetPost.author.name}</Typography>
+            <Avatar
+              aria-label="recipe"
+              alt={targetPost.author && targetPost.author.name ? targetPost.author.name : user.name}
+              src={
+                targetPost.originalPost
+                  ? targetPost.originalPost && targetPost.text != null && targetPost.image == null
+                    ? targetPost.author && targetPost.author.profileImage
+                      ? targetPost.author.profileImage
+                      : user.profileImage
+                    : targetPost.originalPost.author.profileImage
+                  : targetPost.author && targetPost.author.profileImage
+                  ? targetPost.author.profileImage
+                  : user.profileImage
+              }
+            ></Avatar>
+            <Typography className={classes.itemNick}>
+              @
+              {targetPost.originalPost
+                ? targetPost.originalPost && targetPost.text != null && targetPost.image == null
+                  ? targetPost.author && targetPost.author.name
+                    ? targetPost.author.name
+                    : user.name
+                  : targetPost.originalPost.author.name
+                : targetPost.author && targetPost.author.name
+                ? targetPost.author.name
+                : user.name}
+            </Typography>
           </div>
-          <Typography className={classes.item}>Send replay @{targetPost.author.name}</Typography>
+          <Typography className={classes.item}>
+            Send replay @{targetPost.author && targetPost.author.name ? targetPost.author.name : user.name}
+          </Typography>
           <div className={classes.content}>
-            <Avatar />
+            <Avatar aria-label="recipe" alt={user.name} src={user.profileImage} />
             <Typography className={classes.itemNick}>@{user.name}</Typography>
           </div>
 

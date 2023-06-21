@@ -1,89 +1,188 @@
 import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
-import {
-  addOnePost,
-  bookmarksPost,
-  getPost,
-  getPostId,
-  likesPost,
-  makeRetweet,
-  openReplayModal,
-  removeRetweet,
-} from '../../features/slices/homeSlice';
+import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
 import Post from '../Post/Post';
-import { usePostStyle } from '../Post/PostStyle';
 import ReplyHeader from '../Post/ReplyHeader';
+import ReplayModal from '../ReplayModal/ReplayModal';
 import Spinner from '../Spinner/Spinner';
 
-export default function PostList({ isBookmarkPage, isReplyPage }) {
-  const posts = useSelector((state) => state.home.post);
-  const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
+const PostsContext = React.createContext([]);
+
+const TypographyWrapper = styled(Typography)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  paddingRight: '20px',
+}));
+
+export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost, lickedProfile }) {
+  const username = useSelector((state) =>
+    state.auth.user && state.auth.user.username ? state.auth.user.username : null
+  );
+
   const { user } = useSelector((state) => state.auth);
+  const [posts, setPosts] = useState([]);
 
-  const [hasMorePosts, setHasMorePosts] = useState(false);
-  const [page, setPage] = useState(1);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [page, setPage] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
 
-  const classes = usePostStyle();
   const dispatch = useDispatch();
+  const tweetPost = useSelector((state) => state.home.tweetedPost);
+
   const fetchPosts = async () => {
     try {
       setHasMorePosts(true);
-      const { data } = await axiosIns.get(`api/posts?p=${page}&n=5`);
+      const { data } = await axiosIns.get(`${apiUrl}p=${page}&n=5`);
+
       if (data.length === 0) {
         setHasMorePosts(false);
       } else if (data.length < 5 && page === 0) {
         setHasMorePosts(false);
-        dispatch(getPost(data));
       } else {
         setHasMorePosts(true);
-        dispatch(getPost(data));
-        setPage((prevPage) => prevPage + 1);
       }
+      const filteredPosts = data.filter((post, index, self) => self.findIndex((p) => p.id === post.id) === index);
+
+      if (page === 0) {
+        setPosts(filteredPosts);
+      } else {
+        setPosts((prevPosts) => {
+          const updatedPosts = [...prevPosts, ...filteredPosts];
+          const uniquePosts = updatedPosts.filter(
+            (post, index, self) => self.findIndex((p) => p.id === post.id) === index
+          );
+
+          return uniquePosts;
+        });
+      }
+      setPage(page + 1);
     } catch (e) {
       return { Error: e };
     }
   };
+
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (!incomingPost) {
+      setPosts([]);
+      setPage(0);
+      fetchPosts();
+    } else {
+      setHasMorePosts(false);
+      setPosts(incomingPost);
+    }
+  }, [incomingPost]);
+  useEffect(() => {
+    if (typeof tweetPost === 'object' && tweetPost !== null) {
+      setPosts((prevPost) => [tweetPost, ...prevPost]);
+    }
+  }, [tweetPost]);
+
   const handleRetweet = async (id) => {
     if (user) {
       const response = await axiosIns.post(`/api/posts`, { originalPost: id });
 
       if (response.status === 200) {
-        dispatch(removeRetweet({ id, username }));
-        dispatch(makeRetweet({ postId: id, reetweetsNumber: response.data }));
-      } else {
-        if (!isBookmarkPage && !isReplyPage) dispatch(addOnePost(response.data));
-        dispatch(makeRetweet({ postId: id, retweetsNumber: response.data.originalPost.retweetsNumber }));
+        setPosts((prevPosts) =>
+          prevPosts
+            .map((post) => {
+              if (+post.id === +id) {
+                return {
+                  ...post,
+                  retweeted: false,
+                  retweetsNumber: response.data,
+                };
+              } else if (post.originalPost && +post.originalPost.id === +id) {
+                return null;
+              } else {
+                return post;
+              }
+            })
+            .filter(Boolean)
+        );
+      } else if (response.status === 201) {
+        if (!isBookmarkPage && !isReplyPage)
+          setPosts((prevPosts) => [
+            {
+              ...response.data,
+            },
+            ...prevPosts.map((post) => {
+              if (+post.id === +id) {
+                return {
+                  ...post,
+                  retweeted: true,
+                  retweetsNumber: response.data.originalPost.retweetsNumber,
+                };
+              } else {
+                return post;
+              }
+            }),
+          ]);
       }
     } else {
       dispatch(handleRegistrationModal(true));
     }
   };
+
   const handleReplay = (props) => {
     if (user) {
       dispatch(openReplayModal(props));
+      setOpenModal(true);
     } else {
       dispatch(handleRegistrationModal(true));
     }
   };
-
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+  const handleClickDelete = (props) => {
+    if (user) {
+      axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
+        setPosts((prevPosts) =>
+          prevPosts.filter(
+            (post) => post.id && +post.id !== +props && (!post.originalPost || +post.originalPost.id !== +props)
+          )
+        );
+      });
+    } else {
+      dispatch(handleRegistrationModal(true));
+    }
+  };
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
-        const LikeNumber = response.data;
-        dispatch(
-          likesPost({
-            postId: props,
-            likesNumber: LikeNumber,
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
+              if (+post.id === +props) {
+                return {
+                  ...post,
+                  liked: !post.liked,
+                  likesNumber: response.data,
+                };
+              } else {
+                return {
+                  ...post,
+                  originalPost: {
+                    ...post.originalPost,
+                    liked: !post.originalPost.liked,
+                    likesNumber: response.data,
+                  },
+                };
+              }
+            }
+
+            return post;
           })
         );
+        lickedProfile && setPosts((prevPosts) => prevPosts.filter((post) => +post.id !== +props));
       });
     } else {
       dispatch(handleRegistrationModal(true));
@@ -94,10 +193,28 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
     if (user) {
       axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
         const bookmarksNum = response.data;
-        dispatch(
-          bookmarksPost({
-            postId: props,
-            bookmarksNumber: bookmarksNum,
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
+              if (+post.id === +props) {
+                return {
+                  ...post,
+                  bookmarked: !post.bookmarked,
+                  bookmarksNumber: bookmarksNum,
+                };
+              } else {
+                return {
+                  ...post,
+                  originalPost: {
+                    ...post.originalPost,
+                    bookmarked: !post.originalPost.bookmarked,
+                    bookmarksNumber: bookmarksNum,
+                  },
+                };
+              }
+            }
+
+            return post;
           })
         );
       });
@@ -105,14 +222,110 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
       dispatch(handleRegistrationModal(true));
     }
   };
+  const handleSendRequest = (props) => {
+    setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
+    setOpenModal(false);
+  };
 
   return (
-    <div style={{ marginBottom: '40px' }}>
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={fetchPosts}
-        hasMore={hasMorePosts}
-        endMessage={
+    <PostsContext.Provider value={posts}>
+      {openModal && (
+        <ReplayModal openModal={openModal} handleClose={handleClose} posts={posts} onSendRequest={handleSendRequest} />
+      )}
+      <div style={{ marginBottom: '40px' }}>
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={fetchPosts}
+          hasMore={hasMorePosts}
+          endMessage={
+            <Typography
+              sx={{
+                marginTop: '25px',
+                color: '#93989D',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '32px',
+              }}
+            >
+              No more results.
+            </Typography>
+          }
+          loader={posts.length === 0 ? null : <Spinner />}
+        >
+          {posts &&
+            posts.map((post) => (
+              <Post
+                key={post.id}
+                replay={
+                  post.originalPost ? (
+                    post.text === null && post.image === null ? (
+                      <ReplyHeader repeat={post.author && post.author.name ? post.author.name : username} />
+                    ) : (
+                      <TypographyWrapper>Reply</TypographyWrapper>
+                    )
+                  ) : null
+                }
+                IdentifierReply={post.text === null && post.image === null}
+                id={post.id}
+                size={isReplyPage}
+                username={post.author && post.author.username ? post.author.username : user ? user.username : ''}
+                profileImage={
+                  post.author && post.author.profileImage ? post.author.profileImage : user ? user.profileImage : ''
+                }
+                name={post.author && post.author.name ? post.author.name : user ? user.name : ''}
+                isBookmarkPage={isBookmarkPage}
+                isReplyPage={isReplyPage}
+                retweet={post.retweetsNumber}
+                like={post.likesNumber}
+                view={post.view}
+                reply={post.repliesNumber}
+                content={post.text}
+                data={post.createdDate}
+                image={post.image}
+                originalPost={post.originalPost}
+                liked={post.liked}
+                bookmarked={post.bookmarked}
+                retweeted={post.retweeted}
+                bookmark={post.bookmarksNumber}
+                handleClick={() => dispatch(getPostId(`${post.id}`))}
+                handleClickLike={() => handleLike(`${post.id}`)}
+                handleClickReplay={() => handleReplay(`${post.id}`)}
+                handleClickRetweet={() => handleRetweet(`${post.id}`)}
+                handleClickBookmark={() => handleBookmark(`${post.id}`)}
+                handleClickDelete={() => handleClickDelete(`${post.id}`)}
+              >
+                {post.originalPost && (
+                  <Post
+                    IdentifierOriginal={post.text != null && post.image === null}
+                    id={post.originalPost.id}
+                    key={post.originalPost.id}
+                    isBookmarkPage={isBookmarkPage}
+                    username={post.originalPost.author.username}
+                    profileImage={post.originalPost.author.profileImage}
+                    name={post.originalPost.author.name}
+                    retweet={post.originalPost.retweetsNumber}
+                    like={post.originalPost.likesNumber}
+                    view={post.originalPost.view}
+                    reply={post.originalPost.repliesNumber}
+                    content={post.originalPost.text}
+                    data={post.originalPost.createdDate}
+                    image={post.originalPost.image}
+                    liked={post.originalPost.liked}
+                    bookmarked={post.originalPost.bookmarked}
+                    retweeted={post.originalPost.retweeted}
+                    bookmark={post.originalPost.bookmarksNumber}
+                    handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
+                    handleClickLike={() => handleLike(`${post.originalPost.id}`)}
+                    handleClickReplay={() => handleReplay(`${post.originalPost.id}`)}
+                    handleClickRetweet={() => handleRetweet(`${post.originalPost.id}`)}
+                    handleClickBookmark={() => handleBookmark(`${post.originalPost.id}`)}
+                    handleClickDelete={() => handleClickDelete(`${post.originalPost.id}`)}
+                  />
+                )}
+              </Post>
+            ))}
+        </InfiniteScroll>
+        {!posts.length && isReplyPage && (
           <Typography
             sx={{
               marginTop: '25px',
@@ -122,94 +335,11 @@ export default function PostList({ isBookmarkPage, isReplyPage }) {
               fontSize: '32px',
             }}
           >
-            No more results.
+            So far, there are no replies. <br /> But you can fix it :)
           </Typography>
-        }
-        loader={<Spinner />}
-      >
-        {posts &&
-          posts.map((post) => (
-            <Post
-              key={post.id}
-              replay={
-                post.originalPost ? (
-                  post.text === null && post.image === null ? (
-                    <ReplyHeader repeat={post.author.name} />
-                  ) : (
-                    <Typography className={classes.reply}>Reply</Typography>
-                  )
-                ) : null
-              }
-              IdentifierReply={post.text === null && post.image === null}
-              id={post.id}
-              classes={isReplyPage ? classes.replyItem : classes.Page}
-              username={post.author.username}
-              avatar={post.author.profileImage}
-              name={post.author.name}
-              isBookmarkPage={isBookmarkPage}
-              isReplyPage={isReplyPage}
-              retweet={post.retweetsNumber}
-              like={post.likesNumber}
-              view={post.view}
-              reply={post.repliesNumber}
-              content={post.text}
-              data={post.createdDate}
-              image={post.image}
-              originalPost={post.originalPost}
-              liked={post.liked}
-              bookmarked={post.bookmarked}
-              retweeted={post.retweeted}
-              bookmark={post.bookmarksNumber}
-              handleClick={() => dispatch(getPostId(`${post.id}`))}
-              handleClickLike={() => handleLike(`${post.id}`)}
-              handleClickReplay={() => handleReplay(`${post.id}`)}
-              handleClickRetweet={() => handleRetweet(`${post.id}`)}
-              handleClickBookmark={() => handleBookmark(`${post.id}`)}
-            >
-              {post.originalPost && (
-                <Post
-                  IdentifierOriginal={post.text != null && post.image === null}
-                  id={post.originalPost.id}
-                  classes={classes.PageSmall}
-                  key={post.originalPost.id}
-                  isBookmarkPage={isBookmarkPage}
-                  username={post.originalPost.author.username}
-                  avatar={post.originalPost.author.profileImage}
-                  name={post.originalPost.author.name}
-                  retweet={post.originalPost.retweetsNumber}
-                  like={post.originalPost.likesNumber}
-                  view={post.originalPost.view}
-                  reply={post.originalPost.repliesNumber}
-                  content={post.originalPost.text}
-                  data={post.originalPost.createdDate}
-                  image={post.originalPost.image}
-                  liked={post.originalPost.liked}
-                  bookmarked={post.originalPost.bookmarked}
-                  retweeted={post.originalPost.retweeted}
-                  bookmark={post.originalPost.bookmarksNumber}
-                  handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
-                  handleClickLike={() => handleLike(`${post.originalPost.id}`)}
-                  handleClickReplay={() => handleReplay(`${post.originalPost.id}`)}
-                  handleClickRetweet={() => handleRetweet(`${post.originalPost.id}`)}
-                  handleClickBookmark={() => handleBookmark(`${post.originalPost.id}`)}
-                />
-              )}
-            </Post>
-          ))}
-      </InfiniteScroll>
-      {!posts.length && isReplyPage && (
-        <Typography
-          sx={{
-            marginTop: '25px',
-            color: '#93989D',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: '32px',
-          }}
-        >
-          So far, there are no replies. <br /> But you can fix it :)
-        </Typography>
-      )}
-    </div>
+        )}
+      </div>
+    </PostsContext.Provider>
   );
 }
+export { PostsContext };
