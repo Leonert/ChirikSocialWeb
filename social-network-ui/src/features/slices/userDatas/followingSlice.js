@@ -105,8 +105,9 @@ const followingSlice = createSlice({
       state.error = null;
 
       const userIndex = state.followingUsers.findIndex((item) => item.username === action.payload.username);
-
-      state.followingUsers[userIndex].currUserFollower = !state.followingUsers[userIndex].currUserFollower;
+      if (userIndex !== -1) {
+        state.followingUsers[userIndex].currUserFollower = !state.followingUsers[userIndex].currUserFollower;
+      }
     },
     [followUser.rejected]: (state, action) => {
       state.loading = false;

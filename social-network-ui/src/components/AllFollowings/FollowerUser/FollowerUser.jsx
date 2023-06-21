@@ -52,7 +52,7 @@ export const FollowerUser = ({ user }) => {
             border: '1px solid gray',
             color: 'rgb(48, 63, 159)',
             '&:hover': {
-              backgroundColor: '#ffcdd2',
+              backgroundColor: 'none',
             },
           }}
         >

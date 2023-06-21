@@ -1,11 +1,12 @@
 package com.socialnetwork.api.filter;
 
 import com.socialnetwork.api.security.JwtTokenUtil;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import com.socialnetwork.api.service.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -14,44 +15,40 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
-import static com.socialnetwork.api.util.Constants.Auth.USERNAME_ATTRIBUTE;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+  private final JwtUserDetailsService jwtUserDetailsService;
   private final JwtTokenUtil jwtTokenUtil;
-  private final List<String> globalPaths =
-        new ArrayList<>(List.of("/h2-console", "/api/login", "/api/registration", "/api/posts", "/api/users",
-              "/api/search", "/api/trends"));
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-        throws ServletException, IOException {
-    String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-    if (authHeader != null && !authHeader.contains("null")) {
-      if (authHeader.startsWith(BEARER)) {
-        authHeader = authHeader.substring(BEARER.length());
-      }
-      try {
-        request.setAttribute(USERNAME_ATTRIBUTE, jwtTokenUtil.checkTokenValidAndReturnUsername(authHeader));
-      } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException
-               | SignatureException | IllegalArgumentException e) {
-        response.setStatus(401);
+          throws ServletException, IOException {
+    try {
+
+      String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+
+      if (authHeader == null || !authHeader.startsWith(BEARER)) {
+        chain.doFilter(request, response);
         return;
       }
-      chain.doFilter(request, response);
-    } else if (globalPaths.stream().anyMatch(request.getRequestURI()::startsWith)) {
-      if (request.getAttribute(USERNAME_ATTRIBUTE) != null) {
-        request.setAttribute(USERNAME_ATTRIBUTE, null);
-      }
-      chain.doFilter(request, response);
-    } else {
-      response.setStatus(401);
+
+      String username = jwtTokenUtil.checkTokenValidAndReturnUsername(authHeader.substring(BEARER.length()));
+      UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+      UsernamePasswordAuthenticationToken auth =
+              new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+      auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+      SecurityContextHolder.getContext().setAuthentication(auth);
+    } catch (Exception ex) {
+      System.out.println("Exception in JwtAuthFilter.");
     }
+
+    chain.doFilter(request, response);
   }
 }

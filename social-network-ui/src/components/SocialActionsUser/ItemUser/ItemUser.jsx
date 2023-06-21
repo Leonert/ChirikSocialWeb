@@ -36,7 +36,19 @@ export const ItemUser = ({ user }) => {
         </div>
       </Link>
       <div>
-        <CustomButton handleClick={handleFollow}>
+        <CustomButton
+          handleClick={handleFollow}
+          styles={
+            currUserFollower
+              ? {
+                  backgroundColor: 'white',
+                  '&:hover': {
+                    backgroundColor: '#eeeeee',
+                  },
+                }
+              : {}
+          }
+        >
           <Typography style={currUserFollower ? { color: '#c62828' } : {}}>
             {currUserFollower ? 'Unfollow' : ' Following'}
           </Typography>
