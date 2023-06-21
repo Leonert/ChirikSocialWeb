@@ -1,6 +1,5 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.security.JwtUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import static com.socialnetwork.api.util.Constants.Exception.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username)
-          .orElseThrow(() -> new UsernameNotFoundException("There is no user with such username"));
-    return new JwtUserDetails(user);
+    return new JwtUserDetails(
+            userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND))
+    );
   }
 }

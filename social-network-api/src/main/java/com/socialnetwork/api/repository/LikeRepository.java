@@ -14,6 +14,9 @@ import java.util.List;
 public interface LikeRepository extends JpaRepository<Like, LikePk> {
   boolean existsByLikePk(LikePk likePk);
 
+  @Query("SELECT l.likedPost FROM Like l WHERE l.likedBy = :user")
+  List<Post> findPostsByUserLiked(User user);
+
   List<Like> findAllByLikedPost(Post post);
 
   int countAllByLikedPost(Post post);

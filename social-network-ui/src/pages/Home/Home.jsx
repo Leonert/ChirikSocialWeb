@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +20,7 @@ function Home() {
   const modalUserState = useSelector((state) => state.home.modalUser);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   useEffect(() => {
     dispatch(GetPosts(0)).then((result) => {
@@ -34,20 +36,22 @@ function Home() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={7}>
+      <Grid item xs={12} md={7}>
         <HeaderMain />
         {user && <ButtonShowMore />}
         {recommendation && <PostList />}
         {following && <Following />}
         {modalUserState && <ModalUser />}
       </Grid>
-      <Grid item xs={5}>
-        <Form action="/" method="post">
-          <SearchInput />
-        </Form>
-        <AsideTrends />
-        <AsideRecommendFollows />
-      </Grid>
+      {matches && (
+        <Grid item xs={5}>
+          <Form action="/" method="post">
+            <SearchInput />
+          </Form>
+          <AsideTrends />
+          <AsideRecommendFollows />
+        </Grid>
+      )}
     </Grid>
   );
 }

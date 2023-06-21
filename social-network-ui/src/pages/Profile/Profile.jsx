@@ -113,12 +113,12 @@ const Profile = (props) => {
             alt="Profile Picture"
             src={data.profileImage}
             sx={{
-              width: { sm: 80, md: 133 },
-              height: { sm: 80, md: 133 },
-              minWidth: { sm: 80, md: 100 },
-              minHeight: { sm: 80, md: 100 },
-              maxWidth: { sm: 80, md: 120 },
-              maxHeight: { sm: 80, md: 120 },
+              width: { xs: 80, md: 133 },
+              height: { xs: 80, md: 133 },
+              minWidth: { xs: 80, md: 100 },
+              minHeight: { xs: 80, md: 100 },
+              maxWidth: { xs: 80, md: 120 },
+              maxHeight: { xs: 80, md: 120 },
               borderRadius: '50%',
               mt: '-14%',
               border: (theme) => `4px solid ${theme.palette.background.paper}`,

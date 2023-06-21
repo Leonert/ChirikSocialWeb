@@ -13,6 +13,17 @@ export const ItemNotification = ({ notification }) => {
   const { loading } = useSelector((state) => state.notifications);
   const [post, setPost] = useState(null);
 
+  function generateRandomRGBA() {
+    const red = Math.floor(Math.random() * 256);
+    const green = Math.floor(Math.random() * 256);
+    const blue = Math.floor(Math.random() * 256);
+    const alpha = Math.random();
+
+    const rgbaColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+
+    return rgbaColor;
+  }
+
   useEffect(() => {
     setNotificationsElem(createNotifications(notification));
   }, [loading]);
@@ -33,12 +44,20 @@ export const ItemNotification = ({ notification }) => {
       {notificationElem && (
         <li className={classes.item}>
           <Box>
-            <Link to={`/${notification?.initiator?.username}`}>
-              {notificationElem.profileImage && (
-                <Box className={classes.avatar}>
-                  <img src={notificationElem.profileImage} alt={notificationElem.username} />
-                </Box>
-              )}
+            <Link className={classes.link} to={`/${notification?.initiator?.username}`}>
+              <Box className={classes.avatar}>
+                {notificationElem.profileImage ? (
+                  <img
+                    className={classes.avatarImg}
+                    src={notificationElem.profileImage}
+                    alt={notificationElem.username}
+                  />
+                ) : (
+                  <div style={{ backgroundColor: `${generateRandomRGBA()}` }} className={classes.avatarText}>
+                    {notificationElem.name ? notificationElem.name.slice(0, 1) : ''}
+                  </div>
+                )}
+              </Box>
               {notificationElem.username && <Box className={classes.username}>@{notificationElem.username}</Box>}
             </Link>
             <Box className={classes.content}>

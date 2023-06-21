@@ -19,6 +19,8 @@ export const useSideMenuStyles = makeStyles((theme) => ({
   },
 
   itemWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
     marginBottom: 2,
     height: 58,
     '& .MuiTypography-h5': {
@@ -31,10 +33,20 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     '& svg': {
       verticalAlign: 'bottom',
       height: '1.9em',
-      marginRight: 15,
     },
     cursor: 'pointer',
     '&:hover': {
+      '& div': {
+        backgroundColor: theme.palette.secondary.light,
+        '& .MuiTypography-h5': {
+          color: theme.palette.primary.main,
+        },
+        '& svg path': {
+          fill: theme.palette.primary.main,
+        },
+      },
+    },
+    '&:has(.active)': {
       '& div': {
         backgroundColor: theme.palette.secondary.light,
         '& .MuiTypography-h5': {
@@ -49,11 +61,12 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       display: 'inline-flex',
       alignItems: 'center',
       position: 'relative',
-      padding: '0 25px 0 20px',
+      padding: '0 20px 0 20px',
       borderRadius: 30,
       height: 50,
       marginBottom: 3,
       transition: 'background-color 0.1s ease-in-out',
+      gap: 15,
     },
   },
   logoIcon: {
@@ -115,11 +128,11 @@ export const useSideMenuStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.divider,
     },
   },
- 
+
   itemWrapperReview: {
     marginBottom: 20,
   },
-  itemWrapperLogOut: { marginTop: 40, display: 'flex', justifyContent: 'flex-end', padding: 0 },
+  itemWrapperLogOut: { marginTop: 40, display: 'flex', justifyContent: 'center', padding: 0 },
   button: {
     height: '52px !important',
     padding: theme.spacing(3.2),
@@ -144,5 +157,18 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     background: 'linear-gradient(0deg, #ffff00, #0000ff)',
     '-webkit-background-clip': 'text',
     '-webkit-text-fill-color': 'transparent',
+  },
+  label: { display: 'none' },
+  tweetBtn: { display: 'none' },
+
+  [theme.breakpoints.up('lg')]: {
+    tweetIconButton: { display: 'none !important' },
+    tweetBtn: { display: 'inline-flex' },
+    itemWrapper: { justifyContent: 'flex-start' },
+    itemWrapperLogOut: { justifyContent: 'flex-end' },
+
+    label: {
+      display: 'block',
+    },
   },
 }));
