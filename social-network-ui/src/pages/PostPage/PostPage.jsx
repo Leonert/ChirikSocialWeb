@@ -44,6 +44,7 @@ const PostPage = () => {
       const response = await axiosIns.get(`/api/posts/${id}`);
       dispatch(setPost(response.data));
       console.log(response.data, 34);
+
       return response;
     };
 

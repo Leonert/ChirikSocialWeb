@@ -50,6 +50,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
           const uniquePosts = updatedPosts.filter(
             (post, index, self) => self.findIndex((p) => p.id === post.id) === index
           );
+
           return uniquePosts;
         });
       }
@@ -87,6 +88,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
             .map((post) => {
               if (+post.id === +id) {
                 console.log(response, 200);
+
                 return {
                   ...post,
                   retweeted: false,
@@ -174,6 +176,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 };
               }
             }
+
             return post;
           })
         );
@@ -208,6 +211,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 };
               }
             }
+
             return post;
           })
         );
@@ -253,9 +257,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 replay={
                   post.originalPost ? (
                     post.text === null && post.image === null ? (
-                      <ReplyHeader
-                        repeat={post.author && post.author.name ? post.author.name : username ? username : ''}
-                      />
+                      <ReplyHeader repeat={post.author && post.author.name ? post.author.name : username} />
                     ) : (
                       <Typography className={classes.reply}>Reply</Typography>
                     )
@@ -333,19 +335,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
             }}
           >
             So far, there are no replies. <br /> But you can fix it :)
-          </Typography>
-        )}
-        {!posts.length && lickedProfile && (
-          <Typography
-            sx={{
-              marginTop: '25px',
-              color: '#93989D',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '32px',
-            }}
-          >
-            Sorry, you didn't like any post.
           </Typography>
         )}
       </div>

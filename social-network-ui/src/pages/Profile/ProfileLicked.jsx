@@ -20,12 +20,14 @@ export const ProfileLicked = () => {
       }
     } catch (e) {
       console.error(e);
+
       return { Error: e };
     }
   };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
     fetchPosts();
   }, []);
 
