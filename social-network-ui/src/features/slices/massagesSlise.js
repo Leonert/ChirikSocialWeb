@@ -1,7 +1,6 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import {ChatApi} from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
-import {useSelector} from "react-redux";
 
 
 export const sendMessage = createAsyncThunk(
@@ -23,17 +22,14 @@ export const sendMessage = createAsyncThunk(
                 recipientId: chat.recipientId,
                 isRead: false,
                 messageId: null,
-                senderUsername: senderUsername,
-                recipientUsername: recipientUsername,
+                senderUsername,
+                recipientUsername,
             };
-
-            console.log(messageDto)
             const response = await axiosIns.post(`/api/messages/chats/${chatId}/add-message`, messageDto);
             const createdMessage = response.data;
             createdMessage.messageId = createdMessage.messageId || null;
 
             dispatch(addChatMessage({ chatId, message: createdMessage }));
-            // console.log(addChatMessage)
 
             return {
                 chatId,
@@ -109,7 +105,6 @@ const messagesSlice = createSlice({
                     senderId: chat.senderId,
                     recipientId: chat.recipientId,
                 };
-                // console.log(updatedMessage)
 
                 if (chat.messages) {
                     chat.messages.push(updatedMessage);
@@ -117,13 +112,12 @@ const messagesSlice = createSlice({
                     chat.messages = [updatedMessage];
                 }
             }
-            // const users = state.chats.map((chat) => ({
-            //     chatId: chat.chatId,
-            //     senderId: chat.senderId,
-            //     recipientId: chat.recipientId,
-            // }));
-            // state.users = users;
-            // console.log(users)
+            const users = state.chats.map((chat) => ({
+                chatId: chat.chatId,
+                senderId: chat.senderId,
+                recipientId: chat.recipientId,
+            }));
+            state.users = users;
 
             if (state.selectedChatId !== chatId) {
                 state.selectedChatId = chatId;
@@ -143,7 +137,6 @@ const messagesSlice = createSlice({
                         recipientId: recipientId || state.chats[chatIndex].senderId,
                         senderId: senderId || state.chats[chatIndex].recipientId,
                     };
-                    // console.log(updatedMessage)
 
                     if (state.chats[chatIndex].messages) {
                         state.chats[chatIndex].messages.push(updatedMessage);
