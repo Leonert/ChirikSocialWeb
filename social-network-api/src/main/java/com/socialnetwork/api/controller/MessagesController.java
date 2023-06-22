@@ -36,6 +36,7 @@ public class MessagesController {
 
   @Autowired
   private SimpMessagingTemplate messagingTemplate;
+
   @GetMapping
   public ResponseEntity<List<MessageDto>> getAllMessages(@RequestParam("userId") int userId) {
     Optional<User> userOptional = userRepository.findById(userId);

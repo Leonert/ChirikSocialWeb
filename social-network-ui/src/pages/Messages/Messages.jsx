@@ -293,11 +293,7 @@ const Messages = ({ chatId, senderId }) => {
                                   onContextMenu={(event) => handleContextMenu(event, index)}
                               >
                                 <div className={classes.userWrapper}>
-                                  <Avatar
-                                      className={classes.userAvatar}
-                                      alt="Profile Picture"
 
-                                  />
                                   <div style={{ flex: 1 }}>
                                     <div className={classes.userHeader}>
                                       <div>
@@ -366,12 +362,7 @@ const Messages = ({ chatId, senderId }) => {
 
                       }
                     </div>
-                    <Avatar className={classes.chatAvatar}
-                            sx={{
-                              borderRadius: '50%',
-                              border: (theme) => `4px solid ${theme.palette.background.paper}`,
-                            }}
-                    />
+
                   </Paper>
                   <Paper className={classes.chat}>
 

@@ -116,6 +116,7 @@ public class MessageServiceImpl implements MessageService {
   public void deleteChat(int chatId) {
     chatRepository.deleteById(chatId);
   }
+
   @Override
   public List<MessageDto> searchMessages(String keyword) {
     List<Message> messages = messageRepository.findByMessageContainingIgnoreCase(keyword);
