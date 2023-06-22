@@ -50,13 +50,6 @@ const Messages = ({ chatId, senderId }) => {
   const [status, setStatus] = useState(false);
   const [error, setError] = useState(null);
 
-  const Chats = useSelector((state) => state.messages.chats)
-  // console.log(author,123)
-  // console.log(senderName,authorId,senderId,'senderName')
-  // console.log(recipientName,'recipientName')
-  const ItemDeleteChats = (props) =>{
-
-  }
   const handleDeleteChat = () => {
 
     if (selectedChatIndex !== null) {
@@ -105,7 +98,7 @@ const Messages = ({ chatId, senderId }) => {
      dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
-     dispatch(fetchChat());
+     // dispatch(fetchChat());
     dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
     dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
     });
