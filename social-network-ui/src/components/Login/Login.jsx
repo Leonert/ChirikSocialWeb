@@ -18,7 +18,6 @@ import * as yup from 'yup';
 
 import { handleModal, handleRegistrationModal } from '../../features/slices/authModalSlice';
 import { loginUser } from '../../features/slices/authSlice';
-import { handleSnackbar } from '../../features/slices/snackbarSlice';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { CustomButton } from './CustomButton';
 import { TitleLogin } from './TitleLogin';
@@ -37,6 +36,7 @@ export const Login = () => {
   const [firstPage, setFirstPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const openRegistrationModal = () => {
     dispatch(handleRegistrationModal(true));
@@ -64,10 +64,11 @@ export const Login = () => {
       formData.append('password', values.password);
       formData.append('rememberMe', values.rememberMe);
 
-      dispatch(handleSnackbar(true));
-      dispatch(handleModal(false));
       dispatch(loginUser(values));
-      resetForm();
+
+      if (user !== null) {
+        resetForm();
+      }
       navigate('/');
     },
   });
