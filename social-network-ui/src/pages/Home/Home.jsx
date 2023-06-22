@@ -36,7 +36,7 @@ function Home() {
             <SearchInput />
           </Form>
           <AsideTrends />
-          <AsideRecommendFollows />
+          {user && <AsideRecommendFollows />}
         </Grid>
       )}
     </Grid>

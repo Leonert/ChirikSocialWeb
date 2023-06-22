@@ -2,6 +2,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Divider, Grid, ListItem, ListItemText, Stack, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useSelector } from 'react-redux';
 import { Form, Link, NavLink, json } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
@@ -14,6 +15,7 @@ const Trends = () => {
   const [page, setPage] = useState(0);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const { user } = useSelector((state) => state.auth);
 
   const fetchTrends = async () => {
     try {
@@ -92,7 +94,7 @@ const Trends = () => {
           </InfiniteScroll>
         </Box>
       </Grid>
-      {matches && (
+      {matches && user && (
         <Grid item xs={5}>
           <Form method="post">
             <SearchInput />
