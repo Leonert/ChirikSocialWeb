@@ -1,12 +1,10 @@
 import { Box, CircularProgress, Container, Typography } from '@material-ui/core';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useEffect, useState } from 'react';
-import { NavLink, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
 import { TOKEN } from '../../util/constants';
-import useEmailConfirmationStyles from './EmailConfirmationStyles';
+import { StyledCancelIcon, StyledCheckCircleIcon, StyledNavLink, StyledTypography } from './EmailConfirmationStyles';
 
 const EmailConfirmation = () => {
   const ACCOUNT_CONFIRMED = 'Your account has been confirmed!';
@@ -17,7 +15,6 @@ const EmailConfirmation = () => {
       <>Something went wrong</>
     </>
   );
-  const classes = useEmailConfirmationStyles();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -50,19 +47,19 @@ const EmailConfirmation = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box className={classes.boxWrapper}>
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', textAlign: 'center' }}
+      >
         {isLoading && <CircularProgress />}
         {!isLoading && (
           <Box>
-            {isConfirmed ? <CheckCircleIcon className={classes.icon} /> : <CancelIcon className={classes.icon} />}
-            <Box className={classes.boxInner}>
+            {isConfirmed ? <StyledCheckCircleIcon /> : <StyledCancelIcon />}
+            <Box sx={{ marginTop: '24px', marginBottom: '40px' }}>
               <Typography variant="h4">{isConfirmed ? ACCOUNT_CONFIRMED : ACCOUNT_NOT_CONFIRMED}</Typography>
             </Box>
-            <NavLink className={classes.link} to={'/'}>
-              <Typography className={classes.typography} variant="h4">
-                Home Page
-              </Typography>
-            </NavLink>
+            <StyledNavLink to={'/'}>
+              <StyledTypography variant="h4">Home Page</StyledTypography>
+            </StyledNavLink>
           </Box>
         )}
       </Box>

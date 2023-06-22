@@ -3,14 +3,13 @@ package com.socialnetwork.api.configs;
 import com.socialnetwork.api.filter.JwtAuthFilter;
 import com.socialnetwork.api.security.jwt.JwtAuthenticationEntryPoint;
 import com.socialnetwork.api.security.oauth2.CustomOAuth2UserService;
-import com.socialnetwork.api.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,16 +22,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final CustomOAuth2UserService customOAuth2UserService;
-  private final OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler;
-  private final OAuth2AuthenticationFailureHandler oauth2AuthenticationFailureHandler;
-  private final HttpCookieOAuth2AuthorizationRequestRepository httpOAuth2RequestRepository;
   private final JwtAuthFilter jwtAuthFilter;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final OAuth2AuthenticationSuccessHandler successHandler;
+  private final CustomOAuth2UserService oauthService;
 
   @Bean
   public PasswordEncoder encoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Override
+  public void configure(WebSecurity web) {
+    web
+            .ignoring()
+            .antMatchers("/h2-console/**");
   }
 
   @Override
@@ -62,10 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(
                     "/oauth/**",
                     "/oauth2/**",
-                    "/h2-console/**",
                     "/api/login/**",
                     "/api/registration/**",
-                    "/api/trends/**")
+                    "/api/trends/**"
+                    )
             .permitAll()
             .antMatchers(HttpMethod.GET, "/api/users/**", "/api/posts/**", "/api/search/**")
             .permitAll()
@@ -76,18 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
             .oauth2Login()
-            .authorizationEndpoint()
-            .baseUri("/oauth2/authorize")
-            .authorizationRequestRepository(httpOAuth2RequestRepository)
-            .and()
-            .redirectionEndpoint()
-            .baseUri("/oauth2/callback/*")
-            .and()
             .userInfoEndpoint()
-            .userService(customOAuth2UserService)
+            .userService(oauthService)
             .and()
-            .successHandler(oauth2AuthenticationSuccessHandler)
-            .failureHandler(oauth2AuthenticationFailureHandler);
+            .successHandler(successHandler);
 
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }

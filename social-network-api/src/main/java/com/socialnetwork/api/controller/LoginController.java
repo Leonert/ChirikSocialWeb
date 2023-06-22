@@ -34,6 +34,7 @@ import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 @RequestMapping("/api/login")
 @RequiredArgsConstructor
 public class LoginController {
+
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;
@@ -62,9 +63,11 @@ public class LoginController {
   public ResponseEntity<?> loginByToken(@CurrentUser UserPrincipal currentUser, HttpServletRequest request)
         throws NoUserWithSuchCredentialsException {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+
     if (authHeader.startsWith(BEARER)) {
       authHeader = authHeader.substring(BEARER.length());
     }
+
     User user = userService.findByUsername(currentUser.getUsername());
     return ResponseEntity.ok(userMapper.convertToAccountData(user, authHeader));
   }

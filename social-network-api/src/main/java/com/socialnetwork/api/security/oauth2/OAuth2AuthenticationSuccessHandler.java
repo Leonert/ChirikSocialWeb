@@ -1,59 +1,70 @@
 package com.socialnetwork.api.security.oauth2;
 
+import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.security.jwt.JwtTokenUtil;
-import com.socialnetwork.api.security.jwt.UserPrincipal;
-import com.socialnetwork.api.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
+
+import static com.socialnetwork.api.util.Constants.Auth.OAUTH_REDIRECT_URL;
 
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+  private final UserRepository userRepository;
   private final JwtTokenUtil jwtTokenUtil;
-  private final HttpCookieOAuth2AuthorizationRequestRepository httpOAuth2RequestRepository;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request,
                                       HttpServletResponse response,
                                       Authentication authentication) throws IOException {
-    String targetUrl = determineTargetUrl(request, response, authentication);
+    CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+    Optional<User> optionalUser = userRepository.findByEmailAddress(oauthUser.getEmail());
+    User user;
 
-    if (response.isCommitted()) {
+    if (optionalUser.isEmpty()) {
+      user = new User();
+      user.setCreatedDate(LocalDateTime.now());
+      user.setName(oauthUser.getName());
+      user.setUsername(generateUsername(oauthUser.getEmail()));
+      user.setEmailAddress(oauthUser.getEmail());
+      user.setEnabled(true);
+      user.setBio("");
+      user.setLocation("");
+      user.setWebsite("");
+      user.setProvider(AuthProvider.GOOGLE);
+      user.setGoogleId(oauthUser.getSub());
+      userRepository.save(user);
+    } else if (optionalUser.get().getProvider() != AuthProvider.GOOGLE) {
+      response.sendRedirect(OAUTH_REDIRECT_URL);
       return;
+    } else {
+      user = userRepository.findByEmailAddress(oauthUser.getEmail()).get();
     }
 
-    clearAuthenticationAttributes(request, response);
-    getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    response.sendRedirect(
+            OAUTH_REDIRECT_URL + "?token=" + jwtTokenUtil.generateToken(user.getUsername(), false)
+    );
   }
 
-  protected String determineTargetUrl(HttpServletRequest request,
-                                      HttpServletResponse response,
-                                      Authentication authentication) {
-    Optional<String> redirectUri = CookieUtils
-            .getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
-            .map(Cookie::getValue);
+  private String generateUsername(String email) {
+    String username = email.substring(0, email.indexOf("@"));
+    Random random = new Random();
 
-    String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-    UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-    String token = jwtTokenUtil.generateToken(userPrincipal.getUsername(), false);
+    while (userRepository.findByUsername(username).isPresent()) {
+      username = username + random.nextInt(10);
+    }
 
-    return UriComponentsBuilder.fromUriString(targetUrl)
-            .queryParam("token", token)
-            .build().toUriString();
-  }
-
-  protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-    super.clearAuthenticationAttributes(request);
-    httpOAuth2RequestRepository.removeAuthRequestCookies(request, response);
+    return username;
   }
 }

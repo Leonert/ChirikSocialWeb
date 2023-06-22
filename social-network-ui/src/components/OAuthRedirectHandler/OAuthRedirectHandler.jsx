@@ -1,24 +1,54 @@
-import React from 'react';
-import { redirect } from 'react-router-dom';
+import { Box, Container, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import {
+  StyledNavLink,
+  StyledSentimentVeryDissatisfiedIcon,
+  StyledTypography,
+} from '../../pages/EmailConfirmation/EmailConfirmationStyles';
 import { TOKEN } from '../../util/constants';
 
-const getUrlParameter = (name) => {
-  name = name.replace(/\[\]/, '\\[').replace(/\[\]/, '\\[]');
-  let regex = new RegExp('[?&]' + name + '=([^&#]*)');
-  let results = regex.exec(window.location.search);
-
-  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-};
-
 const OAuthRedirectHandler = () => {
-  const token = getUrlParameter('token');
+  const token = new URLSearchParams(window.location.search).get('token');
+  const [isTokenExist, setTokenExist] = useState(true);
+  const navigate = useNavigate();
 
-  if (token) {
-    localStorage.setItem(TOKEN, token);
-  }
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem(TOKEN, token);
 
-  return redirect('/');
+      navigate('/');
+    }
+    setTokenExist(false);
+  }, []);
+
+  if (isTokenExist) return null;
+
+  return (
+    <Container maxWidth="sm">
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', textAlign: 'center' }}
+      >
+        <Box>
+          <StyledSentimentVeryDissatisfiedIcon />
+          <Box sx={{ marginTop: '24px', marginBottom: '40px' }}>
+            <Typography variant="h4">
+              {' '}
+              <>
+                <>Whoops...</>
+                <br />
+                <>Google authorization failed...</>
+              </>
+            </Typography>
+          </Box>
+          <StyledNavLink to={'/'}>
+            <StyledTypography variant="h4">Home Page</StyledTypography>
+          </StyledNavLink>
+        </Box>
+      </Box>
+    </Container>
+  );
 };
 
 export default OAuthRedirectHandler;

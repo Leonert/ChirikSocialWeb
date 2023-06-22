@@ -1,11 +1,20 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-// import { FcGoogle } from 'react-icons/fc';
+import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { handleModal, handleRegistrationModal } from '../../features/slices/authModalSlice';
@@ -78,17 +87,20 @@ export const Login = () => {
     >
       {loading && <CustomLoader />}
       <TitleLogin firstPage={firstPage} />
-      {/* {firstPage && (
+
+      {firstPage && (
         <>
-          <CustomButton styles={{ width: '100%', marginBottom: '20px' }}>
-            <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
-              <FcGoogle size={20} />
-            </Typography>{' '}
-            <Typography textTransform="none"> Sign in with Google</Typography>
-          </CustomButton>
+          <Link to="http://localhost:8080/oauth2/authorization/google">
+            <CustomButton styles={{ width: '100%', marginBottom: '20px' }}>
+              <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
+                <FcGoogle size={20} />
+              </Typography>{' '}
+              <Typography textTransform="none"> Sign in with Google</Typography>
+            </CustomButton>
+          </Link>
           <Divider sx={{ marginBottom: '20px', color: 'white' }}>or</Divider>
         </>
-      )} */}
+      )}
 
       <form onSubmit={formik.handleSubmit}>
         <TextField

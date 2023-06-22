@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -95,11 +97,10 @@ public class User {
   @Transient
   private boolean isCurrUserFollower;
 
-  @Transient
+  @Enumerated(EnumType.STRING)
   private AuthProvider provider;
 
-  @Transient
-  private String providerId;
+  private String googleId;
 
   public User() {
   }

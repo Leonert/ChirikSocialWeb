@@ -43,7 +43,6 @@ export const router = createBrowserRouter([
       },
       {
         path: '/messages',
-
         element: <Messages />,
       },
       {
@@ -104,5 +103,9 @@ export const router = createBrowserRouter([
   {
     path: '/email-confirmation',
     element: <EmailConfirmation />,
+  },
+  {
+    path: '/google-authorization',
+    element: <OAuthRedirectHandler />,
   },
 ]);

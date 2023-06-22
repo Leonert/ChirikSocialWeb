@@ -47,6 +47,7 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController extends Controller {
+
   private final PostService postService;
   private final LikeService likeService;
   private final BookmarkService bookmarkService;
