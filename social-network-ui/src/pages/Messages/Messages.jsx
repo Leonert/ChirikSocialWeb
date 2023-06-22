@@ -22,7 +22,7 @@ import classNames from "classnames";
 import {formatChatMessageDate} from "../../util/formatDate";
 import {MessageInput} from "../../components/MessageInput/MessageInput";
 import axiosIns from "../../axiosInstance";
-import {Avatar, Grid, IconButton, List, ListItem, Menu, MenuItem, Paper, Snackbar, Typography} from "@mui/material";
+import { Grid, IconButton, List, ListItem, Menu, MenuItem, Paper, Snackbar, Typography} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -104,7 +104,6 @@ const Messages = ({ chatId, senderId }) => {
     });
   };
   const onConnected = () => {
-    console.log('Connected to WebSocket');
   };
 
 
@@ -142,8 +141,8 @@ const Messages = ({ chatId, senderId }) => {
         chatId: selectedChatId || chatId,
         message: trimmedMessage,
         authorId: author,
-        senderUsername: senderUsername,
-        recipientUsername: recipientUsername,
+        senderUsername,
+        recipientUsername,
         chatName,
         parentId:
             messages[selectedChatId]?.messages
