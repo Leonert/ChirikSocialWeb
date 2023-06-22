@@ -1,6 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Grid, InputAdornment, Tab, Tabs, TextField, alpha, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
@@ -40,6 +41,7 @@ const Search = () => {
   const [searchInputValue, setSearchInputValue] = useState(searchValue);
   const debouncedValue = useDebounce(searchInputValue, 400);
   const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const { user } = useSelector((state) => state.auth);
 
   const handleTabChange = (event, newValue) => {
     if (newValue === 0) {
@@ -107,7 +109,7 @@ const Search = () => {
           </TabPanel>
         </Box>
       </Grid>
-      {matches && (
+      {matches && user && (
         <Grid item xs={5}>
           <AsideRecommendFollows />
         </Grid>
