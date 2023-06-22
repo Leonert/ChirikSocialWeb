@@ -19,8 +19,8 @@ import { BOOKMARKS, EXPLORE, HOME, MESSAGES, NOTIFICATIONS, SETTING } from '../.
 import LogOut from '../LogOut/LogOut';
 import LogOutModal from '../LogOutModal/LogOutModal';
 import ReplayModal from '../ReplayModal/ReplayModal';
+import AddTweetModal from './AddTweetModal/AddTweetModal';
 import { useSideMenuStyles } from './SideMenuStyles';
-import AddTweetModal from "../AddTweetModal/AddTweetModal";
 
 const SideMenu = () => {
   const classes = useSideMenuStyles();
