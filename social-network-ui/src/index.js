@@ -14,8 +14,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ThemeProvider theme={defaultTheme}>
     <CssBaseline />
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+      <Provider store={store}>
+          <RouterProvider router={router} />
+      </Provider>
   </ThemeProvider>
+
 );

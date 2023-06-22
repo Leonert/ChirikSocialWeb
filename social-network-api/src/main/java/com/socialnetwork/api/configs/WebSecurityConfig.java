@@ -58,7 +58,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/h2-console/**",
                     "/api/login/**",
                     "/api/registration/**",
-                    "/api/trends/**")
+                    "/api/trends/**",
+                    "/api/messages/**",
+                    "/websocket/**")
             .permitAll()
             .antMatchers(HttpMethod.GET, "/api/users/**", "/api/posts/**", "/api/search/**")
             .permitAll()

@@ -7,8 +7,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
-import { changePassword, changePasswordModal } from '../../features/slices/settingSlice';
-import CloseButton from '../SideMenu/AddTweetModal/AddTweetForm/CloseButton/CloseButton';
+import {changePassword, changePasswordModal} from '../../features/slices/settingSlice';
+import CloseButton from '../AddTweetModal/AddTweetForm/CloseButton/CloseButton';
 
 export default function PasswordChange() {
   const [showPassword, setShowPassword] = useState(false);

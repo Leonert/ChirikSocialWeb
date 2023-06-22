@@ -91,6 +91,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
+
       localStorage.setItem(TOKEN, action.payload.jwt);
     },
     [loginUserWithJwt.rejected]: (state, action) => {

@@ -1,5 +1,6 @@
 import { createTheme } from '@material-ui/core/styles';
-import { deepmerge } from '@mui/utils';
+import {deepmerge} from "@mui/utils";
+
 
 const commonTheme = {
   typography: {
@@ -15,11 +16,6 @@ const commonTheme = {
     ],
   },
   palette: {
-    error: {
-      light: 'rgb(255, 221, 237)',
-      main: 'rgb(244, 33, 46)',
-      dark: 'rgb(202, 32, 85)',
-    },
     common: {
       black: 'rgb(15, 20, 25)',
       white: 'rgb(255, 255, 255)',
@@ -163,7 +159,6 @@ const commonTheme = {
     },
   },
 };
-
 export const defaultTheme = createTheme(
   deepmerge(
     {
@@ -171,6 +166,7 @@ export const defaultTheme = createTheme(
         background: {
           default: 'rgb(21, 32, 43)',
           paper: 'rgb(21, 32, 43)',
+          lithe: 'rgb(133,123,123)',
           lightBlue: 'rgb(63, 81, 181)',
           lightDefault: 'rgb(19, 36, 51)',
         },

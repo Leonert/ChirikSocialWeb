@@ -1,9 +1,12 @@
-import { makeStyles } from '@mui/styles';
+import {makeStyles} from "@mui/styles";
 
 export const useMessagesModalStyles = makeStyles((theme) => ({
     header: {
         margin: 0,
         border: 0,
+        display: "flex",
+        justifyContent:"space-between",
+
         "& svg": {
             fontSize: 26,
         },
