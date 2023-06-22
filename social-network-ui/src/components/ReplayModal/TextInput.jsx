@@ -2,7 +2,7 @@ import { CircularProgress, TextareaAutosize } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { useAddTweetFormStyles } from '../AddTweetModal/AddTweetForm/AddTweetFormStyles';
+import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
 
 const TextInput = (props) => {
   const MAX_LENGTH = 280;
