@@ -55,7 +55,7 @@ const formatWebsiteLink = (link) => {
 
 const Profile = (props) => {
   const { username } = useParams();
-  const routeMatch = useRouteMatch([`${username}`, `${username}/replies`, `${username}/media`, `${username}/likes`]);
+  const routeMatch = useRouteMatch([`${username}`, `${username}/replies`, `${username}/likes`]);
   const currentTab = routeMatch?.pattern?.path;
   const { user } = useSelector((state) => state.auth);
   const { data } = useLoaderData();
@@ -113,12 +113,12 @@ const Profile = (props) => {
             alt="Profile Picture"
             src={data.profileImage}
             sx={{
-              width: { sm: 80, md: 133 },
-              height: { sm: 80, md: 133 },
-              minWidth: { sm: 80, md: 100 },
-              minHeight: { sm: 80, md: 100 },
-              maxWidth: { sm: 80, md: 120 },
-              maxHeight: { sm: 80, md: 120 },
+              width: { xs: 80, md: 133 },
+              height: { xs: 80, md: 133 },
+              minWidth: { xs: 80, md: 100 },
+              minHeight: { xs: 80, md: 100 },
+              maxWidth: { xs: 80, md: 120 },
+              maxHeight: { xs: 80, md: 120 },
               borderRadius: '50%',
               mt: '-14%',
               border: (theme) => `4px solid ${theme.palette.background.paper}`,
@@ -201,7 +201,6 @@ const Profile = (props) => {
           <ProfileTabs value={currentTab}>
             <ProfileTab label="Posts" value={username} to={`/${username}`} component={Link} />
             <ProfileTab label="Replies" value={`${username}/replies`} to="replies" component={Link} />
-            <ProfileTab label="Media" value={`${username}/media`} to="media" component={Link} />
             <ProfileTab label="Likes" value={`${username}/likes`} to="likes" component={Link} />
           </ProfileTabs>
           <Box>

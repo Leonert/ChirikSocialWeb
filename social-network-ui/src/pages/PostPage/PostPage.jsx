@@ -26,6 +26,7 @@ const PostPage = () => {
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
       dispatch(addOnePost(response.data));
+
       dispatch(addReply());
       dispatch(replayMessage(''));
     });
@@ -51,6 +52,8 @@ const PostPage = () => {
 
       if (response.data !== '') {
         dispatch(getPost(response.data));
+
+        setIsLoading(false);
       }
 
       setIsLoading(false);
@@ -103,7 +106,6 @@ const PostPage = () => {
             ) : null
           }
           postPage={true}
-          classes={postClasses.Page}
           key={post.id}
           username={post.author.username}
           avatar={post.author.profileImage}
@@ -129,7 +131,6 @@ const PostPage = () => {
             <Post
               IdentifierOriginal={post.text !== null && post.image === null}
               id={post.originalPost.id}
-              classes={postClasses.PageSmall}
               key={post.id}
               username={post.originalPost.author.username}
               avatar={post.originalPost.author.profileImage}

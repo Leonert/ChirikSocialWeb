@@ -1,20 +1,29 @@
-import { Grid } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Form } from 'react-router-dom';
 
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
-import SearchField from '../../components/SearchField/SearchField';
+import SearchInput from '../../components/SearchInput/SearchInput';
 import TrendsSection from './TrendsSection';
 
 const Explore = () => {
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={7}>
-        <SearchField />
+      <Grid item xs={matches ? 7 : 12}>
+        <Form action="/" method="post">
+          <SearchInput />
+        </Form>
         <TrendsSection />
       </Grid>
-      <Grid item xs={5}>
-        <AsideRecommendFollows />
-      </Grid>
+      {matches && user && (
+        <Grid item xs={5}>
+          <AsideRecommendFollows />
+        </Grid>
+      )}
     </Grid>
   );
 };

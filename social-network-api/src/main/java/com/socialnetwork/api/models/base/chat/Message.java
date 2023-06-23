@@ -1,6 +1,8 @@
-package com.socialnetwork.api.models.base;
+package com.socialnetwork.api.models.base.chat;
 
-import lombok.Data;
+import com.socialnetwork.api.models.base.User;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,14 +14,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "messages")
 public class Message {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
+  @Column(name = "message_id")
   private int id;
+
+  @ManyToOne
+  @JoinColumn(name = "chat_id")
+  private Chat chat;
 
   @ManyToOne
   @JoinColumn(name = "sender_id", referencedColumnName = "id")
@@ -29,6 +37,9 @@ public class Message {
   @JoinColumn(name = "recipient_id", referencedColumnName = "id")
   private User recipient;
 
+  @Column(name = "date")
+  private LocalDateTime date;
+
   @Column(name = "message")
   private String message;
 
@@ -36,5 +47,9 @@ public class Message {
   private LocalDateTime timestamp;
 
   @Column(name = "is_read")
-  private boolean isRead;
+  private boolean read;
+
+  public Message() {
+    this.date = LocalDateTime.now();
+  }
 }

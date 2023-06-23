@@ -1,0 +1,50 @@
+###
+POST localhost:8080/api/registration/save-user
+Content-Type: application/json
+
+{
+  "username": "denys",
+  "emailAddress": "denyaaquapark@gmail.com",
+  "password": "141"
+}
+
+###
+POST localhost:8080/api/login/authenticate
+Content-Type: application/json
+
+{
+  "emailAddress": "denyaaquapark@gmail.com",
+  "password": "141",
+  "rememberMe": true
+}
+
+###
+POST localhost:8080/api/registration/save-user
+Content-Type: application/json
+
+{
+  "username": "denyss",
+  "emailAddress": "d.kozarenkoo@gmail.com",
+  "password": "141",
+  "birthDate": "2003-07-11T13:36:06.000Z"
+}
+
+###
+POST http://localhost:8080/api/messages/create
+Content-Type: application/json
+
+{
+  "senderId": 12,
+  "recipientId": 1,
+  "message": "Hello!",
+  "read": false
+}
+
+###
+GET http://localhost:8080/api/messages/101
+
+###
+DELETE http://localhost:8080/api/messages/101
+
+###
+PUT http://localhost:8080/api/messages/102/read

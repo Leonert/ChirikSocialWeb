@@ -1,18 +1,21 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Divider, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, ListItem, ListItemText, Stack, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useSelector } from 'react-redux';
 import { Form, Link, NavLink, json } from 'react-router-dom';
 
 import axiosIns from '../../axiosInstance';
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
-import SearchField from '../../components/SearchField/SearchField';
+import SearchInput from '../../components/SearchInput/SearchInput';
 import Spinner from '../../components/Spinner/Spinner';
 
 const Trends = () => {
   const [trends, setTrends] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMorePosts, setHasMorePosts] = useState(true);
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const { user } = useSelector((state) => state.auth);
 
   const fetchTrends = async () => {
     try {
@@ -37,7 +40,7 @@ const Trends = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={7}>
+      <Grid item xs={matches ? 7 : 12}>
         <Box sx={{ maxWidth: '600px', width: '100%' }}>
           <Stack direction="row" p="6px 0" alignItems="center">
             <NavLink
@@ -91,12 +94,14 @@ const Trends = () => {
           </InfiniteScroll>
         </Box>
       </Grid>
-      <Grid item xs={5}>
-        <Form method="post">
-          <SearchField />
-        </Form>
-        <AsideRecommendFollows />
-      </Grid>
+      {matches && user && (
+        <Grid item xs={5}>
+          <Form method="post">
+            <SearchInput />
+          </Form>
+          <AsideRecommendFollows />
+        </Grid>
+      )}
     </Grid>
   );
 };

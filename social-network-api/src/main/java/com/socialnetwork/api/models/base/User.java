@@ -5,6 +5,8 @@ import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
 import com.socialnetwork.api.security.oauth2.AuthProvider;
+import com.socialnetwork.api.models.base.chat.Chat;
+import com.socialnetwork.api.models.base.chat.Message;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,12 +15,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -92,6 +96,7 @@ public class User {
   @OneToMany(mappedBy = "recipient")
   private List<Notification> notifications;
 
+  @Column(name = "is_enabled")
   private boolean isEnabled;
 
   @Transient
@@ -102,6 +107,9 @@ public class User {
 
   private String googleId;
 
+  @ManyToMany(mappedBy = "users")
+  private List<Chat> chats;
+
   public User() {
   }
 
@@ -109,7 +117,18 @@ public class User {
     this.id = id;
   }
 
-  private void setId(int id) {
+  public void setId(int id) {
     this.id = id;
   }
+
+  public List<Chat> getChats() {
+    List<Chat> chats = new ArrayList<>();
+
+    if (chats != null) {
+      chats.addAll(this.chats);
+    }
+
+    return chats;
+  }
+
 }

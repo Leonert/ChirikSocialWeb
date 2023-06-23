@@ -6,7 +6,11 @@ import ProfilePostList from './Posts/ProfilePostList';
 const ProfilePosts = () => {
   const { data } = useRouteLoaderData('profile');
 
-  return <ProfilePostList posts={data.withoutAuthorPosts} user={data} />;
+  const filteredPosts = data.withoutAuthorPosts.filter(
+    (post) => post.originalPost === null || (post.text === null && post.image === null && post.originalPost)
+  );
+
+  return <ProfilePostList posts={filteredPosts} user={data} />;
 };
 
 export default ProfilePosts;

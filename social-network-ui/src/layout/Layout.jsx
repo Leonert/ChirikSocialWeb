@@ -1,4 +1,5 @@
 import { Container, Grid } from '@material-ui/core';
+import { Box } from '@mui/material';
 import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
@@ -27,9 +28,9 @@ export const Layout = () => {
   return (
     <>
       <Container className={classes.wrapper} maxWidth="lg">
-        <Grid sm={1} md={2} item style={{ minWidth: '256px' }}>
+        <Box sx={{ minWidth: { xs: 86, lg: 256 } }} className={classes.sideMenuWrapper}>
           <SideMenu />
-        </Grid>
+        </Box>
         <Grid container>
           <ScrollRestoration
             getKey={(location) => {

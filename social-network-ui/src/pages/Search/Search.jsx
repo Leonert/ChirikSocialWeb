@@ -1,24 +1,13 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, InputAdornment, Tab, Tabs, TextField, alpha } from '@mui/material';
+import { Box, Grid, InputAdornment, Tab, Tabs, TextField, alpha, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
+import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
+import useDebounce from '../../util/useDebounce';
 import PostsList from './PostsList';
 import UsersList from './UsersList';
-
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 function TabPanel(props) {
   const { children, tabValue, index, ...other } = props;
@@ -51,6 +40,8 @@ const Search = () => {
   const [tabValue, setTabValue] = useState(tabIndex);
   const [searchInputValue, setSearchInputValue] = useState(searchValue);
   const debouncedValue = useDebounce(searchInputValue, 400);
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const { user } = useSelector((state) => state.auth);
 
   const handleTabChange = (event, newValue) => {
     if (newValue === 0) {
@@ -73,50 +64,57 @@ const Search = () => {
   };
 
   return (
-    <>
-      <Box display="flex" flexDirection="column" maxWidth="600px" width="100%">
-        <TextField
-          value={searchInputValue}
-          onChange={handleSearchInputChange}
-          fullWidth
-          sx={{
-            border: 'none',
-            mt: '40px',
-            backgroundColor: (theme) => alpha(theme.palette.common.white, 0.15),
-            '&:hover': {
-              backgroundColor: (theme) => alpha(theme.palette.common.white, 0.25),
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon sx={{ color: (theme) => theme.palette.common.white }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs variant="fullWidth" value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
-            <Tab
-              label="Users"
-              {...a11yProps(0)}
-              sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
-            />
-            <Tab
-              label="Posts"
-              {...a11yProps(1)}
-              sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
-            />
-          </Tabs>
+    <Grid container spacing={2}>
+      <Grid item xs={matches ? 7 : 12}>
+        <Box display="flex" flexDirection="column" maxWidth="600px" width="100%">
+          <TextField
+            value={searchInputValue}
+            onChange={handleSearchInputChange}
+            fullWidth
+            sx={{
+              border: 'none',
+              mt: '40px',
+              backgroundColor: (theme) => alpha(theme.palette.common.white, 0.15),
+              '&:hover': {
+                backgroundColor: (theme) => alpha(theme.palette.common.white, 0.25),
+              },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon sx={{ color: (theme) => theme.palette.common.white }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs variant="fullWidth" value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
+              <Tab
+                label="Users"
+                {...a11yProps(0)}
+                sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
+              />
+              <Tab
+                label="Posts"
+                {...a11yProps(1)}
+                sx={{ '&.MuiTab-root': { color: (theme) => theme.palette.text.primary } }}
+              />
+            </Tabs>
+          </Box>
+          <TabPanel tabValue={tabValue} index={0}>
+            <UsersList key={debouncedValue} searchValue={debouncedValue} />
+          </TabPanel>
+          <TabPanel tabValue={tabValue} index={1}>
+            <PostsList key={debouncedValue} searchValue={debouncedValue} />
+          </TabPanel>
         </Box>
-        <TabPanel tabValue={tabValue} index={0}>
-          <UsersList key={debouncedValue} searchValue={debouncedValue} />
-        </TabPanel>
-        <TabPanel tabValue={tabValue} index={1}>
-          <PostsList key={debouncedValue} searchValue={debouncedValue} />
-        </TabPanel>
-      </Box>
-    </>
+      </Grid>
+      {matches && user && (
+        <Grid item xs={5}>
+          <AsideRecommendFollows />
+        </Grid>
+      )}
+    </Grid>
   );
 };
 

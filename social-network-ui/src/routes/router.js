@@ -15,7 +15,9 @@ import Messages from '../pages/Messages/Messages';
 import { Notifications } from '../pages/Notifications/Notifications';
 import PostPage from '../pages/PostPage/PostPage';
 import Profile from '../pages/Profile/Profile';
+import { ProfileLicked } from '../pages/Profile/ProfileLicked';
 import ProfilePosts from '../pages/Profile/ProfilePosts';
+import ProfileReplies from '../pages/Profile/ProfileReplies';
 import profileLoader from '../pages/Profile/profileLoader';
 import Search from '../pages/Search/Search';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
@@ -27,11 +29,11 @@ export const router = createBrowserRouter([
 
     element: <Layout />,
     errorElement: <div>Error page</div>,
+    action: homeSearchAction,
     children: [
       {
         index: true,
         element: <Home />,
-        action: homeSearchAction,
       },
       {
         path: '/explore',
@@ -77,15 +79,12 @@ export const router = createBrowserRouter([
           },
           {
             path: 'replies',
-            element: <div>replies</div>,
+            element: <ProfileReplies />,
           },
-          {
-            path: 'media',
-            element: <div>media</div>,
-          },
+
           {
             path: 'likes',
-            element: <div>likes</div>,
+            element: <ProfileLicked />,
           },
         ],
       },

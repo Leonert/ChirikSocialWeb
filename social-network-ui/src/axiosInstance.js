@@ -19,15 +19,15 @@ axiosIns.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// axiosIns.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response.status === 401) {
-//       localStorage.removeItem(TOKEN);
-//     }
+axiosIns.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem(TOKEN);
+    }
 
-//     return Promise.reject(error);
-//   }
-// );
+    return Promise.reject(error);
+  }
+);
 
 export default axiosIns;
