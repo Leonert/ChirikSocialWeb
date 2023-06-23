@@ -17,8 +17,6 @@ public interface LikeRepository extends JpaRepository<Like, LikePk> {
   @Query("SELECT l.likedPost FROM Like l WHERE l.likedBy = :user")
   List<Post> findPostsByUserLiked(User user);
 
-  List<Like> findAllByLikedPost(Post post);
-
   int countAllByLikedPost(Post post);
 
   @Query("SELECT l.likedBy FROM Like l WHERE l.likedPost.id = :id")

@@ -9,8 +9,12 @@ import {
 } from '../../pages/EmailConfirmation/EmailConfirmationStyles';
 import { TOKEN } from '../../util/constants';
 
+const getURLParam = (param) => {
+  return new URLSearchParams(window.location.search).get(param);
+}
+
 const OAuthRedirectHandler = () => {
-  const token = new URLSearchParams(window.location.search).get('token');
+  const token = getURLParam('token');
   const [isTokenExist, setTokenExist] = useState(true);
   const navigate = useNavigate();
 
