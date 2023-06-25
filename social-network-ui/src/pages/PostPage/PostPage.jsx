@@ -58,6 +58,7 @@ const PostPage = () => {
 
       setIsLoading(false);
       setReplies(response.data);
+
       return response;
     };
 
