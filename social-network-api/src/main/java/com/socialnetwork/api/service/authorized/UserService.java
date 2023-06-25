@@ -11,6 +11,7 @@ import com.socialnetwork.api.models.auth.ConfirmationToken;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;
+import com.socialnetwork.api.security.oauth2.AuthProvider;
 import com.socialnetwork.api.service.NotificationService;
 import com.socialnetwork.api.service.ConfirmationTokenService;
 import com.socialnetwork.api.service.CloudinaryService;
@@ -40,7 +41,6 @@ public class UserService {
   private final ConfirmationTokenService confirmationTokenService;
   private final CloudinaryService cloudinaryService;
   private final ModelMapper modelMapper;
-
   private final EmailService emailService;
   private final PasswordEncoder passwordEncoder;
 
@@ -60,19 +60,10 @@ public class UserService {
     return userRepository.findByEmailAddress(emailAddress).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
 
-  public boolean existsById(Integer id) {
-    return userRepository.existsById(id);
-  }
-
-  public Optional<User> getByUsernameAndId(String username, int id) {
-    return userRepository.findByUsernameAndId(username, id);
-  }
-
   public void save(User user) {
     user.setCreatedDate(LocalDateTime.now());
-
+    user.setProvider(AuthProvider.LOCAL);
     userRepository.save(user);
-
     ConfirmationToken confirmationToken = new ConfirmationToken(user);
     confirmationTokenService.save(confirmationToken);
     emailService.sendTokenForAccountActivation(user, confirmationToken);
@@ -91,10 +82,6 @@ public class UserService {
     user.setEnabled(true);
     confirmationTokenService.deleteById(token.getTokenId());
     userRepository.save(user);
-  }
-
-  public User findById(int id) throws NoUserWithSuchCredentialsException {
-    return userRepository.findById(id).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
 
   public List<User> getFollowers(String queryUsername, String currentUserUsername,
@@ -182,10 +169,6 @@ public class UserService {
       followsRepository.deleteById(new FollowPk(currentUser.getId(), user.getId()));
     }
     return false;
-  }
-
-  public User getReferenceById(int id) {
-    return userRepository.getReferenceById(id);
   }
 
   public void passwordChange(String username, String oldPassword, String newPassword)

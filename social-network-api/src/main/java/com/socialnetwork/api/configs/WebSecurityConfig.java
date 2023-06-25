@@ -1,12 +1,15 @@
 package com.socialnetwork.api.configs;
 
 import com.socialnetwork.api.filter.JwtAuthFilter;
-import com.socialnetwork.api.security.JwtAuthenticationEntryPoint;
+import com.socialnetwork.api.security.jwt.JwtAuthenticationEntryPoint;
+import com.socialnetwork.api.security.oauth2.CustomOAuth2UserService;
+import com.socialnetwork.api.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,12 +23,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final JwtAuthFilter jwtAuthFilter;
-
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final OAuth2AuthenticationSuccessHandler successHandler;
+  private final CustomOAuth2UserService oauthService;
 
   @Bean
   public PasswordEncoder encoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Override
+  public void configure(WebSecurity web) {
+    web
+            .ignoring()
+            .antMatchers("/h2-console/**");
   }
 
   @Override
@@ -53,9 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/**/*.js")
             .permitAll()
             .antMatchers(
-                    "/auth/**",
+                    "/oauth/**",
                     "/oauth2/**",
-                    "/h2-console/**",
                     "/api/login/**",
                     "/api/registration/**",
                     "/api/trends/**",
@@ -68,7 +78,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticated()
             .and()
             .exceptionHandling()
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
+            .oauth2Login()
+            .userInfoEndpoint()
+            .userService(oauthService)
+            .and()
+            .successHandler(successHandler);
 
     http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
   }

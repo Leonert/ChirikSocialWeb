@@ -4,11 +4,11 @@ import com.socialnetwork.api.models.additional.Bookmark;
 import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.security.oauth2.AuthProvider;
 import com.socialnetwork.api.models.base.chat.Chat;
 import com.socialnetwork.api.models.base.chat.Message;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,11 @@ public class User {
 
   @Transient
   private boolean isCurrUserFollower;
+
+  @Enumerated(EnumType.STRING)
+  private AuthProvider provider;
+
+  private String googleId;
 
   @ManyToMany(mappedBy = "users")
   private List<Chat> chats;
