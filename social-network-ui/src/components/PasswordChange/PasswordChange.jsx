@@ -13,7 +13,6 @@ import CloseButton from '../AddTweetModal/AddTweetForm/CloseButton/CloseButton';
 export default function PasswordChange() {
   const [showPassword, setShowPassword] = useState(false);
   const showInput = useSelector((state) => state.setting.status);
-  console.log(showInput);
   const theme = useTheme(showInput);
   const primaryColor = theme.palette.text.secondary;
   const secondaryColor = theme.palette.background.lightBlue;

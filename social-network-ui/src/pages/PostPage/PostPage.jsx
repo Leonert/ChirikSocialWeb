@@ -10,7 +10,7 @@ import { usePostStyle } from '../../components/Post/PostStyle';
 import ReplyHeader from '../../components/Post/ReplyHeader';
 import PostList from '../../components/PostList/PostList';
 import TextInput from '../../components/ReplayModal/TextInput';
-import { addOnePost, clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
+import { clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
 import { addReply, makeRetweet, setBookmark, setLike, setPost } from '../../features/slices/postSlice';
 import usePostPageStyles from './PostPageStyles';
 

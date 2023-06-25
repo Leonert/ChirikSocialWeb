@@ -27,7 +27,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
 
   const { user } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
-  console.log(posts);
+
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
