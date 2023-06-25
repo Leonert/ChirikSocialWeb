@@ -28,6 +28,7 @@ import static com.socialnetwork.api.util.Constants.Auth.USERNAME_TAKEN;
 @RequestMapping("/api/registration")
 @RequiredArgsConstructor
 public class RegistrationController {
+
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final UserMapper userMapper;

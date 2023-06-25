@@ -7,7 +7,7 @@ import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
 import com.socialnetwork.api.security.CurrentUser;
-import com.socialnetwork.api.security.JwtUserDetails;
+import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.authorized.SearchService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthSearchService;
 import lombok.AllArgsConstructor;
@@ -40,7 +40,7 @@ public class SearchController {
   public List<? extends PostDtoInterface> searchPosts(@RequestParam(QUERY) String query,
                                                       @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                       @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-                                                      @CurrentUser JwtUserDetails currentUser) {
+                                                      @CurrentUser UserPrincipal currentUser) {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
     if (currentUser == null) {
@@ -54,7 +54,7 @@ public class SearchController {
   public List<? extends UserDtoInterface> searchUsers(@RequestParam(QUERY) String query,
                                                       @RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
                                                       @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> usersPerPage,
-                                                      @CurrentUser JwtUserDetails currentUser)
+                                                      @CurrentUser UserPrincipal currentUser)
         throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);

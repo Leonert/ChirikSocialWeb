@@ -8,8 +8,8 @@ import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.CurrentUser;
-import com.socialnetwork.api.security.JwtTokenUtil;
-import com.socialnetwork.api.security.JwtUserDetails;
+import com.socialnetwork.api.security.jwt.JwtTokenUtil;
+import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.NotificationService;
 import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,7 @@ import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 @RequestMapping("/api/login")
 @RequiredArgsConstructor
 public class LoginController {
+
   private final UserService userService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;
@@ -59,18 +60,20 @@ public class LoginController {
   }
 
   @GetMapping("jwt")
-  public ResponseEntity<?> loginByToken(@CurrentUser JwtUserDetails currentUser, HttpServletRequest request)
+  public ResponseEntity<?> loginByToken(@CurrentUser UserPrincipal currentUser, HttpServletRequest request)
         throws NoUserWithSuchCredentialsException {
     String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+
     if (authHeader.startsWith(BEARER)) {
       authHeader = authHeader.substring(BEARER.length());
     }
+
     User user = userService.findByUsername(currentUser.getUsername());
     return ResponseEntity.ok(userMapper.convertToAccountData(user, authHeader));
   }
 
   @PostMapping("password-change")
-  public ResponseEntity<?> passwordChange(@CurrentUser JwtUserDetails currentUser,
+  public ResponseEntity<?> passwordChange(@CurrentUser UserPrincipal currentUser,
                                           @RequestBody UserDto.Request.PasswordEditing passwords)
       throws NoUserWithSuchCredentialsException, AccessDeniedException {
     userService.passwordChange(currentUser.getUsername(), passwords.getOldPassword(), passwords. getNewPassword());

@@ -31,12 +31,11 @@ public class EmailService {
   public void sendTokenForAccountActivation(User user, ConfirmationToken token) {
     MimeMessagePreparator mailMessage = mimeMessage -> {
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-      message.setFrom(emailAddressFrom, "FP3 Social Network");
+      message.setFrom(emailAddressFrom, "Chirik");
       message.addTo(user.getEmailAddress());
       message.setSubject("Complete Registration");
       message.setText("To confirm your account, please click here: "
           + confirmAccountUrl + token.getConfirmationToken());
-      System.out.println(token.getConfirmationToken());
     };
 
     javaMailSender.send(mailMessage);
@@ -51,7 +50,6 @@ public class EmailService {
       message.setSubject("Recover your password");
       message.setText("To recover your password, please click here: "
           + passwordRecoveryUrl + token.getConfirmationToken());
-      System.out.println(token.getConfirmationToken());
     };
 
     javaMailSender.send(mailMessage);

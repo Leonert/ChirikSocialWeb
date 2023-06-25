@@ -83,7 +83,7 @@ const EditProfileModal = () => {
           website: values.website,
           birthDate: formattedDate,
         });
-        const {profileImage, profileBackgroundImage} = response.data;
+        const { profileImage, profileBackgroundImage } = response.data;
 
         setOpenEditModal(false);
         setLoadedAvatarPicture(profileImage || '');

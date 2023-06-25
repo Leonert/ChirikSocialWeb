@@ -1,7 +1,7 @@
 package com.socialnetwork.api.filter;
 
-import com.socialnetwork.api.security.JwtTokenUtil;
-import com.socialnetwork.api.service.JwtUserDetailsService;
+import com.socialnetwork.api.security.jwt.JwtTokenUtil;
+import com.socialnetwork.api.service.UserPrincipalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +23,7 @@ import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-  private final JwtUserDetailsService jwtUserDetailsService;
+  private final UserPrincipalService userPrincipalService;
   private final JwtTokenUtil jwtTokenUtil;
 
   @Override
@@ -39,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       }
 
       String username = jwtTokenUtil.checkTokenValidAndReturnUsername(authHeader.substring(BEARER.length()));
-      UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+      UserDetails userDetails = userPrincipalService.loadUserByUsername(username);
       UsernamePasswordAuthenticationToken auth =
               new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
       auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
