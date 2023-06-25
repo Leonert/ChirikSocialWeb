@@ -22,10 +22,10 @@ const PostPage = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const post = useSelector((state) => state.post);
-
+  const [replies, setReplies] = useState([]);
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
-      dispatch(addOnePost(response.data));
+      setReplies((prevState) => [response.data, ...prevState]);
 
       dispatch(addReply());
       dispatch(replayMessage(''));
@@ -57,7 +57,7 @@ const PostPage = () => {
       }
 
       setIsLoading(false);
-
+      setReplies(response.data);
       return response;
     };
 
@@ -166,7 +166,7 @@ const PostPage = () => {
         </Box>
       )}
 
-      {!isLoading && post && <PostList isreplypage={true} />}
+      {!isLoading && post && <PostList isreplypage={true} incomingPost={replies} />}
       {!isLoading && !post && <NotFound />}
     </Container>
   );

@@ -27,7 +27,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
 
   const { user } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
-
+  console.log(posts);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
@@ -276,6 +276,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
                 isBookmarkPage={isBookmarkPage}
                 isreplypage={isreplypage}
                 retweet={post.retweetsNumber}
+                retweeted={post.retweeted}
                 like={post.likesNumber}
                 view={post.view}
                 reply={post.repliesNumber}
@@ -285,7 +286,6 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
                 originalPost={post.originalPost}
                 liked={post.liked}
                 bookmarked={post.bookmarked}
-                retweeted={post.retweeted}
                 bookmark={post.bookmarksNumber}
                 handleClick={() => dispatch(getPostId(`${post.id}`))}
                 handleClickLike={() => handleLike(`${post.id}`)}
@@ -304,6 +304,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
                     profileImage={post.originalPost.author.profileImage}
                     name={post.originalPost.author.name}
                     retweet={post.originalPost.retweetsNumber}
+                    retweeted={post.originalPost.retweeted}
                     like={post.originalPost.likesNumber}
                     view={post.originalPost.view}
                     reply={post.originalPost.repliesNumber}
@@ -312,7 +313,6 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
                     image={post.originalPost.image}
                     liked={post.originalPost.liked}
                     bookmarked={post.originalPost.bookmarked}
-                    retweeted={post.originalPost.retweeted}
                     bookmark={post.originalPost.bookmarksNumber}
                     handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
                     handleClickLike={() => handleLike(`${post.originalPost.id}`)}
