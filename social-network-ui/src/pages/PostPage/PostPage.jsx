@@ -166,7 +166,7 @@ const PostPage = () => {
         </Box>
       )}
 
-      {!isLoading && post && <PostList isReplyPage={true} />}
+      {!isLoading && post && <PostList isreplypage={true} />}
       {!isLoading && !post && <NotFound />}
     </Container>
   );

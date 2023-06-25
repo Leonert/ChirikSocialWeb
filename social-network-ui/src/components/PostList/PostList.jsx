@@ -20,7 +20,7 @@ const TypographyWrapper = styled(Typography)(({ theme }) => ({
   paddingRight: '20px',
 }));
 
-export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost, lickedProfile }) {
+export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incomingPost, lickedProfile }) {
   const username = useSelector((state) =>
     state.auth.user && state.auth.user.username ? state.auth.user.username : null
   );
@@ -108,7 +108,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
             .filter(Boolean)
         );
       } else if (response.status === 201) {
-        if (!isBookmarkPage && !isReplyPage)
+        if (!isBookmarkPage && !isreplypage)
           setPosts((prevPosts) => [
             {
               ...response.data,
@@ -267,14 +267,14 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 }
                 IdentifierReply={post.text === null && post.image === null}
                 id={post.id}
-                size={isReplyPage}
+                size={isreplypage}
                 username={post.author && post.author.username ? post.author.username : user ? user.username : ''}
                 profileImage={
                   post.author && post.author.profileImage ? post.author.profileImage : user ? user.profileImage : ''
                 }
                 name={post.author && post.author.name ? post.author.name : user ? user.name : ''}
                 isBookmarkPage={isBookmarkPage}
-                isReplyPage={isReplyPage}
+                isreplypage={isreplypage}
                 retweet={post.retweetsNumber}
                 like={post.likesNumber}
                 view={post.view}
@@ -325,7 +325,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
               </Post>
             ))}
         </InfiniteScroll>
-        {!posts.length && isReplyPage && (
+        {!posts.length && isreplypage && (
           <Typography
             sx={{
               marginTop: '25px',
