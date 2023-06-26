@@ -3,6 +3,7 @@ package com.socialnetwork.api.controller;
 import com.socialnetwork.api.dto.NotificationDto;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.mapper.authorized.NotificationMapper;
+import com.socialnetwork.api.models.base.Notification;
 import com.socialnetwork.api.security.CurrentUser;
 import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.authorized.UserService;
@@ -24,9 +25,9 @@ public class NotificationController {
 
   @GetMapping()
   public ResponseEntity<List<NotificationDto>> getUserNotifications(@CurrentUser UserPrincipal currentUser)
-        throws NoUserWithSuchCredentialsException {
+          throws NoUserWithSuchCredentialsException {
     return getListResponseEntity(notificationMapper.mapNotifications(userService.findByUsername(
-          currentUser.getUsername()).getNotifications()));
+            currentUser.getUsername()).getNotifications()));
   }
 
   private ResponseEntity<List<NotificationDto>> getListResponseEntity(List<NotificationDto> list) {

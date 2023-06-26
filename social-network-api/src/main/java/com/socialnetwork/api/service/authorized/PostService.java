@@ -2,6 +2,7 @@ package com.socialnetwork.api.service.authorized;
 
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.models.additional.View;
 import com.socialnetwork.api.models.base.Hashtag;
 import com.socialnetwork.api.models.base.Post;
@@ -16,6 +17,7 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,16 +27,21 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_NOTIFICATIONS;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
+  private final ViewRepository viewRepository;
   private final PostRepository postRepository;
   private final UserService userService;
   private final CloudinaryService cloudinaryService;
   private final HashtagService hashtagService;
   private final NotificationService notificationService;
   private final ModelMapper modelMapper;
-  private final ViewRepository viewRepository;
+  private final NotificationMapper notificationMapper;
+  private final SimpMessagingTemplate messagingTemplate;
 
   public Post getReferenceById(int id) throws NoPostWithSuchIdException {
     if (!postRepository.existsById(id)) {
@@ -63,7 +70,12 @@ public class PostService {
     }
 
     postRepository.save(post);
-    notificationService.saveReplyRetweet(post);
+    notificationService.saveReplyRetweet(post)
+            .ifPresent(notification -> messagingTemplate.convertAndSend(
+                    TOPIC_NOTIFICATIONS,
+                    notificationMapper.mapNotification(notification))
+      );
+
     return post;
   }
 
@@ -120,10 +132,6 @@ public class PostService {
             .skip(page * usersForPage).limit(usersForPage)
             .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
             .toList();
-  }
-
-  public boolean existsById(Integer postId) {
-    return postRepository.existsById(postId);
   }
 
   public int countPostRetweets(int id) {

@@ -53,6 +53,7 @@ public class LoginController {
     if (!user.isEnabled()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(CONFIRMATION_REQUIRED));
     }
+
     notificationService.saveLogin(user);
 
     return ResponseEntity.ok(userMapper.convertToAccountData(user,

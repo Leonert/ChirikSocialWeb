@@ -9,31 +9,41 @@ import com.socialnetwork.api.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
+
   private final NotificationRepository notificationRepository;
   private final PostRepository postRepository;
 
-  public void saveReplyRetweet(Post post) {
+  public Optional<Notification> saveReplyRetweet(Post post) {
     if (post.getOriginalPost() != null && post.getText() != null && post.getImage() == null) {
-      notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
-            post.getAuthor(), post, NotificationType.REPLY));
+      return Optional.of(notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
+              post.getAuthor(), post, NotificationType.REPLY)));
     } else if (post.getOriginalPost() != null) {
-      notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
-            post.getAuthor(), post, NotificationType.RETWEET));
+      return Optional.of(notificationRepository.save(new Notification(post.getOriginalPost().getAuthor(),
+              post.getAuthor(), post, NotificationType.RETWEET)));
     }
+
+    return Optional.empty();
   }
 
-  public void saveFollow(User currentUser, User user) {
-    notificationRepository.save(new Notification(user, currentUser, null, NotificationType.FOLLOWER));
+  public Notification saveFollow(User currentUser, User user) {
+    return notificationRepository.save(new Notification(user, currentUser, null, NotificationType.FOLLOWER));
   }
 
-  public void saveLike(int userId, int postId) {
+  public Optional<Notification> saveLike(int userId, int postId) {
     Post post = postRepository.getReferenceById(postId);
+
     if (userId != post.getAuthor().getId()) {
-      notificationRepository.save(new Notification(post.getAuthor(), new User(userId), post, NotificationType.LIKE));
+      return Optional.of(notificationRepository.save(
+              new Notification(post.getAuthor(), new User(userId), post, NotificationType.LIKE)
+      ));
     }
+
+    return Optional.empty();
   }
 
   public void saveLogin(User user) {

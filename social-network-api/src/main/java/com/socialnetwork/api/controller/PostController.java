@@ -23,6 +23,7 @@ import com.socialnetwork.api.service.noneauthorized.NonAuthPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ import static com.socialnetwork.api.util.Constants.Request.RESULTS_PER_PAGE_QUER
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.POSTS_PER_PAGE_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
+import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_POSTS;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +60,7 @@ public class PostController extends Controller {
   private final NonAuthUserMapper nonAuthUserMapper;
   private final NonAuthPostService nonAuthPostService;
   private final NonAuthLikeService nonAuthLikeService;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @GetMapping("/{id}")
   public PostDtoInterface getPostById(@PathVariable(ID_QUERY) Integer id,
@@ -158,8 +161,10 @@ public class PostController extends Controller {
     }
     String image = postDto.getImage();
     postDto.setImage(null);
-    return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.convertToPostDtoDefault(postService.save(
-            postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username));
+    PostDto.Response.WithAuthor responseDto = postMapper.convertToPostDtoDefault(postService.save(
+            postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username);
+    messagingTemplate.convertAndSend(TOPIC_POSTS, responseDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
   }
 
   @PostMapping("/edit")

@@ -9,12 +9,12 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:8080/api/login/authenticate
+POST localhost:8080/api/login
 Content-Type: application/json
 
 {
-  "emailAddress": "denyaaquapark@gmail.com",
-  "password": "141",
+  "emailAddress": "vladlena@gmail.com",
+  "password": "1",
   "rememberMe": true
 }
 

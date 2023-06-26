@@ -34,6 +34,13 @@ public class Constants {
     public static final String CONFIRMATION_REQUIRED = "The account exists but needs to be activated.";
   }
 
+  public static class WebSocket {
+    public static final String TOPIC_POSTS = "/topic/posts";
+    public static final String TOPIC_MESSAGES = "/topic/messages";
+    public static final String TOPIC_MESSAGE = "/topic/message";
+    public static final String TOPIC_NOTIFICATIONS = "/topic/notifications";
+  }
+
   public static class Exception {
     public static final String USER_NOT_FOUND = "User with such credentials was not found.";
     public static final String POST_NOT_FOUND = "Post with such id was not found";
