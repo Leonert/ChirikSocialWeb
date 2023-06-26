@@ -3,10 +3,12 @@ import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
+import SockJsClient from 'react-stomp';
 
 import axiosIns from '../../axiosInstance';
 import { handleRegistrationModal } from '../../features/slices/authModalSlice';
-import { getPostId, openReplayModal } from '../../features/slices/homeSlice';
+import { getPostId, openReplayModal, tweetedPost } from '../../features/slices/homeSlice';
+import { SOCKET_URL } from '../../util/constants';
 import Post from '../Post/Post';
 import ReplyHeader from '../Post/ReplyHeader';
 import ReplayModal from '../ReplayModal/ReplayModal';
@@ -222,13 +224,21 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
       dispatch(handleRegistrationModal(true));
     }
   };
+
   const handleSendRequest = (props) => {
     setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
     setOpenModal(false);
   };
 
+  const onSocketChange = (post) => {
+    if (!isBookmarkPage && !isReplyPage) {
+      dispatch(tweetedPost(post));
+    }
+  };
+
   return (
     <PostsContext.Provider value={posts}>
+      <SockJsClient url={SOCKET_URL} topics={['/topic/posts']} debug={false} onMessage={onSocketChange} />
       {openModal && (
         <ReplayModal openModal={openModal} handleClose={handleClose} posts={posts} onSendRequest={handleSendRequest} />
       )}

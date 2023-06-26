@@ -6,6 +6,8 @@ export const getBookmarks = createAsyncThunk('posts/getBookmarks', async (_, { r
   try {
     const { data } = await axiosIns.get('/api/bookmarks');
 
+    console.log(data);
+
     return data;
   } catch (error) {
     return rejectWithValue(error.response.data.message);
@@ -153,7 +155,7 @@ const homeSlice = createSlice({
   },
   extraReducers: {
     [getBookmarks.fulfilled]: (state, action) => {
-      state.post = [...action.payload];
+      state.post = action.payload;
     },
   },
 });
