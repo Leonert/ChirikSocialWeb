@@ -12,7 +12,6 @@ const PostFooterBtn = (props) => {
 
   return (
     <CardActions
-      disableSpacing
       className={classes.pageItem}
       sx={{
         display: 'flex',

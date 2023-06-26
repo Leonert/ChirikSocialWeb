@@ -20,7 +20,7 @@ const TypographyWrapper = styled(Typography)(({ theme }) => ({
   paddingRight: '20px',
 }));
 
-export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incomingPost, lickedProfile }) {
+export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incomingPost, lickedProfile }) {
   const username = useSelector((state) =>
     state.auth.user && state.auth.user.username ? state.auth.user.username : null
   );
@@ -108,7 +108,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
             .filter(Boolean)
         );
       } else if (response.status === 201) {
-        if (!isBookmarkPage && !isReplyPage)
+        if (!isBookmarkPage && !isreplypage)
           setPosts((prevPosts) => [
             {
               ...response.data,
@@ -267,15 +267,16 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 }
                 IdentifierReply={post.text === null && post.image === null}
                 id={post.id}
-                size={isReplyPage}
+                size={isreplypage}
                 username={post.author && post.author.username ? post.author.username : user ? user.username : ''}
                 profileImage={
                   post.author && post.author.profileImage ? post.author.profileImage : user ? user.profileImage : ''
                 }
                 name={post.author && post.author.name ? post.author.name : user ? user.name : ''}
                 isBookmarkPage={isBookmarkPage}
-                isReplyPage={isReplyPage}
+                isreplypage={isreplypage}
                 retweet={post.retweetsNumber}
+                retweeted={post.retweeted}
                 like={post.likesNumber}
                 view={post.view}
                 reply={post.repliesNumber}
@@ -285,7 +286,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                 originalPost={post.originalPost}
                 liked={post.liked}
                 bookmarked={post.bookmarked}
-                retweeted={post.retweeted}
                 bookmark={post.bookmarksNumber}
                 handleClick={() => dispatch(getPostId(`${post.id}`))}
                 handleClickLike={() => handleLike(`${post.id}`)}
@@ -304,6 +304,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                     profileImage={post.originalPost.author.profileImage}
                     name={post.originalPost.author.name}
                     retweet={post.originalPost.retweetsNumber}
+                    retweeted={post.originalPost.retweeted}
                     like={post.originalPost.likesNumber}
                     view={post.originalPost.view}
                     reply={post.originalPost.repliesNumber}
@@ -312,7 +313,6 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
                     image={post.originalPost.image}
                     liked={post.originalPost.liked}
                     bookmarked={post.originalPost.bookmarked}
-                    retweeted={post.originalPost.retweeted}
                     bookmark={post.originalPost.bookmarksNumber}
                     handleClick={() => dispatch(getPostId(`${post.originalPost.id}`))}
                     handleClickLike={() => handleLike(`${post.originalPost.id}`)}
@@ -325,7 +325,7 @@ export default function PostList({ isBookmarkPage, isReplyPage, apiUrl, incoming
               </Post>
             ))}
         </InfiniteScroll>
-        {!posts.length && isReplyPage && (
+        {!posts.length && isreplypage && (
           <Typography
             sx={{
               marginTop: '25px',

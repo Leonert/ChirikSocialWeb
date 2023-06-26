@@ -10,7 +10,7 @@ import { usePostStyle } from '../../components/Post/PostStyle';
 import ReplyHeader from '../../components/Post/ReplyHeader';
 import PostList from '../../components/PostList/PostList';
 import TextInput from '../../components/ReplayModal/TextInput';
-import { addOnePost, clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
+import { clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
 import { addReply, makeRetweet, setBookmark, setLike, setPost } from '../../features/slices/postSlice';
 import usePostPageStyles from './PostPageStyles';
 
@@ -22,10 +22,10 @@ const PostPage = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const post = useSelector((state) => state.post);
-
+  const [replies, setReplies] = useState([]);
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
-      dispatch(addOnePost(response.data));
+      setReplies((prevState) => [response.data, ...prevState]);
 
       dispatch(addReply());
       dispatch(replayMessage(''));
@@ -57,6 +57,7 @@ const PostPage = () => {
       }
 
       setIsLoading(false);
+      setReplies(response.data);
 
       return response;
     };
@@ -166,7 +167,7 @@ const PostPage = () => {
         </Box>
       )}
 
-      {!isLoading && post && <PostList isReplyPage={true} />}
+      {!isLoading && post && <PostList isreplypage={true} incomingPost={replies} />}
       {!isLoading && !post && <NotFound />}
     </Container>
   );

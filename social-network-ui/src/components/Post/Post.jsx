@@ -17,7 +17,7 @@ import { handleOpenRetweetModal } from '../../features/slices/postDatas/retweets
 import AvatarLink from '../UI/AvatarLink';
 import NameLink from '../UI/NameLink';
 
-const CardSize = styled(Card)(({ theme, isReplyPage }) => ({
+const CardSize = styled(Card)(({ theme, isreplypage }) => ({
   backgroundColor: theme.palette.background.paper + ' !important',
 
   color: theme.palette.text.primary,
@@ -25,7 +25,7 @@ const CardSize = styled(Card)(({ theme, isReplyPage }) => ({
   boxShadow: 'none !important',
   borderRadius: '10px  ',
   margin: '0',
-  ...(isReplyPage
+  ...(isreplypage
     ? { border: `1px solid transparent` }
     : { marginTop: '20px', border: `1px solid ${theme.palette.divider}` }),
 }));
@@ -86,13 +86,13 @@ export default function Post(props) {
   };
 
   return (
-    <CardSize isReplyPage={props.isReplyPage}>
+    <CardSize isreplypage={props.isreplypage}>
       {props.replay}
       {props.content != null && (
         <CardHeaderItem
           avatar={<AvatarLink alt={props.name} avatar={props.profileImage} to={`/${props.username}`} />}
           action={
-            props.username === user.username ? (
+            user && props.username === user.username ? (
               <Tooltip title="Delete">
                 <IconButtonCloth aria-label="settings" onClick={props.handleClickDelete}>
                   <MoreHorizIcon />
@@ -125,7 +125,7 @@ export default function Post(props) {
         </CardContentWrapper>
       )}
 
-      {!props.isReplyPage && props.children}
+      {!props.isreplypage && props.children}
 
       {props.image && (
         <CardMedia
@@ -172,7 +172,7 @@ export default function Post(props) {
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
           <CardContentWrapper
-            disableSpacing
+       
             sx={{
               display: 'flex',
               justifyContent: 'space-around',
@@ -227,7 +227,7 @@ export default function Post(props) {
         )
       ) : props.originalPost || props.IdentifierOriginal ? null : (
         <CardContentWrapper
-          disableSpacing
+          
           sx={{
             display: 'flex',
             justifyContent: 'space-around',
