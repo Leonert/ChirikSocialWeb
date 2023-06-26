@@ -12,7 +12,11 @@ export const changePassword = createAsyncThunk(
       });
 
       if (status === 200) {
-        dispatch(changePasswordModal(false));
+        dispatch(changePasswordOk(false));
+        setTimeout(() => {
+          dispatch(changePasswordModal(false));
+          dispatch(changePasswordOk(true));
+        }, 2000);
       }
 
       return data;
@@ -25,12 +29,8 @@ const settingSlice = createSlice({
   name: 'setting',
   initialState: {
     yourAccount: true,
-    // twitterBlue: false,
     security: false,
-    // privacy: false,
-    // notifications: false,
-    // accessibility: false,
-    // additional: false,
+    status: true,
     changePassword: false,
     accountInformation: false,
     sideSetting: true,
@@ -38,68 +38,18 @@ const settingSlice = createSlice({
   reducers: {
     selectYourAccount: (state) => {
       state.yourAccount = true;
-      // state.twitterBlue = false;
+
       state.security = false;
-      // state.privacy = false;
-      // state.notifications = false;
-      // state.accessibility = false;
-      // state.additional = false;
-    },
-    // selectTwitterBlue: (state) => {
-    //   state.yourAccount = false;
-    //   state.twitterBlue = true;
-    //   state.security = false;
-    //   state.privacy = false;
-    //   state.notifications = false;
-    //   state.accessibility = false;
-    //   state.additional = false;
-    // },
-    selectSecurity: (state) => {
-      state.yourAccount = false;
-      // state.twitterBlue = false;
-      state.security = true;
-      // state.privacy = false;
-      // state.notifications = false;
-      // state.accessibility = false;
-      // state.additional = false;
     },
 
-    // selectPrivacy: (state) => {
-    //   state.yourAccount = false;
-    //   state.twitterBlue = false;
-    //   state.security = false;
-    //   state.privacy = true;
-    //   state.notifications = false;
-    //   state.accessibility = false;
-    //   state.additional = false;
-    // },
-    // selectNotifications: (state) => {
-    //   state.yourAccount = false;
-    //   state.twitterBlue = false;
-    //   state.security = false;
-    //   state.privacy = false;
-    //   state.notifications = true;
-    //   state.accessibility = false;
-    //   state.additional = false;
-    // },
-    // selectAccessibility: (state) => {
-    //   state.yourAccount = false;
-    //   state.twitterBlue = false;
-    //   state.security = false;
-    //   state.privacy = false;
-    //   state.notifications = false;
-    //   state.accessibility = true;
-    //   state.additional = false;
-    // },
-    // selectAdditional: (state) => {
-    //   state.yourAccount = false;
-    //   state.twitterBlue = false;
-    //   state.security = false;
-    //   state.privacy = false;
-    //   state.notifications = false;
-    //   state.accessibility = false;
-    //   state.additional = true;
-    // },
+    selectSecurity: (state) => {
+      state.yourAccount = false;
+
+      state.security = true;
+    },
+    changePasswordOk: (state, action) => {
+      state.status = action.payload;
+    },
     changePasswordModal: (state, action) => {
       state.changePassword = action.payload;
       state.sideSetting = !action.payload;
@@ -108,13 +58,4 @@ const settingSlice = createSlice({
 });
 
 export default settingSlice.reducer;
-export const {
-  selectYourAccount,
-  // selectTwitterBlue,
-  // selectPrivacy,
-  // selectNotifications,
-  // selectAccessibility,
-  // selectAdditional,
-  selectSecurity,
-  changePasswordModal,
-} = settingSlice.actions;
+export const { selectYourAccount, selectSecurity, changePasswordModal, changePasswordOk } = settingSlice.actions;

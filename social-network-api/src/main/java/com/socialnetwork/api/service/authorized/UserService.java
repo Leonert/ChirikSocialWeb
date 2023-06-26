@@ -31,7 +31,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.socialnetwork.api.util.Constants.Image.BASE_64_PREFIX;
-import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_NOTIFICATIONS;
 
 @Service
 @RequiredArgsConstructor
@@ -169,8 +168,9 @@ public class UserService {
     User currentUser = findByUsername(currentUserUsername);
     if (!isFollowed(currentUser, user)) {
       followsRepository.save(new Follow(currentUser, user));
-      messagingTemplate.convertAndSend(
-              TOPIC_NOTIFICATIONS,
+      messagingTemplate.convertAndSendToUser(
+              username,
+              "/queue/notifications",
               notificationMapper.mapNotification(notificationService.saveFollow(currentUser, user))
       );
       return true;

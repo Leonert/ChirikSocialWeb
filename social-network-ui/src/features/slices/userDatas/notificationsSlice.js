@@ -30,6 +30,8 @@ const notificationsSlice = createSlice({
       state.list = [];
     },
     addNotification: (state, action) => {
+      console.log(action.payload);
+
       return { ...state, list: [...state.list, action.payload] };
     },
   },

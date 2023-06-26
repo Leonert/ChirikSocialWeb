@@ -17,8 +17,6 @@ export const ListNotifications = () => {
   const { list, loading } = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
 
-  console.log('list: ', list);
-
   useEffect(() => {
     dispatch(getNotifications());
 
@@ -28,16 +26,17 @@ export const ListNotifications = () => {
   }, []);
 
   const onSocketChange = (notification) => {
+    console.log(notification);
     dispatch(addNotification(notification));
   };
 
   return (
     <ul className={classes.list}>
+      <SockJsClient url={SOCKET_URL} topics={['/user/queue/notifications']} onMessage={onSocketChange} debug={false} />
       {list.length === 0 && loading ? (
         <Spinner />
       ) : (
         <>
-          <SockJsClient url={SOCKET_URL} topics={['/topic/notifications']} onMessage={onSocketChange} debug={false} />
           {list.map((notification, index) => {
             return <ItemNotification key={index} notification={notification} />;
           })}

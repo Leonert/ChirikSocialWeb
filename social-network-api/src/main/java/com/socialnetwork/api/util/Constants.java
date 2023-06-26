@@ -38,7 +38,7 @@ public class Constants {
     public static final String TOPIC_POSTS = "/topic/posts";
     public static final String TOPIC_MESSAGES = "/topic/messages";
     public static final String TOPIC_MESSAGE = "/topic/message";
-    public static final String TOPIC_NOTIFICATIONS = "/topic/notifications";
+    public static final String TOPIC_NOTIFICATIONS = "/queue/notifications";
   }
 
   public static class Exception {
