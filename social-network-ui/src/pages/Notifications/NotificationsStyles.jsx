@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme) =>
   createStyles({
     notificationsWrap: {
       width: '100%',
-      backgroundColor: '#ffffff',
+      backgroundColor: theme.palette.background.paper + ' !important',
       display: 'flex',
       flexDirection: 'column',
     },

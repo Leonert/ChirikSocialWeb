@@ -18,12 +18,11 @@ export const Followers = () => {
   const path = location.pathname.split('/')[location.pathname.split('/').length - 1];
   const { followersUsers, loading, isTotalUsers } = useSelector((state) => state.followers);
   const [currentPage, setCurrentPage] = useState(0);
-  
+
   useEffect(() => {
-    if (followersUsers.length === 0 && !loading) {
-      
-      dispatch(loadFollowers({ username }));
-    }
+    // if (followersUsers.length === 0 && !loading) {
+    dispatch(loadFollowers({ username }));
+    // }
 
     return () => {
       dispatch(removeFollowersUsers());
@@ -67,7 +66,7 @@ export const Followers = () => {
         <List
           sx={{
             width: '100%',
-            backgroundColor: 'white',
+            backgroundColor: 'rgb(21, 32, 43)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
