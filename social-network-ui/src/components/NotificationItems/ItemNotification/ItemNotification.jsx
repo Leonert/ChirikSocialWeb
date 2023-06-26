@@ -44,22 +44,25 @@ export const ItemNotification = ({ notification }) => {
       {notificationElem && (
         <li className={classes.item}>
           <Box>
-            <Link className={classes.link} to={`/${notification?.initiator?.username}`}>
-              <Box className={classes.avatar}>
-                {notificationElem.profileImage ? (
-                  <img
-                    className={classes.avatarImg}
-                    src={notificationElem.profileImage}
-                    alt={notificationElem.username}
-                  />
-                ) : (
-                  <div style={{ backgroundColor: `${generateRandomRGBA()}` }} className={classes.avatarText}>
-                    {notificationElem.name ? notificationElem.name.slice(0, 1) : ''}
-                  </div>
-                )}
-              </Box>
-              {notificationElem.username && <Box className={classes.username}>@{notificationElem.username}</Box>}
-            </Link>
+            {notification?.initiator !== null ? (
+              <Link className={classes.link} to={`/${notification?.initiator?.username}`}>
+                <Box className={classes.avatar}>
+                  {notificationElem.profileImage ? (
+                    <img
+                      className={classes.avatarImg}
+                      src={notificationElem.profileImage}
+                      alt={notificationElem.username}
+                    />
+                  ) : (
+                    <div style={{ backgroundColor: `${generateRandomRGBA()}` }} className={classes.avatarText}>
+                      {notificationElem.name ? notificationElem.name.slice(0, 1) : ''}
+                    </div>
+                  )}
+                </Box>
+                {notificationElem.username && <Box className={classes.username}>@{notificationElem.username}</Box>}
+              </Link>
+            ) : null}
+
             <Box className={classes.content}>
               {post !== null ? (
                 <Link to={`/${post?.author.username}/${post?.author.id}`}>

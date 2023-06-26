@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CustomButton } from '../../components/Login/CustomButton';
@@ -11,11 +11,6 @@ const FollowButton = ({ user }) => {
     (state) =>
       state.following.followingUsers.find((followingUser) => followingUser.username === user.username)?.currUserFollower
   );
-  useEffect(() => {
-    if (user.currUserFollower) {
-      dispatch(addFollowingUser(user));
-    }
-  }, []);
 
   const isFollowed = !!currUserFollower;
 
