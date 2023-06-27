@@ -50,7 +50,7 @@ public class NotificationService {
     return Optional.empty();
   }
 
-  public void saveLogin(User user) {
-    notificationRepository.save(new Notification(user, null, null, NotificationType.ENTRANCE));
+  public Notification saveLogin(User user) {
+    return notificationRepository.save(new Notification(user, null, null, NotificationType.ENTRANCE));
   }
 }
