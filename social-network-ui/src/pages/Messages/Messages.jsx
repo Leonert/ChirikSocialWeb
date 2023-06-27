@@ -262,17 +262,24 @@ const Messages = ({ chatId, senderId }) => {
             <Paper variant="outlined">
               <Paper className={classes.header}>
                 <div>
-                  <Typography variant="h6">Messages</Typography>
+                  <Typography variant="h6">Chat</Typography>
                 </div>
               </Paper>
               {Object.values(chats).length === 0 ? (
                   <>
-                    <div className={classes.messagesTitle}>Send a message, get a message</div>
-                    <div className={classes.messagesText}>
-                      Direct Messages are private conversations between you and other people on Twitter. Share Tweets, media,
-                      and more!
+                    <div className={classes.messagesTitle}>
+                      Send a message, get a message
                     </div>
-                    <Button onClick={onOpenModalWindow} className={classes.messagesButton} variant="contained" color="primary">
+                    <div className={classes.messagesText}>
+                      Direct Messages are private conversations between you and other people on Twitter.
+                      Share Tweets, media, and more!
+                    </div>
+                    <Button
+                        onClick={onOpenModalWindow}
+                        className={classes.messagesButton}
+                        variant="contained"
+                        color="primary"
+                    >
                       Start a conversation
                     </Button>
                   </>
@@ -391,8 +398,10 @@ const Messages = ({ chatId, senderId }) => {
                       }
                       <div ref={chatEndRef}></div>
                     </React.Fragment>
+
                   </Paper>
                   <Paper className={classes.chatFooter}>
+                    {/* Message input and send button */}
                     <MessageInput
                         multiline
                         value={message}

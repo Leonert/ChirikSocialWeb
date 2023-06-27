@@ -172,7 +172,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chat: {
     padding: '53px 15px',
     color: theme.palette.text.primary,
-    height: 600,
+    height: 800,
     overflowY: 'auto',
     backgroundColor: theme.palette.background.lightDefault,
     display: 'flex',
@@ -328,7 +328,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatFooter: {
     display: 'flex',
     position: 'fixed',
-    bottom: 3,
     width: 598,
     padding: 4,
     borderRight: 0,
