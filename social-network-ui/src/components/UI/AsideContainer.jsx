@@ -18,6 +18,7 @@ const AsideContainer = ({ header, children, asideActions, isSticky }) => {
         top: 0,
         mb: '16px',
         mt: '16px',
+        ml:"20px",
       }}
     >
       <Typography sx={{ p: '12px 16px', fontSize: '26px', fontWeight: 700 }}>{header}</Typography>

@@ -20,14 +20,9 @@ const TypographyWrapper = styled(Typography)(({ theme }) => ({
   paddingRight: '20px',
 }));
 
-export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incomingPost, lickedProfile }) {
-  const username = useSelector((state) =>
-    state.auth.user && state.auth.user.username ? state.auth.user.username : null
-  );
-
+export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incomingPost, lickedProfile, author }) {
   const { user } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
-
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
@@ -259,7 +254,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
                 replay={
                   post.originalPost ? (
                     post.text === null && post.image === null ? (
-                      <ReplyHeader repeat={post.author && post.author.name ? post.author.name : username} />
+                      <ReplyHeader repeat={post.author && post.author.name ? post.author.name : author.name} />
                     ) : (
                       <TypographyWrapper>Reply</TypographyWrapper>
                     )
@@ -268,11 +263,9 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
                 IdentifierReply={post.text === null && post.image === null}
                 id={post.id}
                 size={isreplypage}
-                username={post.author && post.author.username ? post.author.username : user ? user.username : ''}
-                profileImage={
-                  post.author && post.author.profileImage ? post.author.profileImage : user ? user.profileImage : ''
-                }
-                name={post.author && post.author.name ? post.author.name : user ? user.name : ''}
+                username={post.author && post.author.username ? post.author.username : author.username}
+                profileImage={post.author && post.author.profileImage ? post.author.profileImage : author.profileImage}
+                name={post.author && post.author.name ? post.author.name : author.name}
                 isBookmarkPage={isBookmarkPage}
                 isreplypage={isreplypage}
                 retweet={post.retweetsNumber}

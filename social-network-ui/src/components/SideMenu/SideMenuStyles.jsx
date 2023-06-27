@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 export const useSideMenuStyles = makeStyles((theme) => ({
   container: {
     position: 'fixed',
-    top: 0,
+    top: '60px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
@@ -19,8 +19,8 @@ export const useSideMenuStyles = makeStyles((theme) => ({
   },
 
   itemWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginBottom: 2,
     height: 58,
     '& .MuiTypography-h5': {

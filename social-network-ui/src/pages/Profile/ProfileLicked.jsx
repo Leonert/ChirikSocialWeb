@@ -4,10 +4,9 @@ import { useRouteLoaderData } from 'react-router-dom';
 import axiosIns from '../../axiosInstance';
 import PostList from '../../components/PostList/PostList';
 
-export const ProfileLicked = () => {
+export const ProfileLicked = (author) => {
   const [posts, setPosts] = useState([]);
   const { data } = useRouteLoaderData('profile');
-
   const fetchPosts = async () => {
     try {
       const response = await axiosIns.get(`/api/users/p/${data.username}/liked`);
@@ -29,5 +28,5 @@ export const ProfileLicked = () => {
     fetchPosts();
   }, []);
 
-  return <PostList incomingPost={posts} lickedProfile={true} />;
+  return <PostList incomingPost={posts} lickedProfile={true} author={author} />;
 };

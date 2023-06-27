@@ -20,6 +20,7 @@ import LogOut from '../LogOut/LogOut';
 import LogOutModal from '../LogOutModal/LogOutModal';
 import ReplayModal from '../ReplayModal/ReplayModal';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
+import Logo from './Logo';
 import { useSideMenuStyles } from './SideMenuStyles';
 
 const SideMenu = () => {
@@ -39,17 +40,8 @@ const SideMenu = () => {
   return (
     <>
       <ReplayModal />
+      <Logo />
       <ul className={classes.container}>
-        <li>
-          <NavLink to={HOME}>
-            <div className={classes.logoIcon}>
-              <IconButton>
-                {Chirick}
-                <span className={`${classes.title} ${classes.label}`}>Chirik</span>
-              </IconButton>
-            </div>
-          </NavLink>
-        </li>
         {user ? (
           <>
             <li className={classes.itemWrapper}>
