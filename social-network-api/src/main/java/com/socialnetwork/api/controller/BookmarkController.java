@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping("/api/bookmarks")
 @RequiredArgsConstructor
 public class BookmarkController {
+
   private final UserService userService;
   private final PostMapper postMapper;
 

@@ -4,6 +4,7 @@ import com.socialnetwork.api.dto.DtoInterface;
 import com.socialnetwork.api.dto.UserDtoInterface;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
@@ -17,6 +18,7 @@ import com.socialnetwork.api.service.noneauthorized.NonAuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +39,7 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController extends Controller {
+
   private final UserService userService;
   private final UserMapper userMapper;
   private final LikeService likeService;
@@ -44,6 +47,9 @@ public class UserController extends Controller {
   private final NonAuthPostMapper nonAuthPostMapper;
   private final NonAuthUserService nonAuthUserService;
   private final NonAuthUserMapper nonAuthUserMapper;
+
+  private final NotificationMapper notificationMapper;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @GetMapping("p/{username}")
   public UserDtoInterface getProfileByUsername(
@@ -65,6 +71,7 @@ public class UserController extends Controller {
           throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+
     if (currentUser == null) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowers(username,
               pageD, resultsD)));
@@ -84,10 +91,12 @@ public class UserController extends Controller {
           throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+
     if (currentUser == null) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthUserService.getFollowed(username,
               pageD, resultsD)));
     }
+
     String currentUserUsername = currentUser.getUsername();
     return getListResponseEntity(userMapper.mapForListing(userService.getFollowed(username, currentUserUsername,
             pageD, resultsD), currentUserUsername));
@@ -96,8 +105,8 @@ public class UserController extends Controller {
   @GetMapping("connect")
   public ResponseEntity<List<? extends DtoInterface>>
     getConnect(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> page,
-               @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
-               @CurrentUser UserPrincipal currentUser)
+             @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsPerPage,
+             @CurrentUser UserPrincipal currentUser)
           throws NoUserWithSuchCredentialsException {
     String username = currentUser != null ? currentUser.getUsername() : null;
     return getListResponseEntity(userMapper.mapForListing(

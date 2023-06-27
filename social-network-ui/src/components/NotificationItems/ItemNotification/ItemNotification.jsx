@@ -66,7 +66,9 @@ export const ItemNotification = ({ notification }) => {
             <Box className={classes.content}>
               {post !== null ? (
                 <Link to={`/${post?.author.username}/${post?.author.id}`}>
-                  {notificationElem.message} <span className={classes.post}>{post.text.slice(0, 50)}</span>
+                  {notificationElem.message} <span className={classes.post}>
+                  {post.text?.slice(0, 50) ?? post.originalPost.text?.slice(0, 50) ?? ""}
+                  </span>
                 </Link>
               ) : (
                 `${notificationElem.message}`

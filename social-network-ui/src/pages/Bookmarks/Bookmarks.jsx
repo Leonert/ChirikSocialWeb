@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PostList from '../../components/PostList/PostList';
 import ReplayModal from '../../components/ReplayModal/ReplayModal';
-import { clearPosts, getBookmarks } from '../../features/slices/homeSlice';
+import { clearPosts, getBookmarks, tweetedPost } from '../../features/slices/homeSlice';
 
 const Bookmarks = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ const Bookmarks = () => {
   const post = useSelector((state) => state.home.post);
 
   useEffect(() => {
+    dispatch(tweetedPost(''));
     dispatch(getBookmarks()).then(() => setIsLoading(false));
 
     return () => {

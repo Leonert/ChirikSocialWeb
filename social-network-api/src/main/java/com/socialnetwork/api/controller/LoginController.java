@@ -4,6 +4,7 @@ import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.AccessDeniedException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.exception.custom.TokenInvalidException;
+import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.models.additional.Response;
 import com.socialnetwork.api.models.base.User;
@@ -15,6 +16,7 @@ import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,7 @@ import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 import static com.socialnetwork.api.util.Constants.Auth.CONFIRMATION_REQUIRED;
 import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
+import static com.socialnetwork.api.util.Constants.WebSocket.QUEUE_NOTIFICATION;
 
 @RestController
 @RequestMapping("/api/login")
@@ -36,10 +39,12 @@ import static com.socialnetwork.api.util.Constants.Auth.WRONG_PASSWORD;
 public class LoginController {
 
   private final UserService userService;
+  private final NotificationService notificationService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;
   private final UserMapper userMapper;
-  private final NotificationService notificationService;
+  private final NotificationMapper notificationMapper;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @PostMapping()
   public ResponseEntity<?> logIn(@RequestBody UserDto.Request.Credentials userDto)
@@ -53,7 +58,12 @@ public class LoginController {
     if (!user.isEnabled()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(CONFIRMATION_REQUIRED));
     }
-    notificationService.saveLogin(user);
+
+    messagingTemplate.convertAndSendToUser(
+            user.getUsername(),
+            QUEUE_NOTIFICATION,
+            notificationMapper.mapNotification(notificationService.saveLogin(user))
+    );
 
     return ResponseEntity.ok(userMapper.convertToAccountData(user,
           jwtTokenUtil.generateToken(user.getUsername(), userDto.getRememberMe())));

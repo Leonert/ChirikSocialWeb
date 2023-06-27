@@ -2,6 +2,7 @@ package com.socialnetwork.api.service.authorized;
 
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.models.additional.Like;
 import com.socialnetwork.api.models.additional.keys.LikePk;
 import com.socialnetwork.api.models.base.Post;
@@ -10,22 +11,35 @@ import com.socialnetwork.api.repository.LikeRepository;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.socialnetwork.api.util.Constants.WebSocket.QUEUE_NOTIFICATION;
+
 @Service
 @RequiredArgsConstructor
 public class LikeService {
+
   private final LikeRepository likeRepository;
   private final UserService userService;
+  private final PostService postService;
   private final NotificationService notificationService;
   private final PostRepository postRepository;
+  private final NotificationMapper notificationMapper;
+  private final SimpMessagingTemplate messagingTemplate;
 
-  public boolean likeUnlike(int userId, int postId) {
+  public boolean likeUnlike(int userId, int postId) throws NoUserWithSuchCredentialsException {
     if (!existsByIds(userId, postId)) {
       save(userId, postId);
-      notificationService.saveLike(userId, postId);
+      notificationService.saveLike(userId, postId)
+              .ifPresent(notification ->
+                messagingTemplate.convertAndSendToUser(
+                        postService.findById(postId).get().getAuthor().getUsername(),
+                        QUEUE_NOTIFICATION,
+                        notificationMapper.mapNotification(notification))
+        );
       return true;
     } else {
       delete(userId, postId);
@@ -46,16 +60,16 @@ public class LikeService {
   }
 
   public List<User> getLikes(int id, String username, int page, int usersForPage)
-        throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     if (!postRepository.existsById(id)) {
       throw new NoPostWithSuchIdException();
     }
     User currentUser = userService.findByUsername(username);
     return likeRepository.findUsersByLikedPost(id)
-          .stream()
-          .skip(page * usersForPage).limit(usersForPage)
-          .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
-          .toList();
+            .stream()
+            .skip(page * usersForPage).limit(usersForPage)
+            .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
+            .toList();
   }
 
   public int countPostLikes(int id) {

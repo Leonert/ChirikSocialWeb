@@ -3,11 +3,10 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
-import { tweetedPost } from '../../../../features/slices/homeSlice';
+import {tweetedPost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import AvatarLink from '../../../UI/AvatarLink';
@@ -68,8 +67,10 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
 
   const handleClickAddTweet = async () => {
     const base64Image = selectedImage ? await getBase64Image() : null;
-    await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
-      dispatch(tweetedPost(response.data));
+    await axiosIns.post('/api/posts', { text, image: base64Image }).then((res) => {
+      if (window.location.pathname !== "/") {
+        dispatch(tweetedPost(res.data));
+      }
     });
 
     setText('');
@@ -82,6 +83,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleCloseImage = () => {
     setSelectedImage(null);
   };
+
   const handleClickQuoteTweet = async () => {
     const result = await uploadTweetImages();
     dispatch({

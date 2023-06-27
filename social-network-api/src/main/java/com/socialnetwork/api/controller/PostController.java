@@ -11,7 +11,9 @@ import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
+import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.base.Post;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.CurrentUser;
 import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.BookmarkService;
@@ -23,6 +25,7 @@ import com.socialnetwork.api.service.noneauthorized.NonAuthPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +45,7 @@ import static com.socialnetwork.api.util.Constants.Request.RESULTS_PER_PAGE_QUER
 import static com.socialnetwork.api.util.Constants.Response.PAGE_NUMBER_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.POSTS_PER_PAGE_DEFAULT;
 import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEFAULT;
+import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_POSTS;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +62,7 @@ public class PostController extends Controller {
   private final NonAuthUserMapper nonAuthUserMapper;
   private final NonAuthPostService nonAuthPostService;
   private final NonAuthLikeService nonAuthLikeService;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @GetMapping("/{id}")
   public PostDtoInterface getPostById(@PathVariable(ID_QUERY) Integer id,
@@ -90,6 +95,33 @@ public class PostController extends Controller {
       outcome.add(postMapper.convertToPostDtoDefault(post, username));
     }
     return getListResponseEntity(outcome);
+  }
+
+  @GetMapping("/following")
+  public ResponseEntity<List<? extends DtoInterface>>
+    getFollowingFeed(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> pageParam,
+                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsQuantityParam,
+                     @CurrentUser UserPrincipal currentUser)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
+    int page = pageParam.orElse(PAGE_NUMBER_DEFAULT);
+    int results = postsQuantityParam.orElse(POSTS_PER_PAGE_DEFAULT);
+
+    if (currentUser == null) {
+      throw new AccessDeniedException();
+    }
+
+    String username = currentUser.getUsername();
+    List<User> followings = userService.findByUsername(username)
+            .getFollowed()
+            .stream()
+            .map(Follow::getFollowedUser)
+            .toList();
+
+    return getListResponseEntity(postMapper.mapForListing(
+                    postService.getFollowingPosts(page, results, followings),
+                    username
+            )
+    );
   }
 
   @GetMapping("/{id}/replies")
@@ -158,8 +190,10 @@ public class PostController extends Controller {
     }
     String image = postDto.getImage();
     postDto.setImage(null);
-    return ResponseEntity.status(HttpStatus.CREATED).body(postMapper.convertToPostDtoDefault(postService.save(
-            postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username));
+    PostDto.Response.WithAuthor responseDto = postMapper.convertToPostDtoDefault(postService.save(
+            postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username);
+    messagingTemplate.convertAndSend(TOPIC_POSTS, responseDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
   }
 
   @PostMapping("/edit")

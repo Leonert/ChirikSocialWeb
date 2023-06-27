@@ -2,6 +2,7 @@ package com.socialnetwork.api.service.authorized;
 
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
+import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.models.additional.View;
 import com.socialnetwork.api.models.base.Hashtag;
 import com.socialnetwork.api.models.base.Post;
@@ -16,25 +17,37 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.Objects;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.socialnetwork.api.util.Constants.WebSocket.QUEUE_NOTIFICATION;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
+  private final ViewRepository viewRepository;
   private final PostRepository postRepository;
   private final UserService userService;
   private final CloudinaryService cloudinaryService;
   private final HashtagService hashtagService;
   private final NotificationService notificationService;
   private final ModelMapper modelMapper;
-  private final ViewRepository viewRepository;
+  private final NotificationMapper notificationMapper;
+  private final SimpMessagingTemplate messagingTemplate;
+
+  public Optional<Post> findById(int id) {
+    return postRepository.findById(id);
+  }
 
   public Post getReferenceById(int id) throws NoPostWithSuchIdException {
     if (!postRepository.existsById(id)) {
@@ -58,12 +71,23 @@ public class PostService {
                   hashtagService.save(hashtag);
                 },
                 () -> hashtagService.save(new Hashtag(h, 1))
-              )
+        )
       );
     }
 
     postRepository.save(post);
-    notificationService.saveReplyRetweet(post);
+
+    if (post.getOriginalPost() != null
+            && !Objects.equals(post.getAuthor().getUsername(), post.getOriginalPost().getAuthor().getUsername())) {
+      notificationService.saveReplyRetweet(post)
+              .ifPresent(notification ->
+                      messagingTemplate.convertAndSendToUser(
+                              post.getOriginalPost().getAuthor().getUsername(),
+                              QUEUE_NOTIFICATION,
+                              notificationMapper.mapNotification(notification))
+        );
+    }
+
     return post;
   }
 
@@ -94,6 +118,13 @@ public class PostService {
     return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))).toList();
   }
 
+  public List<Post> getFollowingPosts(int page, int postsNumber, List<User> followings) {
+    return postRepository.findAllByAuthorIn(
+            followings,
+            PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))
+    );
+  }
+
   public List<Post> getUnviewedPosts(int page, int postsNumber, String currentUserUsername)
           throws NoUserWithSuchCredentialsException {
     return postRepository.findAllPostsUnViewedByUser(userService.findByUsername(currentUserUsername).getId(),
@@ -120,10 +151,6 @@ public class PostService {
             .skip(page * usersForPage).limit(usersForPage)
             .peek(f -> f.setCurrUserFollower(userService.isFollowed(currentUser, f)))
             .toList();
-  }
-
-  public boolean existsById(Integer postId) {
-    return postRepository.existsById(postId);
   }
 
   public int countPostRetweets(int id) {

@@ -32,6 +32,7 @@ const SideMenu = () => {
   const handleClickOpenAddTweet = () => {
     setVisibleAddTweet(true);
   };
+
   const onCloseAddTweet = () => {
     setVisibleAddTweet(false);
   };
