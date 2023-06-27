@@ -9,14 +9,10 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:8080/api/login
+GET localhost:8080/api/posts/following
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2bGFkbGVuYSIsImlhdCI6MTY4Nzg5MTkwNywiZXhwIjoxNjg4NzU1OTA3fQ.WSaVIbDhNK6oAe76wFPL3TJWwYfI8vzcMAUM2rdRuzZz-f1ohjfQzSPcaDF7XZN-02rjrIGn3oNuCx7kbJGsPw
 
-{
-  "emailAddress": "vladlena@gmail.com",
-  "password": "1",
-  "rememberMe": true
-}
 
 ###
 POST localhost:8080/api/registration/save-user

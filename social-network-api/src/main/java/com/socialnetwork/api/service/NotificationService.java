@@ -1,11 +1,14 @@
 package com.socialnetwork.api.service;
 
+import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.models.additional.NotificationType;
 import com.socialnetwork.api.models.base.Notification;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.repository.NotificationRepository;
 import com.socialnetwork.api.repository.PostRepository;
+import com.socialnetwork.api.repository.UserRepository;
+import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,7 @@ public class NotificationService {
 
   private final NotificationRepository notificationRepository;
   private final PostRepository postRepository;
+  private final UserRepository userRepository;
 
   public Optional<Notification> saveReplyRetweet(Post post) {
     if (post.getOriginalPost() != null && post.getText() != null && post.getImage() == null) {
@@ -34,12 +38,12 @@ public class NotificationService {
     return notificationRepository.save(new Notification(user, currentUser, null, NotificationType.FOLLOWER));
   }
 
-  public Optional<Notification> saveLike(int userId, int postId) {
+  public Optional<Notification> saveLike(int userId, int postId) throws NoUserWithSuchCredentialsException {
     Post post = postRepository.getReferenceById(postId);
 
     if (userId != post.getAuthor().getId()) {
       return Optional.of(notificationRepository.save(
-              new Notification(post.getAuthor(), new User(userId), post, NotificationType.LIKE)
+              new Notification(post.getAuthor(), userRepository.findById(userId).get(), post, NotificationType.LIKE)
       ));
     }
 

@@ -24,7 +24,7 @@ function Home() {
   const { user } = useSelector((state) => state.auth);
   const matches = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
-  const onPostAdded = (post) => {
+  const onSocketChanged = (post) => {
     dispatch(tweetedPost(post));
   };
 
@@ -32,7 +32,7 @@ function Home() {
     <Grid container sx={{ margin: '0', paddingTop: '0' }}>
       <Grid item xs={12} md={7} sx={{ paddingTop: '0' }}>
         <HeaderMain />
-        <SockJsClient url={SOCKET_URL} topics={['/topic/posts']} onMessage={onPostAdded} debug={false} />
+        <SockJsClient url={SOCKET_URL} topics={['/topic/posts']} onMessage={onSocketChanged} />
         {user && <ButtonShowMore />}
         {recommendation && <PostList apiUrl="api/posts?" />}
         {following && <Following />}

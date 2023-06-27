@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SockJsClient from 'react-stomp';
-
 import {
   addNotification,
   getNotifications,
@@ -14,6 +13,7 @@ import { useStylesListNotification } from './LitsNotificationStyle';
 
 export const ListNotifications = () => {
   const classes = useStylesListNotification();
+  const username = useSelector((state) => state.auth.user?.username || "");
   const { list, loading } = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
 
@@ -26,21 +26,18 @@ export const ListNotifications = () => {
   }, []);
 
   const onSocketChange = (notification) => {
-    console.log(notification);
     dispatch(addNotification(notification));
   };
 
   return (
     <ul className={classes.list}>
-      <SockJsClient url={SOCKET_URL} topics={['/user/queue/notifications']} onMessage={onSocketChange} debug={false} />
-      {list.length === 0 && loading ? (
+      <SockJsClient url={SOCKET_URL} topics={[`/user/${username}/queue/notification`]} onMessage={onSocketChange}/>
+        {list.length === 0 && loading ? (
         <Spinner />
       ) : (
-        <>
-          {list.map((notification, index) => {
+          list.map((notification, index) => {
             return <ItemNotification key={index} notification={notification} />;
-          })}
-        </>
+          })
       )}
     </ul>
   );

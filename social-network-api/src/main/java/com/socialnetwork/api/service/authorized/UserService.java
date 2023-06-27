@@ -31,6 +31,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.socialnetwork.api.util.Constants.Image.BASE_64_PREFIX;
+import static com.socialnetwork.api.util.Constants.WebSocket.QUEUE_NOTIFICATION;
 
 @Service
 @RequiredArgsConstructor
@@ -163,6 +164,7 @@ public class UserService {
     return userToUpdate;
   }
 
+
   public boolean followUnfollow(String username, String currentUserUsername) throws NoUserWithSuchCredentialsException {
     User user = findByUsername(username);
     User currentUser = findByUsername(currentUserUsername);
@@ -170,7 +172,7 @@ public class UserService {
       followsRepository.save(new Follow(currentUser, user));
       messagingTemplate.convertAndSendToUser(
               username,
-              "/queue/notifications",
+              QUEUE_NOTIFICATION,
               notificationMapper.mapNotification(notificationService.saveFollow(currentUser, user))
       );
       return true;

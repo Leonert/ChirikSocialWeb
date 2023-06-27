@@ -6,8 +6,6 @@ export const getBookmarks = createAsyncThunk('posts/getBookmarks', async (_, { r
   try {
     const { data } = await axiosIns.get('/api/bookmarks');
 
-    console.log(data);
-
     return data;
   } catch (error) {
     return rejectWithValue(error.response.data.message);

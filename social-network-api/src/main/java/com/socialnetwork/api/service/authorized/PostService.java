@@ -21,13 +21,15 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.Objects;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_NOTIFICATIONS;
+import static com.socialnetwork.api.util.Constants.WebSocket.QUEUE_NOTIFICATION;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,10 @@ public class PostService {
   private final ModelMapper modelMapper;
   private final NotificationMapper notificationMapper;
   private final SimpMessagingTemplate messagingTemplate;
+
+  public Optional<Post> findById(int id) {
+    return postRepository.findById(id);
+  }
 
   public Post getReferenceById(int id) throws NoPostWithSuchIdException {
     if (!postRepository.existsById(id)) {
@@ -65,16 +71,22 @@ public class PostService {
                   hashtagService.save(hashtag);
                 },
                 () -> hashtagService.save(new Hashtag(h, 1))
-              )
+        )
       );
     }
 
     postRepository.save(post);
-    notificationService.saveReplyRetweet(post)
-            .ifPresent(notification -> messagingTemplate.convertAndSend(
-                    TOPIC_NOTIFICATIONS,
-                    notificationMapper.mapNotification(notification))
-      );
+
+    if (post.getOriginalPost() != null
+            && !Objects.equals(post.getAuthor().getUsername(), post.getOriginalPost().getAuthor().getUsername())) {
+      notificationService.saveReplyRetweet(post)
+              .ifPresent(notification ->
+                      messagingTemplate.convertAndSendToUser(
+                              post.getOriginalPost().getAuthor().getUsername(),
+                              QUEUE_NOTIFICATION,
+                              notificationMapper.mapNotification(notification))
+        );
+    }
 
     return post;
   }
@@ -104,6 +116,13 @@ public class PostService {
 
   public List<Post> getPosts(int page, int postsNumber) {
     return postRepository.findAll(PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))).toList();
+  }
+
+  public List<Post> getFollowingPosts(int page, int postsNumber, List<User> followings) {
+    return postRepository.findAllByAuthorIn(
+            followings,
+            PageRequest.of(page, postsNumber, Sort.by(Sort.Direction.DESC, "createdDate"))
+    );
   }
 
   public List<Post> getUnviewedPosts(int page, int postsNumber, String currentUserUsername)

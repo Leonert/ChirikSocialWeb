@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_NOTIFICATIONS;
+import static com.socialnetwork.api.util.Constants.WebSocket.QUEUE_NOTIFICATION;
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +24,21 @@ public class LikeService {
 
   private final LikeRepository likeRepository;
   private final UserService userService;
+  private final PostService postService;
   private final NotificationService notificationService;
   private final PostRepository postRepository;
   private final NotificationMapper notificationMapper;
   private final SimpMessagingTemplate messagingTemplate;
 
-  public boolean likeUnlike(int userId, int postId) {
+  public boolean likeUnlike(int userId, int postId) throws NoUserWithSuchCredentialsException {
     if (!existsByIds(userId, postId)) {
       save(userId, postId);
       notificationService.saveLike(userId, postId)
-              .ifPresent(notification -> messagingTemplate.convertAndSend(
-                      TOPIC_NOTIFICATIONS,
-                      notificationMapper.mapNotification(notification))
+              .ifPresent(notification ->
+                messagingTemplate.convertAndSendToUser(
+                        postService.findById(postId).get().getAuthor().getUsername(),
+                        QUEUE_NOTIFICATION,
+                        notificationMapper.mapNotification(notification))
         );
       return true;
     } else {

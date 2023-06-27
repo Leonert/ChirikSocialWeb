@@ -11,7 +11,9 @@ import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
+import com.socialnetwork.api.models.additional.Follow;
 import com.socialnetwork.api.models.base.Post;
+import com.socialnetwork.api.models.base.User;
 import com.socialnetwork.api.security.CurrentUser;
 import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.BookmarkService;
@@ -93,6 +95,33 @@ public class PostController extends Controller {
       outcome.add(postMapper.convertToPostDtoDefault(post, username));
     }
     return getListResponseEntity(outcome);
+  }
+
+  @GetMapping("/following")
+  public ResponseEntity<List<? extends DtoInterface>>
+    getFollowingFeed(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> pageParam,
+                     @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsQuantityParam,
+                     @CurrentUser UserPrincipal currentUser)
+          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
+    int page = pageParam.orElse(PAGE_NUMBER_DEFAULT);
+    int results = postsQuantityParam.orElse(POSTS_PER_PAGE_DEFAULT);
+
+    if (currentUser == null) {
+      throw new AccessDeniedException();
+    }
+
+    String username = currentUser.getUsername();
+    List<User> followings = userService.findByUsername(username)
+            .getFollowed()
+            .stream()
+            .map(Follow::getFollowedUser)
+            .toList();
+
+    return getListResponseEntity(postMapper.mapForListing(
+                    postService.getFollowingPosts(page, results, followings),
+                    username
+            )
+    );
   }
 
   @GetMapping("/{id}/replies")
