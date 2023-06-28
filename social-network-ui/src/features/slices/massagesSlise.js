@@ -5,15 +5,13 @@ import axiosIns from "../../axiosInstance";
 
 export const sendMessage = createAsyncThunk(
     'api/messages/sendMessage',
-    async ({ chatId, message,authorId ,senderUsername, recipientUsername }, { getState, dispatch }) => {
+    async ({ chatId, message, authorId, senderUsername, recipientUsername }, { getState, dispatch }) => {
         const state = getState();
         const trimmedMessage = message.trim();
         const chatIndex = state.messages.chats.findIndex((chat) => chat.chatId === chatId);
 
-
         if (chatIndex !== -1) {
             const chat = state.messages.chats[chatIndex];
-
 
             const messageDto = {
                 chatId,
@@ -29,6 +27,8 @@ export const sendMessage = createAsyncThunk(
             const createdMessage = response.data;
             createdMessage.messageId = createdMessage.messageId || null;
 
+            createdMessage.senderUsername = senderUsername;
+
             dispatch(addChatMessage({ chatId, message: createdMessage }));
 
             return {
@@ -37,10 +37,10 @@ export const sendMessage = createAsyncThunk(
                 senderId: chat.senderId,
                 recipientId: chat.recipientId,
             };
-
         }
     }
 );
+
 
 
 export const fetchChat = createAsyncThunk(

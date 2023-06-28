@@ -59,7 +59,7 @@ const Messages = ({ chatId, senderId }) => {
         axiosIns
           .delete(`/api/messages/chats/${chatId}`)
           .then((response) => {
-            // dispatch(fetchChat());
+
             setStatus(true);
             setError(null);
           })
@@ -94,7 +94,6 @@ const Messages = ({ chatId, senderId }) => {
     dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
-    // dispatch(fetchChat());
     dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
     dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
   };
@@ -262,7 +261,6 @@ const Messages = ({ chatId, senderId }) => {
               </>
             ) : (
               <>
-                <div className={classes.searchWrapper}></div>
                 <List component="nav" className={classes.list} aria-label="main mailbox folders">
                   {groupedChats.map((group, index) =>
                     group && group.chats && group.chats.length > 0 ? (

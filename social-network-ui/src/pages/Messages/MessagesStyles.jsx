@@ -6,8 +6,16 @@ export const useMessagesStyles = makeStyles((theme) => ({
   grid: {
     padding: "12px 0px 0px 0px !important",
   },
+  messagesContainer: {
+    "& .MuiPaper-outlined": {
+      padding: 0,
+      borderRadius: 0,
+      minHeight: '100vh',
+      borderTop: 0,
+      borderBottom: 0,
+    },
+  },
   header: {
-
     height: 47,
     zIndex: 1,
     borderTop: 0,
@@ -114,8 +122,14 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   chatContainer: {
     minWidth: 600,
-    padding: 0,
-    borderLeft: 0,
+    "& .MuiPaper-outlined": {
+      padding: 0,
+      borderRadius: 0,
+      minHeight: '100vh',
+      borderLeft: 0,
+      borderTop: 0,
+      borderBottom: 0,
+    },
   },
   chatInfoWrapper: {
     width: 320,
@@ -328,9 +342,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
   chatFooter: {
     display: 'flex',
     position: 'fixed',
-    bottom: 3,
     width: 598,
-    padding: 4,
+    padding: 5,
     borderRight: 0,
     borderLeft: 0,
     borderBottom: 0,
