@@ -14,12 +14,13 @@ const AsideRecommendFollows = () => {
     setLoading(true);
     try {
       const { data } = await axiosIns.get('api/users/connect?n=3');
-      setRecommendedUsers(data);
+      setRecommendedUsers(data || []);
     } catch (e) {
       return json(e);
     }
     setLoading(false);
   };
+
   useEffect(() => {
     fetchRecommendedUsers();
   }, []);
