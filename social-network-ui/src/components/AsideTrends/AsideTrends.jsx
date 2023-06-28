@@ -14,7 +14,7 @@ const AsideTrends = () => {
     setLoading(true);
     try {
       const { data } = await axiosIns.get('api/trends/hashtags?n=10&p=0');
-      setRecommendedTrends(data);
+      setRecommendedTrends(data || []);
     } catch (e) {
       return json(e);
     }

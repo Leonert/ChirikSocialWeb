@@ -153,9 +153,11 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
       dispatch(handleRegistrationModal(true));
     }
   };
+
   const handleClose = () => {
     setOpenModal(false);
   };
+
   const handleClickDelete = (props) => {
     if (user) {
       axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
@@ -169,6 +171,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
       dispatch(handleRegistrationModal(true));
     }
   };
+
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
