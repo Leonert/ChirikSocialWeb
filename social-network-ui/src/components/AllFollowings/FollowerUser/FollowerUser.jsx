@@ -1,18 +1,26 @@
 import { Avatar, Box, ListItem, Typography } from '@mui/material';
 import { useCallback, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { handleLoginModal, handleModal } from '../../../features/slices/authModalSlice';
 import { followUser } from '../../../features/slices/userDatas/followingSlice';
 import { CustomButton } from '../../Login/CustomButton';
 
 export const FollowerUser = ({ user }) => {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.auth.user.username);
+  const currentUser = useSelector((state) => state.auth.user?.username);
   const { profileImage, name, username, currUserFollower } = user;
 
   const handleFollow = useCallback(() => {
-    dispatch(followUser({ user }));
+    if (currentUser) {
+      dispatch(followUser({ user }));
+    } else {
+      dispatch(handleLoginModal(true));
+      dispatch(handleModal(true));
+      toast('You need to login');
+    }
   }, []);
 
   useEffect(() => {}, [currUserFollower]);
@@ -72,6 +80,7 @@ export const FollowerUser = ({ user }) => {
           </Typography>
         </CustomButton>
       </Box>
+      <Toaster />
     </ListItem>
   );
 };
