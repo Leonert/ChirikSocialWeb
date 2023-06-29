@@ -83,17 +83,21 @@ public class PostController extends Controller {
           throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
+
     if (currentUser == null) {
       return getListResponseEntity(nonAuthPostMapper.mapForListing(
               nonAuthPostService.getPosts(pageD, resultsD)));
     }
+
     String username = currentUser.getUsername();
     List<PostDto.Response.WithAuthor> outcome = new ArrayList<>();
     List<Post> posts = showViewedPosts.orElse(false) ? postService.getPosts(pageD, resultsD)
             : postService.getUnviewedPosts(pageD, resultsD, username);
+
     for (Post post : posts) {
       outcome.add(postMapper.convertToPostDtoDefault(post, username));
     }
+
     return getListResponseEntity(outcome);
   }
 
@@ -102,7 +106,7 @@ public class PostController extends Controller {
     getFollowingFeed(@RequestParam(PAGE_NUMBER_QUERY) Optional<Integer> pageParam,
                      @RequestParam(RESULTS_PER_PAGE_QUERY) Optional<Integer> postsQuantityParam,
                      @CurrentUser UserPrincipal currentUser)
-          throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException, AccessDeniedException {
+          throws NoUserWithSuchCredentialsException, AccessDeniedException {
     int page = pageParam.orElse(PAGE_NUMBER_DEFAULT);
     int results = postsQuantityParam.orElse(POSTS_PER_PAGE_DEFAULT);
 
@@ -165,11 +169,14 @@ public class PostController extends Controller {
           throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersForPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+
     if (currentUser == null) {
       return getListResponseEntity(nonAuthUserMapper.mapForListing(nonAuthLikeService.getLikes(id,
               pageD, resultsD)));
     }
+
     String currentUserUsername = currentUser.getUsername();
+
     return getListResponseEntity(userMapper.mapForListing(likeService.getLikes(id,
             currentUserUsername, pageD, resultsD), currentUserUsername));
   }
@@ -180,19 +187,23 @@ public class PostController extends Controller {
           throws NoPostWithSuchIdException, NoUserWithSuchCredentialsException, PostWithNoDataException {
     Integer id = postDto.getOriginalPost();
     String username = currentUser.getUsername();
+
     if (id == null && postDto.getImage() == null && postDto.getText() == null) {
       throw new PostWithNoDataException();
     }
+
     if (id != null && postDto.getText() == null && postDto.getImage() == null
             && postService.isRetweetedByUser(userService.findByUsername(username).getId(), id)) {
       postService.deleteUserRetweet(userService.findByUsername(username).getId(), id);
       return ResponseEntity.status(HttpStatus.OK).body(postService.countPostRetweets(id));
     }
+
     String image = postDto.getImage();
     postDto.setImage(null);
     PostDto.Response.WithAuthor responseDto = postMapper.convertToPostDtoDefault(postService.save(
             postMapper.convertToPost(postDto, userService.findByUsername(username)), image), username);
     messagingTemplate.convertAndSend(TOPIC_POSTS, responseDto);
+
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
   }
 
@@ -203,6 +214,7 @@ public class PostController extends Controller {
     Post post = postService.getReferenceById(postDto.getId());
     String username = currentUser.getUsername();
     checkAuthenticationForPost(post, username);
+
     return ResponseEntity.status(202).body(postMapper.convertToPostDtoDefault(
             postService.edit(postMapper.convertToPost(postDto), post), username));
   }
@@ -214,6 +226,7 @@ public class PostController extends Controller {
     Post post = postService.getReferenceById(id);
     checkAuthenticationForPost(post, currentUser.getUsername());
     postService.delete(post);
+
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
