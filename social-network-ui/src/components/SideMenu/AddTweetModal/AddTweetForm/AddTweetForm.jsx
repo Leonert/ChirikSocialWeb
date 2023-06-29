@@ -71,7 +71,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
       if (window.location.pathname !== "/") {
         dispatch(tweetedPost(res.data));
       }
-      handleCloseMenu();
+      handleCloseMenu ? () => handleCloseMenu() : null;
     });
 
     setText('');
