@@ -1,3 +1,7 @@
+import toast from 'react-hot-toast';
+
+export const notify = (text) => toast(text);
+
 function createFollowerNotification(notification) {
   const { name, profileImage, username, timestamp } = notification.initiator;
   const message = `${name} subscribed to you.`;

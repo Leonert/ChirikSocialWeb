@@ -30,7 +30,7 @@ const notificationsSlice = createSlice({
       state.list = [];
     },
     addNotification: (state, action) => {
-      return { ...state, list: [...state.list, action.payload] };
+      state.list = [action.payload, ...state.list];
     },
   },
   extraReducers: {
