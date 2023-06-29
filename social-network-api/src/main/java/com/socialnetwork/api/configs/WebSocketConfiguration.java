@@ -21,7 +21,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry.addEndpoint("/websocket")
-            .setAllowedOrigins("http://localhost:3000")
+            .setAllowedOrigins("http://localhost:3000", "https://chirik.vercel.app")
             .withSockJS();
   }
 }
