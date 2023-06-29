@@ -19,11 +19,8 @@ import java.util.List;
 public class NonAuthPostMapper {
 
   private final ModelMapper modelMapper;
-
   private final NonAuthLikeService nonAuthLikeService;
-
   private final BookmarkService bookmarkService;
-
   private final NonAuthPostService nonAuthPostService;
 
   public NonAuthPostDto.Response.WithAuthor convertToPostDtoDefault(Post post) throws NoPostWithSuchIdException {

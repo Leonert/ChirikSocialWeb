@@ -173,6 +173,7 @@ export default function Post(props) {
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
           <CardContentWrapper
+       
             sx={{
               display: 'flex',
               justifyContent: 'space-around',
@@ -227,6 +228,7 @@ export default function Post(props) {
         )
       ) : props.originalPost || props.IdentifierOriginal ? null : (
         <CardContentWrapper
+          
           sx={{
             display: 'flex',
             justifyContent: 'space-around',

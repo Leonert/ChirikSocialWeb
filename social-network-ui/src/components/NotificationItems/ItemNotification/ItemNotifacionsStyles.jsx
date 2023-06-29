@@ -4,11 +4,12 @@ export const useStylesItemNotification = makeStyles((theme) =>
   createStyles({
     item: {
       padding: '20px 20px 20px 40px',
-      border: '1px solid #eceff1',
+      border: '1px solid rgba(0, 0, 0, 0.1)',
 
       borderCollapse: 'collapse',
       '&:hover': {
-        backgroundColor: '#eceff1',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        border: `1px solid transparent`,
       },
     },
 
@@ -36,7 +37,7 @@ export const useStylesItemNotification = makeStyles((theme) =>
       width: '40px',
       height: '40px',
       fontSize: '20px',
-      color: 'black',
+      color: '#000000',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -44,12 +45,12 @@ export const useStylesItemNotification = makeStyles((theme) =>
     username: {
       display: 'inline-block',
       fontSize: '16px',
-      color: 'black',
+      color: theme.palette.text.primary,
       marginBottom: '14px',
     },
     content: {
-      fontSize: '12px',
-      color: 'black',
+      fontSize: '14px',
+      color: theme.palette.text.primary,
     },
     post: {
       fontWeight: 600,

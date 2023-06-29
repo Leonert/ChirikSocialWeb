@@ -42,10 +42,6 @@ public class PostMapper {
     return modelMapper.map(postDto, Post.class);
   }
 
-  public Post convertToPost(PostDto.Request.Default postDto) {
-    return modelMapper.map(postDto, Post.class);
-  }
-
   public List<PostDto.Response.WithAuthor> mapForListing(List<Post> posts, String currentUserUsername) {
     return posts.stream().map(p -> {
       try {

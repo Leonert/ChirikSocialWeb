@@ -26,6 +26,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_MESSAGES;
+import static com.socialnetwork.api.util.Constants.WebSocket.TOPIC_MESSAGE;
+
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
@@ -113,7 +116,7 @@ public class MessagesController {
   @DeleteMapping("/chats/{chatId}")
   public ResponseEntity<Void> deleteChat(@PathVariable("chatId") int chatId) {
     messageService.deleteChat(chatId);
-    messagingTemplate.convertAndSend("/topic/messages", chatId);
+    messagingTemplate.convertAndSend(TOPIC_MESSAGES, chatId);
 
     return ResponseEntity.noContent().build();
   }
@@ -128,7 +131,7 @@ public class MessagesController {
 
     chatDto.setChatId(createdMessageDto.getChatId());
     chatDto.addMessage(createdMessageDto);
-    messagingTemplate.convertAndSend("/topic/messages", chatDto);
+    messagingTemplate.convertAndSend(TOPIC_MESSAGES, chatDto);
     return ResponseEntity.created(URI.create("/api/messages/chats/"
             + createdMessageDto.getChatId())).body(chatDto);
   }
@@ -148,7 +151,7 @@ public class MessagesController {
 
     MessageDto createdMessageDto = messageService.addMessage(messageDto, chatDto);
     List<MessageDto> updatedMessages = messageService.getMessagesByChatId(chatId);
-    messagingTemplate.convertAndSend("/topic/message", updatedMessages);
+    messagingTemplate.convertAndSend(TOPIC_MESSAGE, updatedMessages);
 
     return ResponseEntity.created(URI.create("/api/messages/"
             + createdMessageDto.getMessageId())).body(createdMessageDto);

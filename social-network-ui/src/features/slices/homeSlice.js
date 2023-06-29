@@ -153,7 +153,7 @@ const homeSlice = createSlice({
   },
   extraReducers: {
     [getBookmarks.fulfilled]: (state, action) => {
-      state.post = [...action.payload];
+      state.post = action.payload;
     },
   },
 });

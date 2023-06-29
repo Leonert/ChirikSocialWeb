@@ -13,20 +13,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
+
   private final UserService userService;
   private final NotificationMapper notificationMapper;
 
   @GetMapping()
   public ResponseEntity<List<NotificationDto>> getUserNotifications(@CurrentUser UserPrincipal currentUser)
-        throws NoUserWithSuchCredentialsException {
-    return getListResponseEntity(notificationMapper.mapNotifications(userService.findByUsername(
-          currentUser.getUsername()).getNotifications()));
+          throws NoUserWithSuchCredentialsException {
+    List<NotificationDto> notifications = new ArrayList<>(notificationMapper.mapNotifications(userService.findByUsername(
+            currentUser.getUsername()).getNotifications()));
+    Collections.reverse(notifications);
+    return getListResponseEntity(notifications);
   }
 
   private ResponseEntity<List<NotificationDto>> getListResponseEntity(List<NotificationDto> list) {

@@ -24,6 +24,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
   List<Post> findAllByOriginalPostAndTextIsNotNull(Post post, Pageable pageable);
 
+  List<Post> findAllByAuthorIn(List<User> authors, Pageable pageable);
+
   @Transactional
   void deletePostByAuthorAndOriginalPostAndTextIsNullAndImageIsNull(User author, Post originalPost);
 

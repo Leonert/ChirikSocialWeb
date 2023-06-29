@@ -16,9 +16,7 @@ import java.util.List;
 public class UserMapper {
 
   private final ModelMapper modelMapper;
-
   private final PostMapper postMapper;
-
   private final UserService userService;
 
   public User convertToUser(UserDto.Request.Registration userDto) {

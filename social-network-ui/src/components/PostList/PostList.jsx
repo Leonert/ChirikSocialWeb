@@ -50,7 +50,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
         setPosts((prevPosts) => {
           const updatedPosts = [...prevPosts, ...filteredPosts];
           const uniquePosts = updatedPosts.filter(
-            (post, index, self) => self.findIndex((p) => p.id === post.id) === index
+              (post, index, self) => self.findIndex((p) => p.id === post.id) === index
           );
 
           return uniquePosts;
@@ -86,23 +86,23 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
 
       if (response.status === 200) {
         setPosts((prevPosts) =>
-          prevPosts
-            .map((post) => {
-              if (+post.id === +id) {
-                return {
-                  ...post,
-                  retweeted: false,
-                  retweetsNumber: response.data,
-                };
-              } else if (post.originalPost && +post.originalPost.id === +id) {
-                return null;
-              } else {
-                return post;
-              }
-            })
-            .filter(Boolean)
+            prevPosts
+                .map((post) => {
+                  if (+post.id === +id) {
+                    return {
+                      ...post,
+                      retweeted: false,
+                      retweetsNumber: response.data,
+                    };
+                  } else if (post.originalPost && +post.originalPost.id === +id) {
+                    return null;
+                  } else {
+                    return post;
+                  }
+                })
+                .filter(Boolean)
         );
-      } else if (response.status === 201) {
+      } else if (response.status === 201 && window.location.pathname !== "/") {
         if (!isBookmarkPage && !isreplypage)
           setPosts((prevPosts) => [
             {
@@ -120,6 +120,20 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
               }
             }),
           ]);
+      } else if (response.status === 201 && window.location.pathname === "/") {
+        setPosts((prevPosts) => [
+          ...prevPosts.map((post) => {
+            if (+post.id === +id) {
+              return {
+                ...post,
+                retweeted: true,
+                retweetsNumber: response.data.originalPost.retweetsNumber,
+              };
+            } else {
+              return post;
+            }
+          }),
+        ]);
       }
     } else {
       dispatch(handleRegistrationModal(true));
@@ -134,48 +148,51 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
       dispatch(handleRegistrationModal(true));
     }
   };
+
   const handleClose = () => {
     setOpenModal(false);
   };
+
   const handleClickDelete = (props) => {
     if (user) {
       axiosIns.delete(`/api/posts/${props}`, {}).then((response) => {
         setPosts((prevPosts) =>
-          prevPosts.filter(
-            (post) => post.id && +post.id !== +props && (!post.originalPost || +post.originalPost.id !== +props)
-          )
+            prevPosts.filter(
+                (post) => post.id && +post.id !== +props && (!post.originalPost || +post.originalPost.id !== +props)
+            )
         );
       });
     } else {
       dispatch(handleRegistrationModal(true));
     }
   };
+
   const handleLike = (props) => {
     if (user) {
       axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
         setPosts((prevPosts) =>
-          prevPosts.map((post) => {
-            if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
-              if (+post.id === +props) {
-                return {
-                  ...post,
-                  liked: !post.liked,
-                  likesNumber: response.data,
-                };
-              } else {
-                return {
-                  ...post,
-                  originalPost: {
-                    ...post.originalPost,
-                    liked: !post.originalPost.liked,
+            prevPosts.map((post) => {
+              if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
+                if (+post.id === +props) {
+                  return {
+                    ...post,
+                    liked: !post.liked,
                     likesNumber: response.data,
-                  },
-                };
+                  };
+                } else {
+                  return {
+                    ...post,
+                    originalPost: {
+                      ...post.originalPost,
+                      liked: !post.originalPost.liked,
+                      likesNumber: response.data,
+                    },
+                  };
+                }
               }
-            }
 
-            return post;
-          })
+              return post;
+            })
         );
         lickedProfile && setPosts((prevPosts) => prevPosts.filter((post) => +post.id !== +props));
       });
@@ -189,28 +206,28 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
       axiosIns.post(`/api/posts/${props}/bookmarks`, {}).then((response) => {
         const bookmarksNum = response.data;
         setPosts((prevPosts) =>
-          prevPosts.map((post) => {
-            if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
-              if (+post.id === +props) {
-                return {
-                  ...post,
-                  bookmarked: !post.bookmarked,
-                  bookmarksNumber: bookmarksNum,
-                };
-              } else {
-                return {
-                  ...post,
-                  originalPost: {
-                    ...post.originalPost,
-                    bookmarked: !post.originalPost.bookmarked,
+            prevPosts.map((post) => {
+              if (+post.id === +props || (post.originalPost && +post.originalPost.id === +props)) {
+                if (+post.id === +props) {
+                  return {
+                    ...post,
+                    bookmarked: !post.bookmarked,
                     bookmarksNumber: bookmarksNum,
-                  },
-                };
+                  };
+                } else {
+                  return {
+                    ...post,
+                    originalPost: {
+                      ...post.originalPost,
+                      bookmarked: !post.originalPost.bookmarked,
+                      bookmarksNumber: bookmarksNum,
+                    },
+                  };
+                }
               }
-            }
 
-            return post;
-          })
+              return post;
+            })
         );
       });
     } else {

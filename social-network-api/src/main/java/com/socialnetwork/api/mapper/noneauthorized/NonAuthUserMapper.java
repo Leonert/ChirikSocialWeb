@@ -5,7 +5,6 @@ import com.socialnetwork.api.dto.noneauthorized.NonAuthUserDto;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.models.base.Post;
 import com.socialnetwork.api.models.base.User;
-import com.socialnetwork.api.service.noneauthorized.NonAuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -19,8 +18,6 @@ public class NonAuthUserMapper {
   private final ModelMapper modelMapper;
 
   private final NonAuthPostMapper nonAuthPostMapper;
-
-  private final NonAuthUserService nonAuthUserService;
 
   public List<NonAuthUserDto.Response.Listing> mapForListing(List<User> users) {
     return users.stream().map(u -> modelMapper.map(u, NonAuthUserDto.Response.Listing.class)).toList();

@@ -21,9 +21,9 @@ export const Following = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
-    if (followingUsers.length === 0) {
-      dispatch(loadFollowing({ username }));
-    }
+    // if (followingUsers.length === 0) {
+    dispatch(loadFollowing({ username }));
+    // }
 
     return () => {
       dispatch(removeFollowingUsers());
@@ -67,7 +67,7 @@ export const Following = () => {
         <List
           sx={{
             width: '100%',
-            backgroundColor: 'white',
+            backgroundColor: 'rgb(21, 32, 43)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

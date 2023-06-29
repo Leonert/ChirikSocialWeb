@@ -17,4 +17,8 @@ public class NotificationMapper {
   public List<NotificationDto> mapNotifications(List<Notification> notifications) {
     return notifications.stream().map(n -> modelMapper.map(n, NotificationDto.class)).toList();
   }
+
+  public NotificationDto mapNotification(Notification notification) {
+    return modelMapper.map(notification, NotificationDto.class);
+  }
 }

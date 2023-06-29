@@ -29,6 +29,9 @@ const notificationsSlice = createSlice({
     removeNotifications: (state, actions) => {
       state.list = [];
     },
+    addNotification: (state, action) => {
+      state.list = [action.payload, ...state.list];
+    },
   },
   extraReducers: {
     [getNotifications.pending]: (state, action) => {
@@ -38,7 +41,7 @@ const notificationsSlice = createSlice({
     [getNotifications.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      state.list = action.payload;
+      state.list = action.payload === '' ? [] : action.payload;
     },
     [getNotifications.rejected]: (state, action) => {
       state.loading = false;
@@ -48,4 +51,4 @@ const notificationsSlice = createSlice({
 });
 
 export const notificationsReducer = notificationsSlice.reducer;
-export const { removeNotifications } = notificationsSlice.actions;
+export const { removeNotifications, addNotification } = notificationsSlice.actions;

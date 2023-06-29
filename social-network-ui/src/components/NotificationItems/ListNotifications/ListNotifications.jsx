@@ -11,6 +11,10 @@ export const ListNotifications = () => {
   const { list, loading } = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
 
+  function convertToMilliseconds(timestamp) {
+    return Date.parse(timestamp);
+  }
+
   useEffect(() => {
     dispatch(getNotifications());
 
@@ -25,7 +29,7 @@ export const ListNotifications = () => {
         <Spinner />
       ) : (
         list.map((notification, index) => {
-          return <ItemNotification key={index} notification={notification} />;
+          return <ItemNotification key={convertToMilliseconds(notification.timestamp)} notification={notification} />;
         })
       )}
     </ul>
