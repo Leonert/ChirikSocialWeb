@@ -11,11 +11,11 @@ export const ProfileLicked = (author) => {
     try {
       const response = await axiosIns.get(`/api/users/p/${data.username}/liked`);
       const lick = response.data;
-
+      const lickPost = [...lick].reverse();
       if (response.status === 204) {
         setPosts([]);
       } else {
-        setPosts(lick);
+        setPosts(lickPost);
       }
     } catch (e) {
       return { Error: e };

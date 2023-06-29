@@ -5,7 +5,7 @@ import AddTweetForm from './AddTweetForm/AddTweetForm';
 import CloseButton from './AddTweetForm/CloseButton/CloseButton';
 import { useAddTweetModalStyles } from './AddTweetModalStyles';
 
-function AddTweetModal({ title, visible, onClose }) {
+function AddTweetModal({ title, visible, onClose, handleCloseMenu }) {
   const classes = useAddTweetModalStyles();
 
   return (
@@ -15,7 +15,13 @@ function AddTweetModal({ title, visible, onClose }) {
         {title}
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        <AddTweetForm minRows={6} title={"What's happening?"} buttonName={'Tweet'} onCloseModal={onClose} />
+        <AddTweetForm
+          minRows={6}
+          title={"What's happening?"}
+          buttonName={'Tweet'}
+          onCloseModal={onClose}
+          handleCloseMenu={handleCloseMenu}
+        />
       </DialogContent>
     </Dialog>
   );

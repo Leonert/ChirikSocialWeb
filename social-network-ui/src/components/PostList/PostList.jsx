@@ -227,7 +227,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
       {openModal && (
         <ReplayModal openModal={openModal} handleClose={handleClose} posts={posts} onSendRequest={handleSendRequest} />
       )}
-      <div style={{ marginBottom: '40px' }}>
+      <div style={{ marginBottom: '40px', marginTop: posts.length === 0 && isBookmarkPage ? '50%' : '0' }}>
         <InfiniteScroll
           dataLength={posts.length}
           next={fetchPosts}

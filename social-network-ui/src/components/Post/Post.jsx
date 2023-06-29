@@ -5,6 +5,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import { Badge, Box, Card, CardContent, CardHeader, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -172,7 +173,6 @@ export default function Post(props) {
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
           <CardContentWrapper
-       
             sx={{
               display: 'flex',
               justifyContent: 'space-around',
@@ -227,7 +227,6 @@ export default function Post(props) {
         )
       ) : props.originalPost || props.IdentifierOriginal ? null : (
         <CardContentWrapper
-          
           sx={{
             display: 'flex',
             justifyContent: 'space-around',

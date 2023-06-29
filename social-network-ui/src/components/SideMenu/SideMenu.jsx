@@ -1,13 +1,13 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import { IconButton, Typography } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import {
   BookmarksIcon,
-  Chirick,
   ExploreIcon,
   HomeIcon,
   MessagesIcon,
@@ -23,9 +23,9 @@ import AddTweetModal from './AddTweetModal/AddTweetModal';
 import Logo from './Logo';
 import { useSideMenuStyles } from './SideMenuStyles';
 
-const SideMenu = () => {
+const SideMenu = ({ handleCloseMenu }) => {
   const classes = useSideMenuStyles();
-
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
   const [visibleAddTweet, setVisibleAddTweet] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
@@ -40,12 +40,12 @@ const SideMenu = () => {
   return (
     <>
       <ReplayModal />
-      <Logo />
+      {matches && <Logo />}
       <ul className={classes.container}>
         {user ? (
           <>
             <li className={classes.itemWrapper}>
-              <NavLink to={HOME}>
+              <NavLink to={HOME} onClick={handleCloseMenu}>
                 <div>
                   <span>{HomeIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -55,7 +55,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={EXPLORE}>
+              <NavLink to={EXPLORE} onClick={handleCloseMenu}>
                 <div>
                   <span>{ExploreIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -65,7 +65,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={NOTIFICATIONS}>
+              <NavLink to={NOTIFICATIONS} onClick={handleCloseMenu}>
                 <div>
                   <span>{NotificationsIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -75,7 +75,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={MESSAGES}>
+              <NavLink to={MESSAGES} onClick={handleCloseMenu}>
                 <div>
                   <span>{MessagesIcon}</span>
                   <Typography className={classes.label} variant="h5">
@@ -85,7 +85,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={BOOKMARKS}>
+              <NavLink to={BOOKMARKS} onClick={handleCloseMenu}>
                 <div>
                   <span>{BookmarksIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -95,7 +95,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={user?.username}>
+              <NavLink to={user?.username} onClick={handleCloseMenu}>
                 <div>
                   <span>{ProfileIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -105,7 +105,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SETTING}>
+              <NavLink to={SETTING} onClick={handleCloseMenu}>
                 <div>
                   <span>{SettingsIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -135,9 +135,9 @@ const SideMenu = () => {
                 fullWidth
               >
                 <Typography component="span">Tweet</Typography>
-                <CreateIcon />
+                {/* <CreateIcon /> */}
               </Button>
-              <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
+              <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} handleCloseMenu={handleCloseMenu} />
             </li>
 
             <li className={classes.itemWrapperLogOut}>

@@ -1,7 +1,5 @@
+import MenuIcon from '@mui/icons-material/Menu';
 import Button from '@mui/material/Button';
-import Fade from '@mui/material/Fade';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import React, { useState } from 'react';
 
 import Logo from './Logo';
@@ -13,7 +11,7 @@ export default function MobileMenu() {
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setShowSideMenu(true);
+    setShowSideMenu((prevState) => !prevState);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -21,7 +19,18 @@ export default function MobileMenu() {
   };
 
   return (
-    <div style={{ position: 'absolute', top: '10px', right: '30px', zIndex: '2', display: 'flex' }}>
+    <div
+      style={{
+        position: 'absolute',
+        top: '10px',
+        right: '30px',
+        zIndex: '2',
+        display: 'flex',
+        maxWidth: '100%',
+        padding: '0 10px ',
+        zIndex: '4',
+      }}
+    >
       <Logo />
       <Button
         id="fade-button"
@@ -30,9 +39,9 @@ export default function MobileMenu() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        Dashboard
+        <MenuIcon />
       </Button>
-      {showSideMenu && <SideMenu />}
+      {showSideMenu && <SideMenu handleCloseMenu={handleClose} />}
     </div>
   );
 }

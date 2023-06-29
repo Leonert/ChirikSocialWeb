@@ -8,6 +8,7 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     padding: 0,
     margin: 0,
     maxWidth: 230,
+
     '& li .selected': {
       '& .MuiTypography-h5': {
         color: theme.palette.primary.main,
@@ -161,14 +162,24 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     '-webkit-text-fill-color': 'transparent',
   },
   label: { display: 'none' },
-  tweetBtn: { display: 'none' },
+  tweetBtn: { display: 'none !important' },
 
   [theme.breakpoints.up('lg')]: {
     tweetIconButton: { display: 'none !important' },
-    tweetBtn: { display: 'inline-flex' },
+    tweetBtn: { display: 'inline-flex !important' },
     itemWrapper: { justifyContent: 'flex-start' },
     itemWrapperLogOut: { justifyContent: 'flex-end' },
 
+    label: {
+      display: 'block',
+    },
+  },
+  [theme.breakpoints.down('xs')]: {
+    tweetIconButton: { display: 'none !important' },
+    tweetBtn: { display: 'inline-flex !important' },
+    container: {
+      backgroundColor: theme.palette.secondary.main,
+    },
     label: {
       display: 'block',
     },

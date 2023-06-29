@@ -4,12 +4,11 @@ import { useMediaQuery } from '@mui/material';
 import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
-
+import MobileMenu from '../components/SideMenu/SideMenuMobile';
 import { BottomLine } from '../components/BottomLine/BottomLine';
 import { CustomModalWindow } from '../components/CustomModalWindow/CustomModalWindow';
 import { CustomSnackbar } from '../components/CustomSnackbar/CustomSnackbar';
 import SideMenu from '../components/SideMenu/SideMenu';
-import MobileMenu from '../components/SideMenu/SideMenuMobile';
 import { loginUserWithJwt } from '../features/slices/authSlice';
 import { TOKEN } from '../util/constants';
 import { useLayoutStyles } from './LayoutStyles';
@@ -35,7 +34,7 @@ export const Layout = () => {
             <SideMenu />
           </Box>
         )}
-        {!matches && <MobileMenu />}
+        {!matches&& <MobileMenu/>}
         <Grid container>
           <ScrollRestoration
             getKey={(location) => {
