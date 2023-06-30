@@ -1,7 +1,7 @@
-package com.socialnetwork.api.models.additional;
+package com.socialnetwork.api.model.additional;
 
-import com.socialnetwork.api.models.additional.keys.FollowPk;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.keys.FollowPk;
+import com.socialnetwork.api.model.base.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

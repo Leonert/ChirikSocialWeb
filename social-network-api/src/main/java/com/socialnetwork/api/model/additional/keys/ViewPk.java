@@ -1,4 +1,4 @@
-package com.socialnetwork.api.models.additional.keys;
+package com.socialnetwork.api.model.additional.keys;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FollowPk implements Serializable {
-  @Column(name = "follower_id")
-  private int followerId;
+public class ViewPk implements Serializable {
+  @Column(name = "user_id")
+  private int userId;
 
-  @Column(name = "followed_id")
-  private int followedId;
+  @Column(name = "post_id")
+  private int postId;
 }

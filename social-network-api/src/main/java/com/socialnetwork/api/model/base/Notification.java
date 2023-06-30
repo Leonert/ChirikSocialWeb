@@ -1,6 +1,6 @@
-package com.socialnetwork.api.models.base;
+package com.socialnetwork.api.model.base;
 
-import com.socialnetwork.api.models.additional.NotificationType;
+import com.socialnetwork.api.model.additional.NotificationType;
 import lombok.Getter;
 import lombok.Setter;
 

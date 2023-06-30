@@ -1,4 +1,4 @@
-package com.socialnetwork.api.configs;
+package com.socialnetwork.api.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

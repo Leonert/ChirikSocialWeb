@@ -6,8 +6,8 @@ import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException
 import com.socialnetwork.api.exception.custom.TokenInvalidException;
 import com.socialnetwork.api.mapper.authorized.NotificationMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
-import com.socialnetwork.api.models.additional.Response;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.Response;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.security.CurrentUser;
 import com.socialnetwork.api.security.jwt.JwtTokenUtil;
 import com.socialnetwork.api.security.jwt.UserPrincipal;

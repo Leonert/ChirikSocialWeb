@@ -6,10 +6,10 @@ import com.socialnetwork.api.exception.custom.EmailException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.exception.custom.TokenInvalidException;
 import com.socialnetwork.api.mapper.authorized.NotificationMapper;
-import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.additional.keys.FollowPk;
-import com.socialnetwork.api.models.auth.ConfirmationToken;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.Follow;
+import com.socialnetwork.api.model.additional.keys.FollowPk;
+import com.socialnetwork.api.model.auth.ConfirmationToken;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.security.oauth2.AuthProvider;
@@ -99,12 +99,6 @@ public class UserService {
             .toList();
   }
 
-  public List<User> getFollowersUnauth(String queryUsername, int page, int usersForPage)
-          throws NoUserWithSuchCredentialsException {
-    return findByUsername(queryUsername).getFollowers().stream().map(Follow::getFollowerUser)
-            .skip(page * usersForPage).limit(usersForPage).toList();
-  }
-
   public List<User> getFollowed(String queryUsername, String currentUserUsername,
                                 int page, int usersForPage) throws NoUserWithSuchCredentialsException {
     User currentUser = findByUsername(currentUserUsername);
@@ -136,8 +130,9 @@ public class UserService {
 
     if (!editedUser.getProfileImage().isEmpty()) {
       if (editedUser.getProfileImage().startsWith(BASE_64_PREFIX)) {
-        editedUser.setProfileImage(
-                cloudinaryService.uploadProfilePic(editedUser.getProfileImage(), String.valueOf(userToUpdate.getId()))
+        editedUser.setProfileImage(cloudinaryService.uploadProfilePic(
+                editedUser.getProfileImage(),
+                String.valueOf(userToUpdate.getId()))
         );
       }
     } else if (userToUpdate.getProfileImage() != null) {

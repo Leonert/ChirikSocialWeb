@@ -1,4 +1,4 @@
-package com.socialnetwork.api.models.additional;
+package com.socialnetwork.api.model.additional;
 
 public enum NotificationType {
   FOLLOWER,

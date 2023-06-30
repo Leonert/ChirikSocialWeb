@@ -1,12 +1,12 @@
-package com.socialnetwork.api.models.base;
+package com.socialnetwork.api.model.base;
 
-import com.socialnetwork.api.models.additional.Bookmark;
-import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.additional.Like;
-import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.model.additional.Bookmark;
+import com.socialnetwork.api.model.additional.Follow;
+import com.socialnetwork.api.model.additional.Like;
+import com.socialnetwork.api.model.additional.View;
 import com.socialnetwork.api.security.oauth2.AuthProvider;
-import com.socialnetwork.api.models.base.chat.Chat;
-import com.socialnetwork.api.models.base.chat.Message;
+import com.socialnetwork.api.model.base.chat.Chat;
+import com.socialnetwork.api.model.base.chat.Message;
 import lombok.Getter;
 import lombok.Setter;
 

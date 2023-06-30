@@ -1,6 +1,6 @@
-package com.socialnetwork.api.models.base.chat;
+package com.socialnetwork.api.model.base.chat;
 
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.User;
 import lombok.Getter;
 import lombok.Setter;
 

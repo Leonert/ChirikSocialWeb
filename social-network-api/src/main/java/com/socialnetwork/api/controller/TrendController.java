@@ -1,9 +1,7 @@
 package com.socialnetwork.api.controller;
 
 import com.socialnetwork.api.dto.DtoInterface;
-import com.socialnetwork.api.dto.HashtagDto;
 import com.socialnetwork.api.mapper.authorized.HashtagMapper;
-import com.socialnetwork.api.models.base.Hashtag;
 import com.socialnetwork.api.service.HashtagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

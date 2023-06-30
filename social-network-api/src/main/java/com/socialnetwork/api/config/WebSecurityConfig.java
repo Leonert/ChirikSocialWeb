@@ -1,4 +1,4 @@
-package com.socialnetwork.api.configs;
+package com.socialnetwork.api.config;
 
 import com.socialnetwork.api.filter.JwtAuthFilter;
 import com.socialnetwork.api.security.jwt.JwtAuthenticationEntryPoint;

@@ -1,6 +1,6 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.models.auth.ConfirmationToken;
+import com.socialnetwork.api.model.auth.ConfirmationToken;
 import com.socialnetwork.api.repository.ConfirmationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
-package com.socialnetwork.api.models.base;
+package com.socialnetwork.api.model.base;
 
-import com.socialnetwork.api.models.additional.Bookmark;
-import com.socialnetwork.api.models.additional.Like;
-import com.socialnetwork.api.models.additional.View;
+import com.socialnetwork.api.model.additional.Bookmark;
+import com.socialnetwork.api.model.additional.Like;
+import com.socialnetwork.api.model.additional.View;
 import lombok.Getter;
 import lombok.Setter;
 

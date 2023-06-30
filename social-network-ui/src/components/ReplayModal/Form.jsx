@@ -50,7 +50,7 @@ function FormModal({ buttonName, posts, onSendRequest }) {
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
       dispatch(replayMessage(''));
-      onSendRequest(response.data);
+        onSendRequest(response.data);
     });
   };
 

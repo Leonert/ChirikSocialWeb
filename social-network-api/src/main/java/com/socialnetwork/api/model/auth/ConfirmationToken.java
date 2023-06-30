@@ -1,6 +1,6 @@
-package com.socialnetwork.api.models.auth;
+package com.socialnetwork.api.model.auth;
 
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.User;
 import lombok.Data;
 
 import javax.persistence.Column;

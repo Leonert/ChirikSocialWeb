@@ -1,4 +1,4 @@
-package com.socialnetwork.api.models.base;
+package com.socialnetwork.api.model.base;
 
 import lombok.Getter;
 import lombok.Setter;

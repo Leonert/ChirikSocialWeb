@@ -1,4 +1,4 @@
-package com.socialnetwork.api.models.auth;
+package com.socialnetwork.api.model.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

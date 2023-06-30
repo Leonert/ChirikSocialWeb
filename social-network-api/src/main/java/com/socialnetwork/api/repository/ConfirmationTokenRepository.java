@@ -1,6 +1,6 @@
 package com.socialnetwork.api.repository;
 
-import com.socialnetwork.api.models.auth.ConfirmationToken;
+import com.socialnetwork.api.model.auth.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
