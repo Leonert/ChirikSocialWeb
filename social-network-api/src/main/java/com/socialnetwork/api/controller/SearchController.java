@@ -30,6 +30,7 @@ import static com.socialnetwork.api.util.Constants.Response.RESULTS_PER_PAGE_DEF
 @RequestMapping("/api/search")
 @AllArgsConstructor
 public class SearchController {
+
   private final SearchService searchService;
   private final UserMapper userMapper;
   private final PostMapper postMapper;

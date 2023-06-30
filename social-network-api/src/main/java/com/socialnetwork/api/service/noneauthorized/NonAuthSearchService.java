@@ -1,7 +1,7 @@
 package com.socialnetwork.api.service.noneauthorized;
 
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.Post;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

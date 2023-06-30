@@ -12,6 +12,7 @@ import static com.socialnetwork.api.util.Constants.Cloudinary.CLOUDINARY_SCHEME;
 import static com.socialnetwork.api.util.Constants.Cloudinary.AVATAR_PRESET;
 import static com.socialnetwork.api.util.Constants.Cloudinary.BACKGROUND_PRESET;
 import static com.socialnetwork.api.util.Constants.Cloudinary.POSTS_PRESET;
+import static com.socialnetwork.api.util.Constants.Cloudinary.POSTS_ID;
 
 @Service
 @PropertySource("classpath:application.properties")
@@ -36,6 +37,14 @@ public class CloudinaryService {
 
   public String uploadPostPic(String base64Img, String publicId) {
     return upload(base64Img, POSTS_PRESET, publicId);
+  }
+
+  public void deletePostPic(String id) {
+    try {
+      cloudinary.uploader().destroy(POSTS_ID + id, ObjectUtils.emptyMap());
+    } catch (IOException ex) {
+      System.out.println(ex.getMessage());
+    }
   }
 
   private String upload(String base64Img, String uploadPreset, String publicId) {

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../axiosInstance';
-import { addOnePost } from '../../../features/slices/homeSlice';
+import {addOnePost, tweetedPost} from '../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../icon';
 import ActionIconButton from '../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
@@ -61,7 +61,9 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleClickAddTweet = async () => {
     const base64Image = fileInputRef.current.files[0] ? await getBase64Image() : null;
     await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
-      dispatch(addOnePost(response.data));
+      if (window.location.pathname !== "/") {
+        dispatch(addOnePost(response.data));
+      }
     });
 
     setText('');

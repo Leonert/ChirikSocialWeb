@@ -1,10 +1,8 @@
 package com.socialnetwork.api.mapper.noneauthorized;
 
-import com.socialnetwork.api.dto.authorized.PostDto;
 import com.socialnetwork.api.dto.noneauthorized.NonAuthPostDto;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.Post;
 import com.socialnetwork.api.service.BookmarkService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthLikeService;
 import com.socialnetwork.api.service.noneauthorized.NonAuthPostService;

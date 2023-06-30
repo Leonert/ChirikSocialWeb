@@ -1,7 +1,7 @@
 package com.socialnetwork.api.mapper.authorized;
 
 import com.socialnetwork.api.dto.NotificationDto;
-import com.socialnetwork.api.models.base.Notification;
+import com.socialnetwork.api.model.base.Notification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

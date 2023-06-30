@@ -9,7 +9,7 @@ import com.socialnetwork.api.mapper.authorized.PostMapper;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthPostMapper;
 import com.socialnetwork.api.mapper.noneauthorized.NonAuthUserMapper;
-import com.socialnetwork.api.models.additional.Response;
+import com.socialnetwork.api.model.additional.Response;
 import com.socialnetwork.api.security.CurrentUser;
 import com.socialnetwork.api.security.jwt.UserPrincipal;
 import com.socialnetwork.api.service.authorized.LikeService;
