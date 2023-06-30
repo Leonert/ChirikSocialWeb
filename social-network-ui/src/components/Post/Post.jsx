@@ -2,7 +2,6 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ClearIcon from '@mui/icons-material/Clear';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import { Badge, Box, Card, CardContent, CardHeader, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
