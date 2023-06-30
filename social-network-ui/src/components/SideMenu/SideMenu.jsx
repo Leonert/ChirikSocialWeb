@@ -1,7 +1,6 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import { IconButton, Typography } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
+import { IconButton, Typography, useMediaQuery } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -46,7 +45,7 @@ const SideMenu = ({ handleCloseMenu }) => {
         {user ? (
           <>
             <li className={classes.itemWrapper}>
-              <NavLink to={HOME}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={HOME} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{HomeIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -56,7 +55,7 @@ const SideMenu = ({ handleCloseMenu }) => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={EXPLORE}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={EXPLORE} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{ExploreIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -66,7 +65,7 @@ const SideMenu = ({ handleCloseMenu }) => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={NOTIFICATIONS}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={NOTIFICATIONS} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{NotificationsIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -76,7 +75,7 @@ const SideMenu = ({ handleCloseMenu }) => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={MESSAGES}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={MESSAGES} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{MessagesIcon}</span>
                   <Typography className={classes.label} variant="h5">
@@ -86,7 +85,7 @@ const SideMenu = ({ handleCloseMenu }) => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={BOOKMARKS}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={BOOKMARKS} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{BookmarksIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -96,7 +95,7 @@ const SideMenu = ({ handleCloseMenu }) => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={user?.username}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={user?.username} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{ProfileIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -106,7 +105,7 @@ const SideMenu = ({ handleCloseMenu }) => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SETTING}  onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <NavLink to={SETTING} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{SettingsIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>

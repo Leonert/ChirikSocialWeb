@@ -10,6 +10,7 @@ const ProfilePosts = () => {
     (post) => post.originalPost === null || (post.text === null && post.image === null && post.originalPost)
   );
   const posts = [...filteredPosts].reverse();
+
   return <ProfilePostList posts={posts} author={data} />;
 };
 

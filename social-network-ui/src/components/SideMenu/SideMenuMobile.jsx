@@ -24,7 +24,6 @@ export default function MobileMenu() {
         position: 'absolute',
         top: '10px',
         right: '30px',
-        zIndex: '2',
         display: 'flex',
         maxWidth: '100%',
         padding: '0 10px ',

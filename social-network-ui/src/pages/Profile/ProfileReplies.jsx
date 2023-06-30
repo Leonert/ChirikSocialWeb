@@ -10,6 +10,7 @@ const ProfileReplies = () => {
     (post) => (post.text != null || post.image != null) && post.originalPost != null
   );
   const posts = [...filteredPosts].reverse();
+
   return <ProfilePostList posts={posts} author={data} />;
 };
 

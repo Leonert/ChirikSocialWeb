@@ -1,6 +1,5 @@
 import { Container, Grid } from '@material-ui/core';
-import { Box } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import React, { useLayoutEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
