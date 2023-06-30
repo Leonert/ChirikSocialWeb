@@ -109,9 +109,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderLeft: 0,
   },
   messagesTitleContainer:{
-    margin:"1" +
-        "0px",
-
+    margin:"1" + "0px",
     alignItems: "center",
   },
   chatInfoWrapper: {

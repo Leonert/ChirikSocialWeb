@@ -47,6 +47,7 @@ export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
     async (userId) => {
         const chats = await ChatApi.getUserChats(userId);
+        console.log(chats)
 
         return chats;
     }

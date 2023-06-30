@@ -11,6 +11,7 @@ import axiosIns from '../../axiosInstance';
 import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
+  addChat,
   addChatMessage,
   delletedChats,
   fetchChat,
@@ -94,10 +95,18 @@ const Messages = ({ chatId, senderId }) => {
     dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
-    // dispatch(fetchChat());
-    dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
-    dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
+    dispatch(delletedChats(chatId));
+
+
+    if (selectedChatId || chatId) {
+      dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
+      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
+    } else {
+      // Якщо не вибрано жодного чату, можливо, ви хочете виконати іншу дію або відобразити помилку.
+      console.error('No chat selected.');
+    }
   };
+
   const onConnected = () => {};
 
   const handleListItemClick = async (group) => {
@@ -267,7 +276,6 @@ const Messages = ({ chatId, senderId }) => {
                 </>
             ) : (
               <>
-                <div className={classes.searchWrapper}></div>
                 <List component="nav" className={classes.list} aria-label="main mailbox folders">
                   {groupedChats.map((group, index) =>
                     group && group.chats && group.chats.length > 0 ? (
