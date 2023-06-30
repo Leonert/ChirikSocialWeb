@@ -245,21 +245,26 @@ const Messages = ({ chatId, senderId }) => {
               </div>
             </Paper>
             {Object.values(chats).length === 0 ? (
-              <>
-                <div className={classes.messagesTitle}>Send a message, get a message</div>
-                <div className={classes.messagesText}>
-                  Direct Messages are private conversations between you and other people on Twitter. Share Tweets,
-                  media, and more!
-                </div>
-                <Button
-                  onClick={onOpenModalWindow}
-                  className={classes.messagesButton}
-                  variant="contained"
-                  color="primary"
-                >
-                  Start a conversation
-                </Button>
-              </>
+                <>
+                  <div className={classes.messagesTitleContainer}>
+                    <div className={classes.messagesTitle}>
+                      Send a message, get a message
+                    </div>
+                    <div className={classes.messagesText}>
+                      Direct Messages are private conversations between you and other people on Twitter.
+                      Share Tweets, media, and more!
+                    </div>
+                    <Button
+                        onClick={onOpenModalWindow}
+                        className={classes.messagesButton}
+                        variant="contained"
+                        color="primary"
+                    >
+                      Start a conversation
+                    </Button>
+                  </div>
+
+                </>
             ) : (
               <>
                 <div className={classes.searchWrapper}></div>
