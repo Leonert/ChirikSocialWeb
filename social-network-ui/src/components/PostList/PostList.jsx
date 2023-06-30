@@ -26,7 +26,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [page, setPage] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-
+ console.log(posts);
   const dispatch = useDispatch();
   const tweetPost = useSelector((state) => state.home.tweetedPost);
 
