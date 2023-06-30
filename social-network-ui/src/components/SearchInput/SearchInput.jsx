@@ -60,7 +60,7 @@ const SearchInput = () => {
   }, [debouncedValue]);
 
   return (
-    <Autocomplete
+    <Autocomplete 
       inputValue={inputValue}
       onInputChange={handleInputChange}
       options={searchResult}
