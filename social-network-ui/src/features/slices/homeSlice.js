@@ -56,6 +56,9 @@ const homeSlice = createSlice({
     clearTweetedPost: (state) => {
       state.tweetedPost = '';
     },
+    clearTweetedPost: (state) => {
+      state.tweetedPost = '';
+    },
     getPost: (state, action) => {
       if (Array.isArray(action.payload)) {
         state.post.push(...action.payload);
