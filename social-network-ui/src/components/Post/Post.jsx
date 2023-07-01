@@ -1,7 +1,7 @@
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import ClearIcon from '@mui/icons-material/Clear';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import { Badge, Box, Card, CardContent, CardHeader, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -95,7 +95,7 @@ export default function Post(props) {
             user && props.username === user.username ? (
               <Tooltip title="Delete">
                 <IconButtonCloth aria-label="settings" onClick={props.handleClickDelete}>
-                  <MoreHorizIcon />
+                  <ClearIcon />
                 </IconButtonCloth>
               </Tooltip>
             ) : null
@@ -172,7 +172,6 @@ export default function Post(props) {
       {props.originalPost ? (
         props.originalPost && props.IdentifierReply ? null : (
           <CardContentWrapper
-       
             sx={{
               display: 'flex',
               justifyContent: 'space-around',
@@ -227,7 +226,6 @@ export default function Post(props) {
         )
       ) : props.originalPost || props.IdentifierOriginal ? null : (
         <CardContentWrapper
-          
           sx={{
             display: 'flex',
             justifyContent: 'space-around',

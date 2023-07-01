@@ -9,8 +9,9 @@ const ProfileReplies = () => {
   const filteredPosts = data.withoutAuthorPosts.filter(
     (post) => (post.text != null || post.image != null) && post.originalPost != null
   );
+  const posts = [...filteredPosts].reverse();
 
-  return <ProfilePostList posts={filteredPosts} user={data} />;
+  return <ProfilePostList posts={posts} author={data} />;
 };
 
 export default ProfileReplies;

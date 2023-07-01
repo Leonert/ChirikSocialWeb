@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../../axiosInstance';
-import {tweetedPost } from '../../../../features/slices/homeSlice';
+import { tweetedPost } from '../../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../../icon';
 import ActionIconButton from '../../../ActionIconButton/ActionIconButton';
 import AvatarLink from '../../../UI/AvatarLink';
@@ -15,7 +15,7 @@ import CloseButton from './CloseButton/CloseButton';
 
 const MAX_LENGTH = 280;
 
-const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onCloseModal }) => {
+const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onCloseModal, handleCloseMenu }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
   const [selectedScheduleDate, setSelectedScheduleDate] = useState(null);
@@ -68,8 +68,11 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleClickAddTweet = async () => {
     const base64Image = selectedImage ? await getBase64Image() : null;
     await axiosIns.post('/api/posts', { text, image: base64Image }).then((res) => {
-      if (window.location.pathname !== "/") {
+      if (window.location.pathname !== '/') {
         dispatch(tweetedPost(res.data));
+      }
+      if (handleCloseMenu) {
+        handleCloseMenu();
       }
     });
 

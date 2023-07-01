@@ -1,13 +1,12 @@
 import { Button } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Typography, useMediaQuery } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import {
   BookmarksIcon,
-  Chirick,
   ExploreIcon,
   HomeIcon,
   MessagesIcon,
@@ -20,11 +19,12 @@ import LogOut from '../LogOut/LogOut';
 import LogOutModal from '../LogOutModal/LogOutModal';
 import ReplayModal from '../ReplayModal/ReplayModal';
 import AddTweetModal from './AddTweetModal/AddTweetModal';
+import Logo from './Logo';
 import { useSideMenuStyles } from './SideMenuStyles';
 
-const SideMenu = () => {
+const SideMenu = ({ handleCloseMenu }) => {
   const classes = useSideMenuStyles();
-
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
   const [visibleAddTweet, setVisibleAddTweet] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
@@ -40,21 +40,12 @@ const SideMenu = () => {
   return (
     <>
       <ReplayModal />
+      {matches && <Logo />}
       <ul className={classes.container}>
-        <li>
-          <NavLink to={HOME}>
-            <div className={classes.logoIcon}>
-              <IconButton>
-                {Chirick}
-                <span className={`${classes.title} ${classes.label}`}>Chirik</span>
-              </IconButton>
-            </div>
-          </NavLink>
-        </li>
         {user ? (
           <>
             <li className={classes.itemWrapper}>
-              <NavLink to={HOME}>
+              <NavLink to={HOME} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{HomeIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -64,7 +55,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={EXPLORE}>
+              <NavLink to={EXPLORE} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{ExploreIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -74,7 +65,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={NOTIFICATIONS}>
+              <NavLink to={NOTIFICATIONS} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{NotificationsIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -84,7 +75,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={MESSAGES}>
+              <NavLink to={MESSAGES} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{MessagesIcon}</span>
                   <Typography className={classes.label} variant="h5">
@@ -94,7 +85,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={BOOKMARKS}>
+              <NavLink to={BOOKMARKS} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{BookmarksIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -104,7 +95,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={user?.username}>
+              <NavLink to={user?.username} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{ProfileIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -114,7 +105,7 @@ const SideMenu = () => {
               </NavLink>
             </li>
             <li className={classes.itemWrapper}>
-              <NavLink to={SETTING}>
+              <NavLink to={SETTING} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
                   <span>{SettingsIcon}</span>
                   <Typography className={classes.label} variant={'h5'}>
@@ -144,9 +135,9 @@ const SideMenu = () => {
                 fullWidth
               >
                 <Typography component="span">Tweet</Typography>
-                <CreateIcon />
+                {/* <CreateIcon /> */}
               </Button>
-              <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} />
+              <AddTweetModal visible={visibleAddTweet} onClose={onCloseAddTweet} handleCloseMenu={handleCloseMenu} />
             </li>
 
             <li className={classes.itemWrapperLogOut}>
