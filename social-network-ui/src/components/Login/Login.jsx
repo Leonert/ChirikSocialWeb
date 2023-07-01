@@ -91,7 +91,7 @@ export const Login = () => {
 
       {firstPage && (
         <>
-          <Link to="http://localhost:8080/oauth2/authorization/google">
+          <Link to="https://chirik-fad33dd28d87.herokuapp.com/oauth2/authorization/google">
             <CustomButton styles={{ width: '100%', marginBottom: '20px' }}>
               <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
                 <FcGoogle size={20} />
