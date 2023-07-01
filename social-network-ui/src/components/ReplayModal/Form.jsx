@@ -27,8 +27,7 @@ function FormModal({ buttonName, posts, onSendRequest }) {
 
   const handleEmojiSelect = (data) => {
     dispatch(addEmoji(data.emoji));
-    console.log(data.emoji);
-    console.log(text, 'text');
+
     setEmojiVisible(false);
   };
   const handleClickImage = () => {
@@ -123,18 +122,18 @@ function FormModal({ buttonName, posts, onSendRequest }) {
               >
                 {buttonName}
               </Button>
+             
             </div>
-          </div>{' '}
-          {emojiVisible && (
-            <EmojiPicker
-              onEmojiClick={handleEmojiSelect}
-              searchDisabled={true}
-              emojiStyle="twitter"
-              lazyLoadEmojis={true}
-              width="100%"
-              height="400px"
-            />
-          )}
+          </div> {emojiVisible && (
+                <EmojiPicker
+                  onEmojiClick={handleEmojiSelect}
+                  searchDisabled={true}
+                  emojiStyle="twitter"
+                  lazyLoadEmojis={true}
+                  width="100%"
+                  height="400px"
+                />
+              )}
         </>
       )}
     </div>

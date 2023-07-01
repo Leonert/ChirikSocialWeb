@@ -1,4 +1,7 @@
+import { IconButton } from '@material-ui/core';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import { Box, Button, CircularProgress, Container, Typography } from '@mui/material';
+import EmojiPicker from 'emoji-picker-react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -10,7 +13,7 @@ import { usePostStyle } from '../../components/Post/PostStyle';
 import ReplyHeader from '../../components/Post/ReplyHeader';
 import PostList from '../../components/PostList/PostList';
 import TextInput from '../../components/ReplayModal/TextInput';
-import { clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
+import { addEmoji, clearPosts, getPost, getPostId, replayMessage } from '../../features/slices/homeSlice';
 import { addReply, makeRetweet, setBookmark, setLike, setPost } from '../../features/slices/postSlice';
 import usePostPageStyles from './PostPageStyles';
 
@@ -23,6 +26,7 @@ const PostPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const post = useSelector((state) => state.post);
   const [replies, setReplies] = useState([]);
+  const [emojiVisible, setEmojiVisible] = useState(false);
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: id }).then((response) => {
       setReplies((prevState) => [response.data, ...prevState]);
@@ -81,6 +85,12 @@ const PostPage = () => {
     await axiosIns.post(`/api/posts/${props}/likes`, {}).then((response) => {
       dispatch(setLike(response.data));
     });
+  };
+
+  const handleEmojiSelect = (data) => {
+    dispatch(addEmoji(data.emoji));
+
+    setEmojiVisible(false);
   };
 
   const handleBookmark = (props) => {
@@ -159,10 +169,24 @@ const PostPage = () => {
       {!isLoading && post && (
         <Box className={pageClasses.replyWrapper}>
           <TextInput handleTextChange={handleTextChange} />
+          <IconButton color="primary" aria-label="add to shopping cart" onClick={(e) => setEmojiVisible(!emojiVisible)}>
+            <InsertEmoticonIcon />
+          </IconButton>
           <Box sx={{ marginTop: '15px', textAlign: 'right' }}>
             <Button disabled={text.length === 0} onClick={sendRequest} color="primary" variant="contained">
               Reply
             </Button>
+
+            {emojiVisible && (
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                searchDisabled={true}
+                emojiStyle="twitter"
+                lazyLoadEmojis={true}
+                width="100%"
+                height="400px"
+              />
+            )}
           </Box>
         </Box>
       )}
