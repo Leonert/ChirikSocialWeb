@@ -1,6 +1,7 @@
 import { Button, CircularProgress, IconButton, TextareaAutosize } from '@material-ui/core';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
+import EmojiPicker from 'emoji-picker-react';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -22,13 +23,18 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const [visiblePoll, setVisiblePoll] = useState(false);
   const [remainingChars, setRemainingChars] = useState(280);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [emojiVisible, setEmojiVisible] = useState(false);
   const classes = useAddTweetFormStyles({ qT: quoteTweet, isScheduled: selectedScheduleDate !== null });
   const textLimitPercent = Math.round((text.length / 280) * 100);
   const textCount = remainingChars;
   const fileInputRef = useRef(null);
   const params = useParams();
   const { user } = useSelector((state) => state.auth);
+  const handleEmojiSelect = (data) => {
+    setText((prevText) => prevText + data.emoji);
 
+    setEmojiVisible(false);
+  };
   const handleClickImage = () => {
     fileInputRef.current.click();
   };
@@ -135,7 +141,11 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
               <IconButton color="primary" aria-label="add to shopping cart" onClick={handleClickImage}>
                 <PermMediaIcon />
               </IconButton>
-              <IconButton color="primary" aria-label="add to shopping cart">
+              <IconButton
+                color="primary"
+                aria-label="add to shopping cart"
+                onClick={(e) => setEmojiVisible(!emojiVisible)}
+              >
                 <InsertEmoticonIcon />
               </IconButton>
               <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
@@ -195,6 +205,16 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
 
           <CloseButton onClose={handleCloseImage} classesProps={classes.selectedImageClothe} />
         </div>
+      )}
+      {emojiVisible && (
+        <EmojiPicker
+          onEmojiClick={handleEmojiSelect}
+          searchDisabled={true}
+          emojiStyle="twitter"
+          lazyLoadEmojis={true}
+          width="100%"
+          height="400px"
+        />
       )}
     </>
   );
