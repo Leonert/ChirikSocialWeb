@@ -1,8 +1,7 @@
 package com.socialnetwork.api.security.jwt;
 
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.User;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

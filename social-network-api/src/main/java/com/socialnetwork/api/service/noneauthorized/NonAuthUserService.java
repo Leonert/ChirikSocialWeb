@@ -1,8 +1,8 @@
 package com.socialnetwork.api.service.noneauthorized;
 
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.Follow;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

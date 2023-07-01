@@ -14,6 +14,7 @@ public class Constants {
     public static final String AVATAR_PRESET = "avatarPicsPreset";
     public static final String BACKGROUND_PRESET = "backgroundPicsPreset";
     public static final String POSTS_PRESET = "postPicsPreset";
+    public static final String POSTS_ID = "postPics/";
   }
 
   public static class Request {

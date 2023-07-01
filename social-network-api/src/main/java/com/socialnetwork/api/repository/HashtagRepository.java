@@ -1,6 +1,6 @@
 package com.socialnetwork.api.repository;
 
-import com.socialnetwork.api.models.base.Hashtag;
+import com.socialnetwork.api.model.base.Hashtag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

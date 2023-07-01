@@ -1,8 +1,8 @@
 package com.socialnetwork.api.service.noneauthorized;
 
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.Post;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.LikeRepository;
 import com.socialnetwork.api.repository.PostRepository;
 import lombok.RequiredArgsConstructor;

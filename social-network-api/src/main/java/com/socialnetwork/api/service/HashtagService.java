@@ -1,6 +1,6 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.models.base.Hashtag;
+import com.socialnetwork.api.model.base.Hashtag;
 import com.socialnetwork.api.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;

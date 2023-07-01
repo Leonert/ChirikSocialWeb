@@ -3,11 +3,12 @@ import { makeStyles } from '@mui/styles';
 export const useSideMenuStyles = makeStyles((theme) => ({
   container: {
     position: 'fixed',
-    top: 0,
+    top: '60px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
     maxWidth: 230,
+
     '& li .selected': {
       '& .MuiTypography-h5': {
         color: theme.palette.primary.main,
@@ -19,8 +20,8 @@ export const useSideMenuStyles = makeStyles((theme) => ({
   },
 
   itemWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginBottom: 2,
     height: 58,
     '& .MuiTypography-h5': {
@@ -161,14 +162,24 @@ export const useSideMenuStyles = makeStyles((theme) => ({
     '-webkit-text-fill-color': 'transparent',
   },
   label: { display: 'none' },
-  tweetBtn: { display: 'none' },
+  tweetBtn: { display: 'none !important' },
 
   [theme.breakpoints.up('lg')]: {
     tweetIconButton: { display: 'none !important' },
-    tweetBtn: { display: 'inline-flex' },
+    tweetBtn: { display: 'inline-flex !important' },
     itemWrapper: { justifyContent: 'flex-start' },
     itemWrapperLogOut: { justifyContent: 'flex-end' },
 
+    label: {
+      display: 'block',
+    },
+  },
+  [theme.breakpoints.down('xs')]: {
+    tweetIconButton: { display: 'none !important' },
+    tweetBtn: { display: 'inline-flex !important' },
+    container: {
+      backgroundColor: theme.palette.secondary.main,
+    },
     label: {
       display: 'block',
     },

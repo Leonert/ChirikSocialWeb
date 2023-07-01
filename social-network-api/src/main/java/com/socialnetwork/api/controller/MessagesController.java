@@ -3,7 +3,7 @@ package com.socialnetwork.api.controller;
 import com.socialnetwork.api.dto.chat.ChatDto;
 import com.socialnetwork.api.dto.chat.CreateChatRequestDto;
 import com.socialnetwork.api.dto.chat.MessageDto;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.service.MessageService;
 import lombok.RequiredArgsConstructor;

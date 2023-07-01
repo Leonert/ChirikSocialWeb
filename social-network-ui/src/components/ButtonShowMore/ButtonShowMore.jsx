@@ -6,7 +6,6 @@ import { useButtonShowStyles } from './ButtonShowMoreStyle';
 
 function ButtonShowMore(props) {
   const classes = useButtonShowStyles();
-  
 
   return (
     <Button className={classes.buttonHeader}>

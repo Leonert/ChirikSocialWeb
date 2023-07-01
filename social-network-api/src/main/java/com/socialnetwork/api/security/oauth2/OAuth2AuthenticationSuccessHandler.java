@@ -1,7 +1,7 @@
 package com.socialnetwork.api.security.oauth2;
 
 import com.socialnetwork.api.mapper.authorized.NotificationMapper;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.UserRepository;
 import com.socialnetwork.api.security.jwt.JwtTokenUtil;
 import com.socialnetwork.api.service.NotificationService;

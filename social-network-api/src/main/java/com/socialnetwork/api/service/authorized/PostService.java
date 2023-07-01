@@ -3,10 +3,10 @@ package com.socialnetwork.api.service.authorized;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
 import com.socialnetwork.api.mapper.authorized.NotificationMapper;
-import com.socialnetwork.api.models.additional.View;
-import com.socialnetwork.api.models.base.Hashtag;
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.View;
+import com.socialnetwork.api.model.base.Hashtag;
+import com.socialnetwork.api.model.base.Post;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.ViewRepository;
 import com.socialnetwork.api.service.CloudinaryService;
@@ -56,8 +56,10 @@ public class PostService {
     return postRepository.getReferenceById(id);
   }
 
-  public Post save(Post post, String image) throws NoPostWithSuchIdException {
-    post.setCreatedDate(LocalDateTime.now());
+  public Post save(Post postToSave, String image) throws NoPostWithSuchIdException {
+    postToSave.setCreatedDate(LocalDateTime.now());
+
+    Post post = postRepository.save(postToSave);
 
     if (image != null) {
       post.setImage(cloudinaryService.uploadPostPic(image, String.valueOf(post.getId())));
@@ -111,6 +113,10 @@ public class PostService {
   }
 
   public void delete(Post post) {
+    if (post.getImage() != null) {
+      cloudinaryService.deletePostPic(String.valueOf(post.getId()));
+    }
+
     postRepository.delete(post);
   }
 

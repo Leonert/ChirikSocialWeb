@@ -1,7 +1,7 @@
 package com.socialnetwork.api.mapper.authorized;
 
 import com.socialnetwork.api.dto.HashtagDto;
-import com.socialnetwork.api.models.base.Hashtag;
+import com.socialnetwork.api.model.base.Hashtag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

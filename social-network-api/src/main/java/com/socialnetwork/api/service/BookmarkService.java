@@ -1,10 +1,10 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.models.additional.Bookmark;
-import com.socialnetwork.api.models.additional.keys.BookmarkPk;
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.Bookmark;
+import com.socialnetwork.api.model.additional.keys.BookmarkPk;
+import com.socialnetwork.api.model.base.Post;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.BookmarkRepository;
 import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;

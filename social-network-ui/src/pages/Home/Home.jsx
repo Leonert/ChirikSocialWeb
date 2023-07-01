@@ -39,7 +39,7 @@ function Home() {
         {modalUserState && <ModalUser />}
       </Grid>
       {matches && (
-        <Grid item xs={5}>
+        <Grid item xs={5} sx={{ padding: '0 20px' }}>
           <Form action="/" method="post">
             <SearchInput />
           </Form>

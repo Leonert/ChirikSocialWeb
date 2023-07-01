@@ -1,7 +1,7 @@
 package com.socialnetwork.api.service;
 
-import com.socialnetwork.api.models.additional.Follow;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.Follow;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.FollowsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
