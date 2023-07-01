@@ -1,14 +1,13 @@
 package com.socialnetwork.api.service;
 
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.models.additional.NotificationType;
-import com.socialnetwork.api.models.base.Notification;
-import com.socialnetwork.api.models.base.Post;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.additional.NotificationType;
+import com.socialnetwork.api.model.base.Notification;
+import com.socialnetwork.api.model.base.Post;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.repository.NotificationRepository;
 import com.socialnetwork.api.repository.PostRepository;
 import com.socialnetwork.api.repository.UserRepository;
-import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

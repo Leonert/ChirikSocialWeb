@@ -125,6 +125,7 @@ public enum UserDto {
     @Data
     public static class AccountData {
       UserDto.Response.Default user;
+      String provider;
       String jwt;
     }
   }

@@ -3,7 +3,7 @@ package com.socialnetwork.api.mapper.authorized;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.exception.custom.NoPostWithSuchIdException;
 import com.socialnetwork.api.exception.custom.NoUserWithSuchCredentialsException;
-import com.socialnetwork.api.models.base.User;
+import com.socialnetwork.api.model.base.User;
 import com.socialnetwork.api.service.authorized.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -57,6 +57,7 @@ public class UserMapper {
   public UserDto.Response.AccountData convertToAccountData(User user, String token) {
     UserDto.Response.AccountData userDtoResponse = new UserDto.Response.AccountData();
     userDtoResponse.setUser(convertToUserDto(user));
+    userDtoResponse.setProvider(String.valueOf(user.getProvider()));
     userDtoResponse.setJwt(token);
     return userDtoResponse;
   }

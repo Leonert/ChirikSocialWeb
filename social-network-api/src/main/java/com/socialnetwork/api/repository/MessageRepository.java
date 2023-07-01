@@ -1,7 +1,7 @@
 package com.socialnetwork.api.repository;
 
-import com.socialnetwork.api.models.base.User;
-import com.socialnetwork.api.models.base.chat.Message;
+import com.socialnetwork.api.model.base.User;
+import com.socialnetwork.api.model.base.chat.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

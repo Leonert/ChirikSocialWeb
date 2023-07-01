@@ -92,7 +92,6 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
   const handleRetweet = async (id) => {
     if (user) {
       const response = await axiosIns.post(`/api/posts`, { originalPost: id });
-
       if (response.status === 200) {
         setPosts((prevPosts) =>
           prevPosts
@@ -244,9 +243,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
     }
   };
   const handleSendRequest = (props) => {
-    if (window.location.pathname !== '/') {
-      setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
-    }
+    setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
     setOpenModal(false);
   };
 
