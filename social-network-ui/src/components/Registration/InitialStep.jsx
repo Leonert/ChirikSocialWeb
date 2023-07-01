@@ -21,7 +21,7 @@ const InitialStep = (props) => {
     >
       <Typography sx={{ fontSize: '36px', marginTop: '10px', marginBottom: '20px' }}>Join Chirik now! </Typography>
 
-      <Link to="http://localhost:8080/oauth2/authorization/google">
+      <Link to="https://chirik-fad33dd28d87.herokuapp.com/oauth2/authorization/google">
         <Button startIcon={<GoogleIcon />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
           <Typography sx={{ fontSize: '14px' }}> Register with Google </Typography>
         </Button>
