@@ -74,20 +74,30 @@ export const useAddTweetFormStyles = makeStyles((theme) => ({
   },
   selectedImageWrapper: {
     position: 'relative',
-    width: '100%',
+    maxWidth: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
   selectedImage: {
-    borderRadius: 20,
-    width: '100%',
+    maxWidth: '100%',
+    maxHeight: '100%',
   },
   selectedImageClothe: {
-    position: 'absolute',
+    position: 'absolute !important',
     borderRadius: '50% !important',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.default + '!important',
     top: '10px',
     right: 10,
     color: theme.palette.text.secondary + '!important',
     width: '10px ! important',
     height: '60px ! important',
+  },
+  emojiPickerWrapper: {
+    position: 'absolute !important',
+    width: '91%',
+    zIndex: '20 !important',
+    top: '170px',
   },
 }));

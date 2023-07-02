@@ -1,4 +1,5 @@
-import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 
 import AddTweetForm from './AddTweetForm/AddTweetForm';
@@ -10,9 +11,11 @@ function AddTweetModal({ title, visible, onClose, handleCloseMenu }) {
 
   return (
     <Dialog className={classes.content} open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle className={classes.header} id="form-dialog-title">
-        <CloseButton onClose={onClose} />
+      <DialogTitle disableTypography className={classes.header} id="form-dialog-title">
         {title}
+        <IconButton className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
         <AddTweetForm

@@ -122,18 +122,20 @@ function FormModal({ buttonName, posts, onSendRequest }) {
               >
                 {buttonName}
               </Button>
-             
             </div>
-          </div> {emojiVisible && (
-                <EmojiPicker
-                  onEmojiClick={handleEmojiSelect}
-                  searchDisabled={true}
-                  emojiStyle="twitter"
-                  lazyLoadEmojis={true}
-                  width="100%"
-                  height="400px"
-                />
-              )}
+          </div>{' '}
+          {emojiVisible && (
+            <div className={classes.emojiPickerWrapper}>
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                searchDisabled={true}
+                emojiStyle="twitter"
+                lazyLoadEmojis={true}
+                width="100%"
+                height="300px"
+              />
+            </div>
+          )}
         </>
       )}
     </div>
