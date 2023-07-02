@@ -2,17 +2,15 @@ import { makeStyles } from '@mui/styles';
 
 export const useAddTweetModalStyles = makeStyles((theme) => ({
   content: {
-    borderRadius: '20px',
     '& .MuiDialog-paper': {
-      borderRadius: '20px',
       boxShadow: 'none',
+
       overflow: 'visible',
     },
     '& .MuiPaper-root': {
       width: '100%',
       border: `1px solid ${theme.palette.divider} !important`,
       boxShadow: 'none !important',
-      border: 'none !important',
     },
     '& .MuiDialogTitle-root': {
       padding: '5px 15px',

@@ -110,7 +110,7 @@ const SideMenu = ({ handleCloseMenu }) => {
                 </div>
               </NavLink>
             </li>
-            {provider != 'GOOGLE' && (
+            {provider !== 'GOOGLE' && (
               <li className={classes.itemWrapper}>
                 <NavLink to={SETTING} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                   <div>
