@@ -1,8 +1,10 @@
 import { Typography } from '@material-ui/core';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { handleLoginModal, handleModal } from '../../../features/slices/authModalSlice';
 import { handleOpenLikeModal } from '../../../features/slices/postDatas/likesSlice';
 import { handleOpenRetweetModal } from '../../../features/slices/postDatas/retweetsSlice';
 import { followUser } from '../../../features/slices/userDatas/followingSlice';
@@ -10,12 +12,19 @@ import { CustomButton } from '../../Login/CustomButton';
 import { useStylesItemUser } from './ItemUserStyles';
 
 export const ItemUser = ({ user }) => {
+  const currentUser = useSelector((state) => state.auth.user?.username);
   const { name, username, profileImage, currUserFollower } = user;
   const classes = useStylesItemUser();
   const dispatch = useDispatch();
 
   const handleFollow = useCallback(() => {
-    dispatch(followUser({ user }));
+    if (currentUser) {
+      dispatch(followUser({ user }));
+    } else {
+      dispatch(handleLoginModal(true));
+      dispatch(handleModal(true));
+      toast('You need to login');
+    }
   }, [user, dispatch]);
 
   const navigateToUser = useCallback(() => {

@@ -13,17 +13,6 @@ export const ItemNotification = ({ notification }) => {
   const { loading } = useSelector((state) => state.notifications);
   const [post, setPost] = useState(null);
 
-  function generateRandomRGBA() {
-    const red = Math.floor(Math.random() * 256);
-    const green = Math.floor(Math.random() * 256);
-    const blue = Math.floor(Math.random() * 256);
-    const alpha = Math.random();
-
-    const rgbaColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-
-    return rgbaColor;
-  }
-
   useEffect(() => {
     setNotificationsElem(createNotifications(notification));
   }, [loading]);
@@ -54,7 +43,7 @@ export const ItemNotification = ({ notification }) => {
                       alt={notificationElem.username}
                     />
                   ) : (
-                    <div style={{ backgroundColor: `${generateRandomRGBA()}` }} className={classes.avatarText}>
+                    <div style={{ backgroundColor: `#94a3b8` }} className={classes.avatarText}>
                       {notificationElem.name ? notificationElem.name.slice(0, 1) : ''}
                     </div>
                   )}
@@ -66,8 +55,9 @@ export const ItemNotification = ({ notification }) => {
             <Box className={classes.content}>
               {post !== null ? (
                 <Link to={`/${post?.author.username}/${post?.author.id}`}>
-                  {notificationElem.message} <span className={classes.post}>
-                  {post.text?.slice(0, 50) ?? post.originalPost.text?.slice(0, 50) ?? ""}
+                  {notificationElem.message}{' '}
+                  <span className={classes.post}>
+                    {post.text?.slice(0, 50) ?? post.originalPost.text?.slice(0, 50) ?? ''}
                   </span>
                 </Link>
               ) : (
