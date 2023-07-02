@@ -3,7 +3,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 
 import AddTweetForm from './AddTweetForm/AddTweetForm';
-import CloseButton from './AddTweetForm/CloseButton/CloseButton';
 import { useAddTweetModalStyles } from './AddTweetModalStyles';
 
 function AddTweetModal({ title, visible, onClose, handleCloseMenu }) {
