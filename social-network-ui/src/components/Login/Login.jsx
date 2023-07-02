@@ -81,7 +81,11 @@ export const Login = () => {
   return (
     <Box
       sx={{
-        width: '60%',
+        width: {
+          sm: '80%',
+          md: '60%',
+          lg: '60%',
+        },
         margin: '0 auto',
         minHeight: '70vh',
       }}
