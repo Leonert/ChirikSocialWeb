@@ -14,10 +14,9 @@ import DialogContent from "@mui/material/DialogContent";
 import CloseButton from "../AddTweetModal/AddTweetForm/CloseButton/CloseButton";
 import {
   addChat,
-  addChatMessage,
+
 } from "../../features/slices/massagesSlise";
-import {SOCKET_URL} from "../../util/constants";
-import SockJsClient from "react-stomp";
+
 
 
 
@@ -32,7 +31,6 @@ const MessagesModal = ({ visible, onClose }) => {
   const [createdChatId, setCreatedChatId] = useState(null);
   const [chat, setChat] = useState(null);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
-  console.log(username)
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {
       event.target.value === '' ? dispatch(removeResult()) : dispatch(addResult(response.data));
@@ -54,6 +52,8 @@ const MessagesModal = ({ visible, onClose }) => {
         setChatUsers((prevChatUsers)=>[...prevChatUsers,selectedUser])
       }
 
+
+
       const messageDto = {
         messageId: null,
         isRead: false,
@@ -70,14 +70,13 @@ const MessagesModal = ({ visible, onClose }) => {
         messages: [messageDto]
       };
 
-      console.log(messageDto,chatDto)
+
 
       axiosIns
           .post('/api/messages/chats/create', { messageDto, chatDto })
           .then((response) => {
             const createdChatDto = response.data;
             dispatch(addChat(createdChatDto));
-            console.log(createdChatDto)
 
             setCreatedChatId(createdChatDto.chatId);
 
@@ -104,9 +103,7 @@ const MessagesModal = ({ visible, onClose }) => {
       <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
 
         <DialogTitle id="form-dialog-title" className={classes.header}>
-          <IconButton onClick={onClose} color="secondary" aria-label="close">
-            <CloseButton color="#fff" />
-          </IconButton>
+          <CloseButton onClose={onClose} color="#fff" />
           <span className={classes.headerMessage}>New message</span>
           <Button
               className={classes.button}
@@ -138,7 +135,7 @@ const MessagesModal = ({ visible, onClose }) => {
             {searchResult.map((user) => (
                 <ListItem
                     key={user.id}
-                    button
+
                     selected={selectedUser && selectedUser.id === user.id}
                     onClick={() => handleListItemClick(user)}
                 >

@@ -98,8 +98,12 @@ const messagesSlice = createSlice({
         },
         addChat: (state, action) => {
             const newChat = action.payload;
-            state.chats.push(newChat);
-            console.log(newChat);
+            if ( state.chats.length === 0 ){
+                state.chats.push(newChat.messages[1]);
+            }else {
+                state.chats.push(newChat[1])
+                console.log(newChat)
+            }
 
         },
 
@@ -171,6 +175,7 @@ const messagesSlice = createSlice({
 
             .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;
+                console.log(action.payload)
             })
 
             .addCase(updateChat.fulfilled, (state, action) => {
