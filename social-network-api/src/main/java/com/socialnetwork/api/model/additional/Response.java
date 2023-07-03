@@ -10,4 +10,7 @@ import lombok.Setter;
 public class Response {
   private String message;
 
+  public static Response of(String message) {
+    return new Response(message);
+  }
 }

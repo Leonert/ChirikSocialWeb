@@ -21,9 +21,27 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.socialnetwork.api.util.Constants.Validation.USERNAME_MAX_LENGTH;
+import static com.socialnetwork.api.util.Constants.Validation.PASSWORD_MIN_LENGTH;
+import static com.socialnetwork.api.util.Constants.Validation.USERNAME_TOO_BIG;
+import static com.socialnetwork.api.util.Constants.Validation.USERNAME_NULL;
+import static com.socialnetwork.api.util.Constants.Validation.USERNAME_BLANK;
+import static com.socialnetwork.api.util.Constants.Validation.NAME_NULL;
+import static com.socialnetwork.api.util.Constants.Validation.NAME_BLANK;
+import static com.socialnetwork.api.util.Constants.Validation.EMAIL_NULL;
+import static com.socialnetwork.api.util.Constants.Validation.EMAIL_NOT_VALID;
+import static com.socialnetwork.api.util.Constants.Validation.EMAIL_REGEXP;
+import static com.socialnetwork.api.util.Constants.Validation.PASSWORD_NULL;
+import static com.socialnetwork.api.util.Constants.Validation.PASSWORD_TOO_SMALL;
+
 
 @Getter
 @Setter
@@ -35,15 +53,24 @@ public class User {
   @Column(name = "id")
   private int id;
 
+  @NotBlank(message = USERNAME_BLANK)
+  @NotNull(message = USERNAME_NULL)
+  @Size(message = USERNAME_TOO_BIG, max = USERNAME_MAX_LENGTH)
   @Column(name = "username")
   private String username;
 
+  @NotBlank(message = NAME_BLANK)
+  @NotNull(message = NAME_NULL)
   @Column(name = "name")
   private String name;
 
+  @NotNull(message = PASSWORD_NULL)
+  @Size(message = PASSWORD_TOO_SMALL, min = PASSWORD_MIN_LENGTH)
   @Column(name = "password")
   private String password;
 
+  @Email(message = EMAIL_NOT_VALID, regexp = EMAIL_REGEXP)
+  @NotNull(message = EMAIL_NULL)
   @Column(name = "email_address")
   private String emailAddress;
 

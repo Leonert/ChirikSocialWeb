@@ -25,7 +25,23 @@ public class Constants {
     public static final String TOKEN_PARAMETER = "token";
   }
 
+  public static class Validation {
+    public static final int USERNAME_MAX_LENGTH = 35;
+    public static final String USERNAME_TOO_BIG = "Username cannot exceed 35 characters.";
+    public static final String USERNAME_BLANK = "Username cannot be blank.";
+    public static final String USERNAME_NULL = "Username cannot be null.";
+    public static final String NAME_NULL = "Name cannot be null.";
+    public static final String NAME_BLANK = "Name cannot be blank.";
+    public static final String EMAIL_REGEXP = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+    public static final String EMAIL_NOT_VALID = "Email is not valid.";
+    public static final String EMAIL_NULL = "Email cannot be null.";
+    public static final String PASSWORD_NULL = "Password cannot be null.";
+    public static final String PASSWORD_TOO_SMALL = "Password cannot be less than 8 characters.";
+    public static final int PASSWORD_MIN_LENGTH = 8;
+  }
+
   public static class Auth {
+    public static final String OK = "Ok";
     public static final String OAUTH_REDIRECT_URL = "http://localhost:3000/google-authorization";
     public static final String USERNAME_TAKEN = "User with such username already exists.";
     public static final String EMAIL_TAKEN = "User with such email address already exists.";

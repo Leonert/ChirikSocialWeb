@@ -1,0 +1,10 @@
+###
+POST localhost:8080/api/registration
+Content-Type: application/json
+
+{
+  "name": "Denys Kozarenko",
+  "emailAddress": "denys@gmail.com",
+  "username": "denko",
+  "password": "12345767"
+}
