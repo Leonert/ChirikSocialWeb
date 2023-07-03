@@ -10,7 +10,7 @@ const Bookmarks = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const post = useSelector((state) => state.home.post);
-
+  const postsList = [...post].reverse();
   useEffect(() => {
     dispatch(tweetedPost(''));
     dispatch(getBookmarks()).then(() => setIsLoading(false));
@@ -30,7 +30,7 @@ const Bookmarks = () => {
           Bookmarks
         </Typography>
         {isLoading && <CircularProgress />}
-        {!isLoading && <PostList isBookmarkPage={true} incomingPost={post} />}
+        {!isLoading && <PostList isBookmarkPage={true} incomingPost={postsList} />}
         <ReplayModal />
       </Container>
     </>

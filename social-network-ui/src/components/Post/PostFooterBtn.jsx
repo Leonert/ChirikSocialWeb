@@ -21,7 +21,7 @@ const PostFooterBtn = (props) => {
     >
       <Tooltip title="Reply">
         <IconButton
-          aria-label="ChatBubbleOutline"
+          aria-label="Reply"
           className={props.replayed ? classes.iconActions : classes.iconColor}
           onClick={props.handleClickReplay}
         >
@@ -32,7 +32,7 @@ const PostFooterBtn = (props) => {
       </Tooltip>
       <Tooltip title="Retweet">
         <IconButton
-          aria-label="ChatBubbleOutline"
+          aria-label="Retweet"
           className={props.retweeted ? classes.iconActions : classes.iconColor}
           onClick={props.handleClickRetweet}
         >
@@ -43,7 +43,7 @@ const PostFooterBtn = (props) => {
       </Tooltip>
       <Tooltip title="Like">
         <IconButton
-          aria-label="add to favorites"
+          aria-label="add to Like"
           className={props.liked ? classes.iconActions : classes.iconColor}
           onClick={props.handleClickLike}
         >
@@ -54,7 +54,7 @@ const PostFooterBtn = (props) => {
       </Tooltip>
       <Tooltip title="Bookmarks">
         <IconButton
-          aria-label="add to favorites"
+          aria-label="add to Bookmarks"
           className={props.bookmarked ? classes.iconActions : classes.iconColor}
           onClick={props.handleClickBookmark}
         >

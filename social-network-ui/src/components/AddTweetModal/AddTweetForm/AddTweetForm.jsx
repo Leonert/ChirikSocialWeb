@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import axiosIns from '../../../axiosInstance';
-import {addOnePost, tweetedPost} from '../../../features/slices/homeSlice';
+import { addOnePost, tweetedPost } from '../../../features/slices/homeSlice';
 import { EmojiIcon } from '../../../icon';
 import ActionIconButton from '../../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from './AddTweetFormStyles';
@@ -61,7 +61,7 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
   const handleClickAddTweet = async () => {
     const base64Image = fileInputRef.current.files[0] ? await getBase64Image() : null;
     await axiosIns.post('/api/posts', { text, image: base64Image }).then((response) => {
-      if (window.location.pathname !== "/") {
+      if (window.location.pathname !== '/') {
         dispatch(addOnePost(response.data));
       }
     });
@@ -114,20 +114,6 @@ const AddTweetForm = ({ unsentTweet, quoteTweet, maxRows, title, buttonName, onC
         </div>
       </div>
       <div className={classes.footer}>
-        <div className={classes.footerWrapper}>
-          {buttonName !== 'Reply' && (
-            <div className={classes.quoteImage}>
-              <IconButton color="primary" aria-label="add to shopping cart" onClick={handleClickImage}>
-                <PermMediaIcon />
-              </IconButton>
-              <IconButton color="primary" aria-label="add to shopping cart">
-                <InsertEmoticonIcon />
-              </IconButton>
-              <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
-              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} />
-            </div>
-          )}
-        </div>
         <div className={classes.footerAddForm}>
           {text && (
             <>

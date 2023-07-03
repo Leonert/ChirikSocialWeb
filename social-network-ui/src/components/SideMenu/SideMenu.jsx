@@ -36,14 +36,20 @@ const SideMenu = ({ handleCloseMenu }) => {
   const onCloseAddTweet = () => {
     setVisibleAddTweet(false);
   };
+  const provider = useSelector((state) => state.auth.provider);
 
   return (
     <>
       <ReplayModal />
-      {matches && <Logo />}
+
       <ul className={classes.container}>
         {user ? (
           <>
+            {matches && (
+              <li>
+                <Logo />
+              </li>
+            )}
             <li className={classes.itemWrapper}>
               <NavLink to={HOME} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
                 <div>
@@ -104,16 +110,18 @@ const SideMenu = ({ handleCloseMenu }) => {
                 </div>
               </NavLink>
             </li>
-            <li className={classes.itemWrapper}>
-              <NavLink to={SETTING} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
-                <div>
-                  <span>{SettingsIcon}</span>
-                  <Typography className={classes.label} variant={'h5'}>
-                    Setting
-                  </Typography>
-                </div>
-              </NavLink>
-            </li>
+            {provider !== 'GOOGLE' && (
+              <li className={classes.itemWrapper}>
+                <NavLink to={SETTING} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+                  <div>
+                    <span>{SettingsIcon}</span>
+                    <Typography className={classes.label} variant={'h5'}>
+                      Setting
+                    </Typography>
+                  </div>
+                </NavLink>
+              </li>
+            )}
             <li className={classes.itemWrapper}>
               <IconButton
                 onClick={handleClickOpenAddTweet}

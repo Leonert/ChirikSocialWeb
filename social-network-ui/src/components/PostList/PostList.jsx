@@ -243,7 +243,9 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
     }
   };
   const handleSendRequest = (props) => {
-    setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
+    if (window.location.pathname !== '/') {
+      setPosts((prevPosts) => [{ ...props }, ...prevPosts]);
+    }
     setOpenModal(false);
   };
 

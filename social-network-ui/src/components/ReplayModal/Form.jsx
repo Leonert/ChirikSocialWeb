@@ -1,11 +1,13 @@
-import { Avatar, Button } from '@material-ui/core';
+import { Avatar, Button, IconButton } from '@material-ui/core';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import Typography from '@mui/material/Typography';
-import React, { useRef } from 'react';
+import EmojiPicker from 'emoji-picker-react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axiosIns from '../../axiosInstance';
-import { replayMessage } from '../../features/slices/homeSlice';
-import { EmojiIcon, MediaIcon } from '../../icon';
+import { addEmoji, replayMessage } from '../../features/slices/homeSlice';
+import { MediaIcon } from '../../icon';
 import ActionIconButton from '../ActionIconButton/ActionIconButton';
 import { useAddTweetFormStyles } from '../SideMenu/AddTweetModal/AddTweetForm/AddTweetFormStyles';
 import TextInput from './TextInput';
@@ -15,7 +17,7 @@ function FormModal({ buttonName, posts, onSendRequest }) {
 
   const text = useSelector((state) => state.home.message);
   const id = useSelector((state) => state.home.postId);
-
+  const [emojiVisible, setEmojiVisible] = useState(false);
   const user = useSelector((state) => state.auth.user);
 
   const classes = useAddTweetFormStyles();
@@ -23,6 +25,11 @@ function FormModal({ buttonName, posts, onSendRequest }) {
   const visiblePoll = false;
   const MAX_LENGTH = 280;
 
+  const handleEmojiSelect = (data) => {
+    dispatch(addEmoji(data.emoji));
+
+    setEmojiVisible(false);
+  };
   const handleClickImage = () => {
     fileInputRef.current.click();
   };
@@ -50,7 +57,7 @@ function FormModal({ buttonName, posts, onSendRequest }) {
   const sendRequest = async () => {
     await axiosIns.post('/api/posts', { text, originalPost: targetPost.id }).then((response) => {
       dispatch(replayMessage(''));
-        onSendRequest(response.data);
+      onSendRequest(response.data);
     });
   };
 
@@ -94,13 +101,15 @@ function FormModal({ buttonName, posts, onSendRequest }) {
             <Avatar aria-label="recipe" alt={user.name} src={user.profileImage} />
             <Typography className={classes.itemNick}>@{user.name}</Typography>
           </div>
-
           <TextInput handleTextChange={handleTextChange} />
+          <IconButton color="primary" aria-label="add to shopping cart" onClick={(e) => setEmojiVisible(!emojiVisible)}>
+            <InsertEmoticonIcon />
+          </IconButton>
           <div className={classes.footer}>
             <div className={classes.footerWrapper}>
               <div className={classes.quoteImage}>
                 <ActionIconButton actionText={'Media'} icon={MediaIcon} onClick={handleClickImage} size={'medium'} />
-                <ActionIconButton id={'onClickAddEmoji'} actionText={'Emoji'} icon={EmojiIcon} size={'medium'} />
+
                 <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={handleTextChange} />
               </div>
             </div>
@@ -114,7 +123,19 @@ function FormModal({ buttonName, posts, onSendRequest }) {
                 {buttonName}
               </Button>
             </div>
-          </div>
+          </div>{' '}
+          {emojiVisible && (
+            <div className={classes.emojiPickerWrapper}>
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                searchDisabled={true}
+                emojiStyle="twitter"
+                lazyLoadEmojis={true}
+                width="100%"
+                height="300px"
+              />
+            </div>
+          )}
         </>
       )}
     </div>
