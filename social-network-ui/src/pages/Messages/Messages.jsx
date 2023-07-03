@@ -11,8 +11,7 @@ import axiosIns from '../../axiosInstance';
 import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
-  addChat,
-  addChatMessage,
+  addChat, addChatMessage,
   delletedChats,
   fetchChat,
   fetchChatMessages,
@@ -31,12 +30,15 @@ import { SOCKET_URL } from '../../util/constants';
 import { formatChatMessageDate } from '../../util/formatDate';
 import { useMessagesStyles } from './MessagesStyles';
 
-const Messages = ({ chatId, senderId }) => {
+const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
-  const chats = useSelector(selectChats);
+  // const chats = useSelector(selectChats);
+  const chats = useSelector((state)=> state.messages.chats);
+  console.log(chats,"chat")
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
+
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
@@ -60,7 +62,6 @@ const Messages = ({ chatId, senderId }) => {
         axiosIns
           .delete(`/api/messages/chats/${chatId}`)
           .then((response) => {
-            // dispatch(fetchChat());
             setStatus(true);
             setError(null);
           })
@@ -99,10 +100,9 @@ const Messages = ({ chatId, senderId }) => {
 
 
     if (selectedChatId || chatId) {
-      dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
+      // dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
       dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      // Якщо не вибрано жодного чату, можливо, ви хочете виконати іншу дію або відобразити помилку.
       console.error('No chat selected.');
     }
   };
@@ -180,9 +180,16 @@ const Messages = ({ chatId, senderId }) => {
         chats: [chat],
       });
     }
+    // console.log(result)
 
     return result;
+
   }, []);
+
+  useEffect(()=>{
+
+  })
+
 
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
@@ -227,6 +234,8 @@ const Messages = ({ chatId, senderId }) => {
     dispatch(fetchChat(authorId));
     scrollToBottom();
   }, [dispatch, authorId]);
+
+
 
   const action = (
     <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
