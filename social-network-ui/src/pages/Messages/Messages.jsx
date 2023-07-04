@@ -1,16 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  Menu,
-  MenuItem,
-  Paper,
-  Snackbar,
-  Typography
-} from '@mui/material';
+import { Grid, IconButton, List, ListItem, Menu, MenuItem, Paper, Snackbar, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
@@ -22,10 +12,12 @@ import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
   addChat,
+  addChatMessage,
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
+  selectChats,
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
@@ -62,7 +54,7 @@ const Messages = ({ chatId }) => {
 
   const handleDeleteChat = () => {
     if (selectedChatIndex !== null) {
-      const chatId = groupedChats[selectedChatIndex]?.chatId;
+      const chatId = filteredMessage[selectedChatIndex]?.chatId;
       setSenderName('');
       setRecipientName('');
       if (chatId) {
@@ -99,17 +91,17 @@ const Messages = ({ chatId }) => {
     }
   };
 
-  const onMessageReceived = async (msg) => {
+  const onMessageReceived = (msg) => {
     dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
     dispatch(delletedChats(chatId));
-    await dispatch(addChat(chatId));
+
     if (selectedChatId || chatId) {
-      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
-      });
+      // dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
+      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      throw new Error('Зось інще');
+      console.error('No chat selected.');
     }
   };
 
@@ -176,24 +168,47 @@ const Messages = ({ chatId }) => {
     dispatch(toggleModalWindow());
   };
 
-  const groupedChats = Object.values(chats).reduce((result, chat) => {
-    if (chat && chat.chatId) {
-      const existingGroup = result.find((group) => group.chatId === chat.chatId);
-      if (existingGroup) {
-        existingGroup.chats.push(chat);
-      } else {
-        result.push({
+  const [filteredMessage, setFilteredMessage] = useState([]);
+
+  console.log(filteredMessage);
+
+  useEffect(() => {
+    const groupedChats = Object.values(chats);
+
+    groupedChats.forEach((chat) => {
+      const index = groupedChats.findIndex((el) => {
+        return el.chatId === chat.chatId;
+      });
+      if (index === -1) {
+        setFilteredMessage({
           chatId: chat.chatId,
-          chats: [chat],
+          chats: [chat.message],
+          ...chat,
         });
       }
+    });
+  }, [chats]);
+
+  useEffect(() => {
+    function sortMessagesByChatId(messages) {
+      const sortedChats = [];
+      messages.forEach((message) => {
+        const existingChat = sortedChats.find((chat) => chat.chatId === message.chatId);
+        if (existingChat) {
+          existingChat.chats.push(message.message);
+        } else {
+          sortedChats.push({
+            chatId: message.chatId,
+            chats: [message.message],
+            ...message,
+          });
+        }
+      });
+
+      return sortedChats.sort((a, b) => a.chatId - b.chatId);
     }
-
-    return result;
-  }, []);
-
-
-
+    setFilteredMessage(sortMessagesByChatId(chats));
+  }, [chats]);
 
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
@@ -265,34 +280,30 @@ const Messages = ({ chatId }) => {
               </div>
             </Paper>
             {Object.values(chats).length === 0 ? (
-                <>
-                  <div className={classes.messagesTitleContainer}>
-                    <div className={classes.messagesTitle}>
-                      Send a message, get a message
-                    </div>
-                    <div className={classes.messagesText}>
-                      Direct Messages are private conversations between you and other people on Twitter.
-                      Share Tweets, media, and more!
-                    </div>
-                    <Button
-                        onClick={onOpenModalWindow}
-                        className={classes.messagesButton}
-                        variant="contained"
-                        color="primary"
-                    >
-                      Start a conversation
-                    </Button>
+              <>
+                <div className={classes.messagesTitleContainer}>
+                  <div className={classes.messagesTitle}>Send a message, get a message</div>
+                  <div className={classes.messagesText}>
+                    Direct Messages are private conversations between you and other people on Twitter. Share Tweets,
+                    media, and more!
                   </div>
-
-                </>
+                  <Button
+                    onClick={onOpenModalWindow}
+                    className={classes.messagesButton}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Start a conversation
+                  </Button>
+                </div>
+              </>
             ) : (
               <>
                 <List component="nav" className={classes.list} aria-label="main mailbox folders">
-                  {groupedChats.map((group, index) =>
+                  {filteredMessage.map((group, index) =>
                     group && group.chats && group.chats.length > 0 ? (
                       <ListItem
                         key={group.chatId}
-                        button
                         className={classNames(classes.listItem, {
                           [classes.selected]: group.chatId === selectedChatId,
                         })}
@@ -303,14 +314,10 @@ const Messages = ({ chatId }) => {
                           <div style={{ flex: 1 }}>
                             <div className={classes.userHeader}>
                               <div>
-                                {group.chats[0]?.senderUsername === username ? (
-                                  <Typography className={classes.chatName}>
-                                    @{group.chats[0]?.recipientUsername}
-                                  </Typography>
+                                {group.senderUsername === username ? (
+                                  <Typography className={classes.chatName}>@{group.recipientUsername}</Typography>
                                 ) : (
-                                  <Typography className={classes.chatName}>
-                                    @{group.chats[0]?.senderUsername}
-                                  </Typography>
+                                  <Typography className={classes.chatName}>@{group.senderUsername}</Typography>
                                 )}
                               </div>
                             </div>
