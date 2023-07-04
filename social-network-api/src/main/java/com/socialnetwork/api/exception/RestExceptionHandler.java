@@ -9,6 +9,8 @@ import com.socialnetwork.api.exception.custom.PostWithNoDataException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +19,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.socialnetwork.api.util.Constants.Exception.MISSING_PATH_VARIABLE;
 import static com.socialnetwork.api.util.Constants.Exception.MISSING_REQUEST_PARAMETER;
@@ -68,11 +73,25 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return buildResponseEntity(new ApiError(BAD_REQUEST, ex));
   }
 
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+          MethodArgumentNotValidException ex,
+          HttpHeaders headers,
+          HttpStatus status,
+          WebRequest request) {
+    Map<String, String> errors = new HashMap<>();
+    ex.getBindingResult().getAllErrors().forEach((error) -> {
+      String fieldName = ((FieldError) error).getField();
+      String errorMessage = error.getDefaultMessage();
+      errors.put(fieldName, errorMessage);
+    });
+    return ResponseEntity.badRequest().body(errors);
+  }
+
   @ExceptionHandler(EmailException.class)
   public ResponseEntity<Object> handleEmailVerification(EmailException ex) {
     return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, ex));
   }
-
 
   private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
     return new ResponseEntity<>(apiError, apiError.getStatus());

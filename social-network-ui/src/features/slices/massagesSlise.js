@@ -1,5 +1,5 @@
-import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
-import {ChatApi} from "../../api/chatApi";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { ChatApi } from "../../api/chatApi";
 import axiosIns from "../../axiosInstance";
 
 
@@ -37,8 +37,14 @@ export const sendMessage = createAsyncThunk(
                 senderId: chat.senderId,
                 recipientId: chat.recipientId,
             };
-
         }
+    }
+);
+
+const updateChat = createAsyncThunk(
+    'messages/updateChat',
+    async ({ chatId, chat }) => {
+        return { chatId, chat };
     }
 );
 
@@ -77,7 +83,7 @@ const messagesSlice = createSlice({
         authorId: ''
     },
     reducers: {
-        getAuthorId: (state, action) =>{
+        getAuthorId: (state, action) => {
             state.authorId = action.payload;
         },
         setSelectedChatId: (state, action) => {
@@ -91,14 +97,16 @@ const messagesSlice = createSlice({
         },
         addChat: (state, action) => {
             const newChat = action.payload;
-            state.chats.push(newChat);
+            state.chats.push(newChat.messages[1]);
         },
+
         delletedChats: (state, action)=>{
             state.chats = state.chats.filter(chat => chat.chatId !== action.payload)
         },
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
             const chat = state.chats.find((chat) => chat.chatId === chatId);
+
             if (chat) {
                 const updatedMessage = {
                     ...message,
@@ -148,16 +156,32 @@ const messagesSlice = createSlice({
                         updatedMessage.isRead = true;
                     }
                 }
+                const updatedChat = {
+                    ...state.chats[chatIndex],
+                    senderId: senderId || state.chats[chatIndex].senderId,
+                    recipientId: recipientId || state.chats[chatIndex].recipientId,
+                };
+                updateChat({ chatId, chat: updatedChat });
             })
 
             .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;
             })
 
+            .addCase(updateChat.fulfilled, (state, action) => {
+                const { chatId, chat } = action.payload;
+                const chatIndex = state.chats.findIndex(
+                    (chat) => chat.chatId === chatId
+                );
+                if (chatIndex !== -1) {
+                    state.chats[chatIndex] = chat;
+                }
+            })
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;
                 state.messages[chatId] = messages;
             });
+
     },
 });
 
@@ -172,14 +196,12 @@ export const {
 } = messagesSlice.actions;
 
 export const selectChats = (state) => state.messages.chats;
-export const selectUsers = (state) => state.messages.users;
 export const selectMessages = (state) => {
     const selectedChatId = state.messages.selectedChatId;
 
     return state.messages.messages[selectedChatId] || [];
 };
 export const selectSelectedChatId = (state) => state.messages.selectedChatId;
-export const selectText = (state) => state.messages.text;
 export const selectVisibleModalWindow = (state) =>
     state.messages.visibleModalWindow;
 

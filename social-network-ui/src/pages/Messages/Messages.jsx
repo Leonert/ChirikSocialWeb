@@ -1,6 +1,16 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
-import { Grid, IconButton, List, ListItem, Menu, MenuItem, Paper, Snackbar, Typography } from '@mui/material';
+import {
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  Menu,
+  MenuItem,
+  Paper,
+  Snackbar,
+  Typography
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,12 +21,11 @@ import axiosIns from '../../axiosInstance';
 import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
-  addChatMessage,
+  addChat,
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
-  selectChats,
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
@@ -30,12 +39,13 @@ import { SOCKET_URL } from '../../util/constants';
 import { formatChatMessageDate } from '../../util/formatDate';
 import { useMessagesStyles } from './MessagesStyles';
 
-const Messages = ({ chatId, senderId }) => {
+const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
-  const chats = useSelector(selectChats);
+  const chats = useSelector((state) => state.messages.chats);
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
+
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
@@ -59,7 +69,6 @@ const Messages = ({ chatId, senderId }) => {
         axiosIns
           .delete(`/api/messages/chats/${chatId}`)
           .then((response) => {
-            // dispatch(fetchChat());
             setStatus(true);
             setError(null);
           })
@@ -90,14 +99,20 @@ const Messages = ({ chatId, senderId }) => {
     }
   };
 
-  const onMessageReceived = (msg) => {
+  const onMessageReceived = async (msg) => {
     dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
-    // dispatch(fetchChat());
-    dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
-    dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
+    dispatch(delletedChats(chatId));
+    await dispatch(addChat(chatId));
+    if (selectedChatId || chatId) {
+      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
+      });
+    } else {
+      throw new Error('Зось інще');
+    }
   };
+
   const onConnected = () => {};
 
   const handleListItemClick = async (group) => {
@@ -162,18 +177,23 @@ const Messages = ({ chatId, senderId }) => {
   };
 
   const groupedChats = Object.values(chats).reduce((result, chat) => {
-    const existingGroup = result.find((group) => group.chatId === chat.chatId);
-    if (existingGroup) {
-      existingGroup.chats.push(chat);
-    } else {
-      result.push({
-        chatId: chat.chatId,
-        chats: [chat],
-      });
+    if (chat && chat.chatId) {
+      const existingGroup = result.find((group) => group.chatId === chat.chatId);
+      if (existingGroup) {
+        existingGroup.chats.push(chat);
+      } else {
+        result.push({
+          chatId: chat.chatId,
+          chats: [chat],
+        });
+      }
     }
 
     return result;
   }, []);
+
+
+
 
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
@@ -245,24 +265,28 @@ const Messages = ({ chatId, senderId }) => {
               </div>
             </Paper>
             {Object.values(chats).length === 0 ? (
-              <>
-                <div className={classes.messagesTitle}>Send a message, get a message</div>
-                <div className={classes.messagesText}>
-                  Direct Messages are private conversations between you and other people on Twitter. Share Tweets,
-                  media, and more!
-                </div>
-                <Button
-                  onClick={onOpenModalWindow}
-                  className={classes.messagesButton}
-                  variant="contained"
-                  color="primary"
-                >
-                  Start a conversation
-                </Button>
-              </>
+                <>
+                  <div className={classes.messagesTitleContainer}>
+                    <div className={classes.messagesTitle}>
+                      Send a message, get a message
+                    </div>
+                    <div className={classes.messagesText}>
+                      Direct Messages are private conversations between you and other people on Twitter.
+                      Share Tweets, media, and more!
+                    </div>
+                    <Button
+                        onClick={onOpenModalWindow}
+                        className={classes.messagesButton}
+                        variant="contained"
+                        color="primary"
+                    >
+                      Start a conversation
+                    </Button>
+                  </div>
+
+                </>
             ) : (
               <>
-                <div className={classes.searchWrapper}></div>
                 <List component="nav" className={classes.list} aria-label="main mailbox folders">
                   {groupedChats.map((group, index) =>
                     group && group.chats && group.chats.length > 0 ? (

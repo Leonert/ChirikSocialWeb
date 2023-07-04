@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import static com.socialnetwork.api.util.Constants.Auth.AUTHORIZATION_HEADER;
 import static com.socialnetwork.api.util.Constants.Auth.BEARER;
@@ -47,16 +48,16 @@ public class LoginController {
   private final SimpMessagingTemplate messagingTemplate;
 
   @PostMapping()
-  public ResponseEntity<?> logIn(@RequestBody UserDto.Request.Credentials userDto)
+  public ResponseEntity<?> logIn(@Valid @RequestBody UserDto.Request.Credentials userDto)
       throws NoUserWithSuchCredentialsException {
     User user = userService.findByEmailAddress(userDto.getEmailAddress());
 
     if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response(WRONG_PASSWORD));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.of(WRONG_PASSWORD));
     }
 
     if (!user.isEnabled()) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(CONFIRMATION_REQUIRED));
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Response.of(CONFIRMATION_REQUIRED));
     }
 
     messagingTemplate.convertAndSendToUser(
@@ -84,7 +85,7 @@ public class LoginController {
 
   @PostMapping("password-change")
   public ResponseEntity<?> passwordChange(@CurrentUser UserPrincipal currentUser,
-                                          @RequestBody UserDto.Request.PasswordEditing passwords)
+                                          @Valid @RequestBody UserDto.Request.PasswordEditing passwords)
       throws NoUserWithSuchCredentialsException, AccessDeniedException {
     userService.passwordChange(currentUser.getUsername(), passwords.getOldPassword(), passwords. getNewPassword());
     return ResponseEntity.ok().build();
@@ -98,7 +99,7 @@ public class LoginController {
   }
 
   @PostMapping("recovery")
-  public ResponseEntity<?> passwordRecovery(@RequestBody UserDto.Request.PasswordRecovery passwordRecovery)
+  public ResponseEntity<?> passwordRecovery(@Valid @RequestBody UserDto.Request.PasswordRecovery passwordRecovery)
       throws TokenInvalidException {
     userService.passwordRecovery(passwordRecovery.getToken(), passwordRecovery.getNewPassword());
     return ResponseEntity.ok().build();

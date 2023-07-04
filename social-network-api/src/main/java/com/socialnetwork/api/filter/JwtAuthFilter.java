@@ -23,8 +23,8 @@ import static com.socialnetwork.api.util.Constants.Auth.BEARER;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-  private final UserPrincipalService userPrincipalService;
   private final JwtTokenUtil jwtTokenUtil;
+  private final UserPrincipalService userPrincipalService;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

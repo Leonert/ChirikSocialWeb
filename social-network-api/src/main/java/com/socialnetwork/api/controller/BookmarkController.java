@@ -31,10 +31,12 @@ public class BookmarkController {
         throws NoUserWithSuchCredentialsException, NoPostWithSuchIdException {
     List<PostDtoInterface> outcome = new ArrayList<>();
     String username = currentUser.getUsername();
+
     for (Post post : userService.findByUsername(username).getBookmarkedPosts()
           .stream().map(Bookmark::getBookmarkedPost).toList()) {
       outcome.add(postMapper.convertToPostDtoDefault(post, username));
     }
+
     return ResponseEntity.ok().body(outcome);
   }
 }

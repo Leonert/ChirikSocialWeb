@@ -65,13 +65,14 @@ public class UserService {
     return userRepository.findByEmailAddress(emailAddress).orElseThrow(NoUserWithSuchCredentialsException::new);
   }
 
-  public void save(User user) {
+  public User save(User user) {
     user.setCreatedDate(LocalDateTime.now());
     user.setProvider(AuthProvider.LOCAL);
-    userRepository.save(user);
-    ConfirmationToken confirmationToken = new ConfirmationToken(user);
+    User savedUser = userRepository.save(user);
+    ConfirmationToken confirmationToken = new ConfirmationToken(savedUser);
     confirmationTokenService.save(confirmationToken);
-    emailService.sendTokenForAccountActivation(user, confirmationToken);
+    emailService.sendTokenForAccountActivation(savedUser.getEmailAddress(), confirmationToken);
+    return savedUser;
   }
 
   public void verifyAccount(String confirmationToken) throws EmailException, NoUserWithSuchCredentialsException {

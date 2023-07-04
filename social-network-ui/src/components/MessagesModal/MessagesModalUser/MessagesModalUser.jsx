@@ -4,6 +4,7 @@ import {Avatar,Typography} from "@material-ui/core";
 
 
 import {useMessagesModalUserStyles} from "./MessagesModalUserStyles";
+import {ListItemAvatar} from "@mui/material";
 
 
 const MessagesModalUser = ({ user }) => {
@@ -11,7 +12,9 @@ const MessagesModalUser = ({ user }) => {
 
     return (
         <div className={classes.container}>
-            <Avatar className={classes.listAvatar} src={user?.avatar?.src} />
+            <ListItemAvatar>
+                <Avatar src={user.profileImage} />
+            </ListItemAvatar>
             <div style={{ flex: 1 }}>
                 <div className={classes.header}>
                     <div style={{ width: 350 }}>
