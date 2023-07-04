@@ -28,11 +28,11 @@ public class EmailService {
   private String passwordRecoveryUrl;
 
   @Async
-  public void sendTokenForAccountActivation(User user, ConfirmationToken token) {
+  public void sendTokenForAccountActivation(String userEmailAddress, ConfirmationToken token) {
     MimeMessagePreparator mailMessage = mimeMessage -> {
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
       message.setFrom(emailAddressFrom, "Chirik");
-      message.addTo(user.getEmailAddress());
+      message.addTo(userEmailAddress);
       message.setSubject("Complete Registration");
       message.setText("To confirm your account, please click here: "
           + confirmAccountUrl + token.getConfirmationToken());

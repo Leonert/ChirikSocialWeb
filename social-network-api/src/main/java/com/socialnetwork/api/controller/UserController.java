@@ -59,6 +59,7 @@ public class UserController extends Controller {
     if (currentUser == null) {
       return nonAuthUserMapper.mapForProfile(nonAuthUserService.findByUsername(username));
     }
+
     return userMapper.mapForProfile(userService.findByUsername(username), currentUser.getUsername());
   }
 
@@ -77,6 +78,7 @@ public class UserController extends Controller {
               pageD, resultsD)));
 
     }
+
     String currentUserUsername = currentUser.getUsername();
     return getListResponseEntity(userMapper.mapForListing(userService.getFollowers(username, currentUserUsername,
             pageD, resultsD), currentUserUsername));
@@ -140,6 +142,7 @@ public class UserController extends Controller {
       return getListResponseEntity(nonAuthPostMapper.mapForListing(
               likeService.getUserLikedPosts(userService.findByUsername(username))));
     }
+
     return getListResponseEntity(postMapper.mapForListing(
             likeService.getUserLikedPosts(userService.findByUsername(username)),
             currentUser.getUsername()));
