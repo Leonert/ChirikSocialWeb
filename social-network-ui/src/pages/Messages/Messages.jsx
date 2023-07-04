@@ -111,7 +111,7 @@ const Messages = ({ chatId }) => {
       dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
       dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      console.error('No chat selected.');
+      throw error('No chat selected')
     }
   };
 
@@ -119,11 +119,6 @@ const Messages = ({ chatId }) => {
 
   const handleListItemClick = async (group) => {
     const chatId = group.chatId;
-
-
-
-    const i = filteredMessage.findIndex((e) => e.chatId === chatId);
-    setActiveIndex(i);
 
     dispatch(setSelectedChatId(chatId));
     setSelectedChatId(chatId);
@@ -185,7 +180,6 @@ const Messages = ({ chatId }) => {
   };
 
   const [filteredMessage, setFilteredMessage] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
 
 
   useEffect(() => {
