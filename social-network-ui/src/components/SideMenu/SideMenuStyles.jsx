@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 export const useSideMenuStyles = makeStyles((theme) => ({
   container: {
     position: 'fixed',
-    top: '60px',
+    top: '10px',
     listStyle: 'none',
     padding: 0,
     margin: 0,

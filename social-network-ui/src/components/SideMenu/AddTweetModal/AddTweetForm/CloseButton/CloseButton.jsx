@@ -9,7 +9,7 @@ const CloseButton = ({ onClose, classesProps }) => {
 
   return (
     <div className={classes.close}>
-      <Button onClick={onClose} className={classesProps || classes.closeButton}>
+      <Button onClick={onClose} className={classesProps || classes.closeButton} data-testid="close-button">
         {CloseIcon}
       </Button>
     </div>

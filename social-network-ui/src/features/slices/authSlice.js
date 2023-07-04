@@ -57,6 +57,7 @@ const authSlice = createSlice({
     token: null,
     error: null,
     loading: false,
+    provider: null,
   },
   reducers: {
     logoutUser: (state) => {
@@ -76,6 +77,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
+      state.provider = action.payload.provider;
       localStorage.setItem(TOKEN, action.payload.jwt);
     },
     [loginUser.rejected]: (state, action) => {
@@ -91,6 +93,7 @@ const authSlice = createSlice({
       state.error = null;
       state.user = action.payload.user;
       state.token = action.payload.jwt;
+      state.provider = action.payload.provider;
 
       localStorage.setItem(TOKEN, action.payload.jwt);
     },

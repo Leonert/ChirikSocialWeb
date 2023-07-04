@@ -56,6 +56,7 @@ const homeSlice = createSlice({
     clearTweetedPost: (state) => {
       state.tweetedPost = '';
     },
+
     getPost: (state, action) => {
       if (Array.isArray(action.payload)) {
         state.post.push(...action.payload);
@@ -78,6 +79,9 @@ const homeSlice = createSlice({
     },
     replayMessage: (state, actions) => {
       state.message = actions.payload;
+    },
+    addEmoji: (state, actions) => {
+      state.message += actions.payload;
     },
     clearPosts: (state) => {
       state.post = [];
@@ -180,4 +184,5 @@ export const {
   addOnePost,
   addReply,
   clearTweetedPost,
+  addEmoji,
 } = homeSlice.actions;
