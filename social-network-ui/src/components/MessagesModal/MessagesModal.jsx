@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../axiosInstance";
 import {addResult, removeResult} from "../../features/slices/searchSlice";
 import React, {useEffect, useState} from "react";
-import { InputAdornment, List, ListItem} from "@mui/material";
+import {Avatar, InputAdornment, List, ListItem, ListItemAvatar} from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
@@ -135,10 +135,10 @@ const MessagesModal = ({ visible, onClose }) => {
             {searchResult.map((user) => (
                 <ListItem
                     key={user.id}
-
                     selected={selectedUser && selectedUser.id === user.id}
                     onClick={() => handleListItemClick(user)}
                 >
+
                   <MessagesModalUser user={user} />
                 </ListItem>
             ))}
