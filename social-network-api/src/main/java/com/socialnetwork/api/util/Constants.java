@@ -42,7 +42,7 @@ public class Constants {
 
   public static class Auth {
     public static final String OK = "Ok";
-    public static final String OAUTH_REDIRECT_URL = "http://localhost:3000/google-authorization";
+    public static final String OAUTH_REDIRECT_URL = "https://chirik.vercel.app/google-authorization";
     public static final String USERNAME_TAKEN = "User with such username already exists.";
     public static final String EMAIL_TAKEN = "User with such email address already exists.";
     public static final String BEARER = "Bearer ";
