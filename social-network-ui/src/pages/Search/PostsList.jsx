@@ -105,7 +105,7 @@ const PostsList = ({ searchValue }) => {
           No more results.
         </Typography>
       }
-      loader={<Spinner />}
+      loader={<Spinner p="50px 0" />}
     >
       <Box>
         {posts.map((post) => (
