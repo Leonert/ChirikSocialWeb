@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { handleLogOutModal } from '../../features/slices/authModalSlice';
 import { logoutUser } from '../../features/slices/authSlice';
-import { Chirick, TweetIcon } from '../../icon';
+import { Chirick } from '../../icon';
 import { useLogOutStyle } from './LogOutModalStyle';
 
 function LogOutModal() {
