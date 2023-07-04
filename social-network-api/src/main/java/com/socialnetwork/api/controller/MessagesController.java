@@ -87,6 +87,7 @@ public class MessagesController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteMessage(@PathVariable("id") int id) {
     messageService.deleteMessage(id);
+    messagingTemplate.convertAndSend(TOPIC_MESSAGES, id);
     return ResponseEntity.noContent().build();
   }
 

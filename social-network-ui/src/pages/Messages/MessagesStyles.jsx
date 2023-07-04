@@ -61,35 +61,26 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   listItem: {
     padding: 0,
-  },
-  '& :hover': {
-    backgroundColor: theme.palette.background.lightBlue,
-  },
-  selected: {
-    backgroundColor: theme.palette.background.lightBlue,
+    backgroundColor: theme.palette.background.paper,
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.dark,
+    },
   },
   userWrapper: {
     height: 76,
-    width: '100%',
-    display: 'flex',
+    borderTop: `1px solid ${theme.palette.divider}`,
+    width: "100%",
+    display: "flex",
     alignItems: 'flex-start',
     paddingLeft: 15,
     paddingTop: 8,
     paddingBottom: 8,
     cursor: 'pointer',
   },
-
   userAvatar: {
     width: theme.spacing(5),
     height: theme.spacing(5),
     marginRight: 15,
-    mt: '-14%',
-    border: `4px solid ${theme.palette.background.paper}`,
-  },
-  userHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   userFullName: {
     display: 'inline-block',
@@ -117,9 +108,13 @@ export const useMessagesStyles = makeStyles((theme) => ({
     padding: 0,
     borderLeft: 0,
   },
+  messagesTitleContainer:{
+    margin:"1" + "0px",
+    alignItems: "center",
+  },
   chatInfoWrapper: {
     width: 320,
-    margin: "0px auto",
+    margin: "50px auto",
     color: theme.palette.text.primary,
 
     paddingTop: 300,
@@ -136,57 +131,30 @@ export const useMessagesStyles = makeStyles((theme) => ({
 
   },
   chatInfoButton: {
-    height: 48,
-    padding: theme.spacing(3.2),
-    "& .MuiButton-label": {
-      fontSize: 15,
-    },
+    marginTop: 27,
+    height: 52,
   },
   chatHeader: {
-    position: 'fixed',
-    display: 'flex',
-    margin: 0,
-    padding: 0,
-    paddingLeft: 15,
-    width: 601,
-    zIndex: 1,
-    borderTop: 0,
-    borderLeft: 0,
-    borderRight: 0,
-    borderRadius: 0,
-    alignItems: 'center',
-    backgroundColor: theme.palette.background.lightDefault,
-
-    flex: 1,
-    '& h6': {
-      fontWeight: 800,
-    },
+    width: 598,
   },
   chatAvatar: {
-    width: theme.spacing(5),
-    height: theme.spacing(5),
-    marginRight: 15,
-    background: theme.palette.background.paper,
-
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    margin: "0px 15px",
   },
   chat: {
-    padding: '53px 15px',
-    color: theme.palette.text.primary,
+    padding: "53px 15px",
     height: 600,
-    overflowY: 'auto',
-    backgroundColor: theme.palette.background.lightDefault,
-    display: 'flex',
-    flexDirection: 'column',
+    overflowY: "auto",
+    border: 0,
   },
   tweetContainer: {
     marginTop: 10,
-    display: 'flex',
-
-    flexDirection: 'row-reverse',
-    '& a': {
-
-      color: 'inherit',
-      textDecoration: 'none',
+    display: "flex",
+    flexDirection: "row-reverse",
+    "& a": {
+      color: "inherit",
+      textDecoration: "none",
     },
   },
   messageTimestamp:{
@@ -195,12 +163,13 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
 
   tweetWrapper: {
-    border: '1px solid rgb(29, 161, 242)',
-    borderRadius: '16px 16px 0px 16px',
+    border: `1px solid ${theme.palette.primary.main}`,
+    borderRadius: "16px 16px 0px 16px",
     padding: 12,
     width: 384,
-    '&:hover': {
-      cursor: 'pointer',
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: theme.palette.secondary.main,
     },
   },
   tweetUserInfoWrapper: {
@@ -209,13 +178,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
   tweetAvatar: {
     width: "18px !important",
     height: "18px !important",
-  },
-  tweetUserFullName: {
-    marginLeft: 3,
-    fontWeight: 700,
-    fontSize: 15,
-    color: theme.palette.text.secondary,
-
+    marginRight: 3,
   },
   tweetUsername: {
     marginLeft: 3,
@@ -223,15 +186,11 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 15,
   },
   myMessage: {
-    display:'flex',
-    flexDirection: 'column',
-    top: 100,
-    borderRadius: '16px 16px 0px 16px',
-    padding: 12,
-    backgroundColor: theme.palette.background.primary,
-    color: theme.palette.text.secondary,
-    "& span": {
-      color: "#fff",
+    display: "flex",
+    flexDirection: "row-reverse",
+    "& .MuiTypography-root": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
       padding: "11px 15px",
       maxWidth: 384,
     },
@@ -327,8 +286,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
 
   chatFooter: {
     display: 'flex',
-    position: 'fixed',
-    bottom: 3,
+    bottom: 1,
     width: 598,
     padding: 4,
     borderRight: 0,
