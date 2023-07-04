@@ -4,7 +4,6 @@ import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
 
 import { Chirick } from '../../icon';
-import Logo from '../SideMenu/Logo';
 
 const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {

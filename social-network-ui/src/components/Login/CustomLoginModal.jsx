@@ -1,5 +1,4 @@
 import CloseIcon from '@mui/icons-material/Close';
-import TwitterIcon from '@mui/icons-material/Twitter';
 import { Box, DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
