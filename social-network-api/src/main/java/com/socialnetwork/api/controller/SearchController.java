@@ -44,9 +44,11 @@ public class SearchController {
                                                       @CurrentUser UserPrincipal currentUser) {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = postsPerPage.orElse(POSTS_PER_PAGE_DEFAULT);
+
     if (currentUser == null) {
       return nonAuthUserMapper.mapPostsForListing(nonAuthSearchService.searchPosts(query, pageD, resultsD));
     }
+
     return postMapper.mapForListing(searchService.searchPosts(query, pageD,
           resultsD), currentUser.getUsername());
   }
@@ -59,9 +61,11 @@ public class SearchController {
         throws NoUserWithSuchCredentialsException {
     int pageD = page.orElse(PAGE_NUMBER_DEFAULT);
     int resultsD = usersPerPage.orElse(RESULTS_PER_PAGE_DEFAULT);
+
     if (currentUser == null) {
       return nonAuthUserMapper.mapUsersForListing(nonAuthSearchService.searchUsers(query, pageD, resultsD));
     }
+
     return userMapper.mapForListing(searchService.searchUsers(query, pageD,
           resultsD), currentUser.getUsername());
   }
