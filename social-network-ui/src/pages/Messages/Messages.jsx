@@ -11,13 +11,10 @@ import axiosIns from '../../axiosInstance';
 import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
-  addChat,
-  addChatMessage,
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
-  selectChats,
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
