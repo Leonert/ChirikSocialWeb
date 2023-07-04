@@ -1,7 +1,5 @@
 package com.socialnetwork.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.socialnetwork.api.dto.authorized.UserDto;
 import com.socialnetwork.api.mapper.authorized.UserMapper;
 import com.socialnetwork.api.model.base.User;
@@ -9,11 +7,8 @@ import com.socialnetwork.api.service.authorized.UserService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
@@ -32,15 +27,8 @@ import static com.socialnetwork.api.util.Constants.Auth.OK;
 import static com.socialnetwork.api.util.Constants.Auth.EMAIL_TAKEN;
 import static com.socialnetwork.api.util.Constants.Auth.USERNAME_TAKEN;
 
-@AutoConfigureMockMvc
-@SpringBootTest
-public class RegistrationControllerTest {
 
-  @Autowired
-  private ObjectMapper objectMapper;
-
-  @Autowired
-  private MockMvc mockMvc;
+public class RegistrationControllerTest extends ControllerTest {
 
   @Autowired
   private UserMapper userMapper;
@@ -48,27 +36,36 @@ public class RegistrationControllerTest {
   @MockBean
   private UserService userService;
 
+  private static final String TEST_EMAIL = "denys@gmail.com";
+
+  private static final String NON_EXISTENT_EMAIL = "nonexistent@gmail.com";
+
+  private static final String USERNAME = "denyskozarenko";
+
   @Test
-  public void checkIfEmailExists_StatusOk_EmailDoesNotExist() throws Exception {
-    when(userService.existsByEmailAddress("nonexistent@gmail.com")).thenReturn(false);
-    mockMvc.perform(get("/api/registration/email?q=nonexistent@gmail.com"))
+  public void checkIfEmailExists_ReturnsStatusOk_EmailDoesNotExist() throws Exception {
+    when(userService.existsByEmailAddress(NON_EXISTENT_EMAIL)).thenReturn(false);
+
+    mockMvc.perform(get("/api/registration/email?q=" + NON_EXISTENT_EMAIL))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(containsString(OK)));
   }
 
   @Test
-  public void checkIfEmailExists_StatusConflict_EmailExists() throws Exception {
-    when(userService.existsByEmailAddress("someemail@gmail.com")).thenReturn(true);
-    mockMvc.perform(get("/api/registration/email?q=someemail@gmail.com"))
+  public void checkIfEmailExists_ReturnsStatusConflict_EmailExists() throws Exception {
+    when(userService.existsByEmailAddress(TEST_EMAIL)).thenReturn(true);
+
+    mockMvc.perform(get("/api/registration/email?q=" + TEST_EMAIL))
             .andDo(print())
             .andExpect(status().isConflict())
             .andExpect(content().string(containsString(EMAIL_TAKEN)));
   }
 
   @Test
-  public void checkIfUsernameExists_StatusOk_UsernameDoesNotExist() throws Exception {
+  public void checkIfUsernameExists_ReturnsStatusOk_UsernameDoesNotExist() throws Exception {
     when(userService.existsByUsername("Denys")).thenReturn(false);
+
     mockMvc.perform(get("/api/registration/username?q=Denys"))
             .andDo(print())
             .andExpect(status().isOk())
@@ -76,20 +73,22 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void checkIfUsernameExists_StatusConflict_UsernameExists() throws Exception {
-    when(userService.existsByUsername("Denys")).thenReturn(true);
-    mockMvc.perform(get("/api/registration/username?q=Denys"))
+  public void checkIfUsernameExists_ReturnsStatusConflict_UsernameExists() throws Exception {
+    when(userService.existsByUsername(USERNAME)).thenReturn(true);
+
+    mockMvc.perform(get("/api/registration/username?q=" + USERNAME))
             .andDo(print())
             .andExpect(status().isConflict())
             .andExpect(content().string(containsString(USERNAME_TAKEN)));
   }
 
   @Test
-  public void saveUser_StatusOk_UserDtoCorrect() throws Exception {
+  public void saveUser_ReturnsStatusOk_UserDtoCorrect() throws Exception {
     UserDto.Request.Registration userDto = createUserDto();
     User user = userMapper.convertToUser(userDto);
     User savedUser = userMapper.convertToUser(createUserDto());
     savedUser.setCreatedDate(LocalDateTime.now());
+
     when(userService.save(user)).thenReturn(savedUser);
 
     mockMvc.perform(post("/api/registration")
@@ -103,7 +102,7 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void saveUser_MethodArgumentNotValidException_UserDtoEmpty() throws Exception {
+  public void saveUser_ReturnsMethodArgumentNotValidException_UserDtoEmpty() throws Exception {
     UserDto.Request.Registration userDto = new UserDto.Request.Registration();
 
     mockMvc.perform(post("/api/registration")
@@ -122,9 +121,5 @@ public class RegistrationControllerTest {
     userDto.setPassword("denys123");
     userDto.setBirthDate(null);
     return userDto;
-  }
-
-  private <T> String jsonFrom(T object) throws JsonProcessingException {
-    return objectMapper.writeValueAsString(object);
   }
 }
