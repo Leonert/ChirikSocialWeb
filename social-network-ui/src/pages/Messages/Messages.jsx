@@ -22,10 +22,12 @@ import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
   addChatMessage,
+
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
+
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
@@ -117,6 +119,8 @@ const Messages = ({ chatId }) => {
 
   const handleListItemClick = async (group) => {
     const chatId = group.chatId;
+
+
 
     const i = filteredMessage.findIndex((e) => e.chatId === chatId);
     setActiveIndex(i);
