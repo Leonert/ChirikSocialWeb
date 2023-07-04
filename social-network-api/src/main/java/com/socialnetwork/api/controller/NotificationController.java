@@ -30,7 +30,9 @@ public class NotificationController {
           throws NoUserWithSuchCredentialsException {
     List<NotificationDto> notifications = new ArrayList<>(notificationMapper.mapNotifications(userService.findByUsername(
             currentUser.getUsername()).getNotifications()));
+
     Collections.reverse(notifications);
+
     return getListResponseEntity(notifications);
   }
 
