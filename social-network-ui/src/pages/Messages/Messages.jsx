@@ -9,7 +9,7 @@ import {
   MenuItem,
   Paper,
   Snackbar,
-  Typography
+  Typography,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import classNames from 'classnames';
@@ -21,11 +21,13 @@ import axiosIns from '../../axiosInstance';
 import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
-  addChat,
+  addChatMessage,
+
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
+
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
@@ -62,20 +64,20 @@ const Messages = ({ chatId }) => {
 
   const handleDeleteChat = () => {
     if (selectedChatIndex !== null) {
-      const chatId = groupedChats[selectedChatIndex]?.chatId;
+      const chatId = filteredMessage[selectedChatIndex]?.chatId;
       setSenderName('');
       setRecipientName('');
       if (chatId) {
         axiosIns
-          .delete(`/api/messages/chats/${chatId}`)
-          .then((response) => {
-            setStatus(true);
-            setError(null);
-          })
-          .catch((error) => {
-            setStatus(true);
-            setError(error.message);
-          });
+            .delete(`/api/messages/chats/${chatId}`)
+            .then((response) => {
+              setStatus(true);
+              setError(null);
+            })
+            .catch((error) => {
+              setStatus(true);
+              setError(error.message);
+            });
         dispatch(delletedChats(chatId));
       }
     }
@@ -99,17 +101,17 @@ const Messages = ({ chatId }) => {
     }
   };
 
-  const onMessageReceived = async (msg) => {
+  const onMessageReceived = (msg) => {
     dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
     dispatch(delletedChats(chatId));
-    await dispatch(addChat(chatId));
+
     if (selectedChatId || chatId) {
-      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
-      });
+      dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
+      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      throw new Error('Зось інще');
+      throw error('No chat selected')
     }
   };
 
@@ -117,6 +119,7 @@ const Messages = ({ chatId }) => {
 
   const handleListItemClick = async (group) => {
     const chatId = group.chatId;
+
     dispatch(setSelectedChatId(chatId));
     setSelectedChatId(chatId);
 
@@ -151,10 +154,10 @@ const Messages = ({ chatId }) => {
         recipientUsername,
         chatName,
         parentId:
-          messages[selectedChatId]?.messages
-            .slice()
-            .reverse()
-            .find((msg) => msg.senderId === sender?.senderId)?.messageId || undefined,
+            messages[selectedChatId]?.messages
+                .slice()
+                .reverse()
+                .find((msg) => msg.senderId === sender?.senderId)?.messageId || undefined,
       };
 
       return dispatch(sendMessage(messageToSend)).then(() => {
@@ -176,24 +179,46 @@ const Messages = ({ chatId }) => {
     dispatch(toggleModalWindow());
   };
 
-  const groupedChats = Object.values(chats).reduce((result, chat) => {
-    if (chat && chat.chatId) {
-      const existingGroup = result.find((group) => group.chatId === chat.chatId);
-      if (existingGroup) {
-        existingGroup.chats.push(chat);
-      } else {
-        result.push({
+  const [filteredMessage, setFilteredMessage] = useState([]);
+
+
+  useEffect(() => {
+    const groupedChats = Object.values(chats);
+
+    groupedChats.forEach((chat) => {
+      const index = groupedChats.findIndex((el) => {
+        return el.chatId === chat.chatId;
+      });
+      if (index === -1) {
+        setFilteredMessage({
           chatId: chat.chatId,
-          chats: [chat],
+          chats: [chat.message],
+          ...chat,
         });
       }
+    });
+  }, [chats]);
+
+  useEffect(() => {
+    function sortMessagesByChatId(messages) {
+      const sortedChats = [];
+      messages.forEach((message) => {
+        const existingChat = sortedChats.find((chat) => chat.chatId === message.chatId);
+        if (existingChat) {
+          existingChat.chats.push(message.message);
+        } else {
+          sortedChats.push({
+            chatId: message.chatId,
+            chats: [message.message],
+            ...message,
+          });
+        }
+      });
+
+      return sortedChats.sort((a, b) => a.chatId - b.chatId);
     }
-
-    return result;
-  }, []);
-
-
-
+    setFilteredMessage(sortMessagesByChatId(chats));
+  }, [chats]);
 
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
@@ -240,192 +265,200 @@ const Messages = ({ chatId }) => {
   }, [dispatch, authorId]);
 
   const action = (
-    <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-      <CloseIcon fontSize="small" />
-    </IconButton>
+      <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+        <CloseIcon fontSize="small" />
+      </IconButton>
   );
 
   return (
-    <>
-      <SockJsClient
-        url={SOCKET_URL}
-        topics={['/topic/message']}
-        onConnect={onConnected}
-        onDisconnect={() => 'Disconnected!'}
-        onMessage={onMessageReceived}
-        debug={false}
-      />
+      <>
+        <SockJsClient
+            url={SOCKET_URL}
+            topics={['/topic/message']}
+            onConnect={onConnected}
+            onDisconnect={() => 'Disconnected!'}
+            onMessage={onMessageReceived}
+            debug={false}
+        />
 
-      <Grid className={classes.grid} md={4} item>
-        <div className={classes.messagesContainer}>
-          <Paper variant="outlined">
-            <Paper className={classes.header}>
-              <div>
-                <Typography variant="h6">Messages</Typography>
-              </div>
-            </Paper>
-            {Object.values(chats).length === 0 ? (
-                <>
-                  <div className={classes.messagesTitleContainer}>
-                    <div className={classes.messagesTitle}>
-                      Send a message, get a message
+        <Grid className={classes.grid} md={4} item>
+          <div className={classes.messagesContainer}>
+            <Paper variant="outlined">
+              <Paper className={classes.header}>
+                <div>
+                  <Typography variant="h6">Messages</Typography>
+                </div>
+              </Paper>
+              {Object.values(chats).length === 0 ? (
+                  <>
+                    <div className={classes.messagesTitleContainer}>
+                      <div className={classes.messagesTitle}>Send a message, get a message</div>
+                      <div className={classes.messagesText}>
+                        Direct Messages are private conversations between you and other people on
+                        Twitter. Share Tweets, media, and more!
+                      </div>
+                      <Button
+                          onClick={onOpenModalWindow}
+                          className={classes.messagesButton}
+                          variant="contained"
+                          color="primary"
+                      >
+                        Start a conversation
+                      </Button>
                     </div>
-                    <div className={classes.messagesText}>
-                      Direct Messages are private conversations between you and other people on Twitter.
-                      Share Tweets, media, and more!
+                  </>
+              ) : (
+                  <>
+                    <List component="nav" className={classes.list} aria-label="main mailbox folders">
+                      {filteredMessage.map((group, index) =>
+                          group && group.chats && group.chats.length > 0 ? (
+                              <ListItem
+                                  key={group.chatId}
+                                  className={classNames(classes.listItem, {
+                                    [classes.selected]: group.chatId === selectedChatId,
+                                  })}
+                                  onClick={() => handleListItemClick(group)}
+                                  onContextMenu={(event) => handleContextMenu(event, index)}
+                              >
+                                <div className={classes.userWrapper}>
+                                  <div style={{ flex: 1 }}>
+                                    <div className={classes.userHeader}>
+                                      <div>
+                                        {group.senderUsername === username ? (
+                                            <Typography className={classes.chatName}>
+                                              @{group.recipientUsername}
+                                            </Typography>
+                                        ) : (
+                                            <Typography className={classes.chatName}>
+                                              @{group.senderUsername}
+                                            </Typography>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ListItem>
+                          ) : null
+                      )}
+                      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+                        <MenuItem onClick={handleDeleteChat}>Deleted</MenuItem>
+                      </Menu>
+                    </List>
+                  </>
+              )}
+            </Paper>
+          </div>
+        </Grid>
+
+        <Grid className={classes.grid} md={6} item>
+          {selectedChatId === undefined ? (
+              <div className={classes.chatContainer}>
+                <Paper variant="outlined">
+                  <div className={classes.chatInfoWrapper}>
+                    <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
+                    <div className={classes.chatInfoText}>
+                      Choose one from your existing messages, or start a new one.
                     </div>
                     <Button
                         onClick={onOpenModalWindow}
-                        className={classes.messagesButton}
+                        className={classes.chatInfoButton}
                         variant="contained"
                         color="primary"
                     >
-                      Start a conversation
+                      New message
                     </Button>
                   </div>
-
-                </>
-            ) : (
-              <>
-                <List component="nav" className={classes.list} aria-label="main mailbox folders">
-                  {groupedChats.map((group, index) =>
-                    group && group.chats && group.chats.length > 0 ? (
-                      <ListItem
-                        key={group.chatId}
-                        button
-                        className={classNames(classes.listItem, {
-                          [classes.selected]: group.chatId === selectedChatId,
-                        })}
-                        onClick={() => handleListItemClick(group)}
-                        onContextMenu={(event) => handleContextMenu(event, index)}
-                      >
-                        <div className={classes.userWrapper}>
-                          <div style={{ flex: 1 }}>
-                            <div className={classes.userHeader}>
-                              <div>
-                                {group.chats[0]?.senderUsername === username ? (
-                                  <Typography className={classes.chatName}>
-                                    @{group.chats[0]?.recipientUsername}
-                                  </Typography>
-                                ) : (
-                                  <Typography className={classes.chatName}>
-                                    @{group.chats[0]?.senderUsername}
-                                  </Typography>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </ListItem>
-                    ) : null
-                  )}
-                  <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem onClick={handleDeleteChat}>Deleted</MenuItem>
-                  </Menu>
-                </List>
-              </>
-            )}
-          </Paper>
-        </div>
-      </Grid>
-
-      <Grid className={classes.grid} md={6} item>
-        {selectedChatId === undefined ? (
-          <div className={classes.chatContainer}>
-            <Paper variant="outlined">
-              <div className={classes.chatInfoWrapper}>
-                <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
-                <div className={classes.chatInfoText}>Choose one from your existing messages, or start a new one.</div>
-                <Button
-                  onClick={onOpenModalWindow}
-                  className={classes.chatInfoButton}
-                  variant="contained"
-                  color="primary"
-                >
-                  New message
-                </Button>
+                </Paper>
               </div>
-            </Paper>
-          </div>
-        ) : (
-          <div className={classes.chatContainer}>
-            <Paper variant="outlined">
-              <Paper className={classes.chatHeader}>
-                <div style={{ flex: 1 }}>
-                  <IconButton className={classes.ArrowBackIcon} onClick={handleExitClick} color="primary">
-                    <ArrowBackIcon />
-                  </IconButton>
-                  {senderName === username ? (
-                    <Typography className={classes.usernameTop}>@{recipientName}</Typography>
-                  ) : (
-                    <Typography className={classes.usernameTop}>@{senderName}</Typography>
-                  )}
-                </div>
-              </Paper>
-              <Paper className={classes.chat}>
-                <React.Fragment>
-                  {Array.isArray(messages?.messages) &&
-                    messages.messages
-                      .filter((message) => message.message.trim() !== '')
-                      .reverse()
-                      .map((massage) => (
-                        <div key={massage.messageId}>
-                          <div ref={chatEndRef}></div>
+          ) : (
+              <div className={classes.chatContainer}>
+                <Paper variant="outlined">
+                  <Paper className={classes.chatHeader}>
+                    <div style={{ flex: 1 }}>
+                      <IconButton
+                          className={classes.ArrowBackIcon}
+                          onClick={handleExitClick}
+                          color="primary"
+                      >
+                        <ArrowBackIcon />
+                      </IconButton>
 
-                          <div className={classNames(classes.messageContent)}>
-                            <div
-                              className={
-                                authorId === massage.senderId ? classes.MyMassageSender : classes.theirMessageWithTweet
-                              }
-                            >
-                              <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>
+
+                    </div>
+                  </Paper>
+                  <Paper className={classes.chat}>
+                    <React.Fragment>
+                      {Array.isArray(messages?.messages) &&
+                          messages.messages
+                              .filter((message) => message.message.trim() !== '')
+                              .reverse()
+                              .map((massage) => (
+                                  <div key={massage.messageId}>
+                                    <div ref={chatEndRef}></div>
+
+                                    <div className={classNames(classes.messageContent)}>
+                                      <div
+                                          className={
+                                            authorId === massage.senderId
+                                                ? classes.MyMassageSender
+                                                : classes.theirMessageWithTweet
+                                          }
+                                      >
+                              <span
+                                  className={classNames(
+                                      classes.tweetUserFullName,
+                                      classes.messageSender
+                                  )}
+                              >
                                 {massage.senderUsername}
                               </span>
-                              <span
-                                className={
-                                  authorId === massage.senderId ? classes.ownMessageWith : classes.senderMessageWith
-                                }
-                              >
+                                        <span
+                                            className={
+                                              authorId === massage.senderId
+                                                  ? classes.ownMessageWith
+                                                  : classes.senderMessageWith
+                                            }
+                                        >
                                 {massage.message}
-                                <span className={classes.messageTimestamp}>
+                                          <span className={classes.messageTimestamp}>
                                   {formatChatMessageDate(massage.timestamp)}
                                 </span>
                               </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                  <div ref={chatEndRef}></div>
-                </React.Fragment>
-              </Paper>
-              <Paper className={classes.chatFooter}>
-                <MessageInput
-                  multiline
-                  value={message}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  variant="outlined"
-                  placeholder="Start a new message"
-                />
-                <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
-                  <IconButton onClick={handleSendMessage} color="primary">
-                    <span>{SandMessageIcon}</span>
-                  </IconButton>
-                </div>
-              </Paper>
-            </Paper>
-          </div>
-        )}
-      </Grid>
-      <Snackbar
-        open={status}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={error ? `${error}` : 'Deleted successfully'}
-        action={action}
-      />
-      <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
-    </>
+                                      </div>
+                                    </div>
+                                  </div>
+                              ))}
+                      <div ref={chatEndRef}></div>
+                    </React.Fragment>
+                  </Paper>
+                  <Paper className={classes.chatFooter}>
+                    <MessageInput
+                        multiline
+                        value={message}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
+                        variant="outlined"
+                        placeholder="Start a new message"
+                    />
+                    <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
+                      <IconButton onClick={handleSendMessage} color="primary">
+                        <span>{SandMessageIcon}</span>
+                      </IconButton>
+                    </div>
+                  </Paper>
+                </Paper>
+              </div>
+          )}
+        </Grid>
+        <Snackbar
+            open={status}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message={error ? `${error}` : 'Deleted successfully'}
+            action={action}
+        />
+        <MessagesModal visible={visibleModalWindow} onClose={onCloseModalWindow} />
+      </>
   );
 };
 
