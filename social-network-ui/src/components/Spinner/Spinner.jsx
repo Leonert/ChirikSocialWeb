@@ -1,19 +1,53 @@
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import { useSpinnerStyles } from './SpinnerStyles';
+const SpinnerCircle = styled('div')(({ theme }) => ({
+  height: 26,
+  width: 26,
+  animation: 'spin 0.75s linear 0s infinite',
+  '@keyframes spin': {
+    '0%': {
+      transform: 'rotate(0deg)',
+    },
+    '100%': {
+      transform: 'rotate(360deg)',
+    },
+  },
+}));
 
-const Spinner = ({ paddingTop, paddingBottom }) => {
-  const classes = useSpinnerStyles({ paddingTop, paddingBottom });
+const Spinner = ({ p }) => {
+  const SpinnerContainer = styled('div')(({ theme }) => ({
+    width: 30,
+    margin: '0px auto',
+    padding: p,
+  }));
 
   return (
-    <div className={classes.loading}>
-      <div className={classes.spinner}>
-        <svg viewBox="0 0 32 32">
-          <circle cx="16" cy="16" fill="none" r="14" className={classes.backCircle} />
-          <circle cx="16" cy="16" fill="none" r="14" className={classes.frontCircle} />
+    <SpinnerContainer>
+      <SpinnerCircle>
+        <svg style={{ height: '100%', width: '100%' }} viewBox="0 0 32 32">
+          <circle
+            cx="16"
+            cy="16"
+            fill="none"
+            r="14"
+            style={{ stroke: 'rgb(25, 39, 52)', strokeWidth: 4, opacity: 0.2 }}
+          />
+          <circle
+            cx="16"
+            cy="16"
+            fill="none"
+            r="14"
+            style={{
+              stroke: 'rgb(63, 81, 181)',
+              strokeWidth: 4,
+              strokeDasharray: 80,
+              strokeDashoffset: 60,
+            }}
+          />
         </svg>
-      </div>
-    </div>
+      </SpinnerCircle>
+    </SpinnerContainer>
   );
 };
 

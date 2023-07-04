@@ -74,7 +74,7 @@ export const Following = () => {
             flexDirection: 'column',
           }}
         >
-          {loading && followingUsers.length === 0 && <Spinner />}
+          {loading && followingUsers.length === 0 && <Spinner p="50px 0" />}
           {followingUsers.length > 0 ? (
             followingUsers.map((user) => {
               return <FollowingUser key={user.username} user={user} />;
