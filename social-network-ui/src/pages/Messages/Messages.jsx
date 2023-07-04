@@ -11,12 +11,11 @@ import axiosIns from '../../axiosInstance';
 import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
-  addChat, addChatMessage,
+  addChat,
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
-  selectChats,
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
@@ -33,9 +32,7 @@ import { useMessagesStyles } from './MessagesStyles';
 const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
-  // const chats = useSelector(selectChats);
-  const chats = useSelector((state)=> state.messages.chats);
-  console.log(chats,"chat")
+  const chats = useSelector((state) => state.messages.chats);
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
 
@@ -92,16 +89,16 @@ const Messages = ({ chatId }) => {
     }
   };
 
-  const onMessageReceived = (msg) => {
+  const onMessageReceived = async (msg) => {
     dispatch(sendMessage(msg)).then(() => {
       setMessage('');
     });
     dispatch(delletedChats(chatId));
-
-
+    await dispatch(addChat(chatId));
     if (selectedChatId || chatId) {
       // dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
-      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
+      dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
+      });
     } else {
       console.error('No chat selected.');
     }
@@ -171,24 +168,22 @@ const Messages = ({ chatId }) => {
   };
 
   const groupedChats = Object.values(chats).reduce((result, chat) => {
-    const existingGroup = result.find((group) => group.chatId === chat.chatId);
-    if (existingGroup) {
-      existingGroup.chats.push(chat);
-    } else {
-      result.push({
-        chatId: chat.chatId,
-        chats: [chat],
-      });
+    if (chat && chat.chatId) {
+      const existingGroup = result.find((group) => group.chatId === chat.chatId);
+      if (existingGroup) {
+        existingGroup.chats.push(chat);
+      } else {
+        result.push({
+          chatId: chat.chatId,
+          chats: [chat],
+        });
+      }
     }
-    // console.log(result)
 
     return result;
-
   }, []);
 
-  useEffect(()=>{
 
-  })
 
 
   const handleExitClick = () => {
@@ -234,8 +229,6 @@ const Messages = ({ chatId }) => {
     dispatch(fetchChat(authorId));
     scrollToBottom();
   }, [dispatch, authorId]);
-
-
 
   const action = (
     <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>

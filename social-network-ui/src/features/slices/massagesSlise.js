@@ -41,9 +41,9 @@ export const sendMessage = createAsyncThunk(
     }
 );
 
-export const updateChat = createAsyncThunk(
+const updateChat = createAsyncThunk(
     'messages/updateChat',
-    ({ chatId, chat }) => {
+    async ({ chatId, chat }) => {
         return { chatId, chat };
     }
 );
@@ -98,13 +98,7 @@ const messagesSlice = createSlice({
         },
         addChat: (state, action) => {
             const newChat = action.payload;
-            if ( state.chats.length === 0 ){
-                state.chats.push(newChat.messages[1]);
-            }else {
-                state.chats.push(newChat[1])
-                console.log(newChat)
-            }
-
+            state.chats.push(newChat.messages[1]);
         },
 
         delletedChats: (state, action)=>{
