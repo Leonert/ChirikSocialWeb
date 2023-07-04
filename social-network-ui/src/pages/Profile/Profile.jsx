@@ -89,7 +89,7 @@ const Profile = (props) => {
             </NavLink>
             <Stack>
               <Typography component="h2" fontSize="18px">
-                {data.name} 
+                {data.name}
               </Typography>
               <Typography sx={{ fontSize: '13px', lineHeight: '16px' }}>
                 {data.withoutAuthorPosts.length} Tweets
@@ -134,17 +134,17 @@ const Profile = (props) => {
             </Typography>
             {data.bio && (
               <Typography mb="12px" variant="body1" sx={{ wordWrap: 'break-word' }}>
-                {data.bio}
+                {data.bio === 'null' ? '' : data.name}
               </Typography>
             )}
             <Stack direction="row" flexWrap="wrap">
-              {data.location && (
+              {data.location && data.location !== 'null' && (
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                   <LocationIcon sx={{ marginRight: 1 }} />
-                  <Typography variant="body1">{data.location}</Typography>
+                  <Typography variant="body1">{data.location === 'null' ? '' : data.location}</Typography>
                 </div>
               )}
-              {data.website && (
+              {data.website && data.website !== 'null' && (
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
                   <LinkIcon sx={{ marginRight: 1 }} />
                   <LinkMui
@@ -160,7 +160,7 @@ const Profile = (props) => {
                       cursor: 'pointer',
                     }}
                   >
-                    {data.website}
+                    {data.website === 'null' ? '' : data.website}
                   </LinkMui>
                 </div>
               )}
