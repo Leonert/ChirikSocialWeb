@@ -27,7 +27,7 @@ const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
   password: yup
     .string('Enter your password')
-    // .min(8, 'Password should be of minimum 8 characters length')
+    .min(8, 'Password should be of minimum 8 characters length')
     .required('Password is required'),
 });
 
@@ -100,7 +100,7 @@ export const Login = () => {
               <Typography sx={{ display: 'flex', alignItems: 'center', marginRight: '6px' }}>
                 <FcGoogle size={20} />
               </Typography>{' '}
-              <Typography textTransform="none"> Sign in with Google</Typography>
+              <Typography textTransform="none"> Log in with Google</Typography>
             </CustomButton>
           </Link>
           <Divider sx={{ marginBottom: '20px', color: 'white' }}>or</Divider>
@@ -136,10 +136,6 @@ export const Login = () => {
               </Typography>
             </CustomButton>
 
-            <CustomButton styles={{ width: '100%', marginBottom: '30px' }}>
-              <Typography textTransform="none">Forgot password? </Typography>
-            </CustomButton>
-
             <Typography textTransform="none">
               <Typography
                 component="span"
@@ -154,7 +150,7 @@ export const Login = () => {
                   dispatch(handleModal(false));
                   openRegistrationModal();
                 }}
-                style={{
+                sx={{
                   cursor: 'pointer',
                   color: 'rgb(63, 81, 181)',
                   '&:hover': {

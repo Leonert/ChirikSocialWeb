@@ -1,6 +1,6 @@
-import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Divider, Typography } from '@mui/material';
 import React from 'react';
+import { FcGoogle } from 'react-icons/fc';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -19,33 +19,43 @@ const InitialStep = (props) => {
         width: '100%',
       }}
     >
-      <Typography sx={{ fontSize: '36px', marginTop: '10px', marginBottom: '20px' }}>Join Chirik now! </Typography>
+      <Typography sx={{ fontSize: '36px', marginTop: '10px', marginBottom: '20px', textAlign: 'center' }}>
+        Join Chirik now!{' '}
+      </Typography>
 
       <Link to="https://chirik-fad33dd28d87.herokuapp.com/oauth2/authorization/google">
-        <Button startIcon={<GoogleIcon />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
+        <Button startIcon={<FcGoogle size={20} />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
           <Typography sx={{ fontSize: '14px' }}> Register with Google </Typography>
         </Button>
       </Link>
 
-      <Divider sx={{ '&::after, &::before': { borderColor: 'rgba(255, 255, 255, 0.4)' }, marginBottom: '12px' }}>
-        or
-      </Divider>
+      <Divider sx={{ '&::after, &::before': { color: 'white' }, marginBottom: '12px' }}>or</Divider>
       <Button onClick={props.onCreateAccount} sx={{ maxWidth: '300px', width: '100%', marginBottom: '30px' }}>
         <Typography sx={{ fontSize: '14px' }}> Registration </Typography>
       </Button>
 
-      <Typography sx={{ fontSize: '14px' }}>
+      <Typography sx={{ fontSize: '14px', color: 'gray', marginRight: '6px' }}>
         Already have an account?{' '}
-        <Link
+        <Typography
+          component="span"
           onClick={() => {
             props.handleClose();
             dispatch(handleLoginModal(true));
             dispatch(handleModal(true));
           }}
-          sx={{ cursor: 'pointer', color: '#fff' }}
+          sx={{
+            ml: '6px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            color: 'rgb(63, 81, 181)',
+            '&:hover': {
+              color: 'rgb(48, 63, 159)',
+              textDecoration: 'underline',
+            },
+          }}
         >
           Log in
-        </Link>
+        </Typography>
       </Typography>
     </Box>
   );

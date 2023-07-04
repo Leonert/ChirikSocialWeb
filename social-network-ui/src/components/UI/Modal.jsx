@@ -1,8 +1,10 @@
 import CloseIcon from '@mui/icons-material/Close';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
+import { Box, DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
+
+import { Chirick } from '../../icon';
+import Logo from '../SideMenu/Logo';
 
 const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {
@@ -26,9 +28,22 @@ const Modal = ({ children, open, onClose, headerText, hasLogoIcon = true, sx, he
             <Typography sx={{ justifySelf: 'center' }}>{headerText}</Typography>
           ) : (
             hasLogoIcon && (
-              <TwitterIcon
-                sx={{ display: 'block', color: 'white', width: '32px', height: '32px', justifySelf: 'center' }}
-              />
+              <Box
+                sx={{
+                  marginLeft: 7,
+                  '& .MuiIconButton-root': {
+                    minWidth: 52,
+                    minHeight: 52,
+                    '& svg': {
+                      color: (theme) => theme.palette.primary.main,
+                      height: '2rem',
+                      width: '2rem',
+                    },
+                  },
+                }}
+              >
+                <IconButton>{Chirick}</IconButton>
+              </Box>
             )
           )}
           {headerActions}
