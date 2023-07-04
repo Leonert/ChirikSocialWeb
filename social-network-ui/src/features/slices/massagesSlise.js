@@ -53,7 +53,6 @@ export const fetchChat = createAsyncThunk(
     'api/messages/fetchChat',
     async (userId) => {
         const chats = await ChatApi.getUserChats(userId);
-        console.log(chats);
 
         return chats;
     }
@@ -107,7 +106,6 @@ const messagesSlice = createSlice({
         addChatMessage: (state, action) => {
             const { chatId, message } = action.payload;
             const chat = state.chats.find((chat) => chat.chatId === chatId);
-            console.log(chat);
 
             if (chat) {
                 const updatedMessage = {
@@ -115,7 +113,6 @@ const messagesSlice = createSlice({
                     senderId: chat.senderId,
                     recipientId: chat.recipientId,
                 };
-                console.log(updatedMessage);
 
                 if (chat.messages) {
                     chat.messages.push(updatedMessage);
@@ -169,7 +166,6 @@ const messagesSlice = createSlice({
 
             .addCase(fetchChat.fulfilled, (state, action) => {
                 state.chats = action.payload;
-                console.log(action.payload)
             })
 
             .addCase(updateChat.fulfilled, (state, action) => {
@@ -180,7 +176,6 @@ const messagesSlice = createSlice({
                 if (chatIndex !== -1) {
                     state.chats[chatIndex] = chat;
                 }
-                console.log(chat)
             })
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 const { chatId, messages } = action.payload;

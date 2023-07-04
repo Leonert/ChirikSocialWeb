@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../axiosInstance";
 import {addResult, removeResult} from "../../features/slices/searchSlice";
 import React, {useEffect, useState} from "react";
-import {IconButton, InputAdornment, List, ListItem} from "@mui/material";
+import { InputAdornment, List, ListItem} from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
@@ -29,7 +29,7 @@ const MessagesModal = ({ visible, onClose }) => {
   const authorId = useSelector((state) => state.messages.authorId);
   const [chatUsers, setChatUsers] = useState([]);
   const [createdChatId, setCreatedChatId] = useState(null);
-  const [chat, setChat] = useState(null);
+  const [, setChat] = useState(null);
   const username = useSelector((state) => (state.auth.user ? state.auth.user.username : null));
   const handleInputChange = (event) => {
     axiosIns.get(`/api/search/users?q=${event.target.value}`, {}).then((response) => {

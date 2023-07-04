@@ -96,11 +96,10 @@ const Messages = ({ chatId }) => {
     dispatch(delletedChats(chatId));
     await dispatch(addChat(chatId));
     if (selectedChatId || chatId) {
-      // dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
       dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {
       });
     } else {
-      console.error('No chat selected.');
+      throw new Error('Зось інще');
     }
   };
 
