@@ -90,7 +90,7 @@ export default function Post(props) {
       {props.replay}
       {props.content != null && (
         <CardHeaderItem
-          avatar={<AvatarLink alt={props.name} avatar={props.avatar} to={`/${props.username}`} />}
+          avatar={<AvatarLink alt={props.name} avatar={props.profileImage} to={`/${props.username}`} />}
           action={
             user && props.username === user.username ? (
               <Tooltip title="Delete">

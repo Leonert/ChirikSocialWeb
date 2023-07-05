@@ -119,7 +119,7 @@ const PostPage = () => {
           postPage={true}
           key={post.id}
           username={post.author.username}
-          avatar={post.author.profileImage}
+          profileImage={post.author.profileImage}
           name={post.author.name}
           retweet={post.retweetsNumber}
           like={post.likesNumber}
@@ -144,7 +144,7 @@ const PostPage = () => {
               id={post.originalPost.id}
               key={post.id}
               username={post.originalPost.author.username}
-              avatar={post.originalPost.author.profileImage}
+              profileImage={post.originalPost.author.profileImage}
               name={post.originalPost.author.name}
               retweet={post.originalPost.retweetsNumber}
               like={post.originalPost.likesNumber}
