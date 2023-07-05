@@ -154,12 +154,14 @@ const SideMenu = ({ handleCloseMenu }) => {
           </>
         ) : (
           <li className={classes.itemWrapper}>
-            <div>
-              <span>{ExploreIcon}</span>
-              <Typography className={classes.label} variant={'h5'}>
-                Review
-              </Typography>
-            </div>
+            <NavLink to={HOME} onClick={handleCloseMenu ? () => handleCloseMenu() : null}>
+              <div>
+                <span>{ExploreIcon}</span>
+                <Typography className={classes.label} variant={'h5'}>
+                  Review
+                </Typography>
+              </div>
+            </NavLink>
           </li>
         )}
         <li>

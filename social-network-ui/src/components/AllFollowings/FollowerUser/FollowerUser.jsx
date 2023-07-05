@@ -67,16 +67,15 @@ export const FollowerUser = ({ user }) => {
           disabled={currentUser === username}
           handleClick={handleFollow}
           styles={{
-            backgroundColor: 'none',
-            border: '1px solid gray',
-            color: 'rgb(48, 63, 159)',
+            backgroundColor: '#3f51b5',
+            color: 'white',
             '&:hover': {
-              backgroundColor: 'none',
+              backgroundColor: '#3f51b5',
             },
           }}
         >
-          <Typography sx={{ fontSize: '14px' }} style={currUserFollower ? { color: '#c62828' } : {}}>
-            {currUserFollower ? 'Unfollow' : ' Following'}
+          <Typography sx={{ fontSize: '14px' }} style={currUserFollower ? { color: 'white' } : {}}>
+            {currUserFollower ? 'Unfollow' : ' Follow'}
           </Typography>
         </CustomButton>
       </Box>

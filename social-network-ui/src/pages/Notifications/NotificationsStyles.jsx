@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme) =>
     },
     header: {
       padding: '20px',
-      borderBottom: '1px solid #eceff1',
+
       width: '100%',
       backgroundColor: 'rgb(15, 20, 25)',
     },
