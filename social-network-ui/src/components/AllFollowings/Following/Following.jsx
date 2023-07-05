@@ -80,7 +80,7 @@ export const Following = () => {
               return <FollowingUser key={user.username} user={user} />;
             })
           ) : (
-            <Typography sx={{ color: 'black' }} variant="h5">
+            <Typography sx={{ color: '#93989D' }} variant="h5">
               There are no followings.
             </Typography>
           )}
