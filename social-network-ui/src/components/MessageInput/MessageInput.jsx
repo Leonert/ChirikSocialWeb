@@ -5,13 +5,12 @@ import TextField from '@mui/material/TextField';
 
 export const MessageInput = styled(TextField)(({ theme }) => ({
     root: {
-
+        width: '100%',
         '& .MuiOutlinedInput-root': {
             marginTop: 2,
             borderRadius: 5,
             padding: '10px 20px',
             border: '1px solid rgb(37, 51, 65)',
-            width: '100%',
             '&.Mui-focused': {
                 '& fieldset': {
                     borderWidth: 1,
