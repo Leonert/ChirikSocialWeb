@@ -112,7 +112,7 @@ const Messages = ({ chatId }) => {
       dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
       dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      throw error('No chat selected');
+      throw error('No chat selected.');
     }
   };
 
