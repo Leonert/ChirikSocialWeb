@@ -1,5 +1,5 @@
-import { createTheme } from '@material-ui/core/styles';
 import {deepmerge} from "@mui/utils";
+import {createTheme} from "@mui/material/styles";
 
 
 const commonTheme = {
