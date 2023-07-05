@@ -112,7 +112,7 @@ const Messages = ({ chatId }) => {
       dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
       dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      throw error('No chat selected.');
+      throw error('No chat selected');
     }
   };
 
@@ -183,7 +183,6 @@ const Messages = ({ chatId }) => {
 
 
 
-// Перший useEffect
   useEffect(() => {
     const groupedChats = Object.values(chats).reduce((result, chat) => {
       const existingGroup = result.find((group) => group.chatId === chat.chatId);
@@ -202,7 +201,6 @@ const Messages = ({ chatId }) => {
     setFilteredMessage(groupedChats);
   }, [chats]);
 
-// Другий useEffect
   useEffect(() => {
     function sortMessagesByChatId(messages) {
       const sortedChats = [];
