@@ -1,4 +1,4 @@
-import { Avatar, ListItem, ListItemText, Stack } from '@mui/material';
+import { Avatar, ListItem, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, json } from 'react-router-dom';
 
@@ -33,10 +33,35 @@ const AsideRecommendFollows = () => {
           <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>
             <Avatar sx={{ mr: '20px' }} alt={user.name} src={user.profileImage} />
             <Stack justifyContent="space-between" alignItems="center" direction="row" width="100%">
-              <Stack>
-                <ListItemText primary={user.name} />
-                <ListItemText primary={`@${user.username}`} />
-                <ListItemText primary={user.bio} />
+              <Stack sx={{ overflow: 'hidden' }}>
+                <Typography
+                  noWrap
+                  sx={{
+                    fontSize: '14px',
+                    minWidth: '145px',
+                    width: '100%',
+                    maxWidth: '145px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {user.name}
+                </Typography>
+                <Typography
+                  noWrap
+                  sx={{
+                    fontSize: '14px',
+                    minWidth: '145px',
+                    width: '100%',
+                    maxWidth: '145px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {`@${user.username}`}
+                </Typography>
               </Stack>
               <FollowButton user={user} />
             </Stack>

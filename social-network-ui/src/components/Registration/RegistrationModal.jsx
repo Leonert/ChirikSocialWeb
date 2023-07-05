@@ -30,59 +30,67 @@ async function usernameAsyncValidation(username) {
 
 const accountProfileValidationSchema = yup.object({
   email: yup
-      .string('Enter your email')
-      .email('Enter a valid email')
-      .required('Email is required')
-      .test('Email already exists', 'Email already exists', async (email) => {
-        let isUnique = false;
-        try {
-          const response = await emailAsyncValidation(email);
-          isUnique = response;
-        } catch (e) {
-          // console.error('Error: ', e.response.status);
-        }
+    .string('Enter your email')
+    .email('Enter a valid email')
+    .min(4, 'Email should be minimum 6 characters length')
+    .max(30, 'Email should be maximum 30 characters length')
+    .required('Email is required')
+    .test('Email already exists', 'Email already exists', async (email) => {
+      let isUnique = false;
+      try {
+        const response = await emailAsyncValidation(email);
+        isUnique = response;
+      } catch (e) {
+        // console.error('Error: ', e.response.status);
+      }
 
-        return isUnique;
-      }),
+      return isUnique;
+    }),
   username: yup
-      .string('Enter your username')
-      .min(4, 'Username should be minimum 4 characters length')
-      .required('Username is required')
-      .test('Username already exists', 'Username already exists', async (username) => {
-        let isUnique = false;
-        try {
-          const response = await usernameAsyncValidation(username);
-          isUnique = response;
-        } catch (e) {
-          // console.error('Error: ', e.response.status);
-        }
+    .string('Enter your username')
+    .min(4, 'Username should be minimum 4 characters length')
+    .max(20, 'Username should be maximum 20 characters length')
+    .required('Username is required')
+    .test('Username already exists', 'Username already exists', async (username) => {
+      let isUnique = false;
+      try {
+        const response = await usernameAsyncValidation(username);
+        isUnique = response;
+      } catch (e) {
+        // console.error('Error: ', e.response.status);
+      }
 
-        return isUnique;
-      }),
+      return isUnique;
+    }),
   password: yup
-      .string('Enter your password')
-      .min(8, 'Password should be minimum 8 characters length')
-      .required('Password is required'),
+    .string('Enter your password')
+    .min(8, 'Password should be minimum 8 characters length')
+    .required('Password is required'),
   repeatPassword: yup
-      .string('Enter your password')
-      .min(8, 'Password should be minimum 8 characters length')
-      .required('Password is required')
-      .oneOf([yup.ref('password'), null], 'Passwords must match'),
+    .string('Enter your password')
+    .min(8, 'Password should be minimum 8 characters length')
+    .required('Password is required')
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
 });
 
 const maxValidDate = new Date(new Date().getTime() + 1 * 60000);
 
 const BIOValidationSchema = yup.object({
-  name: yup.string('Enter your Name').min(3, 'Name should be minimum 3 characters length').required('Name is required'),
+  name: yup
+    .string('Enter your Name')
+    .min(3, 'Name should be minimum 3 characters length')
+    .required('Name is required')
+    .max(15, 'Name should be maximum 15 characters length'),
   surname: yup
-      .string('Enter your Surname')
-      .min(3, 'Surname should be minimum 3 characters length')
-      .required('Surname is required'),
+    .string('Enter your Surname')
+    .min(3, 'Surname should be minimum 3 characters length')
+    .required('Surname is required')
+    .max(15, 'Surname should be maximum 15 characters length'),
   birthDate: yup
-      .date('Invalid date')
-      .required('Birthdate is required')
-      .max(maxValidDate, 'Invalid date')
-      .typeError('Invalid date'),
+    .date('Invalid date')
+    .required('Birthdate is required')
+    .max(maxValidDate, 'Invalid date')
+    .typeError('Invalid date'),
 });
 
 const validationSchema = (activeStep) => {
@@ -169,20 +177,20 @@ const RegistrationModal = () => {
   ];
 
   return (
-      <div>
-        <Button sx={{ p: '7px  34px', fontSize: '16px' }} onClick={handleOpen}>
-          Sign up
-        </Button>
-        <Modal
-            open={open}
-            onClose={handleClose}
-            title="Mytitle"
-            sx={{ maxHeight: '650px', height: '100%' }}
-            headerText={activeStep > 0 && `Step ${activeStep}/${steps.length - 1}`}
-        >
-          <form onSubmit={formik.handleSubmit}>{steps[activeStep]} </form>
-        </Modal>
-      </div>
+    <div>
+      <Button sx={{ p: '7px  34px', fontSize: '16px' }} onClick={handleOpen}>
+        Sign up
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        title="Mytitle"
+        sx={{ maxHeight: '650px', height: '100%' }}
+        headerText={activeStep > 0 && `Step ${activeStep}/${steps.length - 1}`}
+      >
+        <form onSubmit={formik.handleSubmit}>{steps[activeStep]} </form>
+      </Modal>
+    </div>
   );
 };
 
