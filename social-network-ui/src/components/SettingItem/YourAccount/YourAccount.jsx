@@ -3,7 +3,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 // import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
 import KeyIcon from '@mui/icons-material/Key';
 // import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import PersonIcon from '@mui/icons-material/Person';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import React from 'react';
@@ -28,19 +27,19 @@ const YourAccount = () => {
       {sideMenu && (
         <>
           <Typography variant={'h5'} sx={{ m: 3 }}>
-            You Account
+            Your Account
           </Typography>
-          <Typography variant={'h7'} style={{ display: 'block', whiteSpace: 'normal', margin: '20px 10px' }}>
+          {/* <Typography variant={'h7'} style={{ display: 'block', whiteSpace: 'normal', margin: '20px 10px' }}>
             See information about your account, download an archive of your data, or learn about your account
             deactivation options
-          </Typography>
-          <SettingItem
+          </Typography> */}
+          {/* <SettingItem
             // handelClick={handelClickAccount}
             iconItem=<PersonIcon sx={{ color: `${primaryColor}` }} />
             text="Account information"
             information="See your account information like your phone number and email address."
             icon={<ArrowForwardIosIcon sx={{ color: `${primaryColor}` }} />}
-          />
+          /> */}
           <SettingItem
             handelClick={handelClickPassword}
             iconItem=<KeyIcon sx={{ color: `${primaryColor}` }} />
