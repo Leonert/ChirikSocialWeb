@@ -533,12 +533,16 @@ const Messages = ({ chatId }) => {
                     borderBottom: 0,
                   }}>
                     <MessageInput
+                        sx={{
+                          width: '100%',
+
+                        }}
                         multiline
                         value={message}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         variant="outlined"
-                        placeholder="Start a new message"
+                        placeholder="Start a new messageа"
                     />
                     <div style={{
                       marginLeft: 8,
