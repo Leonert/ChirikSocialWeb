@@ -542,7 +542,7 @@ const Messages = ({ chatId }) => {
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         variant="outlined"
-                        placeholder="Start a new message"
+                        placeholder="Start a new messageа"
                     />
                     <div style={{
                       marginLeft: 8,
