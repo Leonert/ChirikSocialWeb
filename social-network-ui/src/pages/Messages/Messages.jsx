@@ -533,6 +533,10 @@ const Messages = ({ chatId }) => {
                     borderBottom: 0,
                   }}>
                     <MessageInput
+                        sx={{
+                          width: '100%',
+
+                        }}
                         multiline
                         value={message}
                         onChange={handleInputChange}
