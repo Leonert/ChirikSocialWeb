@@ -26,7 +26,7 @@ export const ListNotifications = () => {
   return (
     <ul className={classes.list}>
       {list.length === 0 && loading ? (
-        <Spinner />
+        <Spinner p="50px 0" />
       ) : (
         list.map((notification, index) => {
           return <ItemNotification key={convertToMilliseconds(notification.timestamp)} notification={notification} />;

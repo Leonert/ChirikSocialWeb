@@ -1,11 +1,11 @@
 import CloseIcon from '@mui/icons-material/Close';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import { DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
+import { Box, DialogContent, DialogTitle, IconButton, Typography, styled } from '@mui/material';
 import MuiDialog from '@mui/material/Dialog';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { handleLoginModal, handleModal } from '../../features/slices/authModalSlice';
+import { Chirick } from '../../icon';
 
 const CustomModal = styled(MuiDialog)(({ theme }) => ({
   '.MuiDialog-paper': {
@@ -38,15 +38,22 @@ export const CustomLoginModal = ({ children, open, onClose, headerText, hasLogoI
             <Typography sx={{ justifySelf: 'center' }}> {headerText}</Typography>
           ) : (
             hasLogoIcon && (
-              <TwitterIcon
+              <Box
                 sx={{
-                  display: 'block',
-                  color: 'white',
-                  width: '32px',
-                  height: '32px',
-                  justifySelf: 'center',
+                  marginLeft: 7,
+                  '& .MuiIconButton-root': {
+                    minWidth: 52,
+                    minHeight: 52,
+                    '& svg': {
+                      color: (theme) => theme.palette.primary.main,
+                      height: '2rem',
+                      width: '2rem',
+                    },
+                  },
                 }}
-              />
+              >
+                <IconButton>{Chirick}</IconButton>
+              </Box>
             )
           )}
         </DialogTitle>

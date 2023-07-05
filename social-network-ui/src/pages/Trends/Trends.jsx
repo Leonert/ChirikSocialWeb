@@ -75,7 +75,7 @@ const Trends = () => {
                 No more results
               </Typography>
             }
-            loader={<Spinner />}
+            loader={<Spinner p="50px 0" />}
           >
             {trends.length > 0 &&
               trends.map((trend) => (

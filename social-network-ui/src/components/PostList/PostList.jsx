@@ -272,7 +272,7 @@ export default function PostList({ isBookmarkPage, isreplypage, apiUrl, incoming
               No more results.
             </Typography>
           }
-          loader={posts.length === 0 ? null : <Spinner />}
+          loader={posts.length === 0 ? null : <Spinner p="50px 0" />}
         >
           {posts &&
             posts.map((post) => (

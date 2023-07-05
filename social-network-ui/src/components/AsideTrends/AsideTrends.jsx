@@ -27,7 +27,7 @@ const AsideTrends = () => {
 
   return (
     <AsideContainer header="Trends for you" asideActions="/trends">
-      {loading && <Spinner />}
+      {loading && <Spinner p="50px 0" />}
       {recommendedTrends.map((trend) => (
         <Link key={trend.id} to={`/search?value=${encodeURIComponent(trend.name)}&tab=posts`}>
           <ListItem sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }}>

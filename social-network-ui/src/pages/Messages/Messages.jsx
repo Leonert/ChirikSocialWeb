@@ -40,7 +40,6 @@ import { SandMessageIcon } from '../../icon';
 import { SOCKET_URL } from '../../util/constants';
 import { formatChatMessageDate } from '../../util/formatDate';
 import { useMessagesStyles } from './MessagesStyles';
-
 const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
@@ -444,4 +443,5 @@ const Messages = ({ chatId }) => {
 };
 
 export default Messages;
+
 

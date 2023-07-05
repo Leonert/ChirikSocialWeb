@@ -7,7 +7,6 @@ import SockJsClient from 'react-stomp';
 
 import AsideRecommendFollows from '../../components/AsideRecommendFollows/AsideRecommendFollows';
 import AsideTrends from '../../components/AsideTrends/AsideTrends';
-import ButtonShowMore from '../../components/ButtonShowMore/ButtonShowMore';
 import Following from '../../components/Following/Following';
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
 import ModalUser from '../../components/ModalUser/ModalUser';
@@ -33,7 +32,6 @@ function Home() {
       <Grid item xs={12} md={7} sx={{ paddingTop: '0' }}>
         <HeaderMain />
         <SockJsClient url={SOCKET_URL} topics={['/topic/posts']} onMessage={onSocketChanged} />
-        {user && <ButtonShowMore />}
         {recommendation && <PostList apiUrl="api/posts?" />}
         {following && <Following />}
         {modalUserState && <ModalUser />}

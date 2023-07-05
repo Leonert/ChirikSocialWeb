@@ -60,7 +60,7 @@ const SearchInput = () => {
   }, [debouncedValue]);
 
   return (
-    <Autocomplete 
+    <Autocomplete
       inputValue={inputValue}
       onInputChange={handleInputChange}
       options={searchResult}
@@ -95,7 +95,7 @@ const SearchInput = () => {
             ),
             endAdornment: (
               <>
-                {loading && <Spinner paddingTop="0" paddingBottom="0" />}
+                {loading && <Spinner />}
                 {params.InputProps.endAdornment}
               </>
             ),

@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { json, useLoaderData, useRevalidator } from 'react-router-dom';
+import * as yup from 'yup';
 
 import axiosIns from '../../axiosInstance';
 import Modal from '../../components/UI/Modal';
@@ -66,11 +67,14 @@ const EditProfileModal = () => {
   const formik = useFormik({
     initialValues: {
       name: `${data.name}`,
-      BIO: `${data.bio}`,
+      BIO: `${data.bio}` === 'null' ? '' : `${data.bio}`,
       location: `${data.location}`,
       website: `${data.website}`,
       birthDate: `${newBirthDate}`,
     },
+    validationSchema: yup.object({
+      name: yup.string().required('Name can`t be null'),
+    }),
     onSubmit: async (values) => {
       const formattedDate = new Date(values.birthDate).toISOString();
       try {
@@ -292,7 +296,7 @@ const EditProfileModal = () => {
             id="location"
             name="location"
             label="Location"
-            value={formik.values.location}
+            value={`${formik.values.location}` === 'null' ? '' : `${formik.values.location}`}
             onChange={handleInputLength(MAX_LOCATION_LENGTH)}
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
@@ -312,7 +316,7 @@ const EditProfileModal = () => {
             id="website"
             name="website"
             label="Website"
-            value={formik.values.website}
+            value={`${formik.values.website}` === 'null' ? '' : `${formik.values.website}`}
             onChange={handleInputLength(MAX_WEBSITE_LENGTH)}
             error={formik.touched.website && Boolean(formik.errors.website)}
             helperText={formik.touched.website && formik.errors.website}
