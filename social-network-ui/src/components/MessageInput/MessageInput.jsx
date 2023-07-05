@@ -1,7 +1,7 @@
-import { withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField/TextField";
+import {styled} from "@mui/material";
 
-export const MessageInput = withStyles((theme) => ({
+export const MessageInput =styled(TextField)(({ theme }) => ({
 
     root: {
         '& .MuiOutlinedInput-root': {
@@ -32,4 +32,4 @@ export const MessageInput = withStyles((theme) => ({
             },
         },
     },
-}))(TextField);
+}));

@@ -326,7 +326,7 @@ const Messages = ({ chatId }) => {
                     }}>Send a message, get a message</div>
                       <div style={{
                         fontSize: 14,
-                        color: 'rgb(29, 155, 240, 0.1)',
+                        color: 'rgb(83, 100, 113)',
                         margin: '8px 30px 27px 30px',}}>
                         Direct Messages are private conversations between you and other people on
                         Twitter. Share Tweets, media, and more!
@@ -336,6 +336,7 @@ const Messages = ({ chatId }) => {
                           sx={{
                             marginLeft: 5,
                             height: 48,
+                            backgroundColor: 'rgb(63, 81, 181)',
                             "& .MuiButton-label": {
                               fontSize: 15,
                             },
@@ -428,8 +429,9 @@ const Messages = ({ chatId }) => {
                     <Button
                         onClick={onOpenModalWindow}
                         sx={{
-                          marginTop: 27,
+                          marginTop: 5,
                           height: 52,
+                          backgroundColor: 'rgb(63, 81, 181)',
                         }}
                         variant="contained"
                         color="primary"

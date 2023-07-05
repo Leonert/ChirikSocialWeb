@@ -1,6 +1,5 @@
 import { SearchIcon } from '../../icon';
 import { MessagesModalInput } from './MessagesModalInput/MessagesModalInput';
-import { useMessagesModalStyles } from './MessagesModalStyles';
 import MessagesModalUser from './MessagesModalUser/MessagesModalUser';
 import {useDispatch, useSelector} from "react-redux";
 import axiosIns from "../../axiosInstance";
@@ -13,15 +12,13 @@ import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import CloseButton from "../AddTweetModal/AddTweetForm/CloseButton/CloseButton";
 import {
-  addChat,
-
+  addChat
 } from "../../features/slices/massagesSlise";
 
 
 
 
 const MessagesModal = ({ visible, onClose }) => {
-  const classes = useMessagesModalStyles();
   const searchResult = useSelector((state) => state.search.searchResult);
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
@@ -102,11 +99,29 @@ const MessagesModal = ({ visible, onClose }) => {
   return (
       <Dialog open={visible} onClose={onClose} aria-labelledby="form-dialog-title">
 
-        <DialogTitle id="form-dialog-title" className={classes.header}>
+        <DialogTitle id="form-dialog-title"
+        sx={{
+          margin: 0,
+          border: 0,
+          display: "flex",
+          justifyContent:"space-between",
+
+          "& svg": {
+            fontSize: 26,
+          },
+        }}
+        >
           <CloseButton onClose={onClose} color="#fff" />
-          <span className={classes.headerMessage}>New message</span>
+          <span style={{
+            marginLeft: 80,
+          }}>New message</span>
           <Button
-              className={classes.button}
+              sx={{
+                marginLeft: "auto",
+                height: 30,
+                backgroundColor: 'rgb(63, 81, 181)',
+
+              }}
               type="submit"
               variant="contained"
               color="primary"
@@ -117,7 +132,11 @@ const MessagesModal = ({ visible, onClose }) => {
           </Button>
         </DialogTitle>
 
-        <DialogContent className={classes.content}>
+        <DialogContent sx={{
+          height: 550,
+          width: 598,
+          padding: 0,
+        }}>
           <form>
             <MessagesModalInput
                 fullWidth
@@ -130,7 +149,10 @@ const MessagesModal = ({ visible, onClose }) => {
                 }}
             />
           </form>
-          <div className={classes.divider} />
+          <div style={{
+            height: 1,
+            backgroundColor: "rgb(207, 217, 222)",
+          }}/>
           <List component="nav" aria-label="main mailbox folders">
             {searchResult.map((user) => (
                 <ListItem
