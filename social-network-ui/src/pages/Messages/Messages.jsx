@@ -22,12 +22,10 @@ import { MessageInput } from '../../components/MessageInput/MessageInput';
 import MessagesModal from '../../components/MessagesModal/MessagesModal';
 import {
   addChatMessage,
-
   delletedChats,
   fetchChat,
   fetchChatMessages,
   getAuthorId,
-
   selectMessages,
   selectSelectedChatId,
   selectVisibleModalWindow,
@@ -40,6 +38,9 @@ import { SandMessageIcon } from '../../icon';
 import { SOCKET_URL } from '../../util/constants';
 import { formatChatMessageDate } from '../../util/formatDate';
 import { useMessagesStyles } from './MessagesStyles';
+import MyMassageSender from "../../components/TestMessages/MyMassageSender";
+import MessageWithTweet from "../../components/TestMessages/theirMessageWithTweet";
+
 const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
@@ -284,25 +285,62 @@ const Messages = ({ chatId }) => {
             debug={false}
         />
 
-        <Grid className={classes.grid} md={4} item>
-          <div className={classes.messagesContainer}>
+        <Grid sx={{ padding: "12px 0px 0px 0px !important" }} md={4} item>
+
             <Paper variant="outlined">
-              <Paper className={classes.header}>
+              <Paper sx={{
+                padding: "12px 0px 0px 0px !important",
+                height: 47,
+                zIndex: 1,
+                borderTop: 0,
+                borderLeft: 0,
+                borderRight: 0,
+                borderRadius: 0,
+                alignItems: 'center',
+                backgroundColor: 'rgb(19, 36, 51)',
+                color: 'rgb(255, 255, 255)',
+                flex: 1,
+                '& h6': {
+                  marginLeft: 15,
+                  fontWeight: 800,
+                },
+                "& svg": {
+                  marginRight: 20
+                },
+              }}>
                 <div>
                   <Typography variant="h6">Messages</Typography>
                 </div>
               </Paper>
               {Object.values(chats).length === 0 ? (
                   <>
-                    <div className={classes.messagesTitleContainer}>
-                      <div className={classes.messagesTitle}>Send a message, get a message</div>
-                      <div className={classes.messagesText}>
+                    <div style={{
+                      margin: "10px",
+                      alignItems: "center",
+                    }}><div style={ {
+                      paddingTop: 83,
+                      lineHeight: 1.1,
+                      fontSize: 29,
+                      fontWeight: 800,
+                      margin: "0px 30px",
+                    }}>Send a message, get a message</div>
+                      <div style={{
+                        fontSize: 14,
+                        color: 'rgb(29, 155, 240, 0.1)',
+                        margin: '8px 30px 27px 30px',}}>
                         Direct Messages are private conversations between you and other people on
                         Twitter. Share Tweets, media, and more!
                       </div>
                       <Button
                           onClick={onOpenModalWindow}
-                          className={classes.messagesButton}
+                          sx={{
+                            marginLeft: 5,
+                            height: 48,
+                            "& .MuiButton-label": {
+                              fontSize: 15,
+                            },
+                          }}
+
                           variant="contained"
                           color="primary"
                       >
@@ -312,7 +350,15 @@ const Messages = ({ chatId }) => {
                   </>
               ) : (
                   <>
-                    <List component="nav" className={classes.list} aria-label="main mailbox folders">
+                    <List component="nav"
+                          sx={{
+                            "& .Mui-selected": {
+                              backgroundColor: 'rgb(255, 255, 255, 0.03)',
+                              "&:hover": {
+                                backgroundColor: 'rgb(63, 81, 181)',
+                              },
+                            },
+                          }} aria-label="main mailbox folders">
                       {filteredMessage.map((group, index) =>
                           group && group.chats && group.chats.length > 0 ? (
                               <ListItem
@@ -323,19 +369,25 @@ const Messages = ({ chatId }) => {
                                   onClick={() => handleListItemClick(group)}
                                   onContextMenu={(event) => handleContextMenu(event, index)}
                               >
-                                <div className={classes.userWrapper}>
+                                <div style={{
+                                  height: 76,
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: 'flex-start',
+                                  paddingLeft: 15,
+                                  paddingTop: 8,
+                                  paddingBottom: 8,
+                                  cursor: 'pointer',
+                                }}>
                                   <div style={{ flex: 1 }}>
-                                    <div className={classes.userHeader}>
-                                      <div>
-                                        {group.senderUsername === username ? (
-                                            <Typography className={classes.chatName}>{group.recipientUsername}</Typography>
-                                        ) : (
-                                            <Typography className={classes.chatName}>{group.senderUsername}</Typography>
-                                        )}
-
+                                    <div>
+                                      {group.senderUsername === username ? (
+                                          <Typography >{group.recipientUsername}</Typography>
+                                      ) : (
+                                          <Typography >{group.senderUsername}</Typography>
+                                      )}
                                       </div>
                                     </div>
-                                  </div>
                                 </div>
                               </ListItem>
                           ) : null
@@ -347,19 +399,38 @@ const Messages = ({ chatId }) => {
                   </>
               )}
             </Paper>
-          </div>
         </Grid>
 
-        <Grid className={classes.grid} md={6} item>
+        <Grid sx={{ padding: "12px 0px 0px 0px !important" }} md={6} item>
           {selectedChatId === undefined ? (
-              <div className={classes.chatContainer}>
+              <div style={{
+                minWidth: 600,
+                padding: 0,
+                borderLeft: 0,
+              }}>
                 <Paper variant="outlined">
-                  <div className={classes.chatInfoWrapper}>
-                    <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
-                    <div className={classes.chatInfoText}>Choose one from your existing messages, or start a new one.</div>
+                  <div style={{
+                    width: 320,
+                    margin: "50px auto",
+                    color: 'rgb(255, 255, 255)',
+                    paddingTop: 300,
+                  }}>
+                    <div style={{
+                      lineHeight: 1.1,
+                      fontSize: 29,
+                      fontWeight: 800,
+                    }}>You don’t have a message selected</div>
+                    <div style={{
+                      fontSize: 14,
+                      color: 'rgb(83, 100, 113)',
+                      margin: '8px 0px 27px 0px',
+                    }}>Choose one from your existing messages, or start a new one.</div>
                     <Button
                         onClick={onOpenModalWindow}
-                        className={classes.chatInfoButton}
+                        sx={{
+                          marginTop: 27,
+                          height: 52,
+                        }}
                         variant="contained"
                         color="primary"
                     >
@@ -369,23 +440,52 @@ const Messages = ({ chatId }) => {
                 </Paper>
               </div>
           ) : (
-              <div className={classes.chatContainer}>
+              <div style={{
+                minWidth: 600,
+                padding: 0,
+                borderLeft: 0,
+              }}>
                 <Paper variant="outlined">
-                  <Paper className={classes.chatHeader}>
+                  <Paper sx={{
+                    width: 598,
+
+                  }}>
                     <div style={{ flex: 1 }}>
                       <IconButton
-                          className={classes.ArrowBackIcon}
+                          sx={{
+                            color:'rgb(63, 81, 181)',
+                          }}
                           onClick={handleExitClick}
                           color="primary"
                       >
                         <ArrowBackIcon />
                       </IconButton>
-                      <Typography className={classes.usernameTop}>{recipientName}</Typography>
-
-
+                      {senderName === username ? (
+                          <Typography sx={{
+                            alignItems: "center",
+                            display: "inline-block",
+                            color: "rgb(255,255,255)",
+                            fontWeight: 400,
+                            fontSize: 15,
+                          }}>{recipientName}</Typography>
+                      ) : (
+                          <Typography sx={{
+                            alignItems: "center",
+                            display: "inline-block",
+                            color: "rgb(255,255,255)",
+                            fontWeight: 400,
+                            fontSize: 15,
+                          }}>{senderName}</Typography>
+                      )}
                     </div>
                   </Paper>
-                  <Paper className={classes.chat}>
+                  <Paper
+                  sx={{
+                    padding: "53px 15px",
+                    height: 600,
+                    overflowY: "auto",
+                    border: 0,
+                  }}>
                     <React.Fragment>
                       {Array.isArray(messages?.messages) &&
                           messages.messages
@@ -395,23 +495,41 @@ const Messages = ({ chatId }) => {
                                   <div key={massage.messageId}>
                                     <div ref={chatEndRef}></div>
 
-                                    <div className={classNames(classes.messageContent)}>
+
                                       <div className={authorId === massage.senderId
                                                 ? classes.MyMassageSender
                                                 : classes.theirMessageWithTweet}>
-                                        <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>{massage.senderUsername}</span>
-                                        <span className={authorId === massage.senderId ? classes.ownMessageWith : classes.senderMessageWith}>{massage.message}</span>
-                                        <span className={classes.messageTimestamp}>
+                                        <span style={{
+                                          fontSize: 13,
+                                          fontWeight:"bold"
+                                        }}>{massage.senderUsername}</span>
+                                        {authorId === massage.senderId ? (
+                                            <MyMassageSender>{massage.message}</MyMassageSender>
+                                        ): (
+                                            <MessageWithTweet>{massage.message}</MessageWithTweet>
+                                        )}
+                                        <span style={{
+                                          paddingTop:10,
+                                          fontSize:11,
+                                          top: 19
+                                        }}>
                                           {formatChatMessageDate(massage.timestamp)}
                                         </span>
                                       </div>
-                                    </div>
                                   </div>
                               ))}
                       <div ref={chatEndRef}></div>
                     </React.Fragment>
                   </Paper>
-                  <Paper className={classes.chatFooter}>
+                  <Paper sx={{
+                    display: 'flex',
+                    bottom: 1,
+                    width: 598,
+                    padding: 1,
+                    borderRight: 0,
+                    borderLeft: 0,
+                    borderBottom: 0,
+                  }}>
                     <MessageInput
                         multiline
                         value={message}
@@ -420,11 +538,23 @@ const Messages = ({ chatId }) => {
                         variant="outlined"
                         placeholder="Start a new message"
                     />
-                    <div style={{ marginLeft: 8 }} className={classes.chatIcon}>
-                      <IconButton onClick={handleSendMessage} color="primary">
-                        <span>{SandMessageIcon}</span>
-                      </IconButton>
+                    <div style={{
+                      marginLeft: 8,
+                      width: 30,
+                      height: 30,
+                    }}>
+                      <IconButton
+                          onClick={handleSendMessage}
+                          color="primary"
+                          style={{
+                            width: 30,
+
+                            paddingTop: 22,
+                            height: "0.82em",
+                          }}
+                      >{SandMessageIcon}</IconButton>
                     </div>
+
                   </Paper>
                 </Paper>
               </div>

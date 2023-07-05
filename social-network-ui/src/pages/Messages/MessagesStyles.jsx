@@ -7,7 +7,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     padding: "12px 0px 0px 0px !important",
   },
   header: {
-
     height: 47,
     zIndex: 1,
     borderTop: 0,
@@ -15,9 +14,8 @@ export const useMessagesStyles = makeStyles((theme) => ({
     borderRight: 0,
     borderRadius: 0,
     alignItems: 'center',
-    backgroundColor: theme.palette.background.lightDefault,
-    color: theme.palette.text.primary,
-
+    backgroundColor: 'rgb(19, 36, 51)',
+    color: 'rgb(255, 255, 255)',
     flex: 1,
     '& h6': {
       marginLeft: 15,
@@ -36,13 +34,13 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   messagesText: {
     fontSize: 14,
-    color: theme.palette.text.secondary,
+    color: 'rgb(29, 155, 240, 0.1)',
     margin: '8px 30px 27px 30px',
   },
   messagesButton: {
     marginLeft: 30,
     height: 48,
-    padding: theme.spacing(3.2),
+
     "& .MuiButton-label": {
       fontSize: 15,
     },
@@ -52,43 +50,32 @@ export const useMessagesStyles = makeStyles((theme) => ({
   },
   list: {
     "& .Mui-selected": {
-      borderRight: `2px solid ${theme.palette.primary.main}`,
-      backgroundColor: theme.palette.secondary.dark,
+      backgroundColor: 'rgb(255, 255, 255, 0.03)',
       "&:hover": {
-        backgroundColor: theme.palette.secondary.dark,
+        backgroundColor: 'rgb(63, 81, 181)',
+
       },
     },
   },
   listItem: {
     padding: 0,
-    backgroundColor: theme.palette.background.paper,
-    "&:hover": {
-      backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: 'rgb(21, 32, 43)',
+    "&.Mui-selected, &.Mui-selected:hover": {
+      backgroundColor: 'rgb(63, 81, 181)',
     },
   },
-  userWrapper: {
-    height: 76,
-    borderTop: `1px solid ${theme.palette.divider}`,
-    width: "100%",
-    display: "flex",
-    alignItems: 'flex-start',
-    paddingLeft: 15,
-    paddingTop: 8,
-    paddingBottom: 8,
-    cursor: 'pointer',
-  },
+
+
+
   userAvatar: {
-    width: theme.spacing(5),
-    height: theme.spacing(5),
     marginRight: 15,
   },
   userFullName: {
     display: 'inline-block',
-    color: theme.palette.text.primary,
+    color:'rgb(255, 255, 255)',
     fontWeight: 800,
     fontSize: 15,
   },
-
   username: {
     marginLeft: 5,
     display: "inline-block",
@@ -96,7 +83,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontWeight: 400,
     fontSize: 15,
   },
-  usernameTop:{
+  usernameTop: {
     marginLeft: 200,
     display: "inline-block",
     color: "rgb(255,255,255)",
@@ -108,15 +95,14 @@ export const useMessagesStyles = makeStyles((theme) => ({
     padding: 0,
     borderLeft: 0,
   },
-  messagesTitleContainer:{
-    margin:"1" + "0px",
+  messagesTitleContainer: {
+    margin: "10px",
     alignItems: "center",
   },
   chatInfoWrapper: {
     width: 320,
     margin: "50px auto",
-    color: theme.palette.text.primary,
-
+    color: 'rgb(255, 255, 255)',
     paddingTop: 300,
   },
   chatInfoTitle: {
@@ -128,7 +114,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     fontSize: 14,
     color: 'rgb(83, 100, 113)',
     margin: '8px 0px 27px 0px',
-
   },
   chatInfoButton: {
     marginTop: 27,
@@ -138,8 +123,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
     width: 598,
   },
   chatAvatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
     margin: "0px 15px",
   },
   chat: {
@@ -157,19 +140,14 @@ export const useMessagesStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
-  messageTimestamp:{
-    fontSize:11,
-    top: 19
-  },
-
   tweetWrapper: {
-    border: `1px solid ${theme.palette.primary.main}`,
+    border: `1px solid 'rgb(25, 39, 52)'`,
     borderRadius: "16px 16px 0px 16px",
     padding: 12,
     width: 384,
     "&:hover": {
       cursor: "pointer",
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: 'rgb(25, 39, 52)',
     },
   },
   tweetUserInfoWrapper: {
@@ -189,52 +167,43 @@ export const useMessagesStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row-reverse",
     "& .MuiTypography-root": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
       padding: "11px 15px",
       maxWidth: 384,
     },
-
   },
-  MyMassageSender:{
+  MyMassageSender: {
     marginLeft: '20%',
-    display:'flex',
+    display: 'flex',
     flexDirection: 'column',
     top: 100,
     padding: 12,
-    backgroundColor: theme.palette.background.primary,
-    color: theme.palette.text.secondary,
+
+    color: 'rgb(175,177,178)',
     alignItems: 'flex-end',
-
   },
-
   ownMessageWith: {
-    padding: theme.spacing(1),
+    padding:7,
     borderRadius: '13px  13px 0px 13px',
-
-    backgroundColor: theme.palette.background.default,
-    border: `1px solid ${theme.palette.primary.main}`,
+    backgroundColor: 'rgb(63, 81, 181)',
+    border: `1px solid 'rgb(25, 39, 52)'`,
   },
-  senderMessageWith:{
-    padding: theme.spacing(1),
+  senderMessageWith: {
+    color: 'rgb(0,0,0)',
+    padding:7,
+
     borderRadius: '0px  13px 13px 13px',
-    backgroundColor: theme.palette.background.default,
-    border: `1px solid ${theme.palette.primary.main}`,
+    backgroundColor: 'rgb(234,237,239)',
+    border: `1px solid 'rgb(25, 39, 52)'`,
   },
-
-
   theirMessageWithTweet: {
     marginRight: '20%',
-    display:'flex',
+    display: 'flex',
     flexDirection: 'column',
     top: 100,
     borderRadius: '16px  0px 16px 16px',
     padding: 10,
-    backgroundColor: theme.palette.background.primary,
-    color: theme.palette.text.secondary,
     alignItems: 'flex-start',
   },
-
   myMessageCommon: {
     marginTop: 10,
     "& .MuiTypography-root": {
@@ -253,7 +222,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     "& svg": {
       marginLeft: 5,
       height: "1.2em",
-      color: theme.palette.primary.main
+      color: 'rgb(136, 153, 166)'
     },
   },
   participantContainer: {
@@ -270,7 +239,7 @@ export const useMessagesStyles = makeStyles((theme) => ({
     },
   },
   participantTweetWrapper: {
-    border: `1px solid ${theme.palette.divider}`,
+    border: `1px solid 'rgb(56, 68, 77)'`,
     borderRadius: "16px 16px 16px 0px",
     padding: 12,
     width: 384,
@@ -279,11 +248,12 @@ export const useMessagesStyles = makeStyles((theme) => ({
       backgroundColor: "rgb(247, 249, 249)"
     },
   },
+  messageContent:{
+    display:"flex"
+  },
   participantTweetInfoWrapper: {
     display: "flex",
   },
-
-
   chatFooter: {
     display: 'flex',
     bottom: 1,
@@ -305,7 +275,6 @@ export const useMessagesStyles = makeStyles((theme) => ({
       },
     },
   },
-
   blockedInfoText: {
     textAlign: "center",
     height: 30,
