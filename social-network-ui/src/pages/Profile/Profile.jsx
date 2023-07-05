@@ -134,7 +134,7 @@ const Profile = (props) => {
             </Typography>
             {data.bio && (
               <Typography mb="12px" variant="body1" sx={{ wordWrap: 'break-word' }}>
-                {data.bio === 'null' ? '' : data.name}
+                {data.bio === 'null' ? '' : data.bio}
               </Typography>
             )}
             <Stack direction="row" flexWrap="wrap">
