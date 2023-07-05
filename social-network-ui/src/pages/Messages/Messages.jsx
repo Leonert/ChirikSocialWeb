@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -13,7 +14,6 @@ import {
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import classNames from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SockJsClient from 'react-stomp';
 
@@ -40,14 +40,13 @@ import { SandMessageIcon } from '../../icon';
 import { SOCKET_URL } from '../../util/constants';
 import { formatChatMessageDate } from '../../util/formatDate';
 import { useMessagesStyles } from './MessagesStyles';
-
 const Messages = ({ chatId }) => {
   const classes = useMessagesStyles();
   const dispatch = useDispatch();
   const chats = useSelector((state) => state.messages.chats);
   const selectedChatId = useSelector(selectSelectedChatId);
   const messages = useSelector(selectMessages);
-
+  const [filteredMessage, setFilteredMessage] = useState([]);
   const [message, setMessage] = useState('');
   const visibleModalWindow = useSelector(selectVisibleModalWindow);
   const chatEndRef = useRef(null);
@@ -56,6 +55,7 @@ const Messages = ({ chatId }) => {
   const authorId = useSelector((state) => state.messages.authorId);
   const [recipientName, setRecipientName] = useState('');
   const [senderName, setSenderName] = useState('');
+
   const [chatName, setChatName] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedChatIndex, setSelectedChatIndex] = useState(null);
@@ -111,7 +111,7 @@ const Messages = ({ chatId }) => {
       dispatch(addChatMessage({ chatId: selectedChatId, message: msg }));
       dispatch(fetchChatMessages(selectedChatId || chatId)).then(() => {});
     } else {
-      throw error('No chat selected')
+      throw error('No chat selected.');
     }
   };
 
@@ -119,14 +119,13 @@ const Messages = ({ chatId }) => {
 
   const handleListItemClick = async (group) => {
     const chatId = group.chatId;
-
     dispatch(setSelectedChatId(chatId));
     setSelectedChatId(chatId);
 
-    const senderUsername = group.chats[0]?.senderUsername || '';
-    const recipientUsername = group.chats[0]?.recipientUsername || '';
-    const newSenderName = username === senderUsername ? senderUsername : recipientUsername;
-    const newRecipientName = username === senderUsername ? recipientUsername : senderUsername;
+    const senderUsername = group.senderUsername || '';
+    const recipientUsername = group.recipientUsername || '';
+    const newSenderName = senderUsername === username ? senderUsername : recipientUsername;
+    const newRecipientName = senderUsername === username ? recipientUsername : senderUsername;
 
     setSenderName(newSenderName);
     setRecipientName(newRecipientName);
@@ -135,6 +134,8 @@ const Messages = ({ chatId }) => {
     dispatch(setText(`${newSenderName} ${newRecipientName}`));
     await dispatch(fetchChatMessages(chatId));
   };
+
+
 
   const handleSendMessage = () => {
     const trimmedMessage = message.trim();
@@ -179,24 +180,24 @@ const Messages = ({ chatId }) => {
     dispatch(toggleModalWindow());
   };
 
-  const [filteredMessage, setFilteredMessage] = useState([]);
 
 
   useEffect(() => {
-    const groupedChats = Object.values(chats);
-
-    groupedChats.forEach((chat) => {
-      const index = groupedChats.findIndex((el) => {
-        return el.chatId === chat.chatId;
-      });
-      if (index === -1) {
-        setFilteredMessage({
+    const groupedChats = Object.values(chats).reduce((result, chat) => {
+      const existingGroup = result.find((group) => group.chatId === chat.chatId);
+      if (existingGroup) {
+        existingGroup.chats.push(chat);
+      } else {
+        result.push({
           chatId: chat.chatId,
-          chats: [chat.message],
-          ...chat,
+          chats: [chat],
         });
       }
-    });
+
+      return result;
+    }, []);
+
+    setFilteredMessage(groupedChats);
   }, [chats]);
 
   useEffect(() => {
@@ -217,8 +218,10 @@ const Messages = ({ chatId }) => {
 
       return sortedChats.sort((a, b) => a.chatId - b.chatId);
     }
+
     setFilteredMessage(sortMessagesByChatId(chats));
   }, [chats]);
+
 
   const handleExitClick = () => {
     dispatch(setSelectedChatId(undefined));
@@ -325,14 +328,11 @@ const Messages = ({ chatId }) => {
                                     <div className={classes.userHeader}>
                                       <div>
                                         {group.senderUsername === username ? (
-                                            <Typography className={classes.chatName}>
-                                              @{group.recipientUsername}
-                                            </Typography>
+                                            <Typography className={classes.chatName}>{group.recipientUsername}</Typography>
                                         ) : (
-                                            <Typography className={classes.chatName}>
-                                              @{group.senderUsername}
-                                            </Typography>
+                                            <Typography className={classes.chatName}>{group.senderUsername}</Typography>
                                         )}
+
                                       </div>
                                     </div>
                                   </div>
@@ -356,9 +356,7 @@ const Messages = ({ chatId }) => {
                 <Paper variant="outlined">
                   <div className={classes.chatInfoWrapper}>
                     <div className={classes.chatInfoTitle}>You don’t have a message selected</div>
-                    <div className={classes.chatInfoText}>
-                      Choose one from your existing messages, or start a new one.
-                    </div>
+                    <div className={classes.chatInfoText}>Choose one from your existing messages, or start a new one.</div>
                     <Button
                         onClick={onOpenModalWindow}
                         className={classes.chatInfoButton}
@@ -382,6 +380,7 @@ const Messages = ({ chatId }) => {
                       >
                         <ArrowBackIcon />
                       </IconButton>
+                      <Typography className={classes.usernameTop}>{recipientName}</Typography>
 
 
                     </div>
@@ -397,33 +396,14 @@ const Messages = ({ chatId }) => {
                                     <div ref={chatEndRef}></div>
 
                                     <div className={classNames(classes.messageContent)}>
-                                      <div
-                                          className={
-                                            authorId === massage.senderId
+                                      <div className={authorId === massage.senderId
                                                 ? classes.MyMassageSender
-                                                : classes.theirMessageWithTweet
-                                          }
-                                      >
-                              <span
-                                  className={classNames(
-                                      classes.tweetUserFullName,
-                                      classes.messageSender
-                                  )}
-                              >
-                                {massage.senderUsername}
-                              </span>
-                                        <span
-                                            className={
-                                              authorId === massage.senderId
-                                                  ? classes.ownMessageWith
-                                                  : classes.senderMessageWith
-                                            }
-                                        >
-                                {massage.message}
-                                          <span className={classes.messageTimestamp}>
-                                  {formatChatMessageDate(massage.timestamp)}
-                                </span>
-                              </span>
+                                                : classes.theirMessageWithTweet}>
+                                        <span className={classNames(classes.tweetUserFullName, classes.messageSender)}>{massage.senderUsername}</span>
+                                        <span className={authorId === massage.senderId ? classes.ownMessageWith : classes.senderMessageWith}>{massage.message}</span>
+                                        <span className={classes.messageTimestamp}>
+                                          {formatChatMessageDate(massage.timestamp)}
+                                        </span>
                                       </div>
                                     </div>
                                   </div>
@@ -463,3 +443,5 @@ const Messages = ({ chatId }) => {
 };
 
 export default Messages;
+
+
