@@ -23,7 +23,7 @@ const InitialStep = (props) => {
         Join Chirik now!{' '}
       </Typography>
 
-      <Link to="https://chirik-fad33dd28d87.herokuapp.com/oauth2/authorization/google">
+      <Link to="https://chirikfp3-079978c808c1.herokuapp.com/oauth2/authorization/google">
         <Button startIcon={<FcGoogle size={20} />} sx={{ maxWidth: '300px', width: '100%', marginBottom: '12px' }}>
           <Typography sx={{ fontSize: '14px' }}> Register with Google </Typography>
         </Button>

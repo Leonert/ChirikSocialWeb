@@ -3,7 +3,7 @@ import axios from 'axios';
 import { TOKEN } from './util/constants';
 
 const axiosIns = axios.create({
-  baseURL: 'https://chirik-fad33dd28d87.herokuapp.com',
+  baseURL: 'https://chirikfp3-079978c808c1.herokuapp.com',
 });
 
 axiosIns.interceptors.request.use(
